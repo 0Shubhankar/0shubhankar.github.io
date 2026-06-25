@@ -1052,3 +1052,36 @@ h3 {
   color: #49c4b0;
   font-size: clamp(2.15rem, 3vw, 3.25rem);
 }
+
+.contact-email {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 34px;
+  border: 1px solid rgba(73, 196, 176, 0.35);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition:
+    background 180ms ease,
+    color 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.contact-email:hover {
+  background: #49c4b0;
+  border-color: #49c4b0;
+  color: #07110f;
+  box-shadow: 0 0 18px rgba(73, 196, 176, 0.45);
+  transform: translateY(-2px);
+}
+
+.contact-email:active {
+  transform: translateY(0);
+}
