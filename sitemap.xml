@@ -3,6 +3,11 @@
   xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://shubhankarsharma.com/</loc>
+    <image:image>
+      <image:loc>https://shubhankarsharma.com/shubhankar-sharma-h.jpg</image:loc>
+      <image:title>Shubhankar Sharma</image:title>
+      <image:caption>Shubhankar Sharma</image:caption>
+    </image:image>
   </url>
   <url>
     <loc>https://shubhankarsharma.com/virginia-tech-photo.html</loc>
