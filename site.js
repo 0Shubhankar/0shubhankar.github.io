@@ -15,7 +15,7 @@ const setActive = (items, activeItem) => {
   items.forEach((item) => item.classList.toggle("is-active", item === activeItem));
 };
 
-const createStepObserver = (items, onActive) => {
+const createStepObserver = (items, onActive, options = {}) => {
   const observer = new IntersectionObserver(
     (entries) => {
       const active = entries
@@ -25,8 +25,8 @@ const createStepObserver = (items, onActive) => {
       if (active) onActive(active.target);
     },
     {
-      rootMargin: "-28% 0px -34% 0px",
-      threshold: [0.35, 0.65],
+      rootMargin: options.rootMargin || "-28% 0px -34% 0px",
+      threshold: options.threshold || [0.35, 0.65],
     },
   );
 
@@ -89,8 +89,11 @@ const setupScrollStories = () => {
   const storySteps = [...document.querySelectorAll(".story-step")];
   const projectSteps = [...document.querySelectorAll(".projects-story-step")];
   const projectCategories = [...document.querySelectorAll(".projects-category-list li")];
+  const isDesktop = desktopQuery.matches;
 
-  if (!desktopQuery.matches || !("IntersectionObserver" in window)) {
+  document.documentElement.classList.toggle("mobile-scroll-layout", !isDesktop);
+
+  if (!("IntersectionObserver" in window)) {
     storySteps.forEach((item) => item.classList.add("is-active"));
     projectSteps.forEach((item) => item.classList.add("is-active"));
     projectCategories.forEach((item, index) => item.classList.toggle("is-active", index === 0));
@@ -115,7 +118,7 @@ const setupScrollStories = () => {
       panelTitle.textContent = step.dataset.title || "";
       panelMeta.textContent = step.dataset.meta || "";
       story.dataset.scene = sceneMap[step.dataset.eyebrow] || "urban";
-    });
+    }, isDesktop ? undefined : { rootMargin: "-18% 0px -48% 0px", threshold: [0.2, 0.45] });
   }
 
   const projectEyebrow = document.getElementById("projects-story-eyebrow");
