@@ -139,3 +139,8 @@ document.addEventListener("click", (event) => {
     window.location.href = "archived.html";
   }
 });
+
+const copyrightYear = document.getElementById("copyright-year");
+if (copyrightYear) {
+  copyrightYear.textContent = new Date().getFullYear();
+}
