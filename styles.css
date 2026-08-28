@@ -98,10 +98,12 @@ img {
 
 .nav-linkedin {
   display: inline-flex;
+  flex: 0 0 auto;
   align-items: center;
   justify-content: center;
   width: 34px;
   height: 34px;
+  overflow: hidden;
   border: 1px solid rgba(244, 239, 230, 0.16);
   border-radius: 7px;
   background: rgba(244, 239, 230, 0.06);
