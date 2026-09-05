@@ -111,7 +111,7 @@ img {
 }
 
 .nav-linkedin:hover {
-  opacity: 0.86;
+  opacity: 1;
 }
 
 .nav-linkedin img {
@@ -119,6 +119,11 @@ img {
   height: 26px;
   filter: grayscale(1) contrast(1.1) brightness(1.05);
   object-fit: contain;
+  transition: filter 160ms ease, opacity 160ms ease;
+}
+
+.nav-linkedin:hover img {
+  filter: none;
 }
 
 
