@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>City Parking Maps</title>
-    <link rel="stylesheet" href="../vendor/shared/lib-9eaeb463f1b3/dist/maplibre-gl.css">
+    <link rel="stylesheet" href="../vendor/shared/lib-34b3c0e131eb/dist/leaflet.css">
     <style>
         body,
         html {
@@ -61,7 +61,14 @@
         #cityInfo th {
             background-color: #f2f2f2;
         }
-    </style>
+    
+        /* Dark-blue raster basemap — no WebGL */
+        #map .leaflet-tile-pane img.leaflet-tile {
+            filter: grayscale(1) invert(1) sepia(0.65)
+                    saturate(1.5) hue-rotate(170deg)
+                    brightness(0.78) contrast(1.15);
+        }
+</style>
 </head>
 
 <body>
@@ -122,7 +129,7 @@
         </table>
     </div>
 
-    <script src="../vendor/shared/lib-1c09437b70d7/dist/maplibre-gl.js"></script>
+    <script src="../vendor/shared/lib-5d00f470f487/dist/leaflet.js"></script>
     <script>
         const cityData = {
             "São Paulo, Brazil": {
@@ -398,12 +405,20 @@
         };
 
 
-        const map = new maplibregl.Map({
-            container: 'map',
-            style: 'https://tiles.stadiamaps.com/styles/stamen_toner_lite.json',
-            center: [174.7633, -36.8485], // Default center on Auckland
-            zoom: 12
-        });
+        const map = L.map('map', {
+                preferCanvas: true
+            }).setView([-36.8485, 174.7633], 12);
+
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+            }).addTo(map);
+
+            let parkingPolygonLayer = null;
+            let parkingPointLayer = null;
+            let currentCityRequest = 0;
+
+
 
         function loadCityData(city) {
             if (!city) return; // Exit if no city is selected
@@ -438,10 +453,10 @@
                 "Auckland, New Zealand": [174.7633, -36.8485]
             };
 
-            map.flyTo({
-                center: coordinates[city],
-                zoom: 12
-            });
+            map.flyTo(
+                    [coordinates[city][1], coordinates[city][0]],
+                    12
+                );
 
             // Populate the city data table
             const cityInfo = cityData[city];
@@ -460,62 +475,66 @@
                 </tr>
             `;
 
-            // Load GeoJSON for parking (as before)
-            const fileName = `${city.replace(/, /g, '_').replace(/ /g, '_')}_parking.geojson`;
+            // Load parking polygons and points using Leaflet.
+            const fileName =
+                `${city.replace(/, /g, '_').replace(/ /g, '_')}_parking.geojson`;
+
+            const requestId = ++currentCityRequest;
+
 
             fetch(fileName)
-                .then(response => response.json())
-                .then(async data => {
-                    if (!map.isStyleLoaded()) {
-                        await new Promise(resolve => map.once('load', resolve));
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(
+                            `GeoJSON HTTP ${response.status}: ${fileName}`
+                        );
                     }
+                    return response.json();
+                })
+                .then(data => {
+                    if (requestId !== currentCityRequest) return;
 
-                    for (const id of ['parking-layer', 'parking-points-layer']) {
-                        if (map.getLayer(id)) map.removeLayer(id);
-                    }
-                    for (const id of ['parking-data', 'parking-points']) {
-                        if (map.getSource(id)) map.removeSource(id);
-                    }
-
-                    map.addSource('parking-data', {
-                        type: 'geojson',
-                        data: data
-                    });
-
-                    map.addLayer({
-                        id: 'parking-layer',
-                        type: 'fill',
-                        source: 'parking-data',
-                        paint: {
-                            'fill-color': '#ff1c95',
-                            'fill-opacity': 0.5
+                    const polygons = L.geoJSON(data, {
+                        filter: feature =>
+                            ['Polygon', 'MultiPolygon'].includes(
+                                feature.geometry?.type
+                            ),
+                        style: {
+                            color: '#ff1c95',
+                            weight: 0,
+                            fillColor: '#ff1c95',
+                            fillOpacity: 0.5
                         }
                     });
 
-                    map.addSource('parking-points', {
-                        type: 'geojson',
-                        data: {
-                            type: 'FeatureCollection',
-                            features: data.features.filter(
-                                feature => feature.geometry?.type === "Point"
-                            )
-                        }
+                    const points = L.geoJSON(data, {
+                        filter: feature =>
+                            feature.geometry?.type === 'Point',
+                        pointToLayer: (feature, latlng) =>
+                            L.circleMarker(latlng, {
+                                radius: 5,
+                                color: '#ffffff',
+                                weight: 1,
+                                fillColor: '#0000ff',
+                                fillOpacity: 1
+                            })
                     });
 
-                    map.addLayer({
-                        id: 'parking-points-layer',
-                        type: 'circle',
-                        source: 'parking-points',
-                        paint: {
-                            'circle-radius': 5,
-                            'circle-color': '#0000ff',
-                            'circle-stroke-width': 1,
-                            'circle-stroke-color': '#ffffff'
-                        }
-                    });
+                    if (parkingPolygonLayer)
+                        map.removeLayer(parkingPolygonLayer);
+
+                    if (parkingPointLayer)
+                        map.removeLayer(parkingPointLayer);
+
+                    parkingPolygonLayer = polygons.addTo(map);
+                    parkingPointLayer = points.addTo(map);
+
 
                 })
-                .catch(err => console.error('Error loading the GeoJSON data:', err));
+                .catch(err => {
+                    console.error('Error loading parking GeoJSON:', err);
+
+                });
         }
 
         // Optionally, load default city on start
