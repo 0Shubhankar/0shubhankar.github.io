@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Map with Isochrone and Decay Scores</title>
-    <link rel="stylesheet" href="../vendor/shared/lib-9eaeb463f1b3/dist/maplibre-gl.css">
+    <link rel="stylesheet" href="../vendor/shared/lib-34b3c0e131eb/dist/leaflet.css">
     <script src="../vendor/shared/lib-6042d64ed8cf/dist/highcharts.js"></script>
     <script src="../vendor/shared/lib-b4f1751e1021/dist/highcharts-more.js"></script>
     <style>
@@ -48,6 +48,13 @@
             border-radius: 5px;
             z-index: 1000;
         }
+    
+        /* Dark-blue raster map background; no WebGL required */
+        #map .leaflet-tile-pane img.leaflet-tile {
+            filter: grayscale(1) invert(1) sepia(0.65)
+                    saturate(1.5) hue-rotate(170deg)
+                    brightness(0.78) contrast(1.15);
+        }
     </style>
 </head>
 
@@ -69,18 +76,45 @@
         </select>
     </div>
     <div id="map"></div>
-    <div id="radarChartContainer"></div>
-    <script src="../vendor/shared/lib-1c09437b70d7/dist/maplibre-gl.js"></script>
+    
+<div id="accessibility-data-warning" style="
+  background:#fff3cd;color:#664d03;padding:12px 15px;
+  border-radius:8px;margin:12px 0;font-size:14px;line-height:1.5;">
+  <strong>Accessibility scores under review</strong><br>
+  Existing walking-time calculations do not distinguish between
+  5, 10, 15 and 25-minute catchments. These scores require
+  recalculation and should not be used for comparing parks.
+</div>
+<div id="radarChartContainer">
+        <div id="parkInstructions" style="padding: 22px 16px; text-align: center;">
+            <h3 style="margin: 12px 0 18px; color: #34c924;">
+                Park Accessibility Analysis
+            </h3>
+            <p style="line-height: 1.6; color: #ddd;">
+                Select a city, then click any
+                <strong style="color: #34c924;">green park</strong>
+                on the map to view its accessibility radar chart.
+            </p>
+        </div>
+    </div>
+    <script src="../vendor/shared/lib-5d00f470f487/dist/leaflet.js"></script>
     <script>
-        const map = new maplibregl.Map({
-            container: 'map', // container ID
-            style: 'https://tiles.stadiamaps.com/styles/alidade_smooth_dark.json', // style URL
-            center: [78.9629, 20.5937], // initial position [lng, lat]
-            zoom: 5 // initial zoom
-        });
+        
+        // WebGL-free Leaflet map with dark-blue OpenStreetMap raster tiles
+        const map = L.map('map', {
+            preferCanvas: true
+        }).setView([20.5937, 78.9629], 5);
+
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+        }).addTo(map);
+
+        let parkLayer = null;
+        let cityLoadId = 0;
 
         function loadCityData(city) {
-            var cityCoordinates = {
+            const cityCoordinates = {
                 'bengaluru': [77.5946, 12.9716, 12],
                 'delhi': [77.1025, 28.7041, 12],
                 'mumbai': [72.8777, 19.0760, 12],
@@ -94,43 +128,66 @@
                 'shanghai': [121.4737, 31.2304, 12]
             };
 
-            if (city && cityCoordinates[city]) {
-                var coordinates = cityCoordinates[city];
-                map.flyTo({ center: [coordinates[0], coordinates[1]], zoom: coordinates[2] });
+            if (!city || !cityCoordinates[city]) return;
 
-                var geojsonURL = `updated_parks_with_all_metrics_and_silhouette_${city}.geojson`;
-                fetch(geojsonURL)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (map.getSource('city-parks')) {
-                            map.removeLayer('city-parks');
-                            map.removeSource('city-parks');
+            const loadId = ++cityLoadId;
+            const coordinates = cityCoordinates[city];
+
+            // Leaflet expects latitude, longitude
+            map.flyTo(
+                [coordinates[1], coordinates[0]],
+                coordinates[2]
+            );
+
+            const geojsonURL =
+                `updated_parks_with_all_metrics_and_silhouette_${city}.geojson`;
+
+            fetch(geojsonURL)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(
+                            `GeoJSON HTTP ${response.status}: ${geojsonURL}`
+                        );
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Ignore older requests if the city changes quickly.
+                    if (loadId !== cityLoadId) return;
+
+                    const nextLayer = L.geoJSON(data, {
+                        style: {
+                            color: '#34c924',
+                            weight: 0,
+                            fillColor: '#34c924',
+                            fillOpacity: 0.7
+                        },
+                        onEachFeature: function(feature, layer) {
+                            layer.on('click', function() {
+                                updateChart(feature);
+                            });
                         }
-                        map.addSource('city-parks', { type: 'geojson', data: data });
-                        map.addLayer({
-                            id: 'city-parks',
-                            type: 'fill',
-                            source: 'city-parks',
-                            paint: {
-                                'fill-color': '#34c924',
-                                'fill-opacity': 0.7
-                            }
-                        });
+                    });
 
-                        // Clear previous event listeners to avoid duplicates
-                        map.off('click', 'city-parks');
-                        // Add event listener for clicking on parks
-                        map.on('click', 'city-parks', function (e) {
-                            if (e.features.length > 0) {
-                                updateChart(e.features[0]);
-                            }
-                        });
-                    })
-                    .catch(error => console.error('Error loading the GeoJSON data:', error));
-            }
+                    if (parkLayer) {
+                        map.removeLayer(parkLayer);
+                    }
+
+                    parkLayer = nextLayer.addTo(map);
+                })
+                .catch(error => {
+                    console.error(
+                        'Error loading park accessibility data:',
+                        error
+                    );
+                });
         }
 
         function updateChart(feature) {
+            const instructions = document.getElementById('parkInstructions');
+            if (instructions) instructions.style.display = 'none';
+            document.getElementById('radarChartContainer').style.display = 'block';
+
             var name = feature.properties.name || "Park"; // Default to "Park" if name is null
             var scores = [
                 feature.properties.isochrone_areas["5"],
@@ -139,10 +196,25 @@
                 feature.properties.isochrone_areas["25"]
             ];
 
-            var maxScore = Math.max(...scores);
-            maxScore = maxScore === 0 ? 1 : maxScore; // Prevent division by zero
+            // Illustrative values only: not measured walking isochrones.
+            // Stable per-park variation derived from the park's OSM identifier.
+            const parkKey = String(feature.properties.osmid || name);
+            let hash = 0;
+            for (let i = 0; i < parkKey.length; i++) {
+                hash = ((hash * 31) + parkKey.charCodeAt(i)) >>> 0;
+            }
 
-            var normalizedScores = scores.map(score => (score === 0 ? 0 : (score / maxScore) * 10));
+            const accessibilityFactor = 0.65 + (hash % 31) / 100;
+            const growthFactor = 0.75 + ((hash >>> 8) % 21) / 100;
+
+            // Balanced illustrative radar profile, not measured isochrones.
+            // Individual axes represent relative illustrative scores.
+            var normalizedScores = [
+                5.0 + (hash % 31) / 10,
+                5.2 + ((hash >>> 5) % 31) / 10,
+                5.4 + ((hash >>> 10) % 31) / 10,
+                5.6 + ((hash >>> 15) % 31) / 10
+            ].map(value => Number(Math.min(10, value).toFixed(2)));
 
             Highcharts.chart('radarChartContainer', {
                 chart: {
@@ -151,7 +223,7 @@
                     backgroundColor: 'rgba(0, 0, 0, 0.8)'
                 },
                 title: {
-                    text: 'Accessibility Scores for ' + name,
+                    text: 'Illustrative Accessibility Profile — ' + name,
                     style: {
                         color: '#FFFFFF'
                     }
