@@ -38,7 +38,14 @@
             color: #ADD8E6;
             /* Lightning color */
         }
-    </style>
+    
+    /* Dark-blue OpenStreetMap basemap without WebGL */
+    .leaflet-tile-pane img.leaflet-tile {
+        filter: grayscale(1) invert(1) sepia(0.65)
+                saturate(1.5) hue-rotate(170deg)
+                brightness(0.78) contrast(1.15);
+    }
+</style>
 </head>
 
 <body>
@@ -67,7 +74,7 @@
             const map = L.map('map').setView([midLat, midLon], 13);
 
             // Add the Dark Mode tile layer
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
             }).addTo(map);
 
