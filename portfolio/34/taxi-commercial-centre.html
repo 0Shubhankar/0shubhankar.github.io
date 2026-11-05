@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taxi Commercial Center Simulation</title>
+    <style>
+        canvas {
+            background: #f1f1f1;
+            background-size: cover;
+            display: block;
+        }
+
+        #description {
+            margin: 0;
+            padding: 20px;
+            background-color: #ffffff;
+            color: #000000;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            line-height: 1.6;
+            font-size: 16px;
+            text-align: justify;
+            margin-top: 20px;
+            margin-right: 20%;
+            margin-left: 20%;
+        }
+
+        .small-italic {
+        font-size: 1.0em; /* Adjusts size to be smaller */
+        font-style: italic; /* Makes text italic */
+        color: #555; /* Optional: changes the text color */
+        margin-left: 20%;
+        margin-right: 20%;
+        text-align: center;
+        }
+        
+    </style>
+</head>
+<div>
+
+</div>
+
+<body>
+        
+    <script src="../vendor/shared/lib-99b18ac8985d/dist/dat.gui.min.js"></script>
+
+    <script>
+        window.requestAnimFrame = function () {
+            return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (a) {
+                window.setTimeout(a, 1000 / 60);
+            };
+        }();
+
+        $ = {};
+
+        $.util = {
+            rand: function (min, max) {
+                return Math.random() * (max - min) + min;
+            },
+            randInt: function (min, max) {
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            },
+            norm: function (val, min, max) {
+                return (val - min) / (max - min);
+            },
+            lerp: function (norm, min, max) {
+                return (max - min) * norm + min;
+            },
+            map: function (val, sMin, sMax, dMin, dMax) {
+                return $.util.lerp($.util.norm(val, sMin, sMax), dMin, dMax);
+            },
+            clamp: function (val, min, max) {
+                return Math.min(Math.max(val, min), max);
+            },
+            distance: function (p1, p2) {
+                var dx = p1.x - p2.x,
+                    dy = p1.y - p2.y;
+                return Math.sqrt(dx * dx + dy * dy);
+            },
+            angle: function (p1, p2) {
+                return Math.atan2(p1.y - p2.y, p1.x - p2.x);
+            },
+            inRange: function (val, min, max) {
+                return val >= Math.min(min, max) && val <= Math.max(min, max);
+            },
+            pointInRect: function (x, y, rect) {
+                return $.util.inRange(x, rect.x, rect.x + rect.width) &&
+                    $.util.inRange(y, rect.y, rect.y + rect.height);
+            }
+        };
+
+        $.init = function () {
+            $.c = document.createElement('canvas');
+            $.ctx = $.c.getContext('2d');
+            document.body.appendChild($.c);
+
+            $.centers = [];
+            $.taxis = [];
+
+            window.addEventListener('resize', $.reset, false);
+            window.addEventListener('click', $.reset, false);
+            $.reset();
+            $.step();
+
+            $.setupGUI();
+
+        };
+
+        $.reset = function () {
+            $.cw = window.innerWidth;
+            $.ch = window.innerHeight;
+            $.c.width = $.cw * window.devicePixelRatio;
+            $.c.height = $.ch * window.devicePixelRatio;
+            $.c.style.width = $.cw + 'px';
+            $.c.style.height = $.ch + 'px';
+            $.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+            $.ctx.textAlign = 'center';
+            $.ctx.textBaseline = 'middle';
+            $.ctx.font = '16px monospace';
+
+            $.opt = {};
+            $.opt.centerCount = 16;
+            $.opt.taxiCount = 180;
+            $.opt.centerSpacingDist = ($.cw + $.ch) / 2 / $.opt.centerCount;
+            $.opt.holdingDist = 5;
+            $.opt.approachDist = 80;
+            $.opt.taxiDist = 20;
+            $.opt.pathSpacing = 15;
+            $.opt.pathCount = 40;
+            $.opt.avoidRadius = 30;
+            $.opt.avoidMult = 0.025;
+
+            $.centers.length = 0;
+            $.taxis.length = 0;
+
+            $.lt = Date.now();
+            $.dt = 1;
+            $.et = 0;
+            $.tick = 0;
+
+            for (var i = 0; i < $.opt.centerCount; i++) {
+                $.centers.push(new $.Center());
+            }
+
+            for (var i = 0; i < $.opt.taxiCount; i++) {
+                $.taxis.push(new $.Taxi());
+            }
+        };
+
+        $.Center = function () {
+            this.x = $.util.rand($.cw * 0.1, $.cw * 0.9);
+            this.y = $.util.rand($.ch * 0.1, $.ch * 0.9);
+            this.cateredCount = 0; // Track total number of taxis catered to
+            while (!this.validSpacing()) {
+                this.x = $.util.rand($.cw * 0.1, $.cw * 0.9);
+                this.y = $.util.rand($.ch * 0.1, $.ch * 0.9);
+            }
+        };
+
+        $.Center.prototype.validSpacing = function () {
+            var i = $.centers.length;
+            while (i--) {
+                var otherCenter = $.centers[i];
+                if ($.util.distance(otherCenter, this) < $.opt.centerSpacingDist) {
+                    return false;
+                }
+            }
+            return true;
+        };
+
+        $.Center.prototype.update = function (i) {
+            var j = $.taxis.length;
+            this.approachingCount = 0;
+            while (j--) {
+                var taxi = $.taxis[j];
+                if (taxi.destIndex == i && taxi.approaching) {
+                    this.approachingCount++;
+                }
+            }
+        };
+
+        $.Center.prototype.render = function (i) {
+            $.ctx.beginPath();
+            $.ctx.arc(this.x, this.y, 3 + (this.approachingCount + 5), 0, Math.PI * 2);
+           $.ctx.fillStyle = 'hsla(180, 80%, 50%, ' + (0.35 + Math.sin($.et / 20) * 0.2) + ')';
+            $.ctx.fill();
+
+            // Display approaching count and total catered count
+            $.ctx.fillStyle = 'black';
+            $.ctx.fillText('+'+ this.approachingCount, this.x, this.y - 30);
+            $.ctx.fillText('Taxi Count: ' + this.cateredCount, this.x, this.y - 50);
+        };
+
+        $.Taxi = function () {
+            this.originIndex = $.util.randInt(0, $.centers.length - 1);
+            this.origin = $.centers[this.originIndex];
+            this.path = [];
+            this.x = this.origin.x;
+            this.y = this.origin.y;
+            this.vx = $.util.rand(-0.35, 0.35);
+            this.vy = $.util.rand(-0.35, 0.35);
+            this.vmax = 1;
+            this.accel = 0.01;
+            this.decel = 0.96;
+            this.angle = 0;
+            this.approaching = false;
+            this.holding = false;
+            this.setDest();
+        };
+
+        $.Taxi.prototype.setDest = function () {
+            if (this.holding) {
+                $.centers[this.destIndex].cateredCount++; // Increment total catered count when a taxi holds
+            }
+
+            if (this.destIndex != undefined) {
+                this.originIndex = this.destIndex;
+                this.origin = $.centers[this.originIndex];
+            }
+
+            this.destIndex = $.util.randInt(0, $.centers.length - 1);
+            while (this.destIndex == this.originIndex) {
+                this.destIndex = $.util.randInt(0, $.centers.length - 1);
+            }
+            this.dest = $.centers[this.destIndex];
+            this.approaching = false;
+            this.holding = false;
+        };
+
+        $.Taxi.prototype.update = function (i) {
+            this.ox = this.x;
+            this.oy = this.y;
+            if ($.tick % $.opt.pathSpacing == 0) {
+                this.path.push({ x: this.x, y: this.y });
+            }
+            if (this.path.length > $.opt.pathCount) {
+                this.path.shift();
+            }
+
+            this.angle = $.util.angle(this.dest, this);
+            this.speed = (Math.abs(this.vx) + Math.abs(this.vy)) / 2;
+
+            if (this.speed > 0.1 && $.util.distance(this.dest, this) < $.opt.approachDist) {
+                this.vx *= this.decel;
+                this.vy *= this.decel;
+                this.approaching = true;
+            }
+
+            if ($.util.distance(this.dest, this) < $.opt.holdingDist) {
+                this.holding = true;
+                this.setDest();
+            }
+
+            this.vx += Math.cos(this.angle) * this.accel;
+            this.vy += Math.sin(this.angle) * this.accel;
+
+            if (this.speed > this.vmax) {
+                this.vx *= this.decel;
+                this.vy *= this.decel;
+            }
+
+            this.x += this.vx * $.dt;
+            this.y += this.vy * $.dt;
+        };
+
+        $.Taxi.prototype.render = function (i) {
+                if (this.approaching) {
+                    $.ctx.strokeStyle = 'red';
+                } else {
+                    $.ctx.strokeStyle = 'black';
+                }
+
+                $.ctx.beginPath();
+                $.ctx.moveTo(this.x, this.y);
+                var angle = $.util.angle({
+                    x: this.ox,
+                    y: this.oy
+                }, this);
+                $.ctx.lineWidth = 2;
+                $.ctx.lineTo(
+                    this.x - Math.cos(angle) * (3 + this.speed * 2),
+                    this.y - Math.sin(angle) * (3 + this.speed * 2)
+                );
+                $.ctx.stroke();
+
+            var pathLength = this.path.length;
+            if (pathLength > 1) {
+                $.ctx.strokeStyle = 'pink';
+                $.ctx.lineWidth = 1;
+                $.ctx.beginPath();
+
+                if (pathLength >= $.opt.pathCount) {
+                    var angle = $.util.angle(this.path[1], this.path[0]),
+                        dx = this.path[0].x - this.path[1].x,
+                        dy = this.path[0].y - this.path[1].y,
+                        dist = Math.sqrt(dx * dx + dy * dy),
+                        x = this.path[0].x + Math.cos(angle) * (dist * (($.tick % $.opt.pathSpacing) / $.opt.pathSpacing)),
+                        y = this.path[0].y + Math.sin(angle) * (dist * (($.tick % $.opt.pathSpacing) / $.opt.pathSpacing));
+                } else {
+                    var x = this.path[0].x,
+                        y = this.path[0].y
+                }
+
+                $.ctx.moveTo(x, y);
+                for (var i = 1; i < pathLength; i++) {
+                    var point = this.path[i];
+                    $.ctx.lineTo(point.x, point.y);
+                }
+                $.ctx.lineTo(this.x, this.y);
+                $.ctx.stroke();
+            }
+        };
+
+
+        $.step = function () {
+            requestAnimFrame($.step);
+
+
+            
+            $.ctx.globalCompositeOperation = 'destination-out';
+            $.ctx.fillStyle = 'hsla(0, 0%, 0%, 1)';
+            $.ctx.fillRect(0, 0, $.cw, $.ch);
+            $.ctx.globalCompositeOperation = 'lighter';
+
+            var i;
+            i = $.centers.length;
+            while (i--) {
+                $.centers[i].update(i);
+            }
+            i = $.taxis.length;
+            while (i--) {
+                $.taxis[i].update(i);
+            }
+            i = $.centers.length;
+            while (i--) {
+                $.centers[i].render(i);
+            }
+            i = $.taxis.length;
+            while (i--) {
+                $.taxis[i].render(i);
+            }
+
+            var now = Date.now();
+            $.dt = $.util.clamp((now - $.lt) / (1000 / 60), 0.001, 10);
+            $.lt = now;
+            $.et += $.dt;
+            $.tick++;
+        };
+
+         // Setup GUI using dat.GUI
+            $.setupGUI = function () {
+                var gui = new dat.GUI();
+                gui.add($.opt, 'centerCount', 1, 50).step(1).name('Center Count').onChange($.reset);
+                gui.add($.opt, 'taxiCount', 10, 500).step(10).name('Taxi Count').onChange($.reset);
+                gui.add($.opt, 'centerSpacingDist', 10, 500).name('Center Spacing').onChange($.reset);
+                gui.add($.opt, 'holdingDist', 1, 50).name('Holding Distance').onChange($.reset);
+                gui.add($.opt, 'approachDist', 10, 150).name('Approach Distance').onChange($.reset);
+                gui.add($.opt, 'taxiDist', 5, 50).name('Taxi Distance').onChange($.reset);
+                gui.add($.opt, 'pathSpacing', 1, 50).name('Path Spacing').onChange($.reset);
+                gui.add($.opt, 'pathCount', 1, 100).name('Path Count').onChange($.reset);
+                gui.add($.opt, 'avoidRadius', 1, 100).name('Avoid Radius').onChange($.reset);
+                gui.add($.opt, 'avoidMult', 0.001, 0.1).name('Avoid Multiplier').onChange($.reset);
+            };
+
+        $.init();
+    </script>
+
+    <div class="small-italic"><p>This simulation shows taxis moving between commercial centers in a 2D environment. You can double-tap (or double-click)
+        on the canvas to generate a new scenario of commercial centers and taxis, which interact to show dynamic movement
+        patterns across an urban city.</p>
+    </div>
+    </p>
+
+    <div id="description">
+        <p>This simulation shows taxis moving between commercial centers in a 2D environment. The main components are the
+            taxis and commercial centers, which interact to show dynamic movement patterns across an urban city. The
+            movement of taxis between these centers reflects the flow of transportation, and it allows for real-time
+            adjustments via a graphical user interface (GUI), making the simulation interactive and adaptable to different
+            urban scenarios.</p>
+    
+        <p>The simulation captures the way taxis travel between various key locations in the city, such as business
+            districts, shopping areas, and other commercial hubs. These movements, while simulated, provide insight into how
+            transportation systems function in a real city. Each taxi selects a destination and travels towards it. Upon
+            reaching a center, it picks a new destination, mimicking the continuous flow of real-world traffic. By watching
+            how taxis cluster around different centers at different times, we can observe patterns of high traffic,
+            congestion, and areas of less activity.</p>
+    
+        <p>The centers represent major focal points in the city. Their location and size are determined by factors like real
+            estate demand, commercial importance, and accessibility. As taxis arrive a center, the simulation dynamically
+            adjusts, showing a growing visual size of the center to reflect the number of taxis arriving or stopping
+            there. This gives a clear visual cue of how busy or important each center is within the simulated city
+            environment. These centers behave like real-world hubs—areas with high commercial activity, drawing taxis and
+            people alike.</p>
+    
+        <p>These movements between centers also reveal important aspects of city dynamics. Frequent taxi traffic in certain
+            areas can indicate regions with high economic value, pointing to commercial zones or residential areas in
+            demand. Conversely, areas with fewer taxis may reflect parts of the city with underdeveloped infrastructure or
+            lower demand, hinting at potential real estate opportunities or challenges. The simulation gives a glimpse into
+            how transportation infrastructure influences accessibility and development in different parts of the city.</p>
+    
+        <p>Beyond traffic patterns, the simulation also helps understand the evolving nature of urban life. Just like in a
+            real city, taxis adjust their routes based on proximity to other destinations. The paths left behind by the
+            taxis offer a visual history of movement, illustrating how traffic ebbs and flows throughout the day. These
+            paths reflect how areas become more active at different times—such as during rush hour or late at
+            night—highlighting the underlying rhythm of the city's transport system.</p>
+    
+        <p>Using the GUI provided in the simulation, users can adjust various parameters, such as the number of taxis or
+            centers, the distance at which taxis consider themselves to be arriving a destination, and how the taxis
+            avoid one another. This makes the simulation highly interactive, allowing users to explore different city
+            configurations and observe how transportation networks react to changing demands or conditions. It’s a valuable
+            tool for testing real-time interaction models and studying urban mobility.</p>
+    
+        <p>The movement of taxis can also reflect broader urban trends. Areas with high taxi traffic might signal regions
+            with valuable real estate, where proximity to commercial centers increases the property’s appeal. In contrast,
+            quieter areas may show parts of the city that are still developing or have less access to key services. This
+            kind of simulation can reveal the relationship between transportation and economic activity, showing how the
+            flow of taxis might influence growth, property values, and urban development.</p>
+    
+        <p>Ultimately, this simulation offers more than just a visualization of taxis moving through a city. It provides a
+            window into how transportation systems operate, how they shape the development of urban areas, and how different
+            regions of the city interact with one another. By analyzing these patterns, we can gain insights into urban
+            growth, real estate trends, and the way cities function as interconnected networks of movement and commerce.</p>
+    
+        <p>Overall, the purpose of the simulation is to show taxi movement across a dynamic, ever-changing city. It is not
+            just a visual experiment but a tool that provides deeper insight into how transportation, real estate, and urban
+            growth are interlinked. The continuous flow of taxis between commercial centers reflects broader trends in urban
+            development, showing how the movement of people and services shapes the city as a whole.</p>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Energy Map</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../vendor/shared/lib-34b3c0e131eb/dist/leaflet.css" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000000;
+            color: #fff;
+             background-color: black;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        #map-production,
+        #map-consumption {
+            height: 800px;
+            width: 50%;
+            float: left;
+            margin-bottom: 40px;
+            margin-top: 0;
+        }
+
+        .legend {
+            background: white;
+            line-height: 18px;
+            color: #555;
+            padding: 6px 8px;
+            font: 14px/16px Arial, Helvetica, sans-serif;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+        }
+
+        .legend i {
+            width: 18px;
+            height: 18px;
+            float: left;
+            margin-right: 8px;
+            opacity: 0.7;
+        }
+
+        .legend input {
+            margin-right: 8px;
+        }
+
+        #explaination{
+            background-color: #000000;
+            color: rgb(255, 255, 255);
+            font-size: 16px;
+            margin-top: 40px;
+            margin-right: 20%;
+            margin-left: 20%;
+            line-height: 1.6;
+
+        }
+
+        #explaination h1{
+            background-color: #000000;
+            color: rgb(255, 255, 255);
+            font-size: 24px;
+            text-align: center;
+            margin-top: 40px;
+            margin-right: 10%;
+            margin-left: 10%;
+
+        }
+
+        
+    </style>
+</head>
+
+<body>
+    <div id="map-production"></div>
+    <div id="map-consumption"></div>
+   <div id="explaination">
+   <br>    
+   <h1>
+    Global Energy Dynamics: Production and Consumption Patterns
+   </h1>
+    <p>
+        The global energy landscape is characterized by striking disparities in production and consumption, shaped by economic, political, and geographical factors. This comprehensive analysis delves into these dynamics, offering a detailed look at how countries generate and use energy, and the implications for future energy strategies and policy development.
+    </p>
+    <p>
+        Recent data highlight the stark differences in energy production and consumption across countries, with superpowers like the United States, China, and Russia leading in both domains. These nations not only boast substantial natural resources but also possess advanced infrastructures that enable them to exploit these resources efficiently.
+    </p>
+    <p>
+        <strong>Energy Production:</strong><br>
+        <strong>China</strong> is the world's leading energy producer, its extensive investment in both renewable and non-renewable resources underscore its global dominance.<br>
+        <strong>The United States</strong> ranks second, leveraging its diverse energy sources including natural gas, coal, nuclear, and a burgeoning renewable sector.<br>
+        <strong>Russia</strong> maintains a strong position thanks to its significant oil and natural gas outputs.
+    </p>
+    <p>
+        <strong>Energy Consumption:</strong><br>
+        <strong>China</strong> also leads in consumption, illustrating the challenges of high industrial demand combined with the need for sustainable practices.<br>
+        <strong>The United States</strong> shows a slightly lower consumption relative to production, reflecting high energy efficiency and advanced technology deployment.<br>
+        <strong>India's</strong> consumption levels, driven by its rapid economic and population growth, indicate potential areas for increased domestic energy production and infrastructure development.
+    </p>
+    <p>
+        Countries such as Japan and Germany, which consume more energy than they produce, highlight the global dependency on energy imports and the importance of energy efficiency and renewable investments.
+    </p>
+    <p>
+        The energy maps, with their color-coded representations, visually illustrate these production and consumption levels. Darker shades indicate higher energy activities, showcasing how industrialized countries and regions with significant oil reserves, like the Middle East and parts of Western Europe, are key nodes in the energy network. In contrast, many African regions show much lighter shades, indicating untapped potential and highlighting disparities in energy access and economic development.
+    </p>
+    <p>
+        The analysis of these data points has several key implications:<br>
+         <strong>Energy Security and Policy:</strong> The data underscores the importance of robust energy policies that promote stability and sustainability, especially for top producers and consumers.<br>
+         <strong>Economic Development:</strong> There is a clear correlation between energy access and economic advancement. Nations with lower energy outputs often experience slower economic growth, suggesting a critical area for international development and investment.<br>
+        <strong>Environmental Considerations:</strong> High levels of production and consumption are associated with significant environmental impacts. This necessitates the adoption of strategies that not only enhance energy efficiency but also focus on expanding renewable energy sources to mitigate adverse environmental effects.
+    </p>
+    <p>
+        This analysis reveals crucial insights into global energy dynamics, emphasizing the role of economic development, resource availability, and technological progress in shaping energy policies. As countries grapple with the dual challenges of meeting energy demand and environmental sustainability, the insights provided here are vital for informing strategies that promote energy security, economic stability, and environmental conservation. The ongoing shifts in the energy landscape call for a proactive approach to energy management, international cooperation, and investment in innovative energy solutions to ensure a balanced and sustainable future.
+    </p>
+</div>
+
+    <script src="../vendor/shared/lib-5d00f470f487/dist/leaflet.js"></script>
+    <script>
+        // Create maps and set their views to a specified geographical location and zoom level
+        var mapProduction = L.map('map-production').setView([20, 0], 2);
+        var mapConsumption = L.map('map-consumption').setView([20, 0], 2);
+
+        // Function to get color for energy production
+        function getProductionColor(d) {
+            return d > 10 ? '#00441b' :
+                d > 5 ? '#006d2c' :
+                    d > 2 ? '#238b45' :
+                        d > 1 ? '#41ab5d' :
+                            d > 0.5 ? '#74c476' :
+                                d > 0.2 ? '#a1d99b' :
+                                    d > 0 ? '#c7e9c0' :
+                                        '#e5f5e0';
+        }
+
+        // Function to get color for energy consumption
+        function getConsumptionColor(d) {
+            return d > 10 ? '#67000d' :
+                d > 5 ? '#a50f15' :
+                    d > 2 ? '#cb181d' :
+                        d > 1 ? '#ef3b2c' :
+                            d > 0.5 ? '#fb6a4a' :
+                                d > 0.2 ? '#fc9272' :
+                                    d > 0 ? '#fcbba1' :
+                                        '#fee5d9';
+        }
+
+        // Function to set style for each feature based on energy production
+        function productionStyle(feature) {
+            return {
+                fillColor: getProductionColor(feature.properties.energyProduction),
+                weight: 2,
+                opacity: 1,
+                color: 'white',
+                dashArray: '3',
+                fillOpacity: 0.7
+            };
+        }
+
+        // Function to set style for each feature based on energy consumption
+        function consumptionStyle(feature) {
+            return {
+                fillColor: getConsumptionColor(feature.properties.energyConsumption),
+                weight: 2,
+                opacity: 1,
+                color: 'white',
+                dashArray: '3',
+                fillOpacity: 0.7
+            };
+        }
+
+        // Add a tile layer for both maps
+    var tileLayerURL = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+        var attributionText = 'Energy data from <a href="https://www.eia.gov/international/overview/world">U.S. Energy Information Administration</a>; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+
+        L.tileLayer(tileLayerURL, { attribution: attributionText }).addTo(mapProduction);
+        L.tileLayer(tileLayerURL, { attribution: attributionText }).addTo(mapConsumption);
+
+        // Fetch the combined GeoJSON data and add it to the maps
+        fetch('combined_geojson.json')
+            .then(response => response.json())
+            .then(data => {
+                L.geoJson(data, {
+                    style: productionStyle,
+                    onEachFeature: function (feature, layer) {
+                        layer.bindPopup(feature.properties.name + ': ' + feature.properties.energyProduction + ' QBTU');
+                    }
+                }).addTo(mapProduction);
+
+                L.geoJson(data, {
+                    style: consumptionStyle,
+                    onEachFeature: function (feature, layer) {
+                        layer.bindPopup(feature.properties.name + ': ' + feature.properties.energyConsumption + ' QBTU');
+                    }
+                }).addTo(mapConsumption);
+            })
+            .catch(error => console.error('Error loading GeoJSON data:', error));
+
+        // Create legend with checkboxes for toggling layers
+        var legendProduction = L.control({ position: 'bottomright' });
+        var legendConsumption = L.control({ position: 'bottomright' });
+
+        legendProduction.onAdd = function (map) {
+            var div = L.DomUtil.create('div', 'legend'),
+                grades = [0, 0.2, 0.5, 1, 2, 5, 10],
+                labels = [];
+
+            div.innerHTML = '<strong>Energy Production</strong><br>';
+            for (var i = 0; i < grades.length; i++) {
+                div.innerHTML +=
+                    '<i style="background:' + getProductionColor(grades[i] + 0.1) + '"></i> ' +
+                    grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+            }
+            return div;
+        };
+
+        legendConsumption.onAdd = function (map) {
+            var div = L.DomUtil.create('div', 'legend'),
+                grades = [0, 0.2, 0.5, 1, 2, 5, 10],
+                labels = [];
+
+            div.innerHTML = '<strong>Energy Consumption</strong><br>';
+            for (var i = 0; i < grades.length; i++) {
+                div.innerHTML +=
+                    '<i style="background:' + getConsumptionColor(grades[i] + 0.1) + '"></i> ' +
+                    grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+            }
+            return div;
+        };
+
+        legendProduction.addTo(mapProduction);
+        legendConsumption.addTo(mapConsumption);
+    </script>
+</body>
+
+</html>

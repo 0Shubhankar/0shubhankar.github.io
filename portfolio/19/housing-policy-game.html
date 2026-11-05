@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gotham</title>
+    <style>
+         body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        font-family: 'Courier New', Courier, monospace;
+        padding: 0 10%;
+        box-sizing: border-box;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    .typewriter {
+        font-size: 24px;
+        border-right: 2px solid;
+        white-space: pre-wrap;
+        overflow: hidden;
+        animation: blink 0.75s step-end infinite;
+        margin-bottom: 20px;
+        text-align: center;
+        max-width: 100%;
+    }
+
+    @keyframes blink {
+        from, to { border-color: transparent }
+        50% { border-color: transparent }
+    }
+
+    .options {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 2s ease;
+    }
+
+    .button {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 18px;
+        padding: 10px 20px;
+        margin: 10px;
+        cursor: pointer;
+        border: 2px solid #333;
+        background-color: #fff;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .button:hover {
+        background-color: #333;
+        color: #fff;
+    }
+
+    body {
+            background-color: #000000;
+            /* Dark Gray */
+            color: #FAFAFA;
+            /* Light Gray */
+        }
+    
+        .button {
+            background-color: #44e7c9;
+            /* Gold */
+            color: #000000;
+            /* Dark Gray */
+        }
+    
+        .button:hover {
+            background-color: #000000;
+            color: #ffffff;
+        }
+    
+    </style>
+</head>
+
+<body>
+    <div id="storyText" class="story-text typewriter"></div>
+    <div id="optionsContainer" class="options"></div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const storyText = document.getElementById('storyText');
+            const optionsContainer = document.getElementById('optionsContainer');
+            function typeText(text, callback) {
+                let i = 0;
+                storyText.innerHTML = ""; // Clear previous text
+                const speed = 50; // Speed of typing
+                function type() {
+                    if (i < text.length) {
+                        storyText.innerHTML += text.charAt(i);
+                        i++;
+                        setTimeout(type, speed);
+                    } else if (callback) {
+                        callback();
+                    }
+                }
+                type(); // Start typing effect
+            }
+            function displayStep(step) {
+                const currentStep = steps[step];
+                optionsContainer.innerHTML = ''; // Clear previous options
+                optionsContainer.style.opacity = 0; // Reset opacity to 0 for fade-in effect
+                typeText(currentStep.text, () => {
+                    currentStep.options.forEach(option => {
+                        const button = document.createElement('button');
+                        button.textContent = option.text;
+                        button.className = 'button';
+                        button.onclick = () => displayStep(option.nextStep);
+                        optionsContainer.appendChild(button);
+                    });
+                    setTimeout(() => optionsContainer.style.opacity = 1, 100); // Fade in options after 100ms
+                });
+            }
+            const steps = {
+               "start": {
+                    "text": "Welcome to Gotham! The city is experiencing unprecedented growth, and as the newly elected mayor, you are under immense pressure. With a surge of new residents and a severe shortage of housing, Gotham is teetering on the edge of a crisis. It’s your responsibility to creatively address this housing shortage before the city bursts at the seams. How will you ensure every citizen has a place to call home in this rapidly expanding urban landscape? 🏠",
+                    "options": [
+                        { "text": "Expand Housing Supply by Encouraging High-Density Development.", "nextStep": "a" },
+                        { "text": "Implement Rent Control Policies to Stabilize Housing Costs.", "nextStep": "b" }
+                    ]
+                },
+                "a": {
+                    "text": "You’ve decided to expand housing supply, stacking Gotham high with shiny new developments. More homes, more people—Gotham’s about to get real cozy! But now comes the next step... how will you make it happen?",
+                    "options": [
+                        { "text": "Easing Zoning Restrictions", "nextStep": "a1" },
+                        { "text": "Incentivizing New Construction and Conversion Projects", "nextStep": "a2" }
+                    ]
+                },
+                "a1": {
+                    "text": "You’ve chosen to ease zoning restrictions. This approach is great for building more homes quickly, but Gotham’s quirky neighborhoods are a bit uneasy. Now, how will you smooth things over?",
+                    "options": [
+                        { "text": "Community Engagement and Incentives", "nextStep": "a11" },
+                        { "text": "Speedy Permits", "nextStep": "a12" }
+                    ]
+                },
+                "a11": {
+                    "text": "You chose Community Engagement and Incentives, and Gotham’s buzzing with excitement! However, a new challenge looms: gentrification is creeping in, and housing is becoming unaffordable for many. It’s time to tackle this head-on.",
+                    "options": [
+                        { "text": "Move forward to tackle the challenge of gentrification and unaffordable housing.", "nextStep": "s" }
+                    ]
+                },
+                "a12": {
+                    "text": "You opted for Speedy Permits, distributing building permits rapidly, and developers were thrilled! But now, Gotham’s streets are packed with construction, and the public is not amused. The backlash is significant, proving that speeding up permits wasn’t the quick fix after all, Mayor. With overcrowded streets and unhappy residents, it’s time to step back and rethink. Gotham is counting on you to find a better path forward!",
+                    "options": [
+                        { "text": "Restart", "nextStep": "start" }
+                    ]
+                },
+                "a2": {
+                    "text": "You’ve chosen to incentivize new construction and conversion projects—Gotham’s about to get a facelift! But now, you need to figure out how to make those incentives work best.",
+                    "options": [
+                        { "text": "Targeted Incentive Programs", "nextStep": "a21" },
+                        { "text": "Monitoring and Evaluation Framework", "nextStep": "a22" }
+                    ]
+                },
+                "a21": {
+                    "text": "You chose Targeted Incentive Programs, and developers are on board—more homes, more diversity! But now, the unintended side effect: unaffordable housing and gentrification. Prices are skyrocketing, and many long-time Gotham residents are starting to feel the pinch, worried about being priced out of their own neighborhoods. While the city grows, it’s clear that balancing development with keeping homes affordable is becoming harder. Gotham is becoming a more expensive place to live—what’s your next move, Mayor?",
+                    "options": [
+                        { "text": "Move forward to tackle the challenge of gentrification and unaffordable housing.", "nextStep": "s" }
+                    ]
+                },
+                "a22": {
+                    "text": "You opted for the Monitoring and Evaluation Framework, setting up systems to track how well your incentives are working. The data is flowing, and you’re making adjustments as needed. But while your team’s busy tracking every detail, Gotham’s housing market is still heating up. Unaffordable housing and gentrification are rearing their heads, with long-time residents feeling the squeeze. While your monitoring framework keeps things organized, it hasn’t stopped prices from climbing. Now, the challenge is finding a way to manage growth without pushing people out.",
+                    "options": [
+                        { "text": "Move forward to tackle the challenge of gentrification and unaffordable housing.", "nextStep": "s" }
+                    ]
+                },
+                "b": {
+                    "text": "You’ve chosen to implement rent control, keeping Gotham’s housing costs from skyrocketing. The people are cheering, but now the hard part: How strict should the policy be?",
+                    "options": [
+                        { "text": "Graduated Rent Control", "nextStep": "b1" },
+                        { "text": "Strong Tenant Protections", "nextStep": "b2" }
+                    ]
+                },
+                "b1": {
+                    "text": "You’ve gone with Graduated Rent Control, keeping Gotham’s rent increases fair and balanced. The city's breathing easier, but now you need to choose how to give this plan a boost!",
+                    "options": [
+                        { "text": "Supplemental Housing Vouchers", "nextStep": "b11" },
+                        { "text": "Landlord Incentive Programs", "nextStep": "b12" }
+                    ]
+                },
+                "b11": {
+                    "text": "You chose Supplemental Housing Vouchers, giving tenants extra help to keep up with Gotham’s rising rents. It’s been a relief for many struggling residents, but there’s a bigger problem brewing. As vouchers roll out, the issue of unaffordable housing and gentrification continues to grow. Even with vouchers, rents are climbing, and long-time residents fear being priced out of their neighborhoods. While the program helps, it’s not enough to stop the wave of high costs sweeping through Gotham. Time to think bigger, Mayor—Gotham’s housing crisis isn’t solved yet!",
+                    "options": [
+                        { "text": "Move forward to tackle the challenge of gentrification and unaffordable housing.", "nextStep": "s" }
+                    ]
+                },
+                "b12": {
+                    "text": "You went with Landlord Incentive Programs, offering landlords tax breaks and maintenance support to keep them invested in Gotham’s housing market. At first, it seemed like a win, but... it didn’t quite go as planned. While landlords enjoyed the perks, it wasn’t enough to make a real impact on Gotham’s housing crisis. Rents are still sky-high, and gentrification is running rampant. Landlords happily took the benefits, but affordable housing? Nowhere in sight. The city's still feeling the squeeze, and your plan didn’t deliver the stability Gotham desperately needs.",
+                    "options": [
+                        { "text": "Restart", "nextStep": "start" }
+                    ]
+                },
+                "b2": {
+                    "text": "You’ve chosen to roll out Strong Tenant Protections. Gotham’s renters are celebrating! But now, it’s time to make those protections really stick. How will you ensure renters stay secure?",
+                    "options": [
+                        { "text": "Legal Support Services for Tenants", "nextStep": "b21" },
+                        { "text": "Landlord-Tenant Mediation Programs", "nextStep": "b22" }
+                    ]
+                },
+                "b21": {
+                    "text": "You chose Legal Support Services for Tenants, giving Gotham’s renters the power to fight unfair evictions and housing issues. The tenants feel more secure, and the courts are busy, but the unaffordable housing and gentrification problem is still looming large. Even with legal support, rents are climbing, and more people are being priced out of their neighborhoods. The program is great for protecting tenant rights, but it hasn’t slowed the skyrocketing costs or stopped the wave of gentrification sweeping Gotham. The legal battles are won, but the housing war rages on, Mayor! Time for another move!",
+                    "options": [
+                        { "text": "Move forward to tackle the challenge of gentrification and unaffordable housing.", "nextStep": "s" }
+                    ]
+                },
+                "b22": {
+                    "text": "You went with Landlord-Tenant Mediation Programs, hoping to solve disputes peacefully and keep the peace in Gotham’s housing market. While some arguments have been smoothed over, the bigger problem of unaffordable housing and gentrification is still running wild. Sure, landlords and tenants are talking things out, but rents are still skyrocketing, and more people are being pushed out of their neighborhoods. The mediations are helpful, but they haven’t put a dent in Gotham’s growing housing crisis. Conversations are good, but the housing crunch is far from over. Back to the drawing board, Mayor!",
+                    "options": [
+                        { "text": "Move forward to tackle the challenge of gentrification and unaffordable housing.", "nextStep": "s" }
+                    ]
+                },
+                "s": {
+                    "text": "Gotham’s feeling the squeeze from gentrification, and unaffordable housing is pushing out low-income residents. How would you fix this?",
+                    "options": [
+                        { "text": "Implement Inclusionary Zoning Policies.", "nextStep": "s1" },
+                        { "text": "Relocate Low-Income Residents to Affordable Housing Zones in the Outskirts.", "nextStep": "s2" }
+                    ]
+                },
+                "s1": {
+                    "text": "You’ve chosen Inclusionary Zoning Policies, ensuring new developments offer a mix of affordable and market-rate housing. This will promote economic diversity, prevent gentrification, and integrate low-income residents throughout Gotham. But now you face two key options to implement this plan:",
+                    "options": [
+                        { "text": "Establish Partnership Programs with Developers", "nextStep": "s1a" },
+                        { "text": "Create a Flexible Compliance Framework", "nextStep": "s1b" }
+                    ]
+                },
+                "s1a": {
+                    "text": "You’ve chosen to Establish Partnership Programs with Developers, offering tax breaks, density bonuses, and fast-tracked permits to incentivize affordable housing. But now you’ve got two paths ahead—one could lead to success, and the other… not so much.",
+                    "options": [
+                        { "text": "Offer Incentives to Developers", "nextStep": "s1aa" },
+                        { "text": "Target Incentives for Affordable Housing in Key Areas", "nextStep": "s1ab" }
+                    ]
+                },
+                "s1aa": {
+                    "text": "You chose to Offer Incentives to Developers, hoping to boost affordable housing across Gotham. However, without focusing on location, things quickly went south. Developers flocked to wealthier neighborhoods, using incentives to build luxury apartments, leaving Gotham’s low-income areas neglected. Instead of affordable housing, the city got high-end developments, driving up prices even further and worsening the housing crisis. Meanwhile, the residents who needed affordable options were left in the dust, and the gap between rich and poor neighborhoods widened. The plan backfired, Mayor—time to regroup and rethink the strategy!",
+                    "options": [
+                        { "text": "Restart", "nextStep": "start" }
+                    ]
+                },
+                "s1ab": {
+                    "text": "You’ve implemented Enhanced Monitoring and Compliance Systems, ensuring developers follow through on their affordable housing commitments. The audits are in place, public trust is growing, and loopholes are closing. But while you’ve kept developers accountable, another issue is spiraling out of control: Gotham’s homelessness crisis. Despite the progress in tracking affordable housing, the city’s housing stock isn’t growing fast enough to meet the demand. The homelessness issue is growing, and the pressure is mounting to find quick solutions. It’s time to shift focus, Mayor—Gotham needs more than just monitoring now.",
+                    "options": [
+                        { "text": "Now Address the escalating issue of homelessness", "nextStep": "xa" }
+                    ]
+                },
+                "s1b": {
+                    "text": "You’ve gone with a Flexible Compliance Framework, giving developers the choice to either build affordable housing on-site, contribute to a housing fund, or build elsewhere. Now, let’s figure out how to make this work!",
+                    "options": [
+                        { "text": "Focus Contributions on Affordable Housing in Key Areas", "nextStep": "s1ba" },
+                        { "text": "Broader Build Locations", "nextStep": "s1bb" }
+                    ]
+                },
+                "s1ba": {
+                    "text": "You’ve chosen to Focus Contributions on Affordable Housing in Key Areas, directing developer funds to high-demand, well-connected parts of Gotham. This move ensures residents have access to jobs and amenities while addressing affordability in critical areas. Progress is being made, but Gotham’s homelessness crisis continues to escalate. Even with strategic investments, the pace of affordable housing development isn’t fast enough to keep up with the rising number of homeless individuals. While the focus on key areas is helping some, it’s not reaching everyone in need. Gotham needs a broader solution, Mayor!",
+                    "options": [
+                        { "text": "Now Address the escalating issue of homelessness", "nextStep": "xb" }
+                    ]
+                },
+                "s1bb": {
+                    "text": "You went with Broader Build Locations, giving developers the flexibility to build affordable units in less central, cheaper areas. While it saved on costs, the plan didn’t work as hoped. Residents found themselves too far from Gotham’s core, with long commutes and limited access to jobs and amenities. The cheaper land meant fewer services, and the distance isolated residents from the vibrant city life they once had. The plan to spread affordable housing backfired, leaving many feeling disconnected and underserved. Time to rethink the strategy, Mayor—Gotham’s residents need better solutions!",
+                    "options": [
+                        { "text": "Restart", "nextStep": "start" }
+                    ]
+                },
+                "s2": {
+                    "text": "You’ve chosen to Relocate Low-Income Residents to Affordable Housing Zones in the Outskirts. It’s cheaper to build outside Gotham’s bustling center, but moving residents this far could have consequences. Now, you need to choose how to make this plan work!",
+                    "options": [
+                        { "text": "Implement Community Development Initiatives", "nextStep": "s2a" },
+                        { "text": "Develop Comprehensive Transport and Infrastructure Plans", "nextStep": "s2b" }
+                    ]
+                },
+                "s2a": {
+                    "text": "You implemented Community Development Initiatives, enhancing the outskirts with schools and healthcare centers, but it’s not all going as planned. While some progress has been made, the increased demand for transportation is straining Gotham’s infrastructure. Low-income residents are spending more of their wages just to commute, and the quality of life isn’t rising as quickly as hoped. Meanwhile, Gotham is facing a growing homelessness crisis. Despite the new housing zones, many citizens remain without homes, and the city’s resources are feeling the pressure. It’s time to address this escalating issue, Mayor. Gotham needs your next move!",
+                    "options": [
+                        { "text": "Now Address the escalating issue of homelessness", "nextStep": "xc" }
+                    ]
+                },
+                "s2b": {
+                    "text": "You went with Comprehensive Transport and Infrastructure Plans, aiming to build better transit options for Gotham's outskirts. The goal was to ease commutes and connect residents to jobs and amenities. But, despite the big investment, it didn’t go as planned. Infrastructure projects are moving at a snail's pace, and Gotham's housing crisis is growing faster than the new transit lines. Residents are stuck with long commutes, and the promised improvements are still years away. The transportation boost came too late to solve the immediate housing needs. Time to rethink.",
+                    "options": [
+                        { "text": "Restart", "nextStep": "start" }
+                    ]
+                },
+                "xa": {
+                    "text": "Gotham is facing a growing homelessness crisis as rising rents and a lack of affordable housing push more residents onto the streets. The city needs immediate and long-term solutions to address this urgent issue.",
+                    "options": [
+                        { "text": "Expand Emergency Shelter and Transitional Housing", "nextStep": "w1" },
+                        { "text": "Develop Permanent Supportive Housing (PSH)", "nextStep": "w2" }
+                    ]
+                },
+                "xb": {
+                    "text": "Gotham is facing a growing homelessness crisis as rising rents and a lack of affordable housing push more residents onto the streets. The city needs immediate and long-term solutions to address this urgent issue.",
+                    "options": [
+                        { "text": "Expand Emergency Shelter and Transitional Housing.", "nextStep": "w1" },
+                        { "text": "Develop Permanent Supportive Housing (PSH).", "nextStep": "w2" }
+                    ]
+                },
+                "xc": {
+                    "text": "Gotham is facing a growing homelessness crisis as rising rents and a lack of affordable housing push more residents onto the streets. The city needs immediate and long-term solutions to address this urgent issue.",
+                    "options": [
+                        { "text": "Expand Emergency Shelter and Transitional Housing.", "nextStep": "w1" },
+                        { "text": "Develop Permanent Supportive Housing (PSH)", "nextStep": "w2" }
+                    ]
+                },
+                "w1": {
+                    "text": "🎉 Congratulations! 🏙️🎉 You did it! After tackling challenge after challenge, from zoning nightmares to gentrification woes, you’ve chosen to Expand Emergency Shelter and Transitional Housing, and Gotham is grateful! 🏙️✨ Your decision brings immediate relief to those most in need, offering safe spaces and a stepping stone toward stability. It’s no small feat navigating the city’s housing crisis, but you’ve taken the bold steps needed to protect Gotham’s most vulnerable residents. 🏠💪 Take a moment to bask in the glory—you’ve earned it! But don’t get too comfortable, Mayor... Gotham’s always got more in store! 🌍👏"
+                },
+                "w2": {
+                    "text": "🎉 Nice Work, Mayor! 🎉🏙️ You’ve chosen to Develop Permanent Supportive Housing (PSH), a solid move for tackling Gotham’s homelessness crisis! By focusing on long-term solutions, you're providing not just a roof, but stability and support for those who need it most. 🏠✨ It’s been quite a journey, Mayor—taking on zoning battles, developer drama, and housing crunches. And now, with PSH, you’re addressing the root causes of homelessness and giving residents the chance to rebuild their lives. It’s a steady, thoughtful step forward! 💼 Well done, Mayor! Gotham’s a little better off because of you."
+                },
+                "restart": {
+                    "text": "You have reached a deadlock or end. Do you want to restart?",
+                    "options": [
+                        { "text": "Restart", "nextStep": "start" }
+                    ]
+                }
+            };
+
+            displayStep('start');
+        });
+    </script>
+</body>
+
+</html>

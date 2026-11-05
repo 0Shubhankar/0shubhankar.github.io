@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Analysis of Comments in DC</title>
+
+    <style>
+
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        .full-screen-iframe {
+            width: 100%;
+            height: 100vh;
+            border: none;
+            pointer-events: auto;
+        }
+
+        .content-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: left;
+            padding: 20px;
+            position: relative;
+        }
+
+        .content-container h1,
+        .content-container h2,
+        .content-container h3 {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: #bbbbbb;
+            text-align: left;
+
+        }
+
+        .content-container h1 {
+            font-size: 2.2em;
+            text-align: left;
+
+        }
+
+        .content-container h2 {
+            font-size: 1.4em;
+            text-align: left;
+
+        }
+
+        .content-container h3 {
+            font-size: 1.em;
+            text-align: left;
+
+        }
+
+        .content-container p {
+            font-size: 1.2em;
+            font-weight: 100;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto;
+            color: #bbbbbb;
+
+        }
+
+        code {
+            background-color: #282c34;
+            color: #61dafb;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #121212;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #888;
+            border-radius: 10px;
+            border: 3px solid #121212;
+        }
+
+        .tooltip {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1em;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .tooltip.show {
+            opacity: 1;
+        }
+
+        .small-text {
+            font-size: 0.3em;
+            font-weight: 200;
+            color: #bbbbbb;
+            margin-top: 10px;
+            width: 100%;
+            text-align: left;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content-container">
+        <iframe src="index2.html" class="full-screen-iframe"></iframe>
+        <p class="small-text">Visualization highlights comments with significant sentiment scores related to pedestrian and road safety.</p>
+
+        <h1>Introduction</h1>
+        <p>Understanding public sentiment and identifying common issues related to pedestrian safety and infrastructure in urban
+        areas is crucial for effective urban management. Analyzing public comments and requests can provide valuable insights
+        into specific problems and areas that require attention. The challenge arises when dealing with a large volume of
+        comments; for instance, over 5,000 comments sourced from the Open Data DC portal. Manually analyzing each comment is
+        impractical; hence, sentiment analysis is employed to prioritize comments, facilitating efficient allocation of
+        resources to address urgent infrastructure needs. This process aids in targeting the most critical points for pedestrian
+        and road safety improvements.l points for pedestrian and road
+        safety.</p>
+        
+
+        <h1>Sentiment Analysis Process</h1>
+        <p>In the context of analyzing a substantial dataset of public comments related to pedestrian safety and infrastructure,
+        the following algorithms and models are utilized for sentiment analysis: The Hugging Face's Transformers library is used
+        to classify the sentiment of each comment, providing an understanding of the general emotional tone and its intensity.
+        Specifically, the distilbert-base-uncased-finetuned-sst-2-english model is employed. This pre-trained model predicts
+        whether the sentiment of a given text is positive or negative and provides a confidence score for the prediction. Its
+        lightweight and efficient nature makes it suitable for processing a large volume of comments. The algorithm steps
+        involved in this process include loading the model using the Hugging Face's transformers library, processing each
+        comment through the model to predict the sentiment and obtain the confidence score, and storing the sentiment results
+        (positive or negative) along with the confidence scores in the dataset for further analysis.
+        
+        To transform each comment into a numerical vector that captures its semantic content, facilitating similarity comparison
+        and clustering, the SentenceTransformer model all-MiniLM-L6-v2 is utilized. This model generates dense vector embeddings
+        for each comment, encapsulating the semantic meaning of the text. The algorithm steps include loading the embedding
+        model using the sentence-transformers library, transforming each comment into a numerical vector using the model, and
+        storing the embeddings for each comment in the dataset for clustering.
+        
+        For clustering comments based on their semantic similarities, the KMeans Clustering algorithm is employed. This
+        algorithm partitions the embeddings into a specified number of clusters, with each cluster containing comments with
+        similar semantic meanings. The algorithm steps involve preprocessing to ensure that the embeddings are standardized,
+        applying the KMeans algorithm to the embeddings to partition them into clusters, and assigning cluster labels to each
+        comment, which are then stored in the dataset.</p>
+
+        <h1>Implementation Overview</h1>
+        <p>The implementation process begins with data preprocessing to clean and prepare the text data for analysis. Following this, the sentiment analysis model from Hugging Face is loaded, and each comment is processed to predict sentiment, with results stored accordingly. Subsequently, the SentenceTransformer model is loaded to generate embeddings for each comment, which are then stored for clustering. The final step involves standardizing the embeddings, applying KMeans clustering to group comments into clusters, and storing the cluster labels. This comprehensive process leverages sentiment analysis, embedding generation, and clustering to analyze public comments related to pedestrian safety and infrastructure in the DC area. By prioritizing comments based on sentiment and identifying common themes through clustering, resources can be allocated more efficiently to address urgent infrastructure needs and improve pedestrian and road safety.</p>
+    </div>
+
+    <div class="content-container">
+        <div class="tooltip">Click to rain to read comments</div>
+        <iframe src="index.html" class="full-screen-iframe"></iframe>
+        <p class="small-text">Map highlighting comments with significant sentiment scores.</p>
+        <h2>Map Visualization</h2>
+        <p>The data utilized in this analysis is sourced from the Open Data DC portal. The collected data undergoes cleaning and
+        preparation to facilitate sentiment analysis and subsequent visualization. The primary objective of the map is to
+        provide a visual representation of various data points related to pedestrian safety and user requests. By displaying
+        these data points on a geographical map, the spatial distribution of issues can be analyzed, sentiment scores
+        understood, and insights gained into specific locations with frequent or severe problems.
+        
+        The data visualization process begins with data loading, where the map imports data from a CSV file, including fields
+        such as coordinates (X, Y), comments, sentiment scores, and other metadata. The map is then centered on specific
+        coordinates with a chosen zoom level to provide an optimal view of the data points. A dark-themed tile layer serves as
+        the base map, offering better visual contrast.
+        
+        Each data point is represented by a green hollow circle on the map, with the radius of the circles adjusted for clear
+        visibility without cluttering the map. The sentiment score of each comment determines the blinking opacity of the
+        circle; higher absolute sentiment scores (whether positive or negative) result in higher maximum opacity, creating a
+        blinking effect that draws attention to areas with extreme sentiments. This visual cue helps to quickly identify areas
+        with significant positive or negative feedback.
+        
+        To convey the overwhelming volume of comments and requests, a matrix rain visual effect is used. This visual metaphor
+        illustrates the sheer number of comments and the complexity of managing and prioritizing them. Additionally, interactive
+        popups enhance user interaction; clicking on any circle brings up a popup with detailed information about the specific
+        data point. The popup includes fields such as OBJECTID, GLOBALID, REQUESTID, USERTYPE, REQUESTTYPE, REQUESTDATE, STATUS,
+        STREETSEGID, COMMENTS, sentiment_score, and cluster.</p>
+    </div>
+
+    <div class="content-container">
+        <div class="tooltip">Click on the points to read comments</div>
+        <iframe src="index4.html" class="full-screen-iframe"></iframe>
+        <p class="small-text">Map highlighting comments with high sentiment scores, with rapidly blinking dots indicating the sentiment intensity.</p>
+        <h2>Analysis and Insights</h2>
+        <p>The blinking effect on the map provides an immediate visual indication of the sentiment associated with each data point.
+        Rapidly blinking circles represent data points with high absolute sentiment scores, indicating strong positive or
+        negative feedback. This visual representation helps quickly identify areas with significant sentiment variations.
+        
+        The geographical distribution of data points on the map helps identify hotspots where multiple incidents or requests are
+        concentrated. Areas with dense clusters of circles might indicate locations with recurring issues, enabling targeted
+        interventions in these regions.
+        
+        Interactive popups enhance user interaction by allowing users to explore detailed information about each data point.
+        These popups provide context and specifics, aiding in understanding and addressing the reported issues more effectively.</p>
+        
+        <h2>Limitations</h2>
+        <p>While this approach provides a comprehensive analysis and visualization of public comments, there are some inherent
+        limitations. The accuracy of sentiment analysis and clustering depends on the quality of the models used. Despite
+        employing advanced models, there might be some misclassifications due to the nuances in human language and context. The
+        results heavily rely on the quality and completeness of the input data. Incomplete or incorrect data entries can affect
+        the analysis and visualization.
+        
+        Additionally, the process is designed to handle a large volume of comments, but extremely high volumes can still pose
+        computational challenges, potentially affecting performance and responsiveness. Sentiment analysis algorithms might not
+        fully capture the subtleties of human emotions and intentions, leading to less precise sentiment classification in some
+        cases. Furthermore, the current analysis provides a snapshot in time. Real-time updates and dynamic analysis are not
+        covered in this process, which could limit the timely identification of emerging issues.</p>
+        
+        <h2>Conclusion</h2>
+        <p>This map visualization serves as a powerful tool for analyzing pedestrian safety data and user requests in the DC area.
+        By combining geographical visualization with sentiment analysis, it provides valuable insights into areas of concern and
+        helps prioritize interventions based on user feedback and incident reports. The interactive elements enhance the user
+        experience, making it easier to explore and understand the data in a meaningful way.</p>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Show tooltips with delay
+            var tooltips = document.querySelectorAll('.tooltip');
+
+            tooltips.forEach(function (tooltip) {
+                setTimeout(function () {
+                    tooltip.classList.add('show');
+                }, 500); // Show after 0.5 second
+
+                setTimeout(function () {
+                    tooltip.classList.remove('show');
+                }, 5000); // Hide after 5 seconds
+            });
+
+            // Set pointer events to auto for all iframes
+            var iframes = document.querySelectorAll('iframe');
+            iframes.forEach(function (iframe) {
+                iframe.style.pointerEvents = 'auto';
+            });
+        });
+    </script>
+</body>
+
+</html>

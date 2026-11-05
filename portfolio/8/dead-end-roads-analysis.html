@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City Maps Analysis</title>
+
+    <style>
+        
+        body {
+            background-color: black;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+            font-weight: 400;
+
+        }
+
+        .section {
+            padding: 40px;
+            border-bottom: 1px solid #ddd;
+            margin-top: 20px; /* Adjust this value to increase or decrease the space above the section */
+        }
+
+
+        .section {
+            padding: 90px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .section-heading h1 {
+            color: white; /* Sets text color to white */
+            font-size: 60px; /* Sets the font size to 15px */
+            margin: 0; /* Removes default margin */
+            padding: 10px 0; /* Adds some vertical padding */
+            text-align: center;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            -webkit-font-smoothing: antialiased;
+            align-items: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .section-heading h2{
+            color: rgb(255, 255, 255);
+            font-size: 30px;
+            text-align: center;
+            -webkit-font-smoothing: antialiased;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+        }
+
+        .section-heading h3{
+        color: rgb(255, 255, 255);
+        font-size: 20px;
+        text-align: center;
+        -webkit-font-smoothing: antialiased;
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        }
+
+
+
+
+        .city-buttons {
+            display: flex;
+            justify-content: center; /* Centers horizontally in the container */
+            align-items: center; /* Centers vertically in the container, if needed */
+            height: 5vh; /* Takes full viewport height, remove if only horizontal centering is needed */
+            margin-top: 40px;
+        }
+
+        .text-button {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 10px 20px;
+            font-size: 20px;
+            color: rgb(255, 255, 255); /* Sets text color to white */
+            background-color: black;
+            cursor: pointer;
+            text-decoration: none; /* Removes underline from links */
+            border: none; /* Ensures no border is visible */
+            outline: none; /* Typically keep this for accessibility unless you provide a custom focus style */
+            border-radius: 4px; /* Optional: Adds rounded corners to the button */
+
+        }
+
+        .text-button:hover, .text-button:focus {
+            color: rgb(255, 0, 0); /* Changes text color to grey on hover and focus */
+        }
+
+        .map-container {
+            text-align: center;
+            margin-bottom: 20px;
+            width: 100%; /* Set width to full screen */
+        }
+
+        #map-iframe {
+            width: 100%; /* Set width to full screen */
+            height: 70vh; /* Set height to 40% of the viewport height */
+            border: 0; /* Remove the border */
+        }
+        iframe {
+            width: 80%;
+            height: 500px;
+            border: 1px solid #ccc;
+        }
+
+        .text-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;  /* Centers items vertically */
+            text-align: left;
+            margin-top: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 15px;
+            color: white;
+            width: 800px;
+            -webkit-font-smoothing: antialiased;
+        }
+        .text-section2 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;  /* Centers items vertically */
+            text-align: left;
+            margin-top: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 16px;
+            color: white;
+            width: 1000px;
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+            align-items: stretch; /* Ensures both columns are the same height */
+
+        }
+
+        .left-column, .right-column {
+            flex: 1; /* Each takes equal space */
+            padding: 20px;
+            width: 400px;
+        }
+
+        .intro-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .intro-graphic {
+            width: 80%;
+            height: 300px;
+            background-color: #0d0d0d;
+            margin-bottom: 20px;
+            margin-top: 20px;
+
+        }
+
+        .comparison-section1 {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .comparison-section1 iframe {
+            width: 30%;
+            height: 400px;
+            border: 0;
+        }
+
+        /* Container for the entire comparison section */
+        .comparison-section2 {
+            display: flex;               /* Use Flexbox for layout */
+            justify-content: space-between; /* Space out the map containers */
+            gap: 20px;                   /* Space between each map-container */
+            flex-wrap: wrap;             /* Allow wrapping on smaller screens */
+        }
+
+        /* Ensure each map container takes up a third of the available space */
+        .map-container-C {
+            flex: 1 1 calc(33.333% - 20px); /* Flex-grow, flex-shrink, and width calculation */
+            display: flex;                 /* Flexbox layout inside each container */
+            flex-direction: column;        /* Stack iframe and text vertically */
+            align-items: center;           /* Center align items */
+            margin-bottom: 20px;           /* Space below each container */
+        }
+
+        /* Style for iframes within the map container */
+        .map-container-C iframe {
+            width: 100%; /* Full width of its container */
+            height: 400px; /* Adjust height as needed */
+            border: 0; /* Remove border */
+        }
+
+        /* Style for text sections within the map container */
+        .text-section-C {
+            margin-top: 10px; /* Space between iframe and text */
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 18px;
+            color: white;
+            text-align: left;
+            width: 100%; /* Full width of container */
+        }
+
+
+        .analysis-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #f0f0f0;
+            width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: left;
+            align-items: center;
+        }
+        .left-column, .right-column {
+            flex: 1; /* Each takes equal space */
+            padding: 20px;
+        }
+
+        .analysis-graphic {
+            height: 300px;
+            background-color: #000000;
+            margin-bottom: 20px;
+            color: #f0f0f0;
+            
+        }
+        .no-exit-sign {
+            font-size: 1.5em;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        .red-text {
+            color: red;
+        }
+    </style>
+        <script>
+            function showMap(city) {
+                document.getElementById('map-iframe').src = city + '.html';
+            }
+        </script>
+</head>
+
+<body>
+
+    <div class="section" id="section-1">
+        <div class="section-heading">
+            <h1><span class="no-exit-sign">🚫</span><span class="red-text">NoExit</span> Nexus</h1>
+            <h2>Why Are Indian Cities Plagued with <span class="red-text">Dead-End Streets?</span></h2>
+        </div>
+        <div class="city-buttons">
+            <a href="#" class="text-button" onclick="showMap('Mumbai'); return false;">Mumbai</a>
+            <a href="#" class="text-button" onclick="showMap('Delhi'); return false;">Delhi</a>
+            <a href="#" class="text-button" onclick="showMap('Bengaluru'); return false;">Bengaluru</a>
+        </div>
+
+        <div class="map-container">
+            <iframe id="map-iframe" src="Mumbai.html" frameborder="0"></iframe>
+        </div>
+        <div class="text-section2">
+            <div class="left-column">
+                <p> The phenomenon of dead-end streets in cities such as Bengaluru, Mumbai, and Delhi is emblematic of
+                deeper systemic issues in urban planning and governance. These dead ends are not just physical barriers but symbols of a
+                broader failure to effectively manage urban growth, leading to severe impacts on traffic, safety, and quality of life.
+                This analysis delves into the underlying causes of dead-end streets in these cities, highlighting inadequate urban
+                planning, unregulated development, encroachments, lack of infrastructure, and political interference. Unplanned areas
+                lacking essential services and connectivity cause frequent flooding, prevent emergency vehicles like fire trucks and
+                ambulances from passing through, and reflect critical deficiencies in urban infrastructure. </p>
+            </div>
+            <div class="right-column">
+                <p>Despite long-term development plans, rapid population growth often outpaces infrastructure updates, leading to outdated
+                and insufficient road networks. Illegal colonies and housing developments, frequently constructed without adherence to
+                building codes or infrastructure requirements, further exacerbate the issue. Political considerations often override
+                sound urban planning, resulting in decisions driven by short-term gains rather than sustainable development. This
+                confluence of factors leads to a proliferation of dead-end streets, increasing traffic congestion on main roads and
+                creating significant challenges for urban mobility and safety. Furthermore, the lack of proper road networks means that
+                traffic is often funneled into a few main arteries, exacerbating congestion and pollution.  </p>
+            </div>
+        </div>
+
+    </div>
+    <div class="text-section2">
+        <div class="left-column">
+
+            <p class="red-text">Inadequate Urban Planning</p>
+            <p>Urban planning in many Indian cities, such as Bengaluru, Mumbai, and Delhi, has been reactive rather than proactive.
+            Explosive population growth has outstripped existing infrastructure, and outdated development plans fail to meet current
+            needs. Plans often lack a comprehensive roadmap, resulting in poorly designed neighborhoods with inadequate
+            connectivity. This piecemeal approach leads to numerous dead-end streets, disrupting traffic flow and forcing vehicles
+            onto congested main roads, worsening traffic problems.</p>
+
+            <p class="red-text">Unregulated Development and Illegal Colonies</p>
+            <p>A significant contributor to the prevalence of dead-end streets is the rampant unregulated development. In many cases,
+            developers bypass legal requirements and construct buildings without proper authorization. These illegal colonies often
+            emerge overnight on land not zoned for residential use, lacking essential infrastructure such as roads, drainage
+            systems, and utilities.
+            
+            Residents of these areas face numerous challenges. Roads are narrow, poorly constructed, and frequently end abruptly,
+            creating dead ends. During emergencies, these dead ends can prevent access by emergency vehicles, putting lives at risk.
+            There have been numerous instances where ambulances and fire trucks could not reach areas in time, resulting in higher
+            death tolls during fires and floods. Health emergencies are similarly impacted, with delays in medical assistance
+            leading to preventable fatalities. Additionally, the absence of proper drainage systems leads to frequent flooding
+            during the monsoon season, as water cannot flow away efficiently.
+            </p>
+
+
+            <p class="red-text">Lack of Infrastructure</p>
+            <p>Infrastructure development in many Indian cities has not kept pace with urban growth. Essential services such as
+            roads, water supply, sewage, and public transport are often inadequate or entirely absent in many neighborhoods. The lack
+            of a well-planned street network leads to the proliferation of dead ends.
+
+            In areas where infrastructure is lacking, residents and developers often create makeshift solutions that are not
+            sustainable in the long term. Narrow, winding lanes are common, and these often end abruptly, creating dead ends.
+            The absence of a comprehensive urban infrastructure plan exacerbates these issues, making it difficult to address them
+            effectively.</p>
+            
+
+            <p class="red-text">Impacts on Traffic and Safety</p>
+            <p>The prevalence of dead-end streets has significant implications for traffic and safety. With many streets ending
+                abruptly, traffic is forced onto a limited number of main roads, leading to severe congestion. This not only
+                increases
+                travel times but also contributes to higher levels of air pollution, as vehicles spend more time idling in traffic.
+            
+                Dead ends also pose serious safety risks. During emergencies such as fires or medical crises, the ability of
+                emergency
+                services to reach affected areas quickly is crucial. Dead-end streets can block access, delaying response times and
+                potentially costing lives. In addition, these areas are often more vulnerable to flooding, as inadequate drainage
+                systems cannot cope with heavy rainfall, leading to waterlogged streets that are impassable for both residents and
+                emergency vehicles.</p>
+    
+            
+            
+        </div>
+            <div class="right-column">
+            
+            
+
+            <p class="red-text">Urban Inequality and Segregation</p>
+
+            <p>Another significant aspect of urban development in these cities is the stark divide between rich and poor. High-income
+            communities often reside in gated communities, which are self-contained enclaves with their own infrastructure. Many of
+            these gated communities lead to dead ends, isolating them from the rest of the urban fabric. Nearby, you can often find
+            slums where people who work in these luxury houses live. Despite having infrastructure facilities within their
+            boundaries, these gated communities are not always integrated with the city’s overall infrastructure. This lack of
+            integration can lead to infrastructure collapse, as the city's systems are not designed to handle the fragmented and
+            isolated development patterns created by these gated communities.</p>
+
+            <p class="red-text">Encroachments on Government Land</p>
+            <p>Encroachment on government land is another critical issue. In many instances, people illegally occupy public land and
+                build unauthorized structures. These encroachments are often tolerated due to political pressures or administrative
+                laxity. Over time, these unauthorized settlements expand and often convert into slums, creating a mafia of slum
+                dwellers
+                with political connections. These mafias take advantage of people with no means, failing to provide any sort of
+                infrastructure while continually increasing rent.
+            
+                Encroachments contribute to the haphazard development of neighborhoods where planning and design principles are
+                ignored.
+                The result is a maze of poorly aligned streets, many of which are dead ends. This chaotic growth pattern not only
+                disrupts the urban fabric but also makes it challenging to retrofit these areas with proper infrastructure later on.
+                These slums frequently lack proper drinking water and sanitation facilities, exacerbating the living conditions for
+                residents. </p>
+
+            
+            <p class="red-text">Political Interference</p>
+            <p>Political considerations frequently override sound urban planning and governance. Politicians often prioritize
+                short-term electoral gains over long-term urban development. For instance, unauthorized colonies might be
+                regularized to
+                secure votes, even if these settlements violate zoning laws and lack basic infrastructure. This practice undermines
+                the
+                rule of law and encourages further illegal development.
+            
+                Moreover, political interference can lead to inconsistent application of building codes and regulations. Developers
+                and
+                residents might feel emboldened to flout rules, knowing they can rely on political patronage to avoid repercussions.
+                This leads to a situation where urban planning principles are ignored, and the cityscape becomes increasingly
+                fragmented
+                and dysfunctional.</p>
+
+                <p class="red-text">Restricted Municipal Autonomy</p>
+                <p>
+                    The lack of autonomy for cities hampers their ability to address dead-end streets effectively. Cities need
+                    state approval for major decisions and must comply with central laws, limiting local solutions. Financial dependence
+                    on
+                    state funding restricts budgets, preventing investments in infrastructure to connect or extend dead-end streets.
+                    Higher
+                    government oversight often misaligns priorities, delaying crucial projects. Political interference and resource
+                    constraints weaken enforcement of building codes, leading to haphazard development and more dead-end streets. This
+                    bureaucratic complexity stifles urban growth, worsens traffic congestion, and hinders the development of connected,
+                    sustainable environments. </p>
+           
+
+        </div>
+    </div>
+
+        </div>
+    </div>
+
+    <div class="section" id="section-3">
+        <div class="section-heading">
+        </div>
+        <div class="comparison-section2">
+            <div class="map-container-C">
+                <div class="section-heading">
+                    <h3>Mumbai</h3>
+                </div>
+                <iframe src="Mumbaianim.html" frameborder="0"></iframe>
+                <div class="text-section-C">
+                    <p>The situation in Mumbai is concerning, with <span class="red-text">19.48% of the streets ending in dead ends</span>. Roads leading to these
+                    dead ends cover 494 kilometers, <span class="red-text">representing 13.31% of the road network</span>. Mumbai's higher percentage of dead-end streets
+                    underscores a significant inefficiency in its urban planning. The higher proportion of dead-end streets intensifies
+                    traffic congestion on the main thoroughfares, disrupting daily commutes and public transportation. Moreover, the lack of
+                    adequate infrastructure in these dead-end areas, such as sewage and drainage systems, results in severe flooding and
+                    clogged pipelines during monsoon seasons, causing additional hardships for residents.</p>
+                </div>
+            </div>
+            <div class="map-container-C">
+                <div class="section-heading">
+                    <h3>Delhi</h3>
+                </div>
+                <iframe src="Delhianim.html" frameborder="0"></iframe>
+                <div class="text-section-C">
+                    <p>In Delhi, the urban infrastructure faces significant challenges, with<span class="red-text">15.09% of the streets ending in dead ends</span>.
+                    Specifically, 1,949 kilometers of roads lead to dead ends,<span class="red-text">accounting for 10.81% of the road network.</span> This indicates
+                    that over one-tenth of the roads in Delhi do not contribute to efficient connectivity, forcing traffic onto the
+                    remaining of the road network. The prevalence of dead-end streets exacerbates congestion and impacts emergency
+                    response times. Additionally, these areas often lack proper sewage and drainage systems, leading to frequent flooding
+                    and clogged pipelines during heavy rains, further complicating urban living conditions.</p>
+                </div>
+            </div>
+            <div class="map-container-C">
+                <div class="section-heading">
+                    <h3>Bengaluru</h3>
+                </div>
+                <iframe src="bengaluruanim.html" frameborder="0"></iframe>
+                <div class="text-section-C">
+                    <p>Bengaluru presents the most severe case among the three cities, with a <span class="red-text">staggering 27.28% of the streets ending in dead
+                    ends</span>. The roads leading to these dead ends measure 4,582 kilometers, <span class="red-text">accounting for 20.62% of the road network.</span> 
+                    These dead-end areas often lack critical infrastructure such as proper sewage and drainage systems. This
+                    deficiency leads to frequent flooding and clogged pipelines during heavy rainfall, exacerbating the city's
+                    infrastructural challenges. The situation is further compounded by the fact that Bengaluru suffers from the worst
+                    traffic congestion among the three cities, illustrating the severe impact of dead-end streets on urban mobility. </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

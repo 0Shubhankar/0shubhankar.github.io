@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Scene with Textured Cubes</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+
+        }
+
+         #canvas-container {
+            flex: 1;
+            /* Makes the canvas take the full height available, leaving room for the description */
+        }
+
+        .label {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        #description {
+            padding: 20px;
+            background-color: #ffffff;
+            color: #000000;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            line-height: 1.6;
+            font-size: 16px;
+            text-align: justify;
+            margin-left: 20%;
+            margin-right:20%;
+        }
+
+        .small-italic {
+            font-size: 1.0em;
+            font-style: italic;
+            color: #555;
+            text-align: center;
+            margin-left: 20%;
+            margin-right:20%;
+        }
+        
+    </style>
+</head>
+
+
+<body>
+    <!-- Three.js Library -->
+    <script src="../vendor/shared/lib-25023b521d77/dist/three.min.js"></script>
+    <!-- Correct CDN for OrbitControls -->
+    <script src="../vendor/shared/lib-1b307bf3cbda/dist/OrbitControls.js"></script>
+    <!-- CSS2DRenderer for Labels -->
+    <script src="../vendor/shared/lib-7df2e2f4f588/dist/CSS2DRenderer.js"></script>
+
+    <script src="../vendor/shared/lib-9092ba184a7e/dist/dat.gui.min.js"></script>
+
+
+    <script>
+        // Key Variables
+        let scene, camera, renderer, labelRenderer, controls;
+        let positions = [], connections = [], clusterCenters = [], textures = [];
+
+        // Define Districts with Socio-Economic Data
+        let districts = [
+                {
+                    name: 'Lower-Income District',
+                    populationDensity: 8000,
+                    realEstatePrices: 150000,
+                    incomeDistribution: 30000,
+                    vacancyRate: 0.20,
+                    minPopulationDensity: 5000,
+                    maxPopulationDensity: 9000,
+                    minRealEstatePrice: 50000,
+                    maxRealEstatePrice: 250000,
+                    minIncome: 10000,
+                    maxIncome: 40000,
+                    minVacancyRate: 0.15,
+                    maxVacancyRate: 0.30,
+                    get affordabilityIndex() { return this.realEstatePrices / this.incomeDistribution; }
+                },
+                {
+                    name: 'Working-Class District',
+                    populationDensity: 6000,
+                    realEstatePrices: 200000,
+                    incomeDistribution: 40000,
+                    vacancyRate: 0.15,
+                    minPopulationDensity: 4000,
+                    maxPopulationDensity: 8000,
+                    minRealEstatePrice: 100000,
+                    maxRealEstatePrice: 350000,
+                    minIncome: 20000,
+                    maxIncome: 60000,
+                    minVacancyRate: 0.10,
+                    maxVacancyRate: 0.20,
+                    get affordabilityIndex() { return this.realEstatePrices / this.incomeDistribution; }
+                },
+                {
+                    name: 'Lower-Middle-Class District',
+                    populationDensity: 5000,
+                    realEstatePrices: 300000,
+                    incomeDistribution: 50000,
+                    vacancyRate: 0.10,
+                    minPopulationDensity: 4000,
+                    maxPopulationDensity: 7000,
+                    minRealEstatePrice: 200000,
+                    maxRealEstatePrice: 450000,
+                    minIncome: 30000,
+                    maxIncome: 70000,
+                    minVacancyRate: 0.08,
+                    maxVacancyRate: 0.15,
+                    get affordabilityIndex() { return this.realEstatePrices / this.incomeDistribution; }
+                },
+                {
+                    name: 'Middle-Class District',
+                    populationDensity: 4000,
+                    realEstatePrices: 400000,
+                    incomeDistribution: 70000,
+                    vacancyRate: 0.08,
+                    minPopulationDensity: 3000,
+                    maxPopulationDensity: 6000,
+                    minRealEstatePrice: 300000,
+                    maxRealEstatePrice: 600000,
+                    minIncome: 50000,
+                    maxIncome: 90000,
+                    minVacancyRate: 0.05,
+                    maxVacancyRate: 0.10,
+                    get affordabilityIndex() { return this.realEstatePrices / this.incomeDistribution; }
+                },
+                {
+                    name: 'Upper-Middle-Class District',
+                    populationDensity: 3000,
+                    realEstatePrices: 600000,
+                    incomeDistribution: 100000,
+                    vacancyRate: 0.05,
+                    minPopulationDensity: 2000,
+                    maxPopulationDensity: 5000,
+                    minRealEstatePrice: 450000,
+                    maxRealEstatePrice: 900000,
+                    minIncome: 80000,
+                    maxIncome: 150000,
+                    minVacancyRate: 0.03,
+                    maxVacancyRate: 0.07,
+                    get affordabilityIndex() { return this.realEstatePrices / this.incomeDistribution; }
+                },
+                {
+                    name: 'Wealthy District',
+                    populationDensity: 2000,
+                    realEstatePrices: 1000000,
+                    incomeDistribution: 200000,
+                    vacancyRate: 0.02,
+                    minPopulationDensity: 1500,
+                    maxPopulationDensity: 3000,
+                    minRealEstatePrice: 700000,
+                    maxRealEstatePrice: 2000000,
+                    minIncome: 150000,
+                    maxIncome: 300000,
+                    minVacancyRate: 0.01,
+                    maxVacancyRate: 0.05,
+                    get affordabilityIndex() { return this.realEstatePrices / this.incomeDistribution; }
+                }
+            ];
+
+
+
+        // Add GUI controls for the global modifiers
+            function setupGUI() {
+                const gui = new dat.GUI({ width: 400 });  // Adjust the width to suit your layout
+
+                // Population Density Modifier Control
+                gui.add(globalModifiers, 'populationDensityModifier', 0.5, 2.0).step(0.1).onChange(applyGlobalModifiersAndUpdateLabels);
+
+                // Real Estate Price Modifier Control
+                gui.add(globalModifiers, 'realEstatePriceModifier', 0.5, 2.0).onChange(applyGlobalModifiersAndUpdateLabels);
+
+                // Income Modifier Control
+                gui.add(globalModifiers, 'incomeModifier', 0.5, 2.0).onChange(applyGlobalModifiersAndUpdateLabels);
+
+                // Vacancy Rate Modifier Control
+                gui.add(globalModifiers, 'vacancyRateModifier', 0.8, 1.2).onChange(applyGlobalModifiersAndUpdateLabels);
+            }
+
+            // Apply global modifiers and update labels when the user changes the GUI controls
+            function applyGlobalModifiersAndUpdateLabels() {
+                applyGlobalModifiers(); // Apply global modifiers to update district data
+                updateLabels(); // Update labels to reflect the new data
+            }
+
+
+        // Global Modifiers
+        let globalModifiers = {
+            populationDensityModifier: 1.0,  // Adjusts population density globally
+            realEstatePriceModifier: 1.0,    // Adjusts real estate prices globally
+            incomeModifier: 1.0,             // Adjusts income distribution globally
+            vacancyRateModifier: 1.0         // Adjusts vacancy rate globally
+        };
+
+        // Setup Scene, Camera, and Renderer
+        function setupScene() {
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xffffff); // White background
+        }
+
+        function setupCamera() {
+            let res = window.innerWidth / window.innerHeight;
+            camera = new THREE.PerspectiveCamera(75, res, 0.1, 1000);
+            camera.position.z = 30;
+        }
+
+        function setupRenderer() {
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            document.body.appendChild(renderer.domElement);
+
+            // Add CSS2DRenderer for the labels
+            labelRenderer = new THREE.CSS2DRenderer();
+            labelRenderer.setSize(window.innerWidth, window.innerHeight);
+            labelRenderer.domElement.style.position = 'absolute';
+            labelRenderer.domElement.style.top = '0px';
+            document.body.appendChild(labelRenderer.domElement);
+        }
+
+        // Load Textures
+        function loadTextures() {
+            const loader = new THREE.TextureLoader();
+            textures = [
+                loader.load('texture1.png'), // Texture for cluster 1
+                loader.load('texture2.png'), // Texture for cluster 2
+                loader.load('texture3.png'), // Texture for cluster 3
+                loader.load('texture4.png'), // Texture for cluster 4
+                loader.load('texture5.png'), // Texture for cluster 5
+                loader.load('texture6.png')  // Texture for cluster 6
+            ];
+        }
+
+        // Setup Positions for Clusters
+        function setupPositions() {
+            let nrOfPositions = 50;
+            clusterCenters = [
+                new THREE.Vector3(10, 10, 10),
+                new THREE.Vector3(-10, 10, 10),
+                new THREE.Vector3(10, -10, 10),
+                new THREE.Vector3(10, 10, -10),
+                new THREE.Vector3(-10, -10, 10),
+                new THREE.Vector3(-10, 10, -10)
+            ];
+
+            for (let i = 0; i < nrOfPositions; i++) {
+                let cluster = clusterCenters[i % clusterCenters.length];
+                let variation = new THREE.Vector3(random(-2, 2), random(-2, 2), random(-2, 2));
+                let position = cluster.clone().add(variation);
+                positions.push(position);
+            }
+        }
+
+        // Setup Cube Objects for Districts
+        function setupCubes() {
+            let geometry = new THREE.BoxGeometry(2, 2, 2);
+            positions.forEach((p, i) => {
+                let clusterIndex = i % textures.length;
+                let material = new THREE.MeshPhongMaterial({
+                    map: textures[clusterIndex], // Apply texture to each cube
+                    shininess: 90,
+                    fog: true,
+                    specular: 0xffffff
+                });
+
+                let cube = new THREE.Mesh(geometry, material);
+                cube.castShadow = true;
+                cube.receiveShadow = true;
+                cube.position.set(p.x, p.y, p.z);
+                scene.add(cube);
+            });
+        }
+
+        // Setup Labels for Districts
+        function setupClusterLabels() {
+            clusterCenters.forEach((center, index) => {
+                let labelText = `District ${index + 1}`;
+                createLabel(center, labelText);
+            });
+        }
+
+        function createLabel(position, text) {
+            let labelDiv = document.createElement('div');
+            labelDiv.className = 'label';
+            labelDiv.textContent = text;
+            document.body.appendChild(labelDiv);
+
+            let label = new THREE.CSS2DObject(labelDiv);
+            label.position.copy(position);
+            scene.add(label);
+        }
+
+        // Setup Lighting for the Scene
+        function setupLights() {
+            let ambientLight = new THREE.AmbientLight(0xffffff, 0.6); // Softer ambient light
+            scene.add(ambientLight);
+
+            let directionalLight = new THREE.DirectionalLight(0xffffff, 0.5); // Main lighting
+            directionalLight.position.set(30, 30, 30);
+            directionalLight.castShadow = true;
+            scene.add(directionalLight);
+
+            let spotLight = new THREE.SpotLight(0xffffff, 0.8); // Spotlight for additional lighting
+            spotLight.position.set(-30, 50, 50);
+            spotLight.castShadow = true;
+            spotLight.lookAt(0, 0, 0);
+            scene.add(spotLight);
+        }
+
+        // Apply Global Modifiers to Districts
+        function applyGlobalModifiers() {
+                districts.forEach(district => {
+                    // Adjust population density with district-specific bounds
+                    district.populationDensity = district.populationDensity +
+                        (globalModifiers.populationDensityModifier * (district.maxPopulationDensity - district.populationDensity)) / district.maxPopulationDensity;
+                    district.populationDensity = Math.min(Math.max(district.populationDensity, district.minPopulationDensity), district.maxPopulationDensity);
+
+                    // Adjust real estate prices within district-specific bounds
+                    district.realEstatePrices = Math.min(Math.max(
+                        district.realEstatePrices * globalModifiers.realEstatePriceModifier,
+                        district.minRealEstatePrice),
+                        district.maxRealEstatePrice
+                    );
+
+                    // Adjust income distribution within district-specific bounds
+                    district.incomeDistribution = Math.min(Math.max(
+                        district.incomeDistribution * globalModifiers.incomeModifier,
+                        district.minIncome),
+                        district.maxIncome
+                    );
+
+                    // Adjust vacancy rate within district-specific bounds
+                    let vacancyRateChange = (globalModifiers.vacancyRateModifier - 1) * 0.1;
+                    district.vacancyRate += vacancyRateChange;
+                    district.vacancyRate = Math.min(Math.max(district.vacancyRate, district.minVacancyRate), district.maxVacancyRate);
+
+                    // Update the affordability index after applying changes to real estate prices and income distribution
+                    district.affordabilityIndex = district.realEstatePrices / district.incomeDistribution;
+
+                    // Clamp the affordability index to a realistic range (e.g., between 1 and 10)
+                    district.affordabilityIndex = Math.min(Math.max(district.affordabilityIndex, 1), 10);
+                });
+            }
+
+
+
+
+        // Update Labels to Show District Data
+        function updateLabels() {
+                districts.forEach((district, index) => {
+                    // Get the cube for this district (based on index)
+                    let cube = scene.children.find(child => child.position.equals(clusterCenters[index]));
+
+                    // Get updated data for the district with <br> tags for line breaks
+                    let labelText = `${district.name}<br>Population Density: ${district.populationDensity.toFixed(2)}<br>Real Estate Prices: $${district.realEstatePrices.toFixed(2)}<br>Income: $${district.incomeDistribution.toFixed(2)}<br>Vacancy Rate: ${(district.vacancyRate * 100).toFixed(2)}%<br>Affordability Index: ${district.affordabilityIndex.toFixed(2)}`;
+
+                    // Find the associated label object and update it
+                    let label = scene.children.find(child => child instanceof THREE.CSS2DObject && child.position.equals(cube.position));
+                    if (label) {
+                        label.element.innerHTML = labelText; // Update label content using innerHTML
+                    }
+                });
+            }
+
+
+
+        // Update Particle Movements Based on Affordability
+        function updateParticleMovement() {
+                particles.forEach(particle => {
+                    let currentDistrict = particle.currentDistrict;
+                    let affordability = currentDistrict.affordabilityIndex;
+
+                    // Check if the particle needs to move to a new district
+                    if (affordability > particle.affordabilityThreshold || currentDistrict.populationDensity > 0.9) {
+                        let newDistrict = findAffordableDistrict(particle);
+                        if (newDistrict) {
+                            // Change the particle's color when it moves to a better district
+                            moveParticleToDistrict(particle, newDistrict);
+                            changeParticleColor(particle, newDistrict); // Change color
+                        } else {
+                            moveToHomelessArea(particle);
+                        }
+                    }
+                });
+            }
+
+            function changeParticleColor(particle, newDistrict) {
+                    // Change the particle's color based on the new district's affordability index
+                    if (newDistrict.affordabilityIndex <= 3) {
+                        particle.color = 'green';  // Green indicates good affordability
+                    } else if (newDistrict.affordabilityIndex <= 6) {
+                        particle.color = 'yellow'; // Yellow for medium affordability
+                    } else {
+                        particle.color = 'red';    // Red for poor affordability
+                    }
+                }
+
+
+
+            function moveParticleToDistrict(particle, newDistrict) {
+                particle.currentDistrict = newDistrict;
+                newDistrict.populationDensity += 0.01; // Increment the new district's population density
+                // Also, update the visual representation of the particle color in the simulation
+                updateParticleVisualization(particle);
+            }
+
+            function updateParticleVisualization(particle) {
+                    if (particle.visualRepresentation && particle.visualRepresentation.material) {
+                        // Update the material color based on particle.color
+                        if (particle.color === 'green') {
+                            particle.visualRepresentation.material.color.set(0x00ff00); // Green
+                        } else if (particle.color === 'yellow') {
+                            particle.visualRepresentation.material.color.set(0xffff00); // Yellow
+                        } else {
+                            particle.visualRepresentation.material.color.set(0xff0000); // Red
+                        }
+                    }
+                }
+
+
+
+            function findAffordableDistrict(particle) {
+                // Get a list of districts that are affordable for the particle
+                let affordableDistricts = districts.filter(district =>
+                    district.affordabilityIndex <= particle.affordabilityThreshold && district.populationDensity < 1.0
+                );
+
+                if (affordableDistricts.length === 0) {
+                    return null; // No affordable district found
+                }
+
+                // Calculate movement probabilities based on affordability (lower index = higher probability)
+                let totalWeight = affordableDistricts.reduce((total, district) => total + (1 / district.affordabilityIndex), 0);
+
+                // Randomly select a new district based on weighted affordability
+                let randomValue = Math.random() * totalWeight;
+                let runningTotal = 0;
+
+                for (let district of affordableDistricts) {
+                    runningTotal += (1 / district.affordabilityIndex);
+                    if (runningTotal >= randomValue) {
+                        return district; // Return the selected district
+                    }
+                }
+            }
+
+            function moveParticleToDistrict(particle, newDistrict) {
+                // Update the particle's current district and move it to the new district
+                particle.currentDistrict = newDistrict;
+                newDistrict.populationDensity += 0.01; // Increment the new district's population density
+            }
+
+            function moveToHomelessArea(particle) {
+                // Handle the case when a particle cannot find an affordable district
+                particle.currentDistrict = null; // Particle becomes homeless
+            }
+
+
+        // Handle Window Resize Events
+        function setupEventListeners() {
+            window.addEventListener("resize", onWindowResize);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            labelRenderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        // Setup Controls for the Scene
+        function setupControls() {
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.autoRotate = true;
+        }
+
+        // Animation Loop
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+            labelRenderer.render(scene, camera);  // Render labels
+            moveData();
+        }
+
+        // Function to Move Data (Particle Movement)
+        function moveData() {
+            connections.forEach(connection => {
+                connection.dataPos.lerpVectors(connection.p0, connection.p1, connection.lerp);
+                connection.sphere.position.set(connection.dataPos.x, connection.dataPos.y, connection.dataPos.z);
+
+                connection.lerp += connection.speed;
+                if (connection.lerp > 1 || connection.lerp < 0) {
+                    connection.speed = -connection.speed;
+                }
+            });
+        }
+
+        
+
+        // Setup Connections Between Districts
+        function setupConnections() {
+                let nrOfConnections = randomInt(40, 100);  // Randomly choose between 40 and 100 connections
+                connections = [];
+
+                for (let i = 0; i < nrOfConnections; i++) {
+                    let index0 = randomInt(positions.length);
+                    let index1 = randomInt(positions.length);
+
+                    let outgoingSphere = createSphere(0xff0000);  // Outgoing particles (red)
+                    let incomingSphere = createSphere(0x00ff00);  // Incoming particles (green)
+
+                    let outgoingConnection = createConnection(index0, index1, outgoingSphere);
+                    let incomingConnection = createConnection(index1, index0, incomingSphere);
+
+                    connections.push(outgoingConnection, incomingConnection);
+
+                    createLine(positions[index0], positions[index1]); // Line for outgoing
+                    createLine(positions[index1], positions[index0]); // Line for incoming
+                }
+            }
+
+
+        // Helper Functions to Create Objects
+        function createSphere(color) {
+            let sphereGeometry = new THREE.SphereGeometry(0.1, 32, 32);
+            let sphereMaterial = new THREE.MeshBasicMaterial({ color: color });
+            let sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+            sphere.castShadow = true;
+            sphere.receiveShadow = true;
+            scene.add(sphere);
+            return sphere;
+        }
+
+        function createConnection(index0, index1, sphere) {
+                return {
+                    p0: positions[index0],
+                    p1: positions[index1],
+                    dataPos: new THREE.Vector3(),
+                    lerp: Math.random(),
+                    speed: random(0.009, 0.02),  // The speed of the particle movement
+                    sphere: sphere
+                };
+            }
+
+
+        function createLine(p0, p1) {
+            let points = [p0, p1];
+            let lineMaterial = new THREE.LineBasicMaterial({ color: 0x888888 });
+            let lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
+            let line = new THREE.Line(lineGeometry, lineMaterial);
+            scene.add(line);
+        }
+
+        // Helper Functions for Randomization
+        function random(min, max) {
+            if (max === undefined) {
+                max = min;
+                min = 0;
+            }
+            return Math.floor(Math.random() * (max - min)) + min;
+        }
+
+        function randomInt(min, max) {
+            return Math.floor(random(min, max));
+        }
+
+        // Setup and Run the Scene
+        function setup() {
+                setupScene();
+                setupCamera();
+                setupRenderer();
+                loadTextures();
+                setupPositions();
+                setupConnections();
+                setupCubes();
+                setupClusterLabels();
+                setupLights();
+                setupControls();
+                setupGUI(); // Initialize the GUI for global modifier controls
+                setupEventListeners();
+                animate();
+            }
+
+
+        // Initialize the simulation
+        setup();
+
+
+        
+
+        
+    </script>
+    <body>
+    
+        <div class="small-italic">
+            <p>By modifying the global parameters, the socio-economic data for each district will be updated, including the
+                affordability index. This influences how particles (representing individuals) move between districts, with more
+                affordable districts attracting higher movement. Explore these dynamics yourself by adjusting the parameters
+                through the GUI and observing the real-time changes.</p>
+        </div>
+
+        
+        <div id="description">
+            <p>This simulation represents a 3D city model where different districts are categorized based on socio-economic data
+                such as population density, real estate prices, income distribution, and vacancy rates. The districts are
+                depicted using textured cubes in a 3D space, each corresponding to a different socio-economic class, such as
+                Lower-Income District, Working-Class District, and Upper-Middle-Class District. Each district has a calculated
+                <strong>affordability index</strong>, which is the ratio of real estate prices to income, and this index impacts
+                how particles (representing people) move between districts.
+            </p>
+
+            <p>This visualization allows users to interact with the city model by adjusting various <strong>global
+                    modifiers</strong> through a control panel created using <strong>dat.GUI</strong>. These modifiers include:
+            </p>
+            <ul>
+                <li><strong>Population Density Modifier:</strong> Globally adjusts the population density in all districts.</li>
+                <li><strong>Real Estate Price Modifier:</strong> Changes the real estate prices in the districts.</li>
+                <li><strong>Income Modifier:</strong> Alters the income distribution across all districts.</li>
+                <li><strong>Vacancy Rate Modifier:</strong> Modifies the vacancy rates in each district.</li>
+            </ul>
+            <p>As users modify these global parameters, the socio-economic data for each district is updated, including the
+                affordability index. This influences how particles (representing individuals) move between districts. Particles
+                move based on affordability and population density: districts with better affordability indices enable faster
+                movement, drawing more particles to them. Particles change color based on the affordability of the district they
+                move into: green for affordable, yellow for moderately affordable, and red for less affordable.</p>
+            <p>In summary, this simulation demonstrates how socio-economic factors like affordability and population density
+                influence migration patterns within an urban environment, with real-time changes reflecting shifts in these
+                dynamics.</p>
+        </div>
+
+    </body>
+</body>
+
+</html>

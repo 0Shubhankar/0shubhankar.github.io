@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>City Parking Maps</title>
+    <link rel="stylesheet" href="../vendor/shared/lib-9eaeb463f1b3/dist/maplibre-gl.css">
+    <style>
+        body,
+        html {
+            height: 100%;
+            /* Ensure full height */
+            margin: 0;
+            /* Remove default margin */
+            padding: 0;
+            /* Remove default padding */
+            display: flex;
+            /* Flexbox for layout */
+            flex-direction: row;
+            /* Arrange children horizontally */
+        }
+         #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+         #citySelector {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            background: #333;
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="sidebar">
+        <select id="citySelector" onchange="loadCityData(this.value)">
+            <option value="">Choose a city...</option>
+            <option value="Delhi, India">Delhi, India</option>
+            <option value="Mumbai, India">Mumbai, India</option>
+            <option value="Bengaluru, India">Bengaluru, India</option>
+            <option value="New York, USA">New York, USA</option>
+            <option value="Los Angeles, USA">Los Angeles, USA</option>
+            <option value="Chicago, USA">Chicago, USA</option>
+            <option value="Shanghai, China">Shanghai, China</option>
+            <option value="Beijing, China">Beijing, China</option>
+            <option value="Shenzhen, China">Shenzhen, China</option>
+            <option value="Istanbul, Turkey">Istanbul, Turkey</option>
+            <option value="Moscow, Russia">Moscow, Russia</option>
+            <option value="London, UK">London, UK</option>
+            <option value="Saint Petersburg, Russia">Saint Petersburg, Russia</option>
+            <option value="Berlin, Germany">Berlin, Germany</option>
+            <option value="Madrid, Spain">Madrid, Spain</option>
+            <option value="Kinshasa, DRC">Kinshasa, DRC</option>
+            <option value="Lagos, Nigeria">Lagos, Nigeria</option>
+            <option value="Cairo, Egypt">Cairo, Egypt</option>
+            <option value="Paris, France">Paris, France</option>
+            <option value="Tokyo, Japan">Tokyo, Japan</option>
+            <option value="Mexico City, Mexico">Mexico City, Mexico</option>
+            <option value="São Paulo, Brazil">São Paulo, Brazil</option>
+            <option value="Buenos Aires, Argentina">Buenos Aires, Argentina</option>
+            <option value="Rio de Janeiro, Brazil">Rio de Janeiro, Brazil</option>
+            <option value="Sydney, Australia">Sydney, Australia</option>
+            <option value="Melbourne, Australia">Melbourne, Australia</option>
+            <option value="Auckland, New Zealand">Auckland, New Zealand</option>
+        </select>
+    </div>
+    <div id="map"></div>
+
+    <script src="../vendor/shared/lib-1c09437b70d7/dist/maplibre-gl.js"></script>
+    <script>
+        const map = new maplibregl.Map({
+            container: 'map',
+            style: 'https://tiles.stadiamaps.com/styles/stamen_toner_lite.json',
+            center: [174.7633, -36.8485], // Default center on Auckland
+            zoom: 12
+        });
+
+        function loadCityData(city) {
+            if (!city) return; // Exit if no city is selected
+
+            const coordinates = {
+                "Delhi, India": [77.2167, 28.6315],
+                "Mumbai, India": [72.8246, 18.9250],
+                "Bengaluru, India": [77.6069, 12.9758],
+                "New York, USA": [-74.0113, 40.7074],
+                "Los Angeles, USA": [-118.2437, 34.0522],
+                "Chicago, USA": [-87.6298, 41.8781],
+                "Shanghai, China": [121.4737, 31.2304],
+                "Beijing, China": [116.4074, 39.9042],
+                "Shenzhen, China": [114.0579, 22.5431],
+                "Istanbul, Turkey": [28.9784, 41.0082],
+                "Moscow, Russia": [37.6173, 55.7558],
+                "London, UK": [-0.1276, 51.5074],
+                "Saint Petersburg, Russia": [30.3609, 59.9311],
+                "Berlin, Germany": [13.4050, 52.5200],
+                "Madrid, Spain": [-3.7038, 40.4168],
+                "Kinshasa, DRC": [15.2663, -4.4419],
+                "Lagos, Nigeria": [3.3792, 6.5244],
+                "Cairo, Egypt": [31.2357, 30.0444],
+                "Paris, France": [2.3522, 48.8566],
+                "Tokyo, Japan": [139.6917, 35.6895],
+                "Mexico City, Mexico": [-99.1332, 19.4326],
+                "São Paulo, Brazil": [-46.6333, -23.5505],
+                "Buenos Aires, Argentina": [-58.3816, -34.6037],
+                "Rio de Janeiro, Brazil": [-43.1729, -22.9068],
+                "Sydney, Australia": [151.2093, -33.8688],
+                "Melbourne, Australia": [144.9631, -37.8136],
+                "Auckland, New Zealand": [174.7633, -36.8485]
+            };
+
+
+
+            // const cityCenter = coordinates[city];
+            // const latDiff = 0.035; // Approximate degree difference for 5 km in latitude
+            // const lngDiff = 0.035 / Math.cos(cityCenter[1] * Math.PI / 180); // Adjusting longitude difference based on latitude
+
+            // const bounds = [
+            //     [cityCenter[0] - lngDiff, cityCenter[1] - latDiff], // Southwest corner
+            //     [cityCenter[0] + lngDiff, cityCenter[1] + latDiff]  // Northeast corner
+            // ];
+
+            // map.setMaxBounds(bounds); // Restricting map panning to these bounds
+
+
+            // Fly to the selected city
+            map.flyTo({
+                center: coordinates[city],
+                zoom: 12
+            });
+
+            // Format the city name to match file naming convention
+            const fileName = `${city.replace(/, /g, '_').replace(/ /g, '_')}_parking.geojson`;
+
+            fetch(fileName)
+                .then(response => response.json())
+                .then(async data => {
+                    if (!map.isStyleLoaded()) {
+                        await new Promise(resolve => map.once('load', resolve));
+                    }
+
+                    for (const id of ['parking-layer', 'parking-points-layer']) {
+                        if (map.getLayer(id)) map.removeLayer(id);
+                    }
+                    for (const id of ['parking-data', 'parking-points']) {
+                        if (map.getSource(id)) map.removeSource(id);
+                    }
+
+                    map.addSource('parking-data', {
+                        type: 'geojson',
+                        data: data
+                    });
+
+                    map.addLayer({
+                        id: 'parking-layer',
+                        type: 'fill',
+                        source: 'parking-data',
+                        paint: {
+                            'fill-color': '#ff1c95',
+                            'fill-opacity': 0.5
+                        }
+                    });
+
+                    map.addSource('parking-points', {
+                        type: 'geojson',
+                        data: {
+                            type: 'FeatureCollection',
+                            features: data.features.filter(
+                                feature => feature.geometry?.type === "Point"
+                            )
+                        }
+                    });
+
+                    // Add a new layer for parking points to look like squares using circles
+                    map.addLayer({
+                        id: 'parking-points-layer',
+                        type: 'circle',
+                        source: 'parking-points',
+                        paint: {
+                            'circle-radius': 5, // Adjust to make the circle look like a small square
+                            'circle-color': '#0000ff', // Different color for distinction
+                            'circle-stroke-width': 1,
+                            'circle-stroke-color': '#ffffff'
+                        }
+                    });
+
+                })
+                .catch(err => console.error('Error loading the GeoJSON data:', err));
+        }
+
+        // Optionally, load default city on start
+        loadCityData('Auckland, New Zealand');
+    </script>
+</body>
+
+</html>

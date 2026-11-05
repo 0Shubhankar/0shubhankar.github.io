@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video with Sliders for Comparison</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js"
+        crossorigin="anonymous"></script>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: auto;
+        }
+
+        #comparisonContainer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            margin: 20px auto;
+            padding: 20px;
+            background: #ffffff;
+        }
+
+        .video-box {
+            width: 48%;
+            background-color: #fff;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+        }
+
+        video {
+            width: 100%;
+            max-height: 400px;
+        }
+
+        .video-heading {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .slider-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            margin-left: 3%;
+            margin-right: 3%;
+        }
+
+        .slider-controls button {
+            background-color:  greenyellow;
+            color: rgb(0, 0, 0);
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .slider-controls button:hover {
+            background-color: greenyellow;
+        }
+
+        .description {
+            color: black;
+            font-size: 16px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        #explaination{
+            color: black;
+            font-size: 16px;
+            text-align: justify;
+            margin-top: 20px;
+            margin-right: 20%;
+            margin-left: 20%;
+
+        }
+
+
+    </style>
+</head>
+
+<body>
+
+    <!-- Comparison Container -->
+    <div id="comparisonContainer">
+        <!-- First Video -->
+        <div class="video-box">
+            <div class="video-heading" id="videoTitleLeft">Rescue Unit 0</div>
+            <video id="leftVideo" autoplay muted loop>
+                <source src="screenSumorescue0d200mE.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+
+            <p class="description" id="leftVideoDescription"></p>
+        </div>
+
+        <!-- Second Video -->
+        <div class="video-box">
+            <div class="video-heading" id="videoTitleRight">Rescue Unit 0</div>
+            <video id="rightVideo" autoplay muted loop>
+                <source src="screenSumorescue0d1500mE.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <p class="description" id="rightVideoDescription"></p>
+        </div>
+    </div>
+
+    <!-- Slider Controls -->
+    <div class="slider-controls">
+        <button id="prevButton">Previous Comparison</button>
+        <button id="nextButton">Next Comparison</button>
+    </div>
+
+    <div id="explaination">
+    <p><strong>Emergency Vehicle Simulation</strong></p>
+    <p>In the bustling arteries of urban landscapes, the efficient navigation of emergency vehicles can mean the difference
+    between life and death. This simulation leverages the SUMO (Simulation of Urban Mobility) framework, an open-source,
+    portable, microscopic, and continuous multi-modal traffic simulation package designed to handle large networks.
+    Developed by the German Aerospace Center and a community of users, SUMO allows for the exploration of innovative traffic
+    management solutions aimed at enhancing the response times of emergency services. By simulating the impact of
+    dynamically controlled traffic signals at various distances—200 meters and 1500 meters—this research assesses how
+    strategic light control can significantly reduce delays. Additionally, employing Dijkstra’s algorithm allows for the
+    real-time computation of the quickest routes, further optimizing the speed and efficiency of emergency vehicles amidst
+    complex city traffic. This introduction lays the groundwork for a detailed exploration into harnessing technology to
+    save lives through smarter urban traffic management.
+</p>
+
+    
+    <p><strong>Signal Timing and Traffic Flow Efficiency</strong></p>
+    <p>
+    <ul>
+        <li>The simulation demonstrates two scenarios where traffic signals turn green when the ambulance is either
+            <strong>200 meters</strong> or <strong>1500 meters</strong> from the signal. The results show that the ambulance
+            takes significantly less time to reach its destination when the signal turns green at <strong>1500
+                meters</strong> than at <strong>200 meters</strong>.</li>
+        <li>This happens because in the <strong>1500-meter scenario</strong>, the vehicles ahead of the ambulance have
+            sufficient time to clear the road, enabling the ambulance to maintain a higher speed. In contrast, when the
+            signal turns green at <strong>200 meters</strong>, the vehicles in front of the ambulance are often unable to
+            move in time, causing delays and reducing the average speed of the ambulance.</li>
+    </ul></p>
+
+    
+    <p> <strong> Detailed Comparison of Rescue Units (Performance Metrics)</strong></p>
+    <p><ul>
+        <li><strong>Rescue Unit 0</strong>: Traveling from Columbia University to a hospital at Madison Avenue and 101st Street, the time is
+            reduced from 758 seconds to 693 seconds when the signal turns green at 1500 meters, with an increase in average
+            speed from 33.34 km/h to 36.46 km/h.
+            <ul>
+                <li>Distance covered: The ambulance covers 7.02 km in the 200-meter scenario and 7.01 km in the 1500-meter
+                    scenario.</li>
+            </ul>
+        </li>
+        <li><strong>Rescue Unit 1</strong>: From Central Park to the hospital, the travel time reduces from 245 seconds to 235 seconds when
+            the signal turns green at 1500 meters, and the speed increases from 34.38 km/h to 35.84 km/h.
+            <ul>
+                <li>Distance covered: Approximately 2.34 km in both scenarios.</li>
+            </ul>
+        </li>
+        <li><strong>Rescue Unit 2</strong>: From Chelsea Market, the ambulance’s time is reduced from 1056 seconds to 946 seconds when the
+            signal turns green at 1500 meters, with an increase in speed from 32.25 km/h to 36.25 km/h.
+            <ul>
+                <li>Distance covered: 9.46 km in both scenarios.</li>
+            </ul>
+        </li>
+        <li><strong>Rescue Unit 3</strong>: The most significant improvement is seen in the route from Wall Street to the hospital, with the
+            time reduced from 1700 seconds to 991 seconds and the speed increasing from 27.83 km/h to 47.73 km/h.
+            <ul>
+                <li>Distance covered: 13.14 km in both scenarios.</li>
+            </ul>
+        </li>
+    </ul></p>
+
+
+    
+    <p><strong>Representation of Vehicle Dynamics and Traffic Signal Control</strong></p>
+    <ul>
+        <li><strong>Vehicle Departure Condition:</strong> A vehicle departs when its speed exceeds 0. Departure time, \(
+            t_{\text{departure}} \), is noted when \( v_{\text{current}} > 0 \), where \( v_{\text{current}} \) denotes the
+            vehicle's current speed.</li>
+        <li><strong>Speed and Distance Updates:</strong> During each simulation step, the vehicle's speed, \(
+            v_{\text{current}} \), is updated to \( v(t) \times 3.6 \) km/h, and the total distance covered, \(
+            d_{\text{total}} \), is calculated as \( \frac{d(t)}{1000} \) kilometers, where \( v(t) \) and \( d(t) \)
+            represent the speed in m/s and distance in meters, respectively.</li>
+    </ul>
+    
+    <p><strong>Traffic Light Control Based on Proximity</strong></p>
+    <ul>
+        <li>Traffic signals change to green when the emergency vehicle is less than 200 meters away, and preemptively change
+            if it's within 1500 meters, based on the vehicle's distance \( d_{\text{next_tls}} \) from the next traffic
+            light.</li>
+    </ul>
+    
+    <p><strong>Travel Time and Average Speed</strong></p>
+    <ul>
+        <li>Upon reaching the destination, the total travel time, \( t_{\text{travel}} \), is \( t_{\text{arrival}} -
+            t_{\text{departure}} \), with \( t_{\text{arrival}} \) marking the arrival time.</li>
+        <li>The average speed, \( v_{\text{avg}} \), is calculated as \( \frac{d_{\text{total}}}{t_{\text{travel}} / 3600}
+            \) km/h, where \( t_{\text{travel}} \) is in seconds.</li>
+    </ul>
+
+    <p><strong>Use of the Krauss Car-Following Model in Emergency Vehicle Simulation</strong></p>
+    <p>The Krauss car-following model plays a key role in generating realistic traffic behavior around the emergency vehicle
+        in this simulation. The model calculates how each vehicle adjusts its speed based on the distance to the vehicle in
+        front. The following equation governs the model:</p>
+    <p>\[ v_{\text{next}} = \min \left( v_{\text{free}}, \max \left( v_{\text{safe}}, v_{\text{current}} - \frac{2 \times
+        (s_{\text{current}} - s_{\text{desired}})}{T} \right) \right) \]</p>
+    <p>Where:</p>
+    <ul>
+        <li>v<sub>next</sub>: The vehicle's next speed.</li>
+        <li>v<sub>free</sub>: The desired speed in free-flow conditions.</li>
+        <li>v<sub>safe</sub>: The safe speed to avoid collisions, based on the distance to the vehicle ahead.</li>
+        <li>v<sub>current</sub>: The current speed of the vehicle.</li>
+        <li>s<sub>current</sub>: The current distance to the vehicle ahead.</li>
+        <li>s<sub>desired</sub>: The desired safe following distance.</li>
+        <li>T: The driver’s reaction time, usually around 1.5 seconds.</li>
+    </ul>
+    <p>In the context of the emergency vehicle, this model helps simulate how other vehicles dynamically adjust their speeds
+        to either make way or follow at a safe distance. It gives a realistic depiction of traffic flow around the emergency
+        vehicle, helping us understand how speed and distance are influenced by the presence of the ambulance. This provides
+        insight into potential delays and efficiency improvements in emergency response routing.</p>
+
+        
+    <p><strong>Dijkstra’s Algorithm: Shortest Path Optimization</strong></p>
+    <p>Dijkstra’s algorithm is employed to dynamically calculate the shortest path for the emergency vehicle, ensuring that
+        it takes the most efficient route based on real-time traffic conditions.</p>
+    
+    <p><strong>Graph Representation</strong></p>
+    <p>The road network is modeled as a graph \( G=(V, E) \), where:</p>
+    <ul>
+        <li>\( V \) is the set of vertices (nodes) representing intersections.</li>
+        <li>\( E \) is the set of edges representing roads between intersections, with each edge having a weight \( w(u, v)
+            \), representing the distance or time between two nodes \( u \) and \( v \).</li>
+    </ul>
+
+        
+    <p><strong>Algorithm Steps</strong></p>
+    <ol>
+        <li><strong>Initialization:</strong>
+            <ul>
+                <li>Set the distance of the starting node \( s \) to zero: \[ d(s)=0 \]</li>
+                <li>Set the distance of all other nodes to infinity: \[ d(v)=\infty \quad \forall v \in V, v \neq s \]</li>
+                <li>Add all nodes to a priority queue \( Q \), prioritized by their tentative shortest distance.</li>
+            </ul>
+        </li>
+        <li><strong>Relaxation:</strong> For each node \( u \) being processed, check its neighboring nodes \( v \), and
+            update the shortest path distance:
+            <p>\[ \text{If } d(u) + w(u, v) < d(v), \text{ update } d(v)=d(u) + w(u, v) \]</p>
+        </li>
+        <li><strong>Shortest Path Selection:</strong> Select the node \( u \) with the smallest tentative distance, and
+            continue the process until all nodes have been processed.</li>
+        <li><strong>Termination:</strong> The process ends when the destination node \( t \) is reached, or all nodes have
+            been processed.</li>
+    </ol>
+    <p><strong>Result:</strong> The algorithm returns the shortest path distance \( d(t) \) from the start node \( s \) to
+        the destination node \( t \), ensuring the most efficient route for the emergency vehicle.</p>
+
+        
+    <p><strong>Traffic Signal Preemption Using TraCI</strong></p>
+    <p>SUMO’s Traffic Control Interface (TraCI) allows real-time control of traffic lights based on the distance of the
+        emergency vehicle to the next signal. The representation of signal preemption is as follows:</p>
+    <ol>
+        <li><strong>Traffic Signal State:</strong>
+            <ul>
+                <li>Let \( S(t) \) denote the state of the traffic signal at time \( t \), where:</li>
+                <li>\( S(t)=\text{"R"} \) represents a red signal.</li>
+                <li>\( S(t)=\text{"Y"} \) represents a yellow signal.</li>
+                <li>\( S(t)=\text{"G"} \) represents a green signal.</li>
+            </ul>
+        </li>
+        <li><strong>Signal Preemption Logic:</strong>
+            <ul>
+                <li>Preemptively change the signal to green if the ambulance is 1500 meters away:
+                    <p>\[ \text{If } d_{\text{next\_tls}}(t) < 1500 \Rightarrow S(t)=\text{"G"} \]</p>
+                </li>
+                <li>Change the signal to green immediately if the ambulance is 200 meters away:
+                    <p>\[ \text{If } d_{\text{next\_tls}}(t) < 200 \Rightarrow S(t)=\text{"G"} \]</p>
+                </li>
+            </ul>
+        </li>
+    </ol>
+
+    <p><strong>Conclusion</strong></p>
+    <p>The SUMO simulation provides vital insights into optimizing emergency vehicle response times through advanced traffic
+        signal preemption and route optimization using Dijkstra’s algorithm. By adapting traffic signals based on the
+        proximity of an emergency vehicle, the simulation underscores the potential for significant reductions in travel
+        times and enhancements in service efficiency. However, the current model's limitations highlight the need for
+        integrating more dynamic and context-aware systems that consider traffic density, real-time incidents, and
+        alternative routing options to address complex urban traffic scenarios. Future iterations could benefit from
+        leveraging real-time traffic data and machine learning techniques to predict and manage urban traffic flows more
+        effectively, thereby offering a more robust and reliable framework for emergency response operations in urban
+        environments.</p>
+
+
+    <p><strong>Limitations of the Simulation</strong></p>
+    <ul>
+        <li><strong>Context-Insensitive Traffic Control:</strong> The current simulation relies predominantly on distance
+            metrics to manage traffic signals, overlooking critical factors such as the actual traffic density, intersection
+            activity, and emergency vehicle type. This approach could lead to inefficient traffic management under varying
+            urban conditions, where dynamic factors play a significant role.</li>
+        <li><strong>Lack of Real-Time Adaptability:</strong> Dijkstra’s algorithm, while effective for static route
+            calculation, does not inherently adapt to sudden changes such as road closures or traffic accidents. This
+            limitation necessitates supplementary systems that can integrate updates in real-time to provide truly adaptive
+            routing options for emergency responses.</li>
+        <li><strong>Simulation of Traffic Conditions:</strong> The simulation presets traffic scenarios that may not
+            accurately mirror the unpredictable nature of real-world traffic patterns. The lack of variability in traffic
+            conditions can skew the results, reducing the applicability of the findings to real-world settings where traffic
+            behavior is highly irregular.</li>
+        <li><strong>Simplification of Emergency Vehicle Behavior:</strong> The model assumes that emergency vehicles
+            strictly adhere to the shortest computed routes. In reality, the decision-making process for routing emergency
+            vehicles is more complex and may involve spontaneous decisions to use alternative pathways such as bus lanes,
+            which are not accounted for in the simulation.</li>
+        <li><strong>Limited Computational Resources:</strong> The complexity and scale of the simulation demand substantial
+            computational power. Limited resources can slow down the simulation process, potentially affecting the timeliness
+            and resolution of results, which is critical for a real-time application like traffic management and emergency
+            response optimization.</li>
+    </ul>
+
+
+    </div>
+
+    <script>
+        // Function to calculate distance
+        function calculateDistance(speed, time) {
+            const timeInHours = time / 3600; // Convert time from seconds to hours
+            return (speed * timeInHours).toFixed(2); // Return distance in km with two decimals
+        }
+
+        // Video and Title arrays for different video comparisons
+        const comparisons = [
+            {
+                title: "Rescue Unit 0: Columbia University to a hospital at Madison Avenue and 101st Street",
+                leftSrc: "screenSumorescue0d200mE.mp4",
+                descriptionleft: `The traffic signal turns green when the ambulance is 200 meters from the signal.<br>
+                                Average speed: 33.34 km/h<br>
+                                Time: 758 seconds<br>
+                                Distance: ${calculateDistance(33.34, 758)} km`,
+                rightSrc: "screenSumorescue0d1500mE.mp4",
+                descriptionright: `The traffic signal turns green when the ambulance is 1500 meters from the signal.<br>
+                                Average speed: 36.46 km/h<br>
+                                Time: 693 seconds<br>
+                                Distance: ${calculateDistance(36.46, 693)} km`
+            },
+            {
+                title: "Rescue Unit 1: Central Park to a hospital at Madison Avenue and 101st Street",
+                leftSrc: "screenSumorescue1d200mE.mp4",
+                descriptionleft: `The traffic signal turns green when the ambulance is 200 meters from the signal.<br>
+                                Average speed: 34.38 km/h<br>
+                                Time: 245 seconds<br>
+                                Distance: ${calculateDistance(34.38, 245)} km`,
+                rightSrc: "screenSumorescue1d1500mE.mp4",
+                descriptionright: `The traffic signal turns green when the ambulance is 1500 meters from the signal.<br>
+                                Average speed: 35.84 km/h<br>
+                                Time: 235 seconds<br>
+                                Distance: ${calculateDistance(35.84, 235)} km`
+            },
+            {
+                title: "Rescue Unit 2: Chelsea Market to a hospital at Madison Avenue and 101st Street",
+                leftSrc: "screenSumorescue2d200mE.mp4",
+                descriptionleft: `The traffic signal turns green when the ambulance is 200 meters from the signal.<br>
+                                Average speed: 32.25 km/h<br>
+                                Time: 1056 seconds<br>
+                                Distance: ${calculateDistance(32.25, 1056)} km`,
+                rightSrc: "screenSumorescue2d1500mE.mp4",
+                descriptionright: `The traffic signal turns green when the ambulance is 1500 meters from the signal.<br>
+                                Average speed: 36.25 km/h<br>
+                                Time: 946 seconds<br>
+                                Distance: ${calculateDistance(36.25, 946)} km`
+            },
+            {
+                title: "Rescue Unit 3: Wall Street to a hospital at Madison Avenue and 101st Street",
+                leftSrc: "screenSumorescue3d200mE.mp4",
+                descriptionleft: `The traffic signal turns green when the ambulance is 200 meters from the signal.<br>
+                                Average speed: 27.83 km/h<br>
+                                Time: 1700 seconds<br>
+                                Distance: ${calculateDistance(27.83, 1700)} km`,
+                rightSrc: "screenSumorescue3d1500mE.mp4",
+                descriptionright: `The traffic signal turns green when the ambulance is 1500 meters from the signal.<br>
+                                Average speed: 47.73 km/h<br>
+                                Time: 991 seconds<br>
+                                Distance: ${calculateDistance(47.73, 991)} km`
+        }
+        ];
+
+        let currentComparisonIndex = 0;
+
+        // Elements from the DOM
+        const leftVideoElement = document.getElementById("leftVideo");
+        const rightVideoElement = document.getElementById("rightVideo");
+        const leftVideoTitle = document.getElementById("videoTitleLeft");
+        const rightVideoTitle = document.getElementById("videoTitleRight");
+        const leftVideoDescription = document.getElementById("leftVideoDescription");
+        const rightVideoDescription = document.getElementById("rightVideoDescription");
+
+        // Function to update the comparison videos, titles, and description
+        function updateComparison() {
+            const comparison = comparisons[currentComparisonIndex];
+            leftVideoElement.src = comparison.leftSrc;
+            rightVideoElement.src = comparison.rightSrc;
+            leftVideoTitle.textContent = comparison.title;
+            rightVideoTitle.textContent = comparison.title;
+            leftVideoDescription.innerHTML = comparison.descriptionleft;
+            rightVideoDescription.innerHTML = comparison.descriptionright;
+        }
+
+        // Previous Button Click
+        document.getElementById("prevButton").addEventListener("click", function () {
+            if (currentComparisonIndex > 0) {
+                currentComparisonIndex--;
+            } else {
+                currentComparisonIndex = comparisons.length - 1;
+            }
+            updateComparison();
+        });
+
+        // Next Button Click
+        document.getElementById("nextButton").addEventListener("click", function () {
+            if (currentComparisonIndex < comparisons.length - 1) {
+                currentComparisonIndex++;
+            } else {
+                currentComparisonIndex = 0;
+            }
+            updateComparison();
+        });
+
+        // Initial load
+        updateComparison();
+    </script>
+
+</body>
+
+</html>

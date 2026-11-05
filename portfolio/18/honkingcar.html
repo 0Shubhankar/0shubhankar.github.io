@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video with Sliders</title>
+    <!-- Load MathJax -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js"
+        crossorigin="anonymous"></script>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: auto;
+            /* Enable scrolling */
+            -webkit-font-smoothing: antialiased;
+
+        }
+
+        #videoContainer {
+            position: relative;
+            margin: 20px auto;
+            width: 90%;
+            padding: 20px;
+            background: #ffffff;
+            box-sizing: border-box;
+        }
+
+        #fullscreenVideo {
+            width: 100%;
+            max-height: 60vh;
+            background-size: cover;
+        }
+
+        #videoDescription {
+            color: black;
+            font-size: 16px;
+            text-align: justify;
+            margin-top: 20px;
+            margin-right: 20%;
+            margin-left: 20%;
+        }
+
+        .slider-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .slider-controls button {
+            background-color: transparent;
+            color: rgb(0, 0, 0);
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .slider-controls button:hover {
+            background-color: greenyellow;
+        }
+
+        .video-heading {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        #explaination{
+            color: black;
+            font-size: 16px;
+            text-align: justify;
+            margin-top: 20px;
+            margin-right: 20%;
+            margin-left: 20%;
+
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="videoContainer">
+        <div class="video-heading" id="videoTitle"></div>
+        <p id="videoDescription"></p>
+        <video id="fullscreenVideo" autoplay muted loop>
+            <source src="screenSumocsthonkscenrio1E.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+        <div class="slider-controls">
+            <button id="prevButton">Previous Video</button>
+            <button id="nextButton">Next Video</button>
+        </div>
+
+       
+
+        
+        <div id="explaination">
+            The simulation is centered around Chhatrapati Shivaji Maharaj Terminus (CSMT) junction in Mumbai, a bustling nexus known
+            not only for its historical and architectural significance but also for its dense and chaotic traffic. This location is
+            emblematic of urban Indian traffic scenarios, where honking is not just frequent but often seems incessant. In India,
+            honking is intertwined deeply with driving etiquette; it's used not just to warn other vehicles but also as a tool to
+            navigate through the disorderly traffic where rules might appear less adhered to, and lane driving is often not
+            practiced. This cultural tendency to honk, sometimes even without clear necessity, forms a pivotal part of the
+            simulation's setting. The SUMO (Simulation of Urban MObility) tool is employed to model these complex vehicular
+            dynamics, providing a robust framework to understand and visualize how different driving behaviors, particularly
+            honking, manifest in real time under various traffic conditions at this busy intersection. This simulation aims to shed
+            light on typical Indian traffic behaviors, offering insights into potential areas for improving traffic management and
+            reducing noise pollution in urban centers.
+
+            Model Selection for Vehicle Behavior
+            The Krauss Car-Following Model is employed within the SUMO simulation framework to govern the behavior of vehicles in
+            terms of their following distances, speeds, and braking. This model is particularly chosen for its robustness in
+            replicating real-life driving dynamics, which is essential for understanding traffic flow and safety at dense and
+            chaotic junctions like the CSMT in Mumbai.
+            
+            Mathematical Basis of the Krauss Model: The Krauss Car-Following Model is grounded in the principle that each
+            vehicle's speed and following distance should be managed to prevent collisions while maintaining efficient traffic flow.
+            Mathematically, it ensures that a vehicle maintains a safe distance from the vehicle ahead based on current speed,
+            reaction times, and braking capabilities:
+            
+            \[ v_{safe} = \min\left(v_{max}, v_{lead} - \frac{2 \cdot (x - x_{lead} - d_{min})}{\tau \cdot v + d_{min}}\right) \]
+            
+            Where:
+            - \( v_{safe} \) is the safe speed the following vehicle should maintain.
+            - \( v_{max} \) is the maximum speed limit.
+            - \( v_{lead} \) is the speed of the vehicle directly ahead.
+            - \( x \) and \( x_{lead} \) are the positions of the following vehicle and the leading vehicle, respectively.
+            - \( d_{min} \) is the minimum acceptable following distance, beyond which it's safe to follow without risk of
+            collision.
+            - \( \tau \) represents the reaction time of the driver, a critical factor in dynamic traffic environments.
+            
+            Why the Krauss Model Is Appropriate for Mumbai Traffic**: The choice of this model is apt for simulations in Indian
+            traffic conditions, where sudden braking and frequent changes in speeds are common due to the heterogeneous mix of
+            traffic (ranging from slow-moving bicycles and rickshaws to faster cars and motorcycles). By implementing this model,
+            the simulation can dynamically adjust the behavior of each vehicle to reflect realistic responses to fluctuating traffic
+            conditions. This not only helps in analyzing the current traffic management strategies but also aids in exploring
+            modifications that could potentially reduce traffic congestion and improve overall road safety. Moreover, the model's
+            sensitivity to vehicle proximity and speed makes it highly relevant for studying the honking behavior in Mumbai, where
+            drivers tend to honk both as a preventive measure and sometimes habitually, to assert their presence on the road.
+            
+            Defining Scenarios
+            Creating specific traffic conditions to understand how different factors influence driver behavior, particularly honking.
+            Each scenario varies in patience (time until honking due to being stuck) and sensitivity
+            (response to slow-moving traffic and close proximity). These scenarios are intended to simulate different driver
+            temperaments and traffic densities.
+
+
+            <div id="explanation">
+                <p id="explanation">
+                    To explore how varying driver tolerance levels and reactivity to traffic conditions affect honking behavior,
+                    different scenarios are meticulously crafted, each simulating a unique combination of traffic density and driver
+                    temperament.
+                </p>
+            
+                <p id="explanation">
+                    <strong>Scenario 1: Low Patience, High Sensitivity</strong><br>
+                    <strong>Parameters:</strong>
+                <ul>
+                    <li>Stuck Time Threshold: 10 seconds</li>
+                    <li>Slow Speed Threshold: 1 m/s</li>
+                    <li>Proximity Threshold: 2 meters</li>
+                    <li>Behavior: Drivers honk almost immediately when traffic halts or moves slowly, and they react sharply to
+                        vehicles within a very close range. This scenario is typical of highly congested urban settings where
+                        drivers are very aggressive.</li>
+                </ul>
+                </p>
+            
+                <p id="explanation">
+                    <strong>Scenario 2: Low Patience, Moderate Sensitivity</strong><br>
+                    <strong>Parameters:</strong>
+                <ul>
+                    <li>Stuck Time Threshold: 10 seconds</li>
+                    <li>Slow Speed Threshold: 3 m/s</li>
+                    <li>Proximity Threshold: 3 meters</li>
+                    <li>Behavior: Similar to Scenario 1 in terms of patience, but with slightly more tolerance for slower speeds and
+                        closer proximities. This represents urban areas with slightly better traffic flow but still high driver
+                        impatience.</li>
+                </ul>
+                </p>
+            
+                <p id="explanation">
+                    <strong>Scenario 3: Low Patience, Low Sensitivity</strong><br>
+                    <strong>Parameters:</strong>
+                <ul>
+                    <li>Stuck Time Threshold: 10 seconds</li>
+                    <li>Slow Speed Threshold: 5 m/s</li>
+                    <li>Proximity Threshold: 4 meters</li>
+                    <li>Behavior: Drivers react quickly to stops but are less concerned about vehicles moving slowly unless they
+                        fall below a higher speed threshold. This could mirror conditions in semi-urban areas where traffic density
+                        is lower.</li>
+                </ul>
+                </p>
+            
+                <p id="explanation">
+                    <strong>Scenario 4: Moderate Patience, High Sensitivity</strong><br>
+                    <strong>Parameters:</strong>
+                <ul>
+                    <li>Stuck Time Threshold: 20 seconds</li>
+                    <li>Slow Speed Threshold: 1 m/s</li>
+                    <li>Proximity Threshold: 2 meters</li>
+                    <li>Behavior: Drivers wait longer before honking when stuck, but remain highly sensitive to slow speeds and
+                        close proximity. This scenario could be seen in busy city districts during off-peak hours.</li>
+                </ul>
+                </p>
+            
+                <p id="explanation">
+                    <strong>Scenario 5: Moderate Patience, Moderate Sensitivity</strong><br>
+                    <strong>Parameters:</strong>
+                <ul>
+                    <li>Stuck Time Threshold: 20 seconds</li>
+                    <li>Slow Speed Threshold: 3 m/s</li>
+                    <li>Proximity Threshold: 3 meters</li>
+                    <li>Behavior: A balanced approach with moderate thresholds for all parameters, typical of suburban areas where
+                        traffic conditions are better managed but occasional congestion occurs.</li>
+                </ul>
+                </p>
+            
+                <p id="explanation">
+                    <strong>Scenario 6: Moderate Patience, Low Sensitivity</strong><br>
+                    <strong>Parameters:</strong>
+                <ul>
+                    <li>Stuck Time Threshold: 20 seconds</li>
+                    <li>Slow Speed Threshold: 5 m/s</li>
+                    <li>Proximity Threshold: 4 meters</li>
+                    <li>Behavior: Drivers are quite tolerant of delays and less bothered by slow-moving traffic or slightly closer
+                        proximities, suitable for highways or less urbanized areas.</li>
+                </ul>
+                </p>
+            
+                <p id="explanation">
+                    <strong>Scenario 7: High Patience, High Sensitivity</strong><br>
+                    <strong>Parameters:</strong>
+                <ul>
+                    <li>Stuck Time Threshold: 30 seconds</li>
+                    <li>Slow Speed Threshold: 1 m/s</li>
+                    <li>Proximity Threshold: 2 meters</li>
+                    <li>Behavior: Drivers allow for long delays before reacting but are still highly sensitive to minimal speed
+                        reductions and proximities. This could represent peak traffic conditions in highly regulated urban centers.
+                    </li>
+                </ul>
+                </p>
+            
+                <p id="explanation">
+                    <strong>Scenario 8: High Patience, Moderate Sensitivity</strong><br>
+                    <strong>Parameters:</strong>
+                <ul>
+                    <li>Stuck Time Threshold: 30 seconds</li>
+                    <li>Slow Speed Threshold: 3 m/s</li>
+                    <li>Proximity Threshold: 3 meters</li>
+                    <li>Behavior: The highest tolerance for traffic delays and moderate sensitivity to speed and proximity,
+                        reflecting either early morning or late evening conditions in urban settings.</li>
+                </ul>
+                </p>
+            </div>
+
+
+
+        <div id="honkingCriteria">
+            <p id="explanation">
+                <strong>Honking Criteria - Mathematical Formulation</strong><br>
+                <strong>Objective:</strong> To formulate and explain the rules for when vehicles should honk using mathematical
+                representations, based on realistic traffic frustrations encountered during simulations.
+            </p>
+        
+            <p id="explanation">
+                <strong>Honking Criteria:</strong>
+            <ol>
+                <li><strong>Stuck Time Threshold:</strong> Defines how long a vehicle must be stationary (speed = 0) before the
+                    driver honks.</li>
+                <li><strong>Slow Speed Threshold:</strong> Sets the upper speed limit below which a vehicle is considered to be
+                    moving too slowly, thus prompting the driver to honk.</li>
+                <li><strong>Proximity Threshold:</strong> Determines the minimal acceptable distance to another vehicle; if this
+                    distance is breached, it triggers honking due to safety concerns or driver impatience.</li>
+            </ol>
+            </p>
+        
+            <p id="explanation">
+                <strong>1. Stuck Condition:</strong><br>
+                <strong>Condition:</strong> \( v = 0 \)<br>
+                <strong>Response:</strong> \( t_{\text{stuck}} > T_{\text{stuck}} \) where \( t_{\text{stuck}} \) is the
+                duration for which the vehicle has been stuck, and \( T_{\text{stuck}} \) is the predefined stuck time threshold
+                (e.g., 10 seconds).<br>
+                <strong>Honking Action:</strong> \( \text{If } t_{\text{stuck}} > T_{\text{stuck}}, \text{ then honk} \)
+            </p>
+        
+            <p id="explanation">
+                <strong>2. Proximity Condition:</strong><br>
+                <strong>Condition:</strong> \( \text{distance}(v_i, v_j) < D_{\text{close}} \) where \( v_i \) and \( v_j \) are
+                    positions of two different vehicles, and \( D_{\text{close}} \) is the proximity threshold (e.g., 5
+                    meters).<br>
+                    <strong>Honking Action:</strong> \( \text{If } \text{distance}(v_i, v_j) < D_{\text{close}}, \text{ then }
+                        v_i \text{ honks} \) </p>
+        
+                        <p id="explanation">
+                            <strong>3. Slow Movement Condition:</strong><br>
+                            <strong>Condition:</strong> \( 0 < v < V_{\text{slow}} \) where \( v \) is the speed of the vehicle,
+                                and \( V_{\text{slow}} \) is the slow speed threshold (e.g., 3 m/s).<br>
+                                <strong>Honking Action:</strong> \( \text{If } 0 < v < V_{\text{slow}}, \text{ then honk} \)
+                                    </p>
+        </div>
+
+            <div id="integrationModel">
+                <p id="explanation">
+                    <strong>Integration of Honking Criteria with the Krauss Car-Following Model</strong><br>
+                    Integrating the honking criteria with the Krauss Car-Following Model in the context of the defined scenarios
+                    provides a more comprehensive understanding of vehicle interactions in traffic simulations. Let's mathematically
+                    link the behaviors dictated by the Krauss model with the scenarios that specify different thresholds for
+                    honking.
+                </p>
+            
+                <p id="explanation">
+                    <strong>Krauss Car-Following Model Formula:</strong><br>
+                    \[ v_{safe} = \min \left( v_{max}, \, v_{lead} - \frac{2 \cdot (x - x_{lead} - d_{min})}{\tau \cdot v + d_{min}}
+                    \right) \]<br>
+                    Where:
+                <ul>
+                    <li>\( v_{safe} \) is the safe following speed.</li>
+                    <li>\( v_{max} \) is the maximum allowable speed.</li>
+                    <li>\( v_{lead} \) is the speed of the vehicle directly in front.</li>
+                    <li>\( x \) and \( x_{lead} \) are the positions of the following vehicle and the leading vehicle, respectively.
+                    </li>
+                    <li>\( d_{min} \) is the minimum safe following distance.</li>
+                    <li>\( \tau \) is the reaction time of the following driver.</li>
+                </ul>
+                </p>
+            
+                <p id="explanation">
+                    <strong>Applying the Model to Scenarios:</strong><br>
+                    Each scenario sets unique values for stuck time, slow speed, and proximity thresholds that influence when
+                    honking might occur:
+                <ul>
+                    <li><strong>Scenario 1: Low Patience, High Sensitivity</strong> - Vehicles follow very closely and honk almost
+                        immediately upon any slight decrease in speed by the vehicle ahead or when minimal distance thresholds are
+                        breached. Mathematical Intersection: \( v_{safe} \text{ frequently equals } v_{lead}, \text{ triggering
+                        honks for } d < 2 \text{ m or } v < 1 \text{ m/s} \)</li>
+                    <li><strong>Scenario 2 to Scenario 8:</strong> - General Formula: \( v_{safe}=\min \left( v_{max}, \, v_{lead} -
+                        \text{dynamic threshold adjustments based on scenario settings} \right) \) - Honking Based on Thresholds:
+                        Each scenario adjusts the \( d_{min} \), \( \tau \), and thresholds for \( v_{safe} \) to determine how
+                        quickly vehicles respond with a honk.</li>
+                </ul>
+                </p>
+            
+                <p id="explanation">
+                    <strong>Conclusion:</strong><br>
+                    Integrating the Krauss Car-Following Model with specified scenarios allows the simulation to dynamically adapt
+                    vehicle behavior based on different driver tolerances and environmental conditions. The model, through its
+                    sensitive parameters, effectively calculates the safe operating speeds and distances, while the scenarios define
+                    when these parameters lead to honking, merging theoretical traffic dynamics with practical driver reactions.
+                    This comprehensive approach provides a robust framework for understanding and improving traffic management
+                    strategies, particularly in complex urban settings where driver behavior significantly impacts traffic flow and
+                    safety.
+                </p>
+            </div>
+
+
+
+            <div id="traciImplementation">
+                <p id="explanation">
+                    <strong>Implementation in SUMO via TraCI</strong><br>
+                    The Traffic Control Interface (TraCI) allows these rules to be dynamically checked and enforced during the
+                    simulation:
+                <ul>
+                    <li><strong>Stuck Vehicle Tracking:</strong> Vehicles with zero speed are monitored for the duration they remain
+                        stuck. If this duration exceeds the stuck time threshold, the vehicle honks.</li>
+                    <li><strong>Proximity Checks:</strong> Each vehicle's position is compared against others within its vicinity.
+                        If another vehicle breaches the set proximity threshold, it prompts a honking response.</li>
+                    <li><strong>Speed Monitoring:</strong> Vehicles' speeds are continually assessed. If a vehicle's speed falls
+                        below the set slow speed threshold (but is not zero), it triggers a honking response to signal slow
+                        movement.</li>
+                </ul>
+                </p>
+            
+                <p id="explanation">
+                    The mathematical formulation of the honking criteria encapsulates the complexities of real-world driving
+                    behaviors in congested urban environments, like Mumbai. By translating these conditions into a traffic
+                    simulation setup, it allows for a more detailed analysis and understanding of how various factors influence
+                    driver behavior and traffic flow dynamics, thereby aiding in the development of more effective traffic
+                    management and control strategies.
+                </p>
+            </div>
+
+
+
+            <div id="runningSimulation">
+                <p id="explanation">
+                    <strong>Running the Simulation</strong><br>
+                    The simulation leverages the Krauss Car-Following Model to dynamically dictate the movements and interactions of
+                    vehicles, with each scenario applying specific conditions and thresholds that influence driving behavior. Here’s
+                    how the simulation runs mathematically:
+                </p>
+            
+                <p id="explanation">
+                    <strong>Mathematical Framework for Simulation Execution</strong>
+                <ol>
+                    <li><strong>Initialization:</strong>
+                        <ul>
+                            <li>Set initial conditions for all vehicles, including starting positions \( x_0 \), speeds \( v_0 \),
+                                and destinations.</li>
+                            <li>Initialize simulation time \( t = 0 \) and set simulation duration \( T = 600 \) seconds.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Time Step Iteration:</strong>
+                        <ul>
+                            <li>The simulation progresses in discrete time steps, \( \Delta t \), typically one second.</li>
+                            <li>At each time step, the following computations occur for each vehicle:</li>
+                        </ul>
+                    </li>
+                    <li><strong>Distance and Speed Calculations:</strong>
+                        <ul>
+                            <li>Calculate the distance \( d \) to the vehicle ahead using the position data:
+                                \[
+                                d = x_{lead} - x - l_{vehicle}
+                                \]
+                                where \( l_{vehicle} \) is the length of the leading vehicle.</li>
+                            <li>Update vehicle positions and speeds using the Krauss Car-Following Model:
+                                \[
+                                v_{safe} = \min\left(v_{max}, \, v_{lead} - \frac{2 \cdot (x - x_{lead} - d_{min})}{\tau \cdot v +
+                                d_{min}}\right)
+                                \]
+                                \[
+                                x = x + v \cdot \Delta t
+                                \]
+                                \[
+                                v = \text{update based on } v_{safe}
+                                \]</li>
+                        </ul>
+                    </li>
+                    <li><strong>Honking Decisions:</strong>
+                        <ul>
+                            <li>Check if the vehicle is stopped (\( v = 0 \)) for more than the stuck time threshold (\( t_{stuck}
+                                \)):
+                                \[
+                                \text{if } (t_{current} - t_{stopped} \geq T_{stuck}) \text{ then honk}
+                                \]</li>
+                            <li>Check for proximity to the vehicle ahead:
+                                \[
+                                \text{if } (d < D_{close}) \text{ then honk} \]</li>
+                            <li>Check for slow-moving conditions:
+                                \[
+                                \text{if } (0 < v < V_{slow}) \text{ then honk} \]</li>
+                        </ul>
+                    </li>
+                </ol>
+                </p>
+            </div>
+
+
+                <div id="scenarioAnalysis">
+                    <p id="explanation">
+                        To provide a deeper mathematical explanation of the results from each scenario during the simulation, we analyze
+                        how the specific threshold settings for each scenario influence the frequency of honking behaviors and correlate
+                        these with the actual number of honks observed. This approach helps to understand the dynamics between
+                        theoretical settings and practical outcomes in the simulated environment.
+                    </p>
+                
+                    <p id="explanation">
+                        <strong>Detailed Mathematical Analysis of Scenario Outcomes:</strong>
+                    </p>
+                
+                    <p id="explanation">
+                        <strong>Scenario 1: Low Patience, High Sensitivity</strong>
+                    <ul>
+                        <li>Mathematical Expectation: The probability of honking \( P_{\text{honk}} \) is high due to very low
+                            thresholds for both speed and proximity.</li>
+                        <li>Given \( N \) vehicles, the expected number of honks can be estimated as: \[ E(\text{honks}) = N \cdot
+                            (P(\text{stuck}) + P(\text{slow}) + P(\text{close})) \]</li>
+                        <li>Observed Honks: 96,674</li>
+                        <li>Implication: High sensitivity settings cause frequent honking due to minimal patience thresholds, closely
+                            matching the expected theoretical outcome.</li>
+                    </ul>
+                    </p>
+                
+                    <p id="explanation">
+                        <strong>Scenario 2: Low Patience, Moderate Sensitivity</strong>
+                    <ul>
+                        <li>Mathematical Expectation: A slight increase in the slow speed and proximity thresholds slightly reduces \(
+                            P(\text{slow}) \) and \( P(\text{close}) \) but remains significant due to low patience.</li>
+                        <li>Observed Honks: 104,281</li>
+                        <li>Implication: Despite moderate increases in thresholds, the low stuck time keeps the honking frequency high,
+                            aligning with the expected high frequency due to the traffic density and conditions modeled.</li>
+                    </ul>
+                    </p>
+                
+                    <p id="explanation">
+                        <strong>Scenario 3: Low Patience, Low Sensitivity</strong>
+                    <ul>
+                        <li>Mathematical Expectation: Higher thresholds for speed and proximity significantly decrease \( P(\text{slow})
+                            \) and \( P(\text{close}) \).</li>
+                        <li>Observed Honks: 103,490</li>
+                        <li>Implication: The relatively high frequency of honking despite increased thresholds suggests other factors at
+                            play, such as frequent stops or high overall traffic density, impacting the results.</li>
+                    </ul>
+                    </p>
+                
+                    <p id="explanation">
+                        <strong>Scenario 4: Moderate Patience, High Sensitivity</strong>
+                    <ul>
+                        <li>Mathematical Expectation: Increased stuck time reduces \( P(\text{stuck}) \), but high sensitivity to speed
+                            and proximity keeps \( P(\text{slow}) \) and \( P(\text{close}) \) significant.</li>
+                        <li>Observed Honks: 87,081</li>
+                        <li>Implication: The higher patience reduces frequency but sensitivity maintains a relatively high honking
+                            level, suggesting an intermediate level of traffic management effectiveness.</li>
+                    </ul>
+                    </p>
+                
+                    <p id="explanation">
+                        <strong>Scenario 5: Moderate Patience, Moderate Sensitivity</strong>
+                    <ul>
+                        <li>Mathematical Expectation: Balanced settings lead to medium probabilities across all conditions, reflecting
+                            typical urban driving scenarios.</li>
+                        <li>Observed Honks: 99,807</li>
+                        <li>Implication: The balanced approach leads to a moderate level of honking, which is expected and indicates
+                            typical driver behavior in moderately congested environments.</li>
+                    </ul>
+                    </p>
+                
+                    <p id="explanation">
+                        <strong>Scenario 6: Moderate Patience, Low Sensitivity</strong>
+                    <ul>
+                        <li>Mathematical Expectation: Higher thresholds across all conditions reduce the probabilities of triggering a
+                            honk.</li>
+                        <li>Observed Honks: 90,982</li>
+                        <li>Implication: Lower sensitivity with moderate patience effectively reduces honking frequency, demonstrating
+                            improved tolerance and potentially less congested traffic conditions.</li>
+                    </ul>
+                    </p>
+                
+                    <p id="explanation">
+                        <strong>Scenario 7: High Patience, High Sensitivity</strong>
+                    <ul>
+                        <li>Mathematical Expectation: Very high stuck time drastically reduces \( P(\text{stuck}) \), though sensitivity
+                            keeps \( P(\text{slow}) \) and \( P(\text{close}) \) higher.</li>
+                        <li>Observed Honks: 79,992</li>
+                        <li>Implication: Significantly reduced honking despite high sensitivity due to the extended patience, indicating
+                            effective management of high sensitivity scenarios.</li>
+                    </ul>
+                    </p>
+                
+                    <p id="explanation">
+                        <strong>Scenario 8: High Patience, Moderate Sensitivity</strong>
+                    <ul>
+                        <li>Mathematical Expectation: The highest patience combined with moderate sensitivity settings lead to the
+                            lowest overall honking probabilities.</li>
+                        <li>Observed Honks: 77,120</li>
+                        <li>Implication: This scenario shows the lowest honking frequency, illustrating an optimal setting for reducing
+                            noise and enhancing traffic flow in densely populated urban centers.</li>
+                    </ul>
+                    </p>
+                
+                    <p id="explanation">
+                        <strong>Conclusion:</strong>
+                        The mathematical correlation between the theoretical thresholds and observed honking data in each scenario
+                        provides a quantifiable insight into how different driver behaviors and traffic management strategies impact
+                        urban traffic dynamics. This analysis helps to validate the model settings and offers a robust framework for
+                        predictive simulations that can guide urban planning and traffic management decisions.
+                    </p>
+                </div>
+
+
+                    <div id="reportingResults">
+                        <p id="explanation">
+                            <strong>Objective:</strong> Summarize findings to inform traffic management and urban planning.
+                        </p>
+                    
+                        <p id="explanation">
+                            <strong>Results:</strong> Provide insights into how varying levels of patience and sensitivity affect traffic
+                            dynamics at a busy urban junction like CSMT. The data helps in proposing changes to traffic signal timings, road
+                            layouts, or driver awareness programs to reduce unnecessary honking and improve traffic flow.
+                        </p>
+                    
+                        <p id="explanation">
+                            <strong>Summary of Findings from Simulation Scenarios:</strong>
+                        </p>
+                    
+                        <p id="explanation">
+                            <strong>Scenario 1: Low Patience, High Sensitivity</strong>
+                        <ul>
+                            <li>Result: 96,674 honks</li>
+                            <li>Analysis: This scenario recorded a high frequency of honking due to very sensitive thresholds. Drivers
+                                reacted quickly to minimal delays and proximity, reflecting typical behavior in extremely congested urban
+                                centers where space and time are at a premium.</li>
+                        </ul>
+                        </p>
+                    
+                        <p id="explanation">
+                            <strong>Scenario 2: Low Patience, Moderate Sensitivity</strong>
+                        <ul>
+                            <li>Result: 104,281 honks</li>
+                            <li>Analysis: Despite a slight increase in thresholds, the continued low patience resulted in the highest
+                                frequency of honking observed. This scenario likely represents peak traffic hours where moderate adjustments
+                                in sensitivity are insufficient to significantly reduce driver frustrations.</li>
+                        </ul>
+                        </p>
+                    
+                        <p id="explanation">
+                            <strong>Scenario 3: Low Patience, Low Sensitivity</strong>
+                        <ul>
+                            <li>Result: 103,490 honks</li>
+                            <li>Analysis: Surprisingly high honking rates were observed, despite increased thresholds for speed and
+                                proximity. This suggests that even minor stops are significant triggers for honking in environments with
+                                generally impatient drivers.</li>
+                        </ul>
+                        </p>
+                    
+                        <p id="explanation">
+                            <strong>Scenario 4: Moderate Patience, High Sensitivity</strong>
+                        <ul>
+                            <li>Result: 87,081 honks</li>
+                            <li>Analysis: Increased patience led to a reduction in honking compared to scenarios with lower patience.
+                                However, high sensitivity to proximity and slow speeds maintained a relatively high honking rate, indicating
+                                sensitivity is a critical factor in honking behavior.</li>
+                        </ul>
+                        </p>
+                    
+                        <p id="explanation">
+                            <strong>Scenario 5: Moderate Patience, Moderate Sensitivity</strong>
+                        <ul>
+                            <li>Result: 99,807 honks</li>
+                            <li>Analysis: A balanced approach resulted in moderate honking frequencies, suggesting this setting may closely
+                                mirror typical urban driving conditions outside of peak hours.</li>
+                        </ul>
+                        </p>
+                    
+                        <p id="explanation">
+                            <strong>Scenario 6: Moderate Patience, Low Sensitivity</strong>
+                        <ul>
+                            <li>Result: 90,982 honks</li>
+                            <li>Analysis: The combination of moderate patience and low sensitivity effectively reduced honking frequencies,
+                                indicating better tolerance and less reactive driving behavior, possibly in less congested traffic
+                                situations.</li>
+                        </ul>
+                        </p>
+                    
+                        <p id="explanation">
+                            <strong>Scenario 7: High Patience, High Sensitivity</strong>
+                        <ul>
+                            <li>Result: 79,992 honks</li>
+                            <li>Analysis: Despite high sensitivity, the very high patience substantially decreased the frequency of honking,
+                                showing that increasing driver tolerance can effectively manage even sensitive driving responses.</li>
+                        </ul>
+                        </p>
+                    
+                        <p id="explanation">
+                            <strong>Scenario 8: High Patience, Moderate Sensitivity</strong>
+                        <ul>
+                            <li>Result: 77,120 honks</li>
+                            <li>Analysis: This scenario resulted in the lowest honking frequency, demonstrating that high patience combined
+                                with moderate sensitivity is optimal for reducing disruptive honking and improving traffic flow.</li>
+                        </ul>
+                        </p>
+                    
+                        <p id="explanation">
+                            <strong>Overall Conclusion:</strong>
+                            The simulation clearly demonstrates that patience levels (time drivers are willing to wait before reacting)
+                            significantly influence honking behavior, potentially more so than the sensitivity to slow speeds or proximity.
+                            High patience, regardless of sensitivity settings, consistently leads to lower honking frequencies. This
+                            suggests that traffic management strategies focusing on educating drivers to be more patient, combined with
+                            smart traffic control systems that optimize flow and reduce unnecessary stops, could be highly effective in
+                            managing urban traffic more efficiently and with less noise pollution. These findings can help urban planners
+                            and traffic management authorities to design better policies and infrastructure adaptations to improve the
+                            quality of urban life.
+                        </p>
+                    </div>
+
+                    
+                <div id="decibelEstimations">
+                    <p id="explanation">
+                        To estimate the decibel noise levels for each scenario based on the number of honks recorded, we can use the
+                        simplified decibel summing formula I described earlier. Given that each honk is assumed to be around 100 dB,
+                        here’s how you can estimate the total decibel noise for each scenario:
+                    </p>
+                
+                    <p id="explanation">
+                        <strong>Calculation Formula:</strong>
+                        \[ L_{\text{total}} = 100 + 10 \log_{10} (N) \]
+                        Where \( N \) is the number of honks in each scenario.
+                    </p>
+                
+                    <p id="explanation">
+                        <strong>Applying the Calculation to Each Scenario:</strong>
+                        Let's compute the approximate decibel levels for each scenario using their respective honk counts:
+                    </p>
+                
+                    <p id="explanation">
+                        <strong>Scenario 1: Low Patience, High Sensitivity</strong>
+                    <ul>
+                        <li>Honks: 96,674</li>
+                        <li>Decibel Noise: \( 100 + 10 \log_{10} (96,674) \approx 149.85 \text{ dB} \)</li>
+                    </ul>
+                    </p>
+                
+                    <p id="explanation">
+                        <strong>Scenario 2: Low Patience, Moderate Sensitivity</strong>
+                    <ul>
+                        <li>Honks: 104,281</li>
+                        <li>Decibel Noise: \( 100 + 10 \log_{10} (104,281) \approx 150.18 \text{ dB} \)</li>
+                    </ul>
+                    </p>
+                
+                    <p id="explanation">
+                        <strong>Scenario 3: Low Patience, Low Sensitivity</strong>
+                    <ul>
+                        <li>Honks: 103,490</li>
+                        <li>Decibel Noise: \( 100 + 10 \log_{10} (103,490) \approx 150.15 \text{ dB} \)</li>
+                    </ul>
+                    </p>
+                
+                    <p id="explanation">
+                        <strong>Scenario 4: Moderate Patience, High Sensitivity</strong>
+                    <ul>
+                        <li>Honks: 87,081</li>
+                        <li>Decibel Noise: \( 100 + 10 \log_{10} (87,081) \approx 149.40 \text{ dB} \)</li>
+                    </ul>
+                    </p>
+                
+                    <p id="explanation">
+                        <strong>Scenario 5: Moderate Patience, Moderate Sensitivity</strong>
+                    <ul>
+                        <li>Honks: 99,807</li>
+                        <li>Decibel Noise: \( 100 + 10 \log_{10} (99,807) \approx 149.99 \text{ dB} \)</li>
+                    </ul>
+                    </p>
+                
+                    <p id="explanation">
+                        <strong>Scenario 6: Moderate Patience, Low Sensitivity</strong>
+                    <ul>
+                        <li>Honks: 90,982</li>
+                        <li>Decibel Noise: \( 100 + 10 \log_{10} (90,982) \approx 149.59 \text{ dB} \)</li>
+                    </ul>
+                    </p>
+                
+                    <p id="explanation">
+                        <strong>Scenario 7: High Patience, High Sensitivity</strong>
+                    <ul>
+                        <li>Honks: 79,992</li>
+                        <li>Decibel Noise: \( 100 + 10 \log_{10} (79,992) \approx 148.93 \text{ dB} \)</li>
+                    </ul>
+                    </p>
+                
+                    <p id="explanation">
+                        <strong>Scenario 8: High Patience, Moderate Sensitivity</strong>
+                    <ul>
+                        <li>Honks: 77,120</li>
+                        <li>Decibel Noise: \( 100 + 10 \log_{10} (77,120) \approx 148.87 \text{ dB} \)</li>
+                    </ul>
+                    </p>
+                
+                    <p id="explanation">
+                        <strong>Interpretation:</strong>
+                        These decibel levels are extraordinarily high, significantly above the threshold for potential hearing damage or
+                        severe disruption. This is indicative of the serious impact traffic noise, particularly from honking, can have
+                        in densely populated urban areas. The calculations show that even slight reductions in the frequency of honking
+                        (as seen in the scenarios with higher patience levels) can have a considerable effect on reducing overall noise
+                        levels, albeit they are still much higher than what would be considered safe or comfortable.
+                    </p>
+                
+                    <p id="explanation">
+                        These estimations provide a strong argument for the implementation of noise mitigation strategies in urban
+                        planning, such as the creation of no-honk zones, stricter regulations on horn use, and urban design that
+                        minimizes situations leading to frequent honking.
+                    </p>
+
+
+
+                    <div id="limitations">
+                        <h2>Limitations of Traffic Simulation</h2>
+                        <p>
+                            Simulating traffic conditions and honking behaviors using tools like SUMO and models like the Krauss
+                            Car-Following Model presents several challenges:
+                        </p>
+                        <ul>
+                            <li><strong>Modeling Simplifications:</strong>
+                                <ul>
+                                    <li><em>Generic Parameters:</em> The models often use generic parameters that may not accurately
+                                        represent localized driving behaviors or the unique conditions of urban environments like Mumbai.
+                                    </li>
+                                    <li><em>Assumptions in Vehicle Dynamics:</em> These simulations typically assume a uniformity in vehicle
+                                        types and driver reactions, which might not hold true across different regions with diverse traffic
+                                        compositions.</li>
+                                </ul>
+                            </li>
+                            <li><strong>Real-World Variability:</strong>
+                                <ul>
+                                    <li><em>Environmental Factors:</em> Factors such as weather conditions, road quality, and unexpected
+                                        events are difficult to accurately model but have a significant impact on traffic behavior.</li>
+                                    <li><em>Human Behavior:</em> The unpredictable nature of human drivers, especially in response to
+                                        honking and other reactive measures, is complex to model accurately.</li>
+                                </ul>
+                            </li>
+                            <li><strong>Data Accuracy and Availability:</strong>
+                                <ul>
+                                    <li><em>Quality of Input Data:</em> The effectiveness of the simulation is heavily dependent on the
+                                        accuracy and completeness of input data, such as traffic volume, vehicle speeds, and road network
+                                        details.</li>
+                                    <li><em>Updates and Maintenance:</em> Keeping the simulation parameters up-to-date with ongoing changes
+                                        in traffic laws, vehicle technology, and urban development is challenging.</li>
+                                </ul>
+                            </li>
+                            <li><strong>Scalability Issues:</strong>
+                                <ul>
+                                    <li><em>Computational Demand:</em> Simulating large-scale networks or high-density areas like CSMT
+                                        requires significant computational resources, which can limit the scalability of the simulation.
+                                    </li>
+                                    <li><em>Detail vs. Performance:</em> Balancing the level of detail in the simulation with performance is
+                                        crucial; more detailed models often require more processing power and time.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <p>
+                            These limitations highlight the need for continuous refinement of traffic simulation tools and models to better
+                            represent the complexities of real-world traffic systems and enhance their predictive capabilities.
+                        </p>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Video array with scenarios
+            const videos = [
+                {
+                    title: "Scenario 1: Low Patience, High Sensitivity",
+                    src: "screenSumocsthonkscenrio1E.mp4",
+                    description: `
+                        Stuck Time Threshold: 10 seconds,
+                        Slow Speed Threshold: 1 m/s,
+                        Proximity Threshold: 2 meters,
+                        Highly reactive to slow speeds and close proximity,
+                        Observed Honks: 96,674`
+                },
+                {
+                    title: "Scenario 2: Low Patience, Moderate Sensitivity",
+                    src: "screenSumocsthonkscenrio2E.mp4",
+                    description: `
+                        Stuck Time Threshold: 10 seconds,
+                        Slow Speed Threshold: 3 m/s,
+                        Proximity Threshold: 3 meters,
+                        Reactive to moderately slow speeds and moderate proximity,
+                        Observed Honks: 104,281`
+                },
+                {
+                    title: "Scenario 3: Low Patience, Low Sensitivity",
+                    src: "screenSumocsthonkscenrio3E.mp4",
+                    description: `
+                        Stuck Time Threshold: 10 seconds,
+                        Slow Speed Threshold: 5 m/s,
+                        Proximity Threshold: 4 meters,
+                        Reacts quickly to stops but less sensitive to speed and proximity,
+                        Observed Honks: 103,490`
+                },
+                {
+                    title: "Scenario 4: Moderate Patience, High Sensitivity",
+                    src: "screenSumocsthonkscenrio4E.mp4",
+                    description: `
+                        Stuck Time Threshold: 20 seconds,
+                        Slow Speed Threshold: 1 m/s,
+                        Proximity Threshold: 2 meters,
+                        Moderate tolerance for stops but highly sensitive to slow speeds and close proximity,
+                        Observed Honks: 87,081`
+                },
+                {
+                    title: "Scenario 5: Moderate Patience, Moderate Sensitivity",
+                    src: "screenSumocsthonkscenrio5E.mp4",
+                    description: `
+                        Stuck Time Threshold: 20 seconds,
+                        Slow Speed Threshold: 3 m/s,
+                        Proximity Threshold: 3 meters,
+                        Balanced response to both delays and moderate proximity,
+                        Observed Honks: 99,807`
+                },
+                {
+                    title: "Scenario 6: Moderate Patience, Low Sensitivity",
+                    src: "screenSumocsthonkscenrio6E.mp4",
+                    description: `
+                        Stuck Time Threshold: 20 seconds,
+                        Slow Speed Threshold: 5 m/s,
+                        Proximity Threshold: 4 meters,
+                        More tolerant to both delays and less sensitive to proximity,
+                        Observed Honks: 90,982`
+                },
+                {
+                    title: "Scenario 7: High Patience, High Sensitivity",
+                    src: "screenSumocsthonkscenrio7E.mp4",
+                    description: `
+                        Stuck Time Threshold: 30 seconds,
+                        Slow Speed Threshold: 1 m/s,
+                        Proximity Threshold: 2 meters,
+                        Allows longer delays before action but remains highly sensitive to proximity issues,
+                        Observed Honks: 79,992`
+                },
+                {
+                    title: "Scenario 8: High Patience, Moderate Sensitivity",
+                    src: "screenSumocsthonkscenrio8E.mp4",
+                    description: `
+                        Stuck Time Threshold: 30 seconds,
+                        Slow Speed Threshold: 3 m/s,
+                        Proximity Threshold: 3 meters,
+                        Forgiving in terms of delay and speed but maintains a moderate stance on vehicle proximity,
+                        Observed Honks: 77,120`
+                }
+            ];
+
+            let currentVideoIndex = 0;
+
+            // Elements from the DOM
+            const videoElement = document.getElementById("fullscreenVideo");
+            const videoTitle = document.getElementById("videoTitle");
+            const videoDescription = document.getElementById("videoDescription");
+            const prevButton = document.getElementById("prevButton");
+            const nextButton = document.getElementById("nextButton");
+
+            if (!videoElement || !videoTitle || !videoDescription || !prevButton || !nextButton) {
+                console.error("One or more DOM elements are missing.");
+                return; // Exit the script if essential elements are missing.
+            }
+
+            // Function to update the video source, title, and description
+            function updateVideo() {
+                videoElement.src = videos[currentVideoIndex].src;
+                videoTitle.textContent = videos[currentVideoIndex].title;
+                videoDescription.innerHTML = videos[currentVideoIndex].description; // Use innerHTML to handle formatting
+            }
+
+            // Button event listeners
+            prevButton.addEventListener("click", function () {
+                currentVideoIndex = (currentVideoIndex > 0) ? currentVideoIndex - 1 : videos.length - 1;
+                updateVideo();
+            });
+
+            nextButton.addEventListener("click", function () {
+                currentVideoIndex = (currentVideoIndex < videos.length - 1) ? currentVideoIndex + 1 : 0;
+                updateVideo();
+            });
+
+            // Initial load of video information
+            updateVideo();
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Story with Innovations</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: url('background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            background-color: #000000;
+        }
+
+        .character {
+            position: absolute;
+            bottom: 0;
+            left: 20px;
+            width: 200px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-30px);
+            }
+
+            60% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .typewriter {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 24px;
+            color: #ffffff;
+            border-right: 2px solid;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: blink 0.75s step-end infinite;
+        }
+
+        .options {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .button {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 18px;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            border: 2px solid #333;
+            background-color: #fff;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #333;
+            color: #fff;
+        }
+
+        @keyframes blink {
+
+            from,
+            to {
+                border-color: transparent
+            }
+
+            50% {
+                border-color: black
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <audio id="bg-music" src="background-music.mp3" loop></audio>
+    <img src="character.png" class="character" alt="Character Animation">
+    <div class="typewriter" id="typewriter"></div>
+    <div class="options" id="options">
+        <button class="button" id="option1">Increase Police Presence</button>
+        <button class="button" id="option2">Implement Public Surveillance</button>
+    </div>
+
+    <script>
+        const text = "In the once peaceful town of Spudsville, crime is on the rise—someone’s been mashing more than just potatoes! What would you do?";
+        const speed = 50; // Speed of typing (milliseconds)
+        let index = 0;
+
+        function type() {
+            if (index < text.length) {
+                document.getElementById("typewriter").innerHTML += text.charAt(index);
+                index++;
+                setTimeout(type, speed);
+            } else {
+                // Show the options after the typing is complete
+                document.getElementById("options").style.display = "block";
+                document.getElementById("bg-music").play(); // Play background music when typing is complete
+            }
+        }
+
+        window.onload = type;
+
+        // Option button click events
+        document.getElementById("option1").onclick = () => alert('You chose to Increase Police Presence.');
+        document.getElementById("option2").onclick = () => alert('You chose to Implement Public Surveillance.');
+    </script>
+</body>
+
+</html>

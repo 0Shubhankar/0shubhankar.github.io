@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Map with Isochrone and Decay Scores</title>
+    <link rel="stylesheet" href="../vendor/shared/lib-301c4190d5f2/dist/leaflet.css" />
+    <script src="../vendor/shared/lib-d39c45fd86ca/dist/leaflet.js"></script>
+    <script src="../vendor/shared/lib-6042d64ed8cf/dist/highcharts.js"></script>
+    <script src="../vendor/shared/lib-b4f1751e1021/dist/highcharts-more.js"></script>
+    
+
+    <style>
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+    
+        #citySelector {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            background: #333;
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+        }
+    
+        select {
+            background: rgba(0, 0, 0, 0.8);
+            border: none;
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+        }
+    
+        #radarChartContainer {
+            position: absolute;
+            top: 60px;
+            /* Moved down to avoid covering the city box */
+            right: 50px;
+            width: 300px;
+            height: 300px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+            z-index: 1000;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="citySelector">
+        <select onchange="loadCityData(this.value)">
+            <option value="">Select a City</option>
+            <option value="bengaluru">Bengaluru</option>
+            <option value="delhi">Delhi</option>
+            <option value="mumbai">Mumbai</option>
+            <option value="chicago">Chicago</option>
+            <option value="newyork">New York</option>
+            <option value="london">London</option>
+            <option value="losangeles">Los Angeles</option>
+            <option value="cairo">Cairo</option>
+            <option value="istanbul">Istanbul</option>
+            <option value="paris">Paris</option>
+            <option value="shanghai">Shanghai</option>
+        </select>
+    </div>
+    <div id="map"></div>
+    <div id="radarChartContainer"></div>
+    <script>
+        var map = L.map('map').setView([20.5937, 78.9629], 3);
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: 'Map data &copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                subdomains: 'abcd',
+                maxZoom: 19
+            }).addTo(map);
+
+            function onEachFeature(feature, layer) {
+                layer.on('click', function () {
+                    updateChart(feature);
+                });
+            }
+
+        function style(feature) {
+            return {
+                weight: 2,
+                opacity: 1,
+                color: 'white',
+                dashArray: '3',
+                fillOpacity: 0.7,
+                fillColor: '#34c924'
+            };
+        }
+
+        function loadCityData(city) {
+            var geojsonURL = '';
+            var cityCoordinates = {
+                'bengaluru': [12.9716, 77.5946, 12],
+                'delhi': [28.7041, 77.1025, 12],
+                'mumbai': [19.0760, 72.8777, 12],
+                'chicago': [41.8781, -87.6298, 12],
+                'newyork': [40.7128, -74.0060, 12],
+                'london': [51.5074, -0.1278, 12],
+                'losangeles': [34.0522, -118.2437, 12],
+                'cairo': [30.0444, 31.2357, 12],
+                'istanbul': [41.0082, 28.9784, 12],
+                'paris': [48.8566, 2.3522, 12],
+                'shanghai': [31.2304, 121.4737, 12]
+            };
+
+            if (city && cityCoordinates[city]) {
+                geojsonURL = `updated_parks_with_all_metrics_and_silhouette_${city}.geojson`;
+                map.setView([cityCoordinates[city][0], cityCoordinates[city][1]], cityCoordinates[city][2]);
+            } else {
+                return; // No action if no city or invalid city is selected
+            }
+
+            fetch(geojsonURL)
+                .then(response => response.json())
+                .then(data => {
+                    L.geoJSON(data, {
+                        onEachFeature: onEachFeature,
+                        style: function (feature) {
+                            return { color: "#00FF00", weight: 2 };
+                        }
+                    }).addTo(map);
+                })
+                .catch(error => console.error('Error loading the GeoJSON data:', error));
+        }
+
+        function onEachFeature(feature, layer) {
+            layer.on('click', function () {
+                updateChart(feature);
+            });
+        }
+
+        function updateChart(feature) {
+                var name = feature.properties.name || "Park"; // Default to "Park" if name is null
+                var errorMargin = Math.random() * 0.1; // Random error margin up to 10%
+                var scores = [
+                    feature.properties.isochrone_areas["5"],
+                    feature.properties.isochrone_areas["10"],
+                    feature.properties.isochrone_areas["15"],
+                    feature.properties.isochrone_areas["25"]
+                ].map(function (score) {
+                    return score * (1 + errorMargin); // Apply the error margin
+                });
+
+                Highcharts.chart('radarChartContainer', {
+                    chart: {
+                        polar: true,
+                        type: 'area',
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)'
+                    },
+                    title: {
+                        text: 'Accessibility Scores for ' + name,
+                        style: {
+                            color: '#FFFFFF'
+                        }
+                    },
+                    pane: {
+                        startAngle: 0,
+                        endAngle: 360
+                    },
+                    xAxis: {
+                        categories: ['5 min', '10 min', '15 min', '25 min'],
+                        tickmarkPlacement: 'on',
+                        lineWidth: 0,
+                        labels: {
+                            style: {
+                                color: '#A0A0A3'
+                            }
+                        }
+                    },
+                    yAxis: {
+                        gridLineInterpolation: 'polygon',
+                        lineWidth: 0,
+                        min: 0,
+                        labels: {
+                            style: {
+                                color: '#A0A0A3'
+                            }
+                        }
+                    },
+                    tooltip: {
+                        shared: true,
+                        pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}</b><br/>'
+                    },
+                    legend: {
+                        enabled: false
+                    },
+                    series: [{
+                        name: 'Park Score',
+                        data: scores,
+                        pointPlacement: 'on',
+                        color: '#34c924',
+                        fillColor: 'rgba(52, 201, 36, 0.1)'
+                    }]
+                });
+            }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Policy Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+    
+        body,
+        html {
+            height: 100%;
+            font-family: 'Times New Roman', Times, serif;
+        }
+    
+        .container,
+        .text-section {
+            max-width: 60%;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffffff;
+        }
+    
+        .background-image {
+            background-image: url('https://picsum.photos/1920/1080');
+            background-size: cover;
+            background-position: center;
+            height: 100%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+    
+        .content {
+            position: relative;
+            color: #fff;
+            text-align: center;
+            z-index: 2;
+        }
+    
+        .content h1 {
+            font-size: 3.6em;
+            margin-bottom: 0.5em;
+        }
+    
+        .content h2 {
+            font-size: 1.8em;
+            margin-bottom: 1em;
+        }
+    
+        .text-section p {
+            margin-bottom: 1.5em;
+            font-size: 1.24em;
+            line-height: 1.6;
+        }
+    
+        .decision-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2em;
+        }
+    
+        .decision-section img {
+            width: 50%;
+            max-height: 400px;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+    
+        .decision-text {
+            width: 50%;
+            font-size: 1.14em;
+            line-height: 1.6;
+        }
+    
+        .option-boxes {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2em;
+        }
+    
+        .option {
+            width: 45%;
+            padding: 1.5em;
+            background-color: #00ffbf;
+            border: 2px solid #ccc;
+            text-align: center;
+            cursor: pointer;
+            font-size: 1.14em;
+        }
+    
+        .option:hover {
+            background-color: #ddd;
+        }
+    
+        .hidden {
+            display: none;
+        }
+
+        .container {
+        transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+        transform: translateY(20px);
+        opacity: 0;
+        }
+
+        .container.show {
+        transform: translateY(0);
+        opacity: 1;
+        }
+
+        html {
+        scroll-behavior: smooth;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="background-image">
+        <div class="overlay"></div>
+        <div class="content">
+            <h1>Policy Game Title</h1>
+            <h2>Subheading or Tagline</h2>
+        </div>
+    </div>
+
+    <div class="text-section">
+        <!-- Introductory text -->
+        <p>Welcome, Chief Planner of Greenville!
+        Welcome to Greenville, the town of charming streets, lovely houses, and... well, a big green problem. The city’s
+        low-income neighborhoods are suffering from a serious lack of parks and green spaces! This isn’t just about a nice place
+        to picnic — it's affecting people's health, happiness, and overall quality of life. No pressure, but it’s up to YOU, the
+        Chief Planner, to fix this imbalance and make Greenville greener, healthier, and more equitable.
+        
+        Of course, things aren’t so simple! Every decision comes with its own set of challenges and consequences. So, put on
+        your best urban planner hat, grab your clipboard, and get ready to make the tough choices.
+    
+        How will you begin to tackle this green space crisis?
+
+        A: Addressing Poor Access to Green Spaces
+        Should you dive right in with large-scale park projects, or take a slower, more community-driven approach to add small green spaces and trees?
+
+        B: Balancing Environmental Justice with Economic Development
+        Maybe it’s not just about parks! How do you create more green spaces in low-income neighborhoods without slowing down Greenville’s growing economy and keeping businesses happy?
+
+        The future of Greenville is in your hands, Chief Planner! Choose wisely!</p>
+    
+        <div class="option-boxes">
+            <div class="option" id="optionA">** A: Addressing Poor Access to Green Spaces**
+        </div>
+            <div class="option" id="optionB">** B: Balancing Environmental Justice with Economic Development**
+    </div>
+        </div>
+    </div>
+        
+    <!-- Containers for options -->
+        <div id="container-option-A" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Bold Move, Chief Planner! 🌳
+                    You’ve chosen to tackle Greenville’s green space crisis head-on! New parks are underway, and residents are thrilled.
+                    But...the budget is tight now! 💸 While parks are sprouting, other projects might suffer.
+                    
+                    What’s your next move?
+                    A: Double Down on Green Spaces
+                    Go all in! Keep building parks, even if it means cutting other infrastructure or finding creative ways to fund your
+                    green dream.
+                    
+                    B: Balance Environmental Justice with Economic Development
+                    Slow down a bit. Can you balance green space development with keeping businesses happy?
+                    
+                    Greenville awaits your decision! 🌍</p>
+                </div>
+            </div>
+            <!-- - **New Choices After Consequence**: -->
+            <div class="option-boxes">
+                <div class="option" id="optionA1">**A1**: **Invest in a large-scale park development project in low-income areas.**</div>
+                <div class="option" id="optionA2">**A2**: **Start by planting trees and creating small green spaces in vacant lots.**</div>
+            </div>
+        </div>
+        <div id="container-option-B" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p> Smart Move, Chief Planner! 🌱💼
+                    
+                    You’ve chosen to balance green space with Greenville’s growing economy. Businesses are breathing a sigh of relief, but
+                    now you’ve got to keep the parks coming without derailing economic progress. Time to juggle!
+                    
+                    ---
+                    
+                    ### What’s your next step?
+                    
+                    **B1**: **Balance Green Space with Economic Interests**
+                    Mix parks with commercial zones! Businesses grow, but green space might take a hit. Can you satisfy everyone?
+                    
+                    **B2**: **Prioritize Green Space in Residential Zones**
+                    Focus on residents! More parks for the people, but businesses will start grumbling. Can you keep them on board?
+                    
+                    Choose wisely, Chief! 🌍🌳</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionB1">Balance green space with economic interests?</div>
+                <div class="option" id="optionB2">Prioritize green space development exclusively in residential zones.</div>
+            </div>
+        </div>
+        <div id="container-option-A1" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>### Big Plans, Chief Planner! 🌳🎉
+                    
+                    You’ve gone all in with a **large-scale park project** in low-income areas, and it’s transforming Greenville! But, whoa,
+                    the costs are climbing fast, and now you’ve got to make some tough calls to keep the green dream alive.
+                    
+                    ---
+                    
+                    ### What’s next?
+                    
+                    **A1.1**: **Cut funding from other infrastructure projects**
+                    Keep building parks, but something's gotta give! Can you cut back on other city projects without facing a revolt?
+                    
+                    **A2**: **Start with small green spaces**
+                    Switch gears—go smaller! Trees and tiny parks cost less but take longer. Will residents stay patient?
+                    
+                    Greenville's watching! 🌍🌱</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionA1.1">A1.1**: Cut funding from other infrastructure projects to maintain the momentum of green space development.</div>
+                <div class="option" id="optionA1.2">**A1.2**: Explore public-private partnerships to share development costs.</div>
+            </div>
+        </div>
+      
+
+        <div id="container-option-A2" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>### Slow and Steady, Chief Planner! 🌱
+                    
+                    You’ve taken a thoughtful approach by planting trees and creating small green spaces. Residents love the new greenery,
+                    but it’s a slow process. Now, you need to decide how to keep the momentum growing without breaking the bank!
+                    
+                    ---
+                    
+                    ### What’s your next step?
+                    
+                    **A2.1**: **Apply for grants**
+                    Secure more funding to expand over time! It’ll keep the green projects going, but grant applications can take a while.
+                    
+                    **A2.2**: **Engage the community**
+                    Get the people involved! Volunteers can help, but are they reliable enough to keep things growing?
+                    
+                    Greenville's future is in your hands! 🌍🌳</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionA2.1">**A2.1**: Apply for grants to expand green space projects over time.</div>
+                <div class="option" id="optionA2.2">**A2.2**: Engage the community to participate in tree planting and green space maintenance.</div>
+            </div>
+        </div>
+
+        <div id="container-option-B1" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>### Smart Strategy, Chief Planner! 🏗️🌳
+                    
+                    You’ve chosen to balance green space with commercial growth by building parks alongside businesses. The economy’s
+                    buzzing, but you’ve sacrificed some parkland. Now it’s time to keep everyone happy!
+                    
+                    ---
+                    
+                    ### What’s next?
+                    
+                    **B1.1**: **Increase park development in residential areas**
+                    Double down on parks in residential zones to make up for the lost green space. Can the budget handle both?
+                    
+                    **B1.2**: **Introduce zoning laws**
+                    Limit business expansion near parks! Public satisfaction rises, but businesses may start pushing back.
+                    
+                    Can you keep Greenville balanced? 🌍🌱</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionB1.1">**B1.1**: Increase park development in residential areas to counterbalance the loss of green space in commercial zones.</div>
+                <div class="option" id="optionB1.2">**B1.2**: Introduce zoning laws that limit business expansion near parks.</div>
+            </div>
+        </div>
+
+        <div id="container-option-B2" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>### Green for the People, Chief Planner! 🌿🏡
+                    
+                    You’ve prioritized parks in residential zones, and the community is loving it! But now, businesses are grumbling that
+                    their growth is being left behind. Time to handle this balancing act!
+                    
+                    ---
+                    
+                    ### What’s your next move?
+                    
+                    **B2.1**: **Offer incentives for eco-friendly businesses**
+                    Work with developers to bring green-minded businesses near parks. Can you strike a deal that keeps everyone happy?
+                    
+                    **B2.2**: **Moratorium on commercial development**
+                    No businesses near parks! Residents cheer, but businesses might start packing their bags.
+                    
+                    Will Greenville thrive, or face a business exodus? 🌍🌳</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionB2.1">**B2.1**: Work with developers to offer incentives for building eco-friendly businesses near green spaces.</div>
+                <div class="option" id="optionB2.2">B2.2**: Implement a moratorium on commercial development in residential green zones</div>
+            </div>
+        </div>
+
+
+        <!-----------------------------------------------------------        S block options  START   ------------------------------------------------------------------------------>
+
+        <div id="container-option-A1.1" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Keep the Parks Growing, Chief Planner! 🌳🚧
+                    You’ve cut funding from other projects to keep the green space dream alive. Parks are popping up, but now there's a new
+                    challenge: maintenance! Without proper care, these green spaces could turn into overgrown jungles, and unhappy residents
+                    might start grumbling.</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.A">Ready to tackle the long-term park maintenance challenge and keep Greenville green?🌳 🌍🌱</div>
+            </div>
+        </div>
+
+        <div id="container-option-A1.2" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Uh-oh, Chief Planner! 🚧💸
+                    You went for a public-private partnership, hoping businesses would chip in to build Greenville's parks. But guess what?
+                    The deals fell through, and the budget’s tighter than ever. The parks? Barely started. 😬 </p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="Play-againA1.2">Play-againA1.2</div>
+            </div>
+        </div>
+
+        <div id="container-option-A2.1" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Steady Progress, Chief Planner! 🌱💡
+                    You’ve secured those grants, and Greenville’s green spaces are expanding—slowly but surely! 🌳 The community loves the
+                    thoughtful development, but there’s a new challenge creeping up… maintenance! Without it, your beautiful parks could
+                    become wild jungles, and the happy residents might turn into grumpy ones. 😬
+                    
+                    What’s next?
+                    You’ve got the parks, now it’s time to keep them pristine! Whether it’s volunteer squads, tax hikes, or another creative
+                    solution, maintenance is key. Can you stop these lovely spaces from turning into green disasters?
+                    
+                    Keep it clean, Chief! 🌍🌿</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.B">Ready to tackle the long-term park maintenance challenge and keep Greenville green?🌳 🌍🌱</div>
+            </div>
+        </div>
+
+
+        <div id="container-option-A2.2" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Go Team Green, Chief Planner! 🌿👷‍♀️
+                    You’ve rallied the community for tree planting and green space maintenance—awesome! The residents are feeling proud, and
+                    costs are way down. But here’s the catch: volunteers can be... a bit flaky. 😬 Without consistent help, your parks might
+                    become wild jungles, and grumbling could replace that community spirit.
+                    
+                    What’s next?
+                    You’ll need to keep the enthusiasm alive! Maybe offer some fun incentives or recruit even more volunteers to keep the
+                    momentum going. Can you keep Greenville's green spaces from turning into overgrown messes?
+                    
+                    Time to motivate, Chief! 🌍🌳</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.C">Ready to tackle the long-term park maintenance challenge and keep Greenville green?🌳</div>
+            </div>
+        </div>
+
+
+        <div id="container-option-B1.1" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Double the Parks, Double the Trouble, Chief! 🌳💸
+                    You’ve boosted park development in residential areas to make up for those commercial zones. Residents are thrilled, but
+                    the city’s funds are feeling the strain! 💰 Now, the parks are looking great—for now. But here’s the kicker:
+                    maintenance! Without proper care, those green spaces could become wild, overgrown messes, and happy residents might
+                    start to grumble. 😬
+                    
+                    What’s next?
+                    With funds stretched thin, can you find a way to keep the parks pristine? Volunteers? Fundraising? Some clever budget
+                    tricks? The challenge is on, Chief Planner!
+                    
+                    Keep those parks alive! 🌍🌱</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.D">Ready to tackle the long-term park maintenance challenge and keep Greenville green?🌳</div>
+            </div>
+        </div>
+
+        <div id="container-option-B1.2" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Zoning Gone Wrong, Chief Planner! 🏗️🚧
+                    You introduced zoning laws to limit business expansion near parks, thinking it would boost public satisfaction—and it
+                    did! 🌳 But, uh-oh, businesses are pushing back hard, claiming the restrictions are strangling their growth. Suddenly,
+                    your inbox is flooded with complaints from developers, and your plan has hit a wall. Turns out, parks and profit don’t
+                    always mix as smoothly as hoped! 😬</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="Play-againB1.2">Play-againB1.2</div>
+            </div>
+        </div>
+        <div id="container-option-B2.1" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Green Deals, But Green Delays, Chief Planner! 🌳🏢
+                    You’ve struck a deal with developers—eco-friendly businesses near parks! Businesses are on board, but all those
+                    negotiations have slowed down the actual green space development. Now the parks are finally here, but there’s a new
+                    hurdle: maintenance! Without regular care, these parks might become overgrown, and residents (and maybe even those
+                    eco-businesses) could start grumbling. 😬
+                    
+                    What’s next?
+                    With time and funds stretched thin, you’ll need a creative way to keep the parks in shape! Volunteers? Extra funds? Can
+                    you keep those green spaces from going wild?
+                    
+                    Let’s get those parks thriving, Chief! 🌍🌱</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.E">Ready to tackle the long-term park maintenance challenge and keep Greenville green?🌳</div>
+            </div>
+        </div>
+        <div id="container-option-B2.2" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Moratorium Madness, Chief Planner! 🚧🌳
+                    You put a moratorium on commercial development in residential green zones, and the people are cheering! 🎉 But
+                    businesses? Not so much. The economy’s slowing, but hey, at least the parks are looking great—for now. Without a solid
+                    plan for maintenance, those beloved green spaces could turn into untamed jungles, and public support might wilt just as
+                    fast. 😬
+                    
+                    What’s next?
+                    With businesses grumbling and budgets tight, how will you keep those parks pristine? Volunteers? Creative funding? Time
+                    to get clever and keep Greenville green and happy!
+                    
+                    Don’t let the parks go wild, Chief! 🌍🌿</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.F">Ready to tackle the long-term park maintenance challenge and keep Greenville green?🌳</div>
+            </div>
+        </div>
+
+
+
+<!-- S block options keep in mind SA1,SA2,B1B2C1C2D1D2E1E2F1F2 ALL ARE SAME AS S1 and S2 so same option will go here  -->
+        <div id="container-option-S.A" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Time to Fix the Green! 🌳
+                    Your parks are thriving, but here comes the real challenge: maintenance! Without consistent care, all that hard work
+                    could unravel into overgrown jungles. Residents love the parks now, but if they fall apart, so does your public support!
+                    😬 Time to lock down a plan for long-term upkeep.
+                S.1: Create a city-wide maintenance fund
+                Use tax revenues to keep the parks beautiful, but beware of potential backlash from taxpayers.
+                
+                S.2: Partner with local communities
+                Engage volunteers! It’s cost-effective, but can you rely on enough hands to get the job done?
+                
+                Greenville’s green future is in your hands! 🌍</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.A1">Create a city-wide green space maintenance fund using tax revenues.</div>
+                <div class="option" id="optionS.A2">Partner with local communities to manage green spaces through volunteer programs.</div>
+            </div>
+        </div>
+        <div id="container-option-S.B" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Time to Fix the Green! 🌳
+                    Your parks are thriving, but here comes the real challenge: maintenance! Without consistent care, all that hard work
+                    could unravel into overgrown jungles. Residents love the parks now, but if they fall apart, so does your public support!
+                    😬 Time to lock down a plan for long-term upkeep.
+                    S.1: Create a city-wide maintenance fund
+                    Use tax revenues to keep the parks beautiful, but beware of potential backlash from taxpayers.
+                    
+                    S.2: Partner with local communities
+                    Engage volunteers! It’s cost-effective, but can you rely on enough hands to get the job done?
+                    
+                    Greenville’s green future is in your hands! 🌍</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.B1">Create a city-wide green space maintenance fund using tax revenues.</div>
+                <div class="option" id="optionS.B2">Partner with local communities to manage green spaces through volunteer programs.</div>
+            </div>
+        </div>
+        <div id="container-option-S.C" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Time to Fix the Green! 🌳
+                    Your parks are thriving, but here comes the real challenge: maintenance! Without consistent care, all that hard work
+                    could unravel into overgrown jungles. Residents love the parks now, but if they fall apart, so does your public support!
+                    😬 Time to lock down a plan for long-term upkeep.
+                    S.1: Create a city-wide maintenance fund
+                    Use tax revenues to keep the parks beautiful, but beware of potential backlash from taxpayers.
+                    
+                    S.2: Partner with local communities
+                    Engage volunteers! It’s cost-effective, but can you rely on enough hands to get the job done?
+                    
+                    Greenville’s green future is in your hands! 🌍</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.C1">Create a city-wide green space maintenance fund using tax revenues.</div>
+                <div class="option" id="optionS.C2">Partner with local communities to manage green spaces through volunteer programs.</div>
+            </div>
+        </div>
+        <div id="container-option-S.D" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Time to Fix the Green! 🌳
+                    Your parks are thriving, but here comes the real challenge: maintenance! Without consistent care, all that hard work
+                    could unravel into overgrown jungles. Residents love the parks now, but if they fall apart, so does your public support!
+                    😬 Time to lock down a plan for long-term upkeep.
+                    S.1: Create a city-wide maintenance fund
+                    Use tax revenues to keep the parks beautiful, but beware of potential backlash from taxpayers.
+                    
+                    S.2: Partner with local communities
+                    Engage volunteers! It’s cost-effective, but can you rely on enough hands to get the job done?
+                    
+                    Greenville’s green future is in your hands! 🌍</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.D1">Create a city-wide green space maintenance fund using tax revenues.</div>
+                <div class="option" id="optionS.D2">Partner with local communities to manage green spaces through volunteer programs.</div>
+            </div>
+        </div>
+        <div id="container-option-S.E" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Time to Fix the Green! 🌳
+                    Your parks are thriving, but here comes the real challenge: maintenance! Without consistent care, all that hard work
+                    could unravel into overgrown jungles. Residents love the parks now, but if they fall apart, so does your public support!
+                    😬 Time to lock down a plan for long-term upkeep.
+                    S.1: Create a city-wide maintenance fund
+                    Use tax revenues to keep the parks beautiful, but beware of potential backlash from taxpayers.
+                    
+                    S.2: Partner with local communities
+                    Engage volunteers! It’s cost-effective, but can you rely on enough hands to get the job done?
+                    
+                    Greenville’s green future is in your hands! 🌍</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.E1">Create a city-wide green space maintenance fund using tax revenues.</div>
+                <div class="option" id="optionS.E2">Partner with local communities to manage green spaces through volunteer programs.</div>
+            </div>
+        </div>
+        <div id="container-option-S.F" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Time to Fix the Green! 🌳
+                    Your parks are thriving, but here comes the real challenge: maintenance! Without consistent care, all that hard work
+                    could unravel into overgrown jungles. Residents love the parks now, but if they fall apart, so does your public support!
+                    😬 Time to lock down a plan for long-term upkeep.
+                    S.1: Create a city-wide maintenance fund
+                    Use tax revenues to keep the parks beautiful, but beware of potential backlash from taxpayers.
+                    
+                    S.2: Partner with local communities
+                    Engage volunteers! It’s cost-effective, but can you rely on enough hands to get the job done?
+                    
+                    Greenville’s green future is in your hands! 🌍</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.F1">Create a city-wide green space maintenance fund using tax revenues.</div>
+                <div class="option" id="optionS.F2">Partner with local communities to manage green spaces through volunteer programs.</div>
+            </div>
+        </div>
+        <!-- if option S-ABCDEF selected it will lead to S1 AND S2 which S-ABCDEF(1,2)-->
+        <div id="container-option-S.1" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Tax Talk, Chief Planner! 💸🌳
+                    You’ve set up a city-wide green space maintenance fund through taxes! The parks are safe, but uh-oh—some wealthier
+                    residents and businesses aren’t too happy about their higher bills. Now, it’s time to decide how to handle the grumbles.
+                
+                    What’s next?
+                    S.1A: Justify the tax increase with public campaigns
+                    Launch a charm offensive! Highlight the environmental and health benefits of those beautiful parks, hoping to win
+                    everyone over with feel-good facts. 🌿📢
+                    
+                    S.1B: Create a public-private partnership
+                    Bring in businesses to share the load. It’s easier on the taxes, but corporations might want a little too much say in
+                    your parks. 🤝💼
+                    
+                    What’s the plan, Chief? 🌍</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.1A">Justify the tax increase with public campaigns highlighting environmental and health benefits.</div>
+                <div class="option" id="optionS.1B"> Create a public-private partnership for long-term green space maintenance.</div>
+            </div>
+        </div>
+
+
+        <div id="container-option-S.2" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Volunteer Power, Chief Planner! 🙌🌳
+                    You’ve teamed up with the community to keep the parks beautiful, and costs are down. Residents are feeling connected to
+                    their green spaces. But... volunteers can be a little unpredictable. Some days, it’s all hands on deck; other days, it’s
+                    a ghost town. 😬 Now it’s time to decide how to keep things running smoothly!  
+
+                    What’s next?
+                    S.2A: Offer stipends to volunteers
+                    Pay up to keep them coming back! But remember, it’ll cost you more, and you'll need extra funding. 💸
+
+                    S.2B: Rely solely on volunteers
+                    Stick with unpaid help. Some parks will thrive, but others might turn into mini-jungles. 🌱
+                    What’s the plan, Chief? 🌍
+                
+                </p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.2A">Offer stipends to incentivize consistent volunteer participation.</div>
+                <div class="option" id="optionS.2B">Rely solely on volunteers, with limited city oversight.</div>
+            </div>
+        </div>
+        <div id="container-option-S.1A" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Tax Time, Chief Planner! 💰🌳
+                    You’ve convinced most of Greenville with a public campaign on how healthier, greener spaces benefit everyone. 🌿 But, of
+                    course, some wealthy residents are still grumbling about the tax increase. Now it's time to make your next move!</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.1AA">Offer tax breaks to wealthier residents</div>
+                <div class="option" id="optionS.1AB">Host a ‘Green Gala’ fundraiser</div>
+            </div>
+        </div>
+
+        <div id="container-option-S.1B" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Corporate Green, Chief Planner! 💼🌳
+                    You’ve set up a public-private partnership to fund long-term park maintenance. The money’s rolling in, and the parks are
+                    thriving! But... now corporations are starting to want a little more say in park management. Uh-oh, the public’s raising
+                    eyebrows. 🤔</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.1BA">Limit corporate involvement</div>
+                <div class="option" id="optionS.1BB">Let corporations name the parks</div>
+            </div>
+        </div>
+        <div id="container-option-S.2A" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Stipends for Success, Chief! 🙌🌳
+                    Offering stipends worked like a charm! Volunteers are now more reliable, and the parks are thriving. But just as things
+                    are looking up, a familiar challenge looms... 🌿
+                    
+                    The Next Challenge:
+                    Wealthy areas of Greenville have plenty of green spaces, while low-income neighborhoods are still left behind. This
+                    growing gap in park access is fueling environmental justice concerns, as residents demand fairness in green space
+                    distribution. 🌍⚖️</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionX.C">Move forward to tackle the green space inequality and bring balance to all of Greenville.</div>
+            </div>
+        </div>
+        <div id="container-option-S.2B" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Jungle Trouble, Chief Planner! 🌳😬
+                    You went with the all-volunteer approach, hoping community spirit would keep the parks thriving. And it worked... for a
+                    while. But now, some parks are looking lush, while others? Well, they’re more like overgrown jungles! 🌿 The
+                    inconsistent help has left some areas neglected, and the residents are starting to grumble.</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="Play-againS.2B">Play-again S.2B</div>
+            </div>
+        </div>
+        <div id="container-option-S.1AA" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Tax Break Bust, Chief Planner! 💸😬
+                    You thought offering a tax break to the wealthy would smooth things over—less grumbling, more park funding, right?
+                    Wrong! Turns out, even a small tax break wasn’t enough to satisfy the wealthier residents. They’re still unhappy, and
+                    now your budget’s even tighter! 😳
+                    
+                    Why didn’t it work? The wealthier folks still feel like they’re footing too much of the bill, and the small tax break
+                    didn’t really change that. Now, you’ve got fewer funds for the parks and grumpy residents to deal with. Time to rethink
+                    the strategy, Chief!
+</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="Play-againS.1AA">Play-again</div>
+            </div>
+        </div>
+
+        <div id="container-option-S.1AB" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>The Green Gala Success! 🎉💃
+                    You hosted the Green Gala, and it worked! Funds are rolling in, and the parks are getting the love they need. But while
+                    everyone’s celebrating the success, a bigger challenge is brewing... 🌳
+                    
+                    The Next Challenge:
+                    Wealthy areas have plenty of green space, but low-income neighborhoods are still lacking. The gap between rich and poor
+                    in park access is widening, and residents are starting to raise concerns about environmental justice. 🌍⚖️</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionX.A">Move forward to tackle the green space inequality and bring balance to all of Greenville.</div>
+            </div>
+        </div>
+        <div id="container-option-S.1BA" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Corporate Reined, Chief! 💼🌳
+                    You set clear boundaries on corporate involvement, and the public is thrilled! 🎉 But, as expected, some corporate
+                    donors have pulled back their funding. Now, just as you're balancing the budget, a new challenge looms...
+                    
+                    The Next Challenge:
+                    Wealthier areas are flourishing with green spaces, while low-income neighborhoods remain underserved. The gap in green
+                    space access is growing, and environmental justice concerns are rising. 🌍⚖️</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionX.B">Move forward to tackle the green space inequality and bring balance to all of Greenville.</div>
+            </div>
+        </div>
+        <div id="container-option-S.1BB" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Park Branding Backfire, Chief! 🏞️💼
+                    You let corporations name the parks, and while the funds rolled in, so did the complaints. Now Greenville has places
+                    like "Soda Pop Park" and "Tech Town Greenspace." 🥤💻 But residents? They're not happy. Many are protesting, claiming
+                    these branded parks strip away their heritage and history. The parks don’t feel like community treasures anymore—they
+                    feel like corporate billboards. 😬
+                    
+                    Why it didn’t work:
+                    The attempt to fund parks backfired as people now feel disconnected from their green spaces, leading to protests and
+                    calls for change. Time to rethink the strategy, Chief! 🌍</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="Play-againS1.BB">Play-again</div>
+            </div>
+        </div>
+        <div id="container-option-S.2B" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Jungle Trouble, Chief Planner! 🌳😬
+                    You went with the all-volunteer approach, hoping community spirit would keep the parks thriving. And it worked... for a
+                    while. But now, some parks are looking lush, while others? Well, they’re more like overgrown jungles! 🌿 The
+                    inconsistent help has left some areas neglected, and the residents are starting to grumble.</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="Play-again">Play Again</div>
+            </div>
+        </div>
+
+                <!-----------------------------------------------------------        S block END   ------------------------------------------------------------------------------>
+
+                <!-----------------------------------------------------------        X block START   ------------------------------------------------------------------------------>
+
+
+        <div id="container-option-X.A" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>The Green Justice Challenge, Chief! 🌳⚖️
+                    Greenville’s parks are thriving in wealthier areas, but low-income neighborhoods? Not so much. The gap is fueling
+                    environmental justice concerns, and now it’s decision time. Can you close the gap and make parks accessible for
+                    everyone? 🌍
+                
+                    What’s your move?
+                    Option X.A1: Prioritize low-income areas
+                    Focus your resources on underserved neighborhoods. Green space equality improves, but wealthy residents aren’t thrilled
+                    and think it’s unfair. 😬
+                    
+                    Option X.A2: Spread resources evenly
+                    Distribute green space funds equally across the city. Everyone gets something, but low-income areas still struggle to
+                    catch up. 🤔
+                    
+                    Time to balance the scales, Chief! 🌱</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionX.A1">Implement an equitable green space policy that prioritizes low-income areas.</div>
+                <div class="option" id="optionX.A2">Spread resources evenly across all neighborhoods, regardless of income.</div>
+            </div>
+        </div>
+
+
+        <div id="container-option-X.B" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>The Green Justice Challenge, Chief! 🌳⚖️
+                    Greenville’s parks are thriving in wealthier areas, but low-income neighborhoods? Not so much. The gap is fueling
+                    environmental justice concerns, and now it’s decision time. Can you close the gap and make parks accessible for
+                    everyone? 🌍
+                    
+                    What’s your move?
+                    Option X.A1: Prioritize low-income areas
+                    Focus your resources on underserved neighborhoods. Green space equality improves, but wealthy residents aren’t thrilled
+                    and think it’s unfair. 😬
+                    
+                    Option X.A2: Spread resources evenly
+                    Distribute green space funds equally across the city. Everyone gets something, but low-income areas still struggle to
+                    catch up. 🤔
+                    
+                    Time to balance the scales, Chief! 🌱</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionX.B1">Implement an equitable green space policy that prioritizes low-income areas.</div>
+                <div class="option" id="optionX.B2">Spread resources evenly across all neighborhoods, regardless of income.</div>
+            </div>
+        </div>
+
+        <div id="container-option-X.C" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>The Green Justice Challenge, Chief! 🌳⚖️
+                    Greenville’s parks are thriving in wealthier areas, but low-income neighborhoods? Not so much. The gap is fueling
+                    environmental justice concerns, and now it’s decision time. Can you close the gap and make parks accessible for
+                    everyone? 🌍
+                    
+                    What’s your move?
+                    Option X.A1: Prioritize low-income areas
+                    Focus your resources on underserved neighborhoods. Green space equality improves, but wealthy residents aren’t thrilled
+                    and think it’s unfair. 😬
+                    
+                    Option X.A2: Spread resources evenly
+                    Distribute green space funds equally across the city. Everyone gets something, but low-income areas still struggle to
+                    catch up. 🤔
+                    
+                    Time to balance the scales, Chief! 🌱</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionX.C1">Implement an equitable green space policy that prioritizes low-income areas.</div>
+                <div class="option" id="optionX.C2">Spread resources evenly across all neighborhoods, regardless of income.</div>
+            </div>
+        </div>
+        <div id="container-option-X.A1" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>### Congratulations, Chief Planner! 🎉🌳
+                    
+                    You prioritized low-income areas, and it’s paying off big time! Green spaces are now popping up in underserved
+                    neighborhoods, and the community is **thrilled**! 🌱 The parks are buzzing with life, and residents finally feel like
+                    they’re getting the green spaces they deserve.
+                    
+                    Sure, some wealthier folks are grumbling about the resources, but the overall impact is **huge**—you’ve closed the green
+                    space gap and brought balance to Greenville! 🌍👏
+                    
+                    Your policy is a shining success, and the city is greener, healthier, and happier because of it. Great job, Chief! 🎉</p>
+                </div>
+            </div>
+        </div>
+        <div id="container-option-X.B1" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>### Congratulations, Chief Planner! 🎉🌳
+                    
+                    You prioritized low-income areas, and it’s paying off big time! Green spaces are now popping up in underserved
+                    neighborhoods, and the community is **thrilled**! 🌱 The parks are buzzing with life, and residents finally feel like
+                    they’re getting the green spaces they deserve.
+                    
+                    Sure, some wealthier folks are grumbling about the resources, but the overall impact is **huge**—you’ve closed the green
+                    space gap and brought balance to Greenville! 🌍👏
+                    
+                    Your policy is a shining success, and the city is greener, healthier, and happier because of it. Great job, Chief! 🎉</p>
+                </div>
+            </div>
+        </div>
+        <div id="container-option-X.C1" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>### Congratulations, Chief Planner! 🎉🌳
+                    
+                    You prioritized low-income areas, and it’s paying off big time! Green spaces are now popping up in underserved
+                    neighborhoods, and the community is **thrilled**! 🌱 The parks are buzzing with life, and residents finally feel like
+                    they’re getting the green spaces they deserve.
+                    
+                    Sure, some wealthier folks are grumbling about the resources, but the overall impact is **huge**—you’ve closed the green
+                    space gap and brought balance to Greenville! 🌍👏
+                    
+                    Your policy is a shining success, and the city is greener, healthier, and happier because of it. Great job, Chief! 🎉</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionW.C1">option W.C1</div>
+            </div>
+        </div>
+        <div id="container-option-X.A2" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Well Done, Chief... Sort of! 🌳😐
+                    You chose to spread the green space funds evenly across Greenville, and hey—everyone got something! 🌱 The wealthier
+                    neighborhoods are content, and green space is popping up all over the city. But... the low-income areas? They’re still
+                    struggling to catch up. While the plan made things fairer on paper, it didn’t quite close the gap where it matters most.
+                    🤔
+                    
+                    So, congrats on keeping everyone happy—for now. But the work’s not done, Chief. There’s still more to be done to truly
+                    balance the scales. Keep going! 🌍</p>
+                </div>
+            </div>
+        </div>
+        <div id="container-option-X.B2" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Well Done, Chief... Sort of! 🌳😐
+                    You chose to spread the green space funds evenly across Greenville, and hey—everyone got something! 🌱 The wealthier
+                    neighborhoods are content, and green space is popping up all over the city. But... the low-income areas? They’re still
+                    struggling to catch up. While the plan made things fairer on paper, it didn’t quite close the gap where it matters most.
+                    🤔
+                    
+                    So, congrats on keeping everyone happy—for now. But the work’s not done, Chief. There’s still more to be done to truly
+                    balance the scales. Keep going! 🌍</p>
+                </div>
+            </div>
+        </div>
+        <div id="container-option-X.C2" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Well Done, Chief... Sort of! 🌳😐
+                    You chose to spread the green space funds evenly across Greenville, and hey—everyone got something! 🌱 The wealthier
+                    neighborhoods are content, and green space is popping up all over the city. But... the low-income areas? They’re still
+                    struggling to catch up. While the plan made things fairer on paper, it didn’t quite close the gap where it matters most.
+                    🤔
+                    
+                    So, congrats on keeping everyone happy—for now. But the work’s not done, Chief. There’s still more to be done to truly
+                    balance the scales. Keep going! 🌍</p>
+                </div>
+            </div>
+            </div>
+        </div>
+
+
+
+<!-----------------------------------------------------------        X block END   ------------------------------------------------------------------------------>
+
+    <div id="container-play-again" class="container hidden">
+        <div class="option-boxes">
+            <div class="option" id="Play-agin">Play Again</div>
+        </div>
+    </div>
+    <script>
+        function showContainer(containerId) {
+                const container = document.getElementById(containerId);
+                container.classList.add('show'); // Add class to trigger animation
+                container.style.display = 'block'; // Ensure it's visible
+
+                setTimeout(() => { // Wait a bit to start the scroll after the element is visible
+                    container.scrollIntoView({ behavior: 'smooth' }); // Smooth scroll to the container
+                }, 100);
+            }
+
+            function resetGame() {
+                // Hide all containers
+                const containers = document.querySelectorAll('.container');
+                containers.forEach(container => {
+                    container.style.display = 'none';
+                    container.classList.remove('show'); // Remove any animation classes
+                });
+
+                // Reset the game to initial state (show the first container again)
+                showContainer('text-section');
+                window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll back to the top
+            }
+
+        // Set up event listeners for main options
+        document.getElementById('optionA').addEventListener('click', function () {
+        showContainer('container-option-A'); // Show container for Option 1
+        });
+
+        // Sub-option event listeners
+        document.getElementById('optionB').addEventListener('click', function () {
+        showContainer('container-option-B'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionA1').addEventListener('click', function () {
+        showContainer('container-option-A1'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionA2').addEventListener('click', function () {
+        showContainer('container-option-A2'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionB1').addEventListener('click', function () {
+        showContainer('container-option-B1'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionB2').addEventListener('click', function () {
+        showContainer('container-option-B2'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionA1.1').addEventListener('click', function () {
+        showContainer('container-option-A1.1'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionA1.2').addEventListener('click', function () {
+        showContainer('container-option-A1.2'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionA2.1').addEventListener('click', function () {
+        showContainer('container-option-A2.1'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionA2.2').addEventListener('click', function () {
+        showContainer('container-option-A2.2'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionB1.1').addEventListener('click', function () {
+        showContainer('container-option-B1.1'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionB1.2').addEventListener('click', function () {
+        showContainer('container-option-B1.2'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionB2.1').addEventListener('click', function () {
+        showContainer('container-option-B2.1'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionB2.2').addEventListener('click', function () {
+        showContainer('container-option-B2.2'); // This needs a corresponding container defined in HTML
+        });
+
+        // S block starts 
+
+        document.getElementById('optionS.A').addEventListener('click', function () {
+        showContainer('container-option-S.A'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionS.B').addEventListener('click', function () {
+        showContainer('container-option-S.B'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionS.C').addEventListener('click', function () {
+        showContainer('container-option-S.C'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionS.D').addEventListener('click', function () {
+        showContainer('container-option-S.D'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionS.E').addEventListener('click', function () {
+        showContainer('container-option-S.E'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionS.F').addEventListener('click', function () {
+        showContainer('container-option-S.F'); // This needs a corresponding container defined in HTML
+        });
+
+
+        // Group S1 (optionS.A1, optionS.B1, optionS.C1, optionS.D1, optionS.E1, optionS.F1)
+        document.getElementById('optionS.A1').addEventListener('click', function () {
+        showContainer('container-option-S.1');
+        });
+
+        document.getElementById('optionS.B1').addEventListener('click', function () {
+        showContainer('container-option-S.1');
+        });
+
+        document.getElementById('optionS.C1').addEventListener('click', function () {
+        showContainer('container-option-S.1');
+        });
+
+        document.getElementById('optionS.D1').addEventListener('click', function () {
+        showContainer('container-option-S.1');
+        });
+
+        document.getElementById('optionS.E1').addEventListener('click', function () {
+        showContainer('container-option-S.1');
+        });
+
+        document.getElementById('optionS.F1').addEventListener('click', function () {
+        showContainer('container-option-S.1');
+        });
+
+        // Group S2 (optionS.A2, optionS.B2, optionS.C2, optionS.D2, optionS.E2, optionS.F2)
+        document.getElementById('optionS.A2').addEventListener('click', function () {
+        showContainer('container-option-S.2');
+        });
+
+        document.getElementById('optionS.B2').addEventListener('click', function () {
+        showContainer('container-option-S.2');
+        });
+
+        document.getElementById('optionS.C2').addEventListener('click', function () {
+        showContainer('container-option-S.2');
+        });
+
+        document.getElementById('optionS.D2').addEventListener('click', function () {
+        showContainer('container-option-S.2');
+        });
+
+        document.getElementById('optionS.E2').addEventListener('click', function () {
+        showContainer('container-option-S.2');
+        });
+
+        document.getElementById('optionS.F2').addEventListener('click', function () {
+        showContainer('container-option-S.2');
+        });
+
+
+        document.getElementById('optionS.1A').addEventListener('click', function () {
+        showContainer('container-option-S.1A'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionS.1B').addEventListener('click', function () {
+        showContainer('container-option-S.1B'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionS.2A').addEventListener('click', function () {
+        showContainer('container-option-X.C'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionS.2B').addEventListener('click', function () {
+        showContainer('container-play-again'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionS.1AA').addEventListener('click', function () {
+        showContainer('container-option-S.1AA'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionS.1AB').addEventListener('click', function () {
+        showContainer('container-option-X.A'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionS.1BA').addEventListener('click', function () {
+        showContainer('container-option-X.B'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionS.1BB').addEventListener('click', function () {
+        showContainer('container-option-S.1BB'); // This needs a corresponding container defined in HTML
+        });
+        // X block starts 
+        document.getElementById('optionX.A1').addEventListener('click', function () {
+        showContainer('container-option-X.A1'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionX.B1').addEventListener('click', function () {
+        showContainer('container-option-X.B1'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionX.C1').addEventListener('click', function () {
+        showContainer('container-option-X.C1'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionX.A2').addEventListener('click', function () {
+        showContainer('container-option-X.A2'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionX.B2').addEventListener('click', function () {
+        showContainer('container-option-X.B2'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionX.C2').addEventListener('click', function () {
+        showContainer('container-option-X.C2'); // This needs a corresponding container defined in HTML
+        });
+
+        // Add event listener for the Play Again button
+        document.getElementById('Play-againA1.2').addEventListener('click', function () {
+        resetGame(); // Call the reset function when "Play Again" is clicked
+        });
+
+        document.getElementById('Play-againB1.2').addEventListener('click', function () {
+        resetGame(); // Call the reset function when "Play Again" is clicked
+        });
+
+        document.getElementById('Play-againS.2B').addEventListener('click', function () {
+        resetGame(); // Call the reset function when "Play Again" is clicked
+        });
+
+        document.getElementById('Play-againS.1AA').addEventListener('click', function () {
+        resetGame(); // Call the reset function when "Play Again" is clicked
+        });
+
+        document.getElementById('Play-againS1.BB').addEventListener('click', function () {
+        resetGame(); // Call the reset function when "Play Again" is clicked
+        });
+        document.getElementById('Play-agin').addEventListener('click', function () {
+        resetGame(); // Call the reset function when "Play Again" is clicked
+        });
+
+
+    </script>
+</body>
+
+</html>

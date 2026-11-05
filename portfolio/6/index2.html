@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Matrix Effect with Comments</title>
+    <script src="../vendor/shared/lib-4a83d06b25f9/dist/p5.js" type="text/javascript"></script>
+    <style>
+        html,
+        body {
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+            background: black;
+        }
+
+        .text {
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            font-size: 8vw;
+            color: #00ff41;
+            font-family: 'Roboto Condensed', sans-serif;
+            font-weight: bold;
+            mix-blend-mode: difference;
+            z-index: 10;
+        }
+
+         .attribution {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: right;
+            color: #00ff41;
+            padding: 10px;
+            font-size: 0.8em;
+        }
+
+        .attribution {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: right;
+            color: #00ff41;
+            padding: 15px 50px; /* Adjust padding */
+            font-size: 0.8em;
+            box-sizing: border-box;
+        }
+
+        .attribution a {
+            color: #00ff41;
+            text-decoration: none;
+        }
+
+        .attribution a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="text">District of Columbia</div>
+    <div class="attribution">
+        Data Source: <a href="https://opendata.dc.gov/datasets/3f28bc3ad77f49079efee0ac05d8464c_0/explore"
+            target="_blank">Opendata DC</a>
+    <script>
+        "use strict";
+
+        var rain;
+        var fontSize;
+        var comments = [];
+        var table;
+
+        function preload() {
+            table = loadTable('cleaned_csv_file.csv', 'csv', 'header');
+        }
+
+        function setup() {
+            createCanvas(windowWidth, windowHeight);
+            fontSize = 15;
+            parseComments();
+            rain = new Rain();
+            frameRate(60);
+        }
+
+        function windowResized() {
+            createCanvas(windowWidth, windowHeight);
+        }
+
+        function draw() {
+            background(0);
+            document.body.style.background = "black";
+            rain.render();
+            rain.update();
+        }
+
+        function parseComments() {
+            for (let r = 0; r < table.getRowCount(); r++) {
+                let comment = table.getString(r, 'COMMENTS');
+                comments.push(comment);
+            }
+        }
+
+        class MatrixSymbol {
+            constructor(x, y, char) {
+                this.pos = createVector(x, y);
+                this.vel = createVector(0, 0);
+                this.char = char;
+                this.opacity = random(100, 255); // Start with random opacity
+                this.opacityDirection = random(1, 3); // Fluctuation speed
+            }
+
+            render() {
+                textSize(fontSize);
+                fill(0, 255, 0, this.opacity); // Apply fluctuating opacity
+                text(this.char, this.pos.x, this.pos.y);
+            }
+
+            update() {
+                this.pos.add(this.vel);
+                this.fluctuateOpacity(); // Update opacity for fluctuating effect
+            }
+
+            setVel(x, y) {
+                this.vel = createVector(x, y);
+            }
+
+            fluctuateOpacity() {
+                this.opacity += this.opacityDirection;
+                if (this.opacity > 255 || this.opacity < 100) {
+                    this.opacityDirection *= -1; // Reverse direction at bounds
+                }
+            }
+        }
+
+        class CodeFall {
+            constructor(y, chars) {
+                this.y = y;
+                this.symbols = [];
+                this.chars = chars;
+                this.generate();
+            }
+
+            generate() {
+                this.minLength = 5;
+                this.MaxLength = round(width / fontSize);
+                var m = 8;
+
+                if (this.MaxLength < m) {
+                    this.MaxLength = m;
+                }
+
+                this.color = color(0, 255, 0);
+                this.vel = random(1, 6);
+                this.length = round(random(this.minLength, this.MaxLength));
+
+                var x = -random(0, 500);
+
+                for (var i = 0; i < this.chars.length; i++) {
+                    this.symbols[i] = new MatrixSymbol(x + fontSize * i, this.y, this.chars[i]);
+                }
+            }
+
+            render() {
+                for (var i = 0; i < this.symbols.length; i++) {
+                    fill(this.color);
+                    this.symbols[i].render();
+                }
+            }
+
+            update() {
+                for (var symbol of this.symbols) {
+                    symbol.setVel(this.vel, 0);
+                    symbol.update();
+                }
+
+                if (this.edges) {
+                    this.generate();
+                }
+            }
+
+            get edges() {
+                var firstSymbol = this.symbols[0];
+                var x = firstSymbol.pos.x;
+
+                return (x - fontSize > width);
+            }
+        }
+
+        class Rain {
+            constructor() {
+                this.falls = [];
+                var n = floor(height / fontSize);
+
+                for (var i = 0; i < n; i++) {
+                    this.add();
+                }
+            }
+
+            render() {
+                for (var fall of this.falls) {
+                    fall.render();
+                }
+            }
+
+            update() {
+                for (var fall of this.falls) {
+                    fall.update();
+                }
+            }
+
+            add() {
+                var n = this.falls.length;
+                var y = fontSize * n;
+                var commentIndex = n % comments.length;
+                var chars = comments[commentIndex].split('');
+                this.falls.push(new CodeFall(y, chars));
+            }
+        }
+    </script>
+</body>
+
+</html>

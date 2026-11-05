@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belonging Simulation</title>
+    <script src="../vendor/shared/lib-0b4610b74464/dist/d3.min.js"></script>
+    <script src="../vendor/shared/lib-9092ba184a7e/dist/dat.gui.min.js"></script>
+    <style>
+        body,
+        html {
+            width: 100%;
+            height: 100%;
+            margin: 0px;
+            display: flex;
+            background-color: black;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            -webkit-font-smoothing: antialiased;
+
+
+        }
+
+        #canvas {
+            margin: 0px;
+            display: block;
+            background-color: black;
+            flex: 3;
+        }
+
+
+        #info-box {
+            position: absolute;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            pointer-events: none;
+            display: none;
+        }
+
+        #group-info {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        }
+
+         #explanation {
+        position: absolute;
+        bottom: 0px;
+        top:100%;
+        /* Adjust as needed */
+        left: 20%;
+        right:20%;
+        /* Adjust as needed */
+        background-color: 000;
+        /* Semi-transparent background */
+        padding: 10px;
+        border-radius: 10px;
+        /* width: 900px; */
+        /* Fixed width */
+        font-size: 16px;
+        /* Adjurgb(255, 255, 255) */
+        color: rgb(255, 255, 255);
+        z-index: 2;
+        line-height: 1.6;
+        /* Ensure it appears above other elements */
+    }
+
+    </style>
+</head>
+
+<body>
+    <canvas id="simulationCanvas"></canvas>
+    <div id="info-box"></div>
+    <div id="group-info"></div>
+
+        <!-- Canvas where stickmen are displayed -->
+        <canvas id="canvas"></canvas>
+
+    <div id="explanation">
+        <p>
+            This visualization represents a dynamic <strong>Belonging Simulation</strong> where each stickman figure
+            represents an individual. These individuals are grouped based on six different types of social belonging:
+            <strong>Family Connections</strong>, <strong>Friendship & Social Circles</strong>, <strong>Workplace
+                Belonging</strong>, <strong>Local Community Involvement</strong>, <strong>National Identity</strong>, and
+            <strong>Religious & Spiritual Community</strong>. Each group is visualized using a specific color:
+        </p>
+        <ul>
+            <li><strong>Red</strong>: Family Connections</li>
+            <li><strong>Blue</strong>: Friendship & Social Circles</li>
+            <li><strong>Green</strong>: Workplace Belonging</li>
+            <li><strong>Yellow</strong>: Local Community Involvement</li>
+            <li><strong>Purple</strong>: National Identity</li>
+            <li><strong>Orange</strong>: Religious & Spiritual Community</li>
+        </ul>
+        <p>
+            Each stickman can move between these groups depending on certain variables that define their level of attachment
+            to each group, such as <strong>income</strong>, <strong>health</strong>, <strong>job satisfaction</strong>, and
+            <strong>social connections</strong>. The simulation allows the user to observe how different factors impact an
+            individual's sense of belonging and how they move between different social categories over time.
+        </p>
+    
+        <h3>Key Features:</h3>
+        <p><strong>Dynamic Group Assignment:</strong> Each stickman belongs to one of the six groups based on a set of
+            personal variables. The group they belong to is determined by their strongest sense of belonging, calculated
+            from several factors.</p>
+    
+        <p><strong>Movement:</strong> Stickmen dynamically move between the six groups based on changes in their belonging
+            scores. For example, if a stickman’s job satisfaction increases, they might move to the <em>Workplace
+                Belonging</em> group, whereas lower income might cause them to move toward <em>Family Connections</em>.</p>
+    
+        <p><strong>Hover Interaction:</strong> When hovering over a stickman, details about the individual’s variables (such
+            as <em>income</em>, <em>job satisfaction</em>, <em>civic engagement</em>) are displayed, allowing you to see the
+            values driving their sense of belonging.</p>
+    
+        <p><strong>Real-time Updates:</strong> The simulation continuously updates in real-time. Stickmen adjust their
+            scores slightly at every frame, which may cause them to switch groups based on their recalculated scores.</p>
+    
+        <p><strong>Group Information:</strong> On the bottom right, the number of stickmen in each group is displayed,
+            providing real-time information on how many individuals belong to each category.</p>
+    
+        <h3>Setting and Control Panel (Using dat.GUI):</h3>
+        <p>
+            The right side of the screen contains a <strong>dat.GUI panel</strong> that allows you to adjust the range of
+            several key variables that affect the belonging calculation. These include:
+        </p>
+        <ul>
+            <li><strong>Closeness to Family</strong>: How close someone feels to their family.</li>
+            <li><strong>Health</strong>: Overall physical and mental well-being.</li>
+            <li><strong>Income</strong>: Economic standing and financial stability.</li>
+            <li><strong>Social Connections</strong>: The strength of friendships and social ties.</li>
+            <li><strong>Work-life Balance</strong>: How balanced one's professional and personal life is.</li>
+            <li><strong>Openness to Diversity</strong>: Comfort with different cultures and ideas.</li>
+            <li><strong>Job Satisfaction</strong>: Level of happiness with their work.</li>
+            <li><strong>Civic Engagement</strong>: Involvement in local activities and communities.</li>
+            <li><strong>National Pride</strong>: Sense of attachment to the nation.</li>
+            <li><strong>Religious Participation</strong>: How much they participate in religious activities.</li>
+        </ul>
+        <p>
+            When you adjust a slider in the control panel, 20 randomly selected stickmen will immediately update based on
+            the new setting, allowing you to explore how the changes in these variables influence their sense of belonging.
+        </p>
+    
+        <h3>Context from the Report:</h3>
+        <p>
+            This simulation is based on a concept that explores how different socio-economic and personal factors influence
+            an individual’s sense of belonging to different social groups. The idea is inspired by real-world dynamics where
+            factors like <strong>income</strong>, <strong>health</strong>, and <strong>social connections</strong> drive our
+            attachment to family, friends, work, community, and religion.
+        </p>
+        <p>
+            In this context, the simulation serves to visualize how fluid an individual's belonging can be, influenced by
+            changes in life circumstances. It also demonstrates how different societal factors might affect population
+            distributions across these social categories. For example, an increase in job satisfaction might lead to a
+            greater sense of belonging in the workplace, while financial struggles might make individuals rely more on
+            family or community support.
+        </p>
+    
+        <h3>How the System Works:</h3>
+        <p>
+            <strong>Variables</strong>: The simulation tracks a set of <em>variables</em> for each stickman (individual),
+            such as <strong>income</strong>, <strong>social connections</strong>, and <strong>job satisfaction</strong>.
+            Each group has a unique set of variables that drive a stickman’s sense of belonging to that group.
+        </p>
+        <p>
+            <strong>Score Calculation</strong>: Every stickman has a <em>belonging score</em> for each group, based on a
+            weighted combination of the relevant variables. For example, for the <strong>Family Connections</strong> group,
+            the key variables include <strong>closeness to family</strong>, <strong>health</strong>, and
+            <strong>income</strong> (normalized to avoid it dominating the score). The group with the highest score is where
+            the stickman belongs.
+        </p>
+        <p>
+            <strong>Dynamic Movement</strong>: As each stickman’s variables change slightly over time, their belonging
+            scores are recalculated. When a stickman’s highest score shifts to a different group, they visually move to that
+            group’s designated area on the screen.
+        </p>
+    
+        <h3>Conclusion:</h3>
+        <p>
+            This visualization provides an interactive way to explore how different life factors influence our social
+            belonging. By tweaking the settings and observing how stickmen move between groups, you can gain insights into
+            the fluid nature of social attachment and how various factors interplay in determining where people feel most
+            connected.
+        </p>
+    </div>
+
+
+
+
+    <script>
+        // Set up canvas and context
+        const canvas = document.getElementById('simulationCanvas');
+        const ctx = canvas.getContext('2d');
+        const infoBox = document.getElementById('info-box');
+        const groupInfo = document.getElementById('group-info');
+
+        // Adjust canvas to full screen
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const charSize = 10; // Adjust the stickman size
+        const hoverRange = 15; // Distance for hover detection
+
+        // Random value generator
+        function randomValue() {
+            return Math.random(); // Generates a random number between 0 and 1
+        }
+
+        // Default score values for each variable (used for new settings)
+        const variableScores = {
+            closenessToFamily: 5,
+            health: 5,
+            income: 5,
+            socialConnections: 5,
+            workLifeBalance: 5,
+            opennessToDiversity: 5,
+            jobSatisfaction: 5,
+            workplaceInclusivity: 5,
+            diversityInLocal: 5,
+            civicEngagement: 5,
+            localTrust: 5,
+            nationalPride: 5,
+            politicalStability: 5,
+            religiousParticipation: 5,
+            spiritualNeeds: 5,
+            culturalSupportForReligion: 5
+        };
+
+        // Set up dat.GUI controls
+        const gui = new dat.GUI({ width: 350 });
+
+        for (let key in variableScores) {
+            gui.add(variableScores, key, 1, 10).name(key).onChange(() => {
+                // When a change is made, randomly select 20 stickmen to apply new scores
+                updateVariableScoresForRandomSelection();
+            });
+        }
+
+        let stickmen = []; // Store all stickmen
+
+        // Function to randomly pick 20 stickmen and update their scores based on new settings
+        function updateVariableScoresForRandomSelection() {
+            const selectedStickmen = [];
+            while (selectedStickmen.length < 20) {
+                const randomIndex = Math.floor(Math.random() * stickmen.length);
+                const randomStickman = stickmen[randomIndex];
+                if (!selectedStickmen.includes(randomStickman)) {
+                    selectedStickmen.push(randomStickman);
+                }
+            }
+            selectedStickmen.forEach(stickman => {
+                updateStickmanVariables(stickman); // Apply the new settings
+            });
+        }
+
+        // Define groups and colors with larger position ranges to use full screen
+        const groups = {
+            family: { color: 'red', dots: [], xRange: [50, canvas.width / 4 - 50], yRange: [50, canvas.height / 2 - 50] },
+            friends: { color: 'blue', dots: [], xRange: [canvas.width / 4 + 50, canvas.width / 2 - 50], yRange: [50, canvas.height / 2 - 50] },
+            workplace: { color: 'green', dots: [], xRange: [canvas.width / 2 + 50, (3 * canvas.width) / 4 - 50], yRange: [50, canvas.height / 2 - 50] },
+            local: { color: 'yellow', dots: [], xRange: [50, canvas.width / 4 - 50], yRange: [canvas.height / 2 + 50, canvas.height - 50] },
+            nation: { color: 'purple', dots: [], xRange: [canvas.width / 4 + 50, canvas.width / 2 - 50], yRange: [canvas.height / 2 + 50, canvas.height - 50] },
+            religion: { color: 'orange', dots: [], xRange: [canvas.width / 2 + 50, (3 * canvas.width) / 4 - 50], yRange: [canvas.height / 2 + 50, canvas.height - 50] }
+        };
+
+        // Number of dots per group
+        const dotsPerGroup = 20;
+        const totalStickmen = 120; // Total of 120 stickmen (20 per group)
+
+        // Stickman object constructor with initial random values
+        function Stickman(x, y, group) {
+            this.x = x;
+            this.y = y;
+            this.targetX = x;
+            this.targetY = y;
+            this.variables = {
+                closenessToFamily: randomValue(),
+                health: randomValue(),
+                income: randomValue(),
+                socialConnections: randomValue(),
+                workLifeBalance: randomValue(),
+                opennessToDiversity: randomValue(),
+                jobSatisfaction: randomValue(),
+                workplaceInclusivity: randomValue(),
+                diversityInLocal: randomValue(),
+                civicEngagement: randomValue(),
+                localTrust: randomValue(),
+                nationalPride: randomValue(),
+                politicalStability: randomValue(),
+                religiousParticipation: randomValue(),
+                spiritualNeeds: randomValue(),
+                culturalSupportForReligion: randomValue()
+            }; // Initialize with random values for variety
+            this.group = group; // Initial group
+        }
+
+        // Initialize stickmen for each group with equal distribution
+        function initializeStickmen() {
+            for (let group in groups) {
+                for (let i = 0; i < dotsPerGroup; i++) {
+                    const x = randomInRange(groups[group].xRange);
+                    const y = randomInRange(groups[group].yRange);
+                    const stickman = new Stickman(x, y, group);
+                    groups[group].dots.push(stickman);
+                    stickmen.push(stickman); // Add to global stickmen list
+                }
+            }
+        }
+
+        // Random number in a range
+        function randomInRange([min, max]) {
+            return Math.random() * (max - min) + min;
+        }
+
+        // Drawing stickmen on canvas
+        function drawStickman(stickman, color) {
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+
+            // Draw stickman head (hollow circle)
+            ctx.beginPath();
+            ctx.arc(stickman.x, stickman.y, charSize, 0, 2 * Math.PI);
+            ctx.closePath();
+            ctx.stroke();
+
+            // Draw stickman body
+            ctx.beginPath();
+            ctx.moveTo(stickman.x, stickman.y + charSize);
+            ctx.lineTo(stickman.x, stickman.y + 3 * charSize);
+            ctx.closePath();
+            ctx.stroke();
+
+            // Left and right arms
+            ctx.beginPath();
+            ctx.moveTo(stickman.x, stickman.y + charSize);
+            ctx.lineTo(stickman.x - charSize, stickman.y + 2 * charSize);
+            ctx.moveTo(stickman.x, stickman.y + charSize);
+            ctx.lineTo(stickman.x + charSize, stickman.y + 2 * charSize);
+            ctx.closePath();
+            ctx.stroke();
+
+            // Left and right legs
+            ctx.beginPath();
+            ctx.moveTo(stickman.x, stickman.y + 3 * charSize);
+            ctx.lineTo(stickman.x - charSize, stickman.y + 4 * charSize);
+            ctx.moveTo(stickman.x, stickman.y + 3 * charSize);
+            ctx.lineTo(stickman.x + charSize, stickman.y + 4 * charSize);
+            ctx.closePath();
+            ctx.stroke();
+        }
+
+        // Main drawing function
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
+
+            for (let group in groups) {
+                groups[group].dots.forEach(stickman => {
+                    drawStickman(stickman, groups[group].color);
+                });
+            }
+        }
+
+        // Function to randomly change variable values over time
+        function updateStickmanVariables(stickman) {
+            for (let key in stickman.variables) {
+                stickman.variables[key] += (Math.random() - 0.5) * 0.01; // Slight random changes
+                stickman.variables[key] = Math.max(0, Math.min(1, stickman.variables[key])); // Keep within [0, 1]
+            }
+        }
+
+        // Function to recalculate belonging scores and change groups
+        function updateBelonging(stickman) {
+                // Normalize income to make sure it doesn't dominate the family score
+                const normalizedIncome = (1 - stickman.variables.income); // Inverse for family, between 0 and 1
+
+                const belongingScores = {
+                    family: stickman.variables.closenessToFamily + stickman.variables.health + normalizedIncome,
+                    friends: stickman.variables.socialConnections + stickman.variables.workLifeBalance + stickman.variables.opennessToDiversity,
+                    workplace: stickman.variables.jobSatisfaction + stickman.variables.income + stickman.variables.workplaceInclusivity,
+                    local: stickman.variables.diversityInLocal + stickman.variables.civicEngagement + stickman.variables.localTrust,
+                    nation: stickman.variables.nationalPride + stickman.variables.politicalStability + stickman.variables.income,
+                    religion: stickman.variables.religiousParticipation + stickman.variables.spiritualNeeds + stickman.variables.culturalSupportForReligion
+                };
+
+                // Find the highest belonging score and assign stickman to that group
+                let highestScore = -Infinity;
+                let newGroup = null;
+                for (let group in belongingScores) {
+                    if (belongingScores[group] > highestScore) {
+                        highestScore = belongingScores[group];
+                        newGroup = group;
+                    }
+                }
+
+                // Update group if it changes
+                if (stickman.group !== newGroup) {
+                    // Remove stickman from old group
+                    const oldGroup = groups[stickman.group];
+                    const index = oldGroup.dots.indexOf(stickman);
+                    if (index !== -1) oldGroup.dots.splice(index, 1);
+
+                    // Set the target position for the new group
+                    stickman.targetX = randomInRange(groups[newGroup].xRange);
+                    stickman.targetY = randomInRange(groups[newGroup].yRange);
+
+                    // Add stickman to new group
+                    stickman.group = newGroup;
+                    groups[newGroup].dots.push(stickman);
+                }
+            }
+
+
+        // Function to move stickmen toward their target positions
+        function moveStickmen(stickman) {
+            const speed = 0.05; // Speed of movement
+
+            stickman.x += (stickman.targetX - stickman.x) * speed;
+            stickman.y += (stickman.targetY - stickman.y) * speed;
+        }
+
+        // Display the number of people in each group
+        // Display the number of people in each group with full names
+            function updateGroupInfo() {
+                const fullGroupNames = {
+                    family: "Family Connections",
+                    friends: "Friendship & Social Circles",
+                    workplace: "Workplace Belonging",
+                    local: "Local Community Involvement",
+                    nation: "National Identity",
+                    religion: "Religious & Spiritual Community"
+                };
+
+                const infoText = Object.keys(groups).map(group => {
+                    return `${fullGroupNames[group]}: ${groups[group].dots.length}`;
+                }).join('<br>');
+
+                groupInfo.innerHTML = infoText;
+            }
+
+
+        // Check for hover and display stickman details
+        function checkHover(mouseX, mouseY) {
+            let hoverStickman = null;
+
+            for (let group in groups) {
+                groups[group].dots.forEach(stickman => {
+                    const distance = Math.sqrt((mouseX - stickman.x) ** 2 + (mouseY - stickman.y) ** 2);
+                    if (distance < hoverRange) {
+                        hoverStickman = stickman;
+                    }
+                });
+            }
+
+            if (hoverStickman) {
+                infoBox.style.display = 'block';
+                infoBox.innerHTML = `
+                    <b>Group:</b> ${hoverStickman.group} <br>
+                    ${Object.entries(hoverStickman.variables).map(([key, value]) => {
+                    return `${key}: ${value.toFixed(2)}`;
+                }).join('<br>')}
+                `;
+                return hoverStickman;
+            } else {
+                infoBox.style.display = 'none';
+            }
+
+            return null;
+        }
+
+        // Mouse move event to detect hover
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+            const hoveredStickman = checkHover(mouseX, mouseY);
+
+            if (hoveredStickman) {
+                infoBox.style.left = `${e.clientX + 10}px`;
+                infoBox.style.top = `${e.clientY + 10}px`;
+            }
+        });
+
+        // Update function for all stickmen
+        function update() {
+            for (let group in groups) {
+                groups[group].dots.forEach(stickman => {
+                    updateStickmanVariables(stickman); // Randomly adjust their scores
+                    updateBelonging(stickman); // Recalculate belonging
+                    moveStickmen(stickman); // Move stickmen toward target positions
+                });
+            }
+
+            updateGroupInfo(); // Update group count info
+        }
+
+        // Main loop
+        function loop() {
+            update();
+            draw();
+            requestAnimationFrame(loop); // Continue the loop
+        }
+
+        // Initialize and start the loop
+        initializeStickmen();
+        loop();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adventure in Spudsville</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #000000;
+            color: #ffffff;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 0 10%;
+            box-sizing: border-box;
+        }
+
+        .typewriter {
+            font-size: 24px;
+            color: #ffffff;
+            border-right: 2px solid;
+            white-space: pre-wrap;
+            overflow: hidden;
+            animation: blink 0.75s step-end infinite;
+            margin-bottom: 20px;
+            text-align: center;
+            max-width: 100%;
+        }
+
+        @keyframes blink {
+
+            from,
+            to {
+                border-color: transparent
+            }
+
+            50% {
+                border-color: black
+            }
+        }
+
+         .options {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            opacity: 0;
+            /* Start invisible */
+            transition: opacity 5s ease;
+            /* Smooth transition for opacity */
+        }
+        .button {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 18px;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            border: 2px solid #333;
+            background-color: #fff;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #333;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="storyText" class="story-text typewriter"></div>
+    <div id="optionsContainer" class="options"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const storyText = document.getElementById('storyText');
+            const optionsContainer = document.getElementById('optionsContainer');
+
+            function typeText(text, callback) {
+                let i = 0;
+                storyText.innerHTML = ""; // Clear previous text
+                const speed = 5; // Speed of typing
+
+                function type() {
+                    if (i < text.length) {
+                        storyText.innerHTML += text.charAt(i);
+                        i++;
+                        setTimeout(type, speed);
+                    } else if (callback) {
+                        callback();
+                    }
+                }
+
+                type(); // Start typing effect
+            }
+
+            function displayStep(step) {
+                const currentStep = steps[step];
+                optionsContainer.innerHTML = ''; // Clear previous options
+                optionsContainer.style.opacity = 0; // Reset opacity to 0 for fade-in effect
+
+                 typeText(currentStep.text, () => {
+                    currentStep.options.forEach(option => {
+                        const button = document.createElement('button');
+                        button.textContent = option.text;
+                        button.className = 'button';
+                        button.onclick = () => displayStep(option.nextStep);
+                        optionsContainer.appendChild(button);
+                    });
+                    setTimeout(() => optionsContainer.style.opacity = 1, 100); // Fade in options after 100ms
+                });
+            }
+            const steps = {
+                start: {
+                    text: "In the once peaceful town of Spudsville, crime is on the rise—someone’s been mashing more than just potatoes! 🕵️‍♂️ Burglaries, runaway, and late-night thefts have the citizens on edge.  What would you do?",
+                    options: [
+                        { text: "Increase Police Presence", nextStep: "a" },
+                        { text: "Implement Public Surveillance", nextStep: "b" }
+                    ]
+                },
+                a: {
+                    text: `Increase Police Presence.\n Deploying more officers across Spudsville! The streets are a little safer, but now you face a bigger decision.\n How will you guide this growing force? 🚓🥔`,
+                    options: [
+                        { text: "Zero Tolerance Policy", nextStep: "a1" },
+                        { text: "Community Policing", nextStep: "a2" }
+                    ]
+                },
+                a1: {
+                    text: `You’ve chosen to implement a "Zero Tolerance" Policy on Crime, cracking down hard on Spudsville’s criminals. The streets are safer, but tensions are rising. Now, you must choose how to deal with the growing political pressure. Will you handle the backlash or stick to your guns?`,
+                    options: [
+                        { text: "Address Public Backlash with Police Accountability", nextStep: "a11" },
+                        { text: "Double Down on Law-and-Order", nextStep: "a1.2" }
+                    ]
+                },
+                a11: {
+                    text: `You chose to Address Public Backlash with Police Accountability, adding oversight and transparency to ease concerns. While some in Spudsville are applauding the move, public opinion is still divided, and the media isn’t making it easy on you!\n Reports are rolling in, questioning whether your approach to crime prevention is effective enough or just a political move to calm the crowd.\n As the media shapes the narrative, public perception of you, Mayor, is starting to dip. The pressure is mounting, and now you need to figure out how to manage the media storm and win back trust. 🌍`,
+                    options: [
+                        { text: "Move ahead decisively to tackle the challenge of media perception and public opinion", nextStep: "s" },
+                        
+                    ]
+                },
+                a12: {
+                    text: `You chose to Double Down on the Law-and-Order Approach, dismissing civil liberty concerns and cracking down hard on crime.\n At first, it seemed like a strong move, but it didn’t pan out. While crime initially dropped, public outcry over heavy-handed policing grew louder. Civil liberties groups, local communities, and even some of the Troopers themselves started to push back. \n The intense policing strained relationships between law enforcement and the public, leading to protests and further distrust. Instead of restoring order, the hardline approach created more division in Spudsville.`,
+                    options: [
+                        { text: "Restart", nextStep: "start" }
+
+                    ]
+                },
+                a2: {
+                    text: "You've decided to invest in Community Policing. How do you proceed?",
+                    options: [
+                        { text: "Increase Community Outreach", nextStep: "s" },
+                        { text: "Review and Adjust Strategy", nextStep: "s" }
+                    ]
+                },
+                b: {
+                    text: "You chose to implement public surveillance. Choose your approach:",
+                    options: [
+                        { text: "Expand Surveillance Network", nextStep: "b1" },
+                        { text: "Introduce Privacy Safeguards", nextStep: "b2" }
+                    ]
+                },
+                b1: {
+                    text: "You've expanded the surveillance network. What's your focus?",
+                    options: [
+                        { text: "Monitor Results", nextStep: "s" },
+                        { text: "Scale Back Surveillance", nextStep: "restart" }
+                    ]
+                },
+                b2: {
+                    text: "You've introduced Privacy Safeguards. What's your next step?",
+                    options: [
+                        { text: "Evaluate Community Response", nextStep: "s" },
+                        { text: "Tighten Surveillance", nextStep: "s" }
+                    ]
+                },
+                s: {
+                    text: "You are at a strategic decision point. Choose your next action:",
+                    options: [
+                        { text: "Public Forums (S1)", nextStep: "s1" },
+                        { text: "Media Campaign (S2)", nextStep: "s2" }
+                    ]
+                },
+                s1: {
+                    text: "You chose public forums. How will you engage the public?",
+                    options: [
+                        { text: "Engage in Dialogue (S1.A)", nextStep: "s1a" },
+                        { text: "Focus on Action (S1.B)", nextStep: "s1b" }
+                    ]
+                },
+                s1a: {
+                    text: "Engage in Dialogue:",
+                    options: [
+                        { text: "Continue Forums (S1.A.A)", nextStep: "restart" },
+                        { text: "Adjust Strategy (S1.A.B)", nextStep: "xa" }
+                    ]
+                },
+                s1b: {
+                    text: "Focus on Action:",
+                    options: [
+                        { text: "Legislate (S1.B.A)", nextStep: "xb" },
+                        { text: "Maintain Current Policies (S1.B.B)", nextStep: "restart" }
+                    ]
+                },
+                s2: {
+                    text: "You chose a media campaign. How will you manage the media?",
+                    options: [
+                        { text: "Direct Dialogue (S2.A)", nextStep: "xc" },
+                        { text: "Expand Campaign (S2.B)", nextStep: "restart" }
+                    ]
+                },
+                xa: {
+                    text: "Choose your strategy for adjusting public dialogue:",
+                    options: [
+                        { text: "Option XA1", nextStep: "restart" },
+                        { text: "Option XA2", nextStep: "restart" }
+                    ]
+                },
+                xb: {
+                    text: "Choose how to legislate:",
+                    options: [
+                        { text: "Option XB1", nextStep: "restart" },
+                        { text: "Option XB2", nextStep: "restart" }
+                    ]
+                },
+                xc: {
+                    text: "Choose your approach to dialogue:",
+                    options: [
+                        { text: "Option XC1", nextStep: "restart" },
+                        { text: "Option XC2", nextStep: "restart" }
+                    ]
+                },
+                restart: {
+                    text: "You have reached a deadlock or end. Do you want to restart?",
+                    options: [
+                        { text: "Restart", nextStep: "start" }
+                    ]
+                }
+            };
+
+            displayStep('start');
+        });
+    </script>
+</body>
+
+</html>

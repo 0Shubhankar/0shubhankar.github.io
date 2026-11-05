@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Information Spread Simulation</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        #metrics {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            font-size: 12px;
+            z-index: 100;
+            width: 250px;
+        }
+
+        .progress-bar {
+            background-color: #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress {
+            height: 10px;
+            border-radius: 5px;
+        }
+    </style>
+    <script src="../vendor/shared/lib-9092ba184a7e/dist/dat.gui.min.js"></script>
+    <script src="../vendor/shared/lib-25023b521d77/dist/three.min.js"></script>
+    <script src="../vendor/shared/lib-1b307bf3cbda/dist/OrbitControls.js"></script>
+</head>
+
+<body>
+    <div id="metrics">
+        <h3>Simulation Metrics</h3>
+        <p><strong>Rate of Spread:</strong> <span id="spreadRate">0</span></p>
+        <p><strong>Conversion Ratio:</strong> <span id="conversionRatio">0%</span></p>
+        <div class="progress-bar">
+            <div id="conversionProgress" class="progress" style="background-color: #4caf50; width: 0%;"></div>
+        </div>
+        <p><strong>Resistant Nodes:</strong> <span id="resistantNodes">0</span></p>
+        <div class="progress-bar">
+            <div id="resistantProgress" class="progress" style="background-color: #f44336; width: 0%;"></div>
+        </div>
+        <p><strong>Average Path Length:</strong> <span id="pathLength">0</span></p>
+        <p><strong>Node Influence Score:</strong> <span id="influenceScore">0</span></p>
+    </div>
+
+   
+    <script>
+        let scene, camera, renderer, controls;
+        let nodes = [];
+        let connections = [];
+        let dataParticles = [];
+        let toDevelop = [];
+        let spreadInformation = false;
+        let conversionCount = 0, spreadRate = 0, resistantCount = 0, totalPaths = 0;
+        let influenceScores = {};
+
+        const metrics = {
+            spreadRate: document.getElementById('spreadRate'),
+            conversionRatio: document.getElementById('conversionRatio'),
+            conversionProgress: document.getElementById('conversionProgress'),
+            resistantNodes: document.getElementById('resistantNodes'),
+            resistantProgress: document.getElementById('resistantProgress'),
+            pathLength: document.getElementById('pathLength'),
+            influenceScore: document.getElementById('influenceScore')
+        };
+
+        const opts = {
+            range: 180,
+            baseConnections: 3,
+            addedConnections: 5,
+            baseSize: 2.5,
+            sizeMultiplier: 0.7,
+            allowedDist: 40,
+            baseDist: 40,
+            addedDist: 30,
+            repaintColor: '#000000',
+            nodeColor: '#00ff99',
+            misinformationColor: '#ff3333',
+            dataSpeed: 0.03,
+            susceptibilityThreshold: 0.5,
+            informationPersuasiveness: 0.2,
+            maxDepth: 4,
+        };
+
+        init();
+        animate();
+
+        function init() {
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(opts.repaintColor);
+
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 100, 300);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.25;
+            controls.screenSpacePanning = false;
+            controls.minDistance = 50;
+            controls.maxDistance = 500;
+
+            const rootNode = createNode(0, 0, 0, opts.baseSize, 'root');
+            nodes.push(rootNode);
+            toDevelop.push({ node: rootNode, depth: 0 });
+            influenceScores[rootNode.id] = 0;
+
+            const gui = new dat.GUI();
+            gui.addColor(opts, 'repaintColor').onChange(() => scene.background.set(opts.repaintColor));
+            gui.addColor(opts, 'nodeColor');
+            gui.addColor(opts, 'misinformationColor');
+            gui.add(opts, 'dataSpeed', 0.001, 0.1).step(0.001);
+            gui.add(opts, 'susceptibilityThreshold', 0, 1).step(0.01).name('Susceptibility Threshold');
+            gui.add(opts, 'informationPersuasiveness', 0, 1).step(0.01).name('Information Persuasiveness');
+            gui.add({ start: startInformationSpread }, 'start').name('Start Spread');
+
+            developNodes();
+        }
+
+        function startInformationSpread() {
+            spreadInformation = true;
+        }
+
+        function developNodes() {
+            while (toDevelop.length > 0) {
+                const { node, depth } = toDevelop.shift();
+                if (depth < opts.maxDepth) {
+                    createConnections(node, depth + 1);
+                }
+            }
+        }
+
+        function createNode(x, y, z, size, type) {
+            const geometry = new THREE.SphereGeometry(size, 16, 16);
+            const material = new THREE.MeshPhongMaterial({
+                color: opts.nodeColor,
+                emissive: opts.nodeColor,
+                emissiveIntensity: 0.6,
+                shininess: 100,
+            });
+            const node = new THREE.Mesh(geometry, material);
+            node.position.set(x, y, z);
+            node.userData = {
+                type: type || 'neutral',
+                susceptibility: Math.random(),
+                hasMisinformation: false,
+                influence: 0,
+            };
+            scene.add(node);
+            influenceScores[node.id] = 0;
+            return node;
+        }
+
+        function createConnections(node, depth) {
+            const connectionsNum = opts.baseConnections + Math.floor(Math.random() * opts.addedConnections);
+
+            for (let i = 0; i < connectionsNum; i++) {
+                const dist = opts.baseDist + Math.random() * opts.addedDist;
+                const angle1 = Math.random() * Math.PI * 2;
+                const angle2 = Math.random() * Math.PI * 2;
+
+                const x = node.position.x + dist * Math.sin(angle1) * Math.cos(angle2);
+                const y = node.position.y + dist * Math.sin(angle1) * Math.sin(angle2);
+                const z = node.position.z + dist * Math.cos(angle1);
+
+                const newNode = createNode(x, y, z, opts.baseSize * opts.sizeMultiplier, 'neutral');
+                nodes.push(newNode);
+
+                const material = new THREE.LineBasicMaterial({ color: opts.nodeColor });
+                const curve = new THREE.CubicBezierCurve3(
+                    node.position,
+                    new THREE.Vector3(node.position.x + dist / 4, node.position.y + dist / 4, node.position.z + dist / 4),
+                    new THREE.Vector3(newNode.position.x - dist / 4, newNode.position.y - dist / 4, newNode.position.z - dist / 4),
+                    newNode.position
+                );
+                const geometry = new THREE.BufferGeometry().setFromPoints(curve.getPoints(50));
+                const connection = new THREE.Line(geometry, material);
+                scene.add(connection);
+                connections.push(connection);
+
+                createDataParticle(node.position, newNode.position);
+
+                toDevelop.push({ node: newNode, depth: depth });
+            }
+        }
+
+        function createDataParticle(startPos, endPos) {
+            const geometry = new THREE.SphereGeometry(0.5, 8, 8);
+            const material = new THREE.MeshBasicMaterial({ color: opts.misinformationColor });
+            const particle = new THREE.Mesh(geometry, material);
+            scene.add(particle);
+
+            dataParticles.push({
+                particle: particle,
+                startPos: startPos.clone(),
+                endPos: endPos.clone(),
+                progress: 0
+            });
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (spreadInformation) {
+                spreadRate = 0;
+                resistantCount = 0;
+                nodes.forEach(node => {
+                    if (!node.userData.hasMisinformation) {
+                        const connectedNodes = getConnectedNodes(node);
+                        connectedNodes.forEach(connectedNode => {
+                            attemptMisinformationSpread(node, connectedNode);
+                        });
+                    }
+                });
+            }
+
+            dataParticles.forEach(data => {
+                data.progress += opts.dataSpeed;
+                if (data.progress >= 1) data.progress = 0;
+                data.particle.position.lerpVectors(data.startPos, data.endPos, data.progress);
+            });
+
+            controls.update();
+            renderer.render(scene, camera);
+
+            updateMetrics();
+        }
+
+        function getConnectedNodes(node) {
+            const connectedNodes = [];
+            connections.forEach(connection => {
+                const points = connection.geometry.attributes.position.array;
+                if (points.includes(node.position.x) && points.includes(node.position.y) && points.includes(node.position.z)) {
+                    nodes.forEach(n => {
+                        if (n !== node && !connectedNodes.includes(n)) {
+                            connectedNodes.push(n);
+                        }
+                    });
+                }
+            });
+            return connectedNodes;
+        }
+
+        function attemptMisinformationSpread(fromNode, toNode) {
+            const connectionStrength = Math.random();
+            const infoFactor = connectionStrength * opts.informationPersuasiveness;
+            const susceptibility = toNode.userData.susceptibility;
+
+            if (!toNode.userData.hasMisinformation && susceptibility + infoFactor > opts.susceptibilityThreshold) {
+                toNode.userData.hasMisinformation = true;
+                toNode.material.color.set(opts.misinformationColor);
+                spreadRate++;
+                conversionCount++;
+
+                influenceScores[fromNode.id]++;
+                totalPaths += 1;
+            } else {
+                resistantCount++;
+            }
+        }
+
+        function updateMetrics() {
+            const conversionRatio = ((conversionCount / nodes.length) * 100).toFixed(2);
+            const avgPathLength = totalPaths === 0 ? 0 : (totalPaths / conversionCount).toFixed(2);
+            const maxInfluence = Math.max(...Object.values(influenceScores));
+
+            metrics.spreadRate.innerText = spreadRate;
+            metrics.conversionRatio.innerText = `${conversionRatio}%`;
+            metrics.conversionProgress.style.width = `${conversionRatio}%`;
+            metrics.resistantNodes.innerText = resistantCount;
+            metrics.resistantProgress.style.width = `${(resistantCount / nodes.length) * 100}%`;
+            metrics.pathLength.innerText = avgPathLength;
+            metrics.influenceScore.innerText = maxInfluence;
+        }
+
+        window.addEventListener('resize', function () {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+
+    
+
+</body>
+
+</html>

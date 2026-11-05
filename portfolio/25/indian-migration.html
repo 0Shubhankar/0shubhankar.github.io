@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Globe with Multiple Fading Arcs and Moving Particles</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #000000;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            -webkit-font-smoothing: antialiased;
+
+        }
+
+        canvas {
+            display: block;
+        }
+
+        #visualization {
+        height: 80vh; /* Reduces the height to allocate space for description */
+        width: 100%; /* Adjusted to use full width instead of height which was incorrect */
+        padding: 20px;
+        }
+
+        #tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            pointer-events: none;
+            display: none;
+            font-size: 14px;
+        }
+
+        #description {
+        padding: 20px;
+        background-color: #000000;
+        color: #ffffff;
+        text-align: left;
+        margin-left: 20%;
+        margin-right: 20%;
+        line-height: 1.6;
+        }
+
+    </style>
+</head>
+
+<body>
+        <div id="visualization"></div> <!-- This div will contain the 3D visualization -->
+        <div id="description">
+            <p>India's diaspora, the largest globally, significantly influences the socio-economic landscapes of their host
+                countries and India. While the migration provides critical remittances and fosters cultural exchange, it also
+                highlights underlying issues such as the lack of opportunities at home.</p>
+        
+            <p>Indian migration is driven by the pursuit of better employment and living conditions, reflecting broader issues
+                such as job scarcity and economic constraints within India itself. Countries like the United States, UAE, UK,
+                and Canada are preferred destinations because of their robust economies and inclusive societies. However, this
+                movement is not just a tale of seeking prosperity but often a necessity due to limited local opportunities.</p>
+        
+            <p>Significant Indian populations in these countries include:
+            <ul>
+                <li><strong>United States</strong>: 5,409,062 Indians</li>
+                <li><strong>UAE</strong>: 3,568,848 Indians</li>
+                <li><strong>Canada</strong>: 2,875,954 Indians</li>
+                <li><strong>Saudi Arabia</strong>: 2,463,509 Indians</li>
+            </ul>
+            These countries offer not only better job prospects but also better living conditions compared to what many migrants
+            might experience in India.</p>
+        
+            <p>The remittances sent home by the Indian diaspora are vital to India's economy, enhancing its foreign exchange
+                reserves and supporting millions of families. The major remittance contributors included:
+            <ul>
+                <li><strong>United States</strong>: 23.4% of total remittances</li>
+                <li><strong>United Arab Emirates</strong>: 18.0%</li>
+                <li><strong>United Kingdom</strong>: 6.8%</li>
+                <li><strong>Singapore</strong>: 5.7%</li>
+                <li><strong>Saudi Arabia</strong>: 5.1%</li>
+            </ul>
+            </p>
+        
+            <p>While these remittances are crucial, they also underscore a reliance on external economic factors to sustain
+                families and communities in India. This dependency highlights the need for more robust economic development
+                within India to prevent brain drain and economic disparity.</p>
+        
+            <p>Remittances indeed bolster India's foreign reserves and help stabilize the national currency. However, this
+                economic benefit comes with its own set of challenges:
+            <ol>
+                <li><strong>Economic Dependency</strong>: Heavy reliance on remittances can make the economy vulnerable to
+                    global financial shifts and policies in host countries.</li>
+                <li><strong>Social Impact</strong>: Families often face social and emotional challenges due to prolonged
+                    separations, and migrants frequently endure difficult living conditions abroad.</li>
+                <li><strong>Skewed Development</strong>: While remittances contribute to household incomes, they can also lead
+                    to unequal development in different regions of India, often exacerbating urban-rural divides.</li>
+            </ol>
+            </p>
+        
+            <p>The migration of Indians globally is a double-edged sword. It offers individuals the chance to improve their
+                living standards and supports the Indian economy through remittances. However, it also highlights significant
+                socio-economic challenges within India that drive such migration. Sustainable development within the country,
+                aimed at creating job opportunities and enhancing living conditions, is essential to mitigate the economic and
+                social costs of this extensive migration. This balanced approach will ensure that migration is a choice rather
+                than a necessity, contributing to a more equitable global landscape.</p>
+        </div>
+
+    <div id="tooltip"></div>
+    <script src="../vendor/shared/lib-25023b521d77/dist/three.min.js"></script>
+    <script src="../vendor/shared/lib-1b307bf3cbda/dist/OrbitControls.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set up scene, camera, and renderer
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+            document.getElementById('visualization').appendChild(renderer.domElement);
+
+            // Add orbit controls
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.25;
+            controls.enableZoom = true;
+
+            // Add lights
+            const ambientLight = new THREE.AmbientLight(0xcccccc);
+            scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
+            directionalLight.position.set(1, 1, 1).normalize();
+            scene.add(directionalLight);
+
+            // Load textures
+            const textureLoader = new THREE.TextureLoader();
+            const globeTexture = textureLoader.load('//unpkg.com/three-globe/example/img/earth-dark.jpg');
+
+            // Create the globe
+            const globeGeometry = new THREE.SphereGeometry(50, 64, 64);
+            const globeMaterial = new THREE.MeshBasicMaterial({ map: globeTexture });
+            const globe = new THREE.Mesh(globeGeometry, globeMaterial);
+            scene.add(globe);
+
+            // Position the camera
+
+            const globeRadius = 75; // Assuming your globe's radius is 50
+            const phi = (90 - 28.6139) * (Math.PI / 180);
+            const theta = (77.2090 + 180) * (Math.PI / 180);
+
+            // Calculate Delhi's position on the globe
+            const x = -(globeRadius * Math.sin(phi) * Math.cos(theta));
+            const y = globeRadius * Math.cos(phi);
+            const z = globeRadius * Math.sin(phi) * Math.sin(theta);
+
+            // Set camera to look at Delhi
+            camera.position.set(x * 2, y * 2, z * 2); // Position camera a bit further from the calculated point
+            camera.lookAt(new THREE.Vector3(x, y, z));
+
+            // Convert lat/lon to 3D position on the globe
+            function latLonToVector3(lat, lon, radius = 50) {
+                const phi = (90 - lat) * (Math.PI / 180);
+                const theta = (lon + 180) * (Math.PI / 180);
+                const x = -(radius * Math.sin(phi) * Math.cos(theta));
+                const y = radius * Math.cos(phi);
+                const z = radius * Math.sin(phi) * Math.sin(theta);
+                return new THREE.Vector3(x, y, z);
+            }
+
+            // Set up raycaster and mouse vector for hover detection
+            const raycaster = new THREE.Raycaster();
+            const mouse = new THREE.Vector2();
+            const tooltip = document.getElementById('tooltip');
+
+            // Function to display tooltip
+            function showTooltip(text, x, y) {
+                tooltip.style.display = 'block';
+                tooltip.style.left = `${x}px`;
+                tooltip.style.top = `${y}px`;
+                tooltip.innerHTML = text;
+            }
+
+            // Function to hide tooltip
+            function hideTooltip() {
+                tooltip.style.display = 'none';
+            }
+
+            // Add event listener for mouse movement to detect hover
+            window.addEventListener('mousemove', (event) => {
+                // Convert mouse position to normalized device coordinates (-1 to +1)
+                mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+                // Update the raycaster with camera and mouse position
+                raycaster.setFromCamera(mouse, camera);
+
+                // Find intersections with objects in the scene
+                const intersects = raycaster.intersectObjects(scene.children, true);
+
+                if (intersects.length > 0) {
+                    const intersectedObject = intersects[0].object;
+
+                    // If the object has userData, show tooltip
+                    if (intersectedObject.userData && intersectedObject.userData.country) {
+                        const countryName = intersectedObject.userData.country;
+                        const overseasIndians = intersectedObject.userData.number;
+                        showTooltip(`${countryName}<br>Overseas Indians: ${overseasIndians}`, event.clientX, event.clientY);
+                    } else {
+                        hideTooltip();
+                    }
+                } else {
+                    hideTooltip();
+                }
+            });
+
+            // Function to create a fading arc with custom shader
+            function createFadingArc(start, end, altitude = 10, count = 1, locationData) {
+                const startToEnd = new THREE.Vector3().subVectors(end, start);
+                const midPoint = start.clone().add(startToEnd.clone().multiplyScalar(0.5)).normalize().multiplyScalar(50 + altitude);
+
+                const controlPoint1 = start.clone().lerp(midPoint, 0.5).normalize().multiplyScalar(50 + altitude / 2);
+                const controlPoint2 = end.clone().lerp(midPoint, 0.5).normalize().multiplyScalar(50 + altitude / 2);
+
+                const curve = new THREE.CubicBezierCurve3(start, controlPoint1, controlPoint2, end);
+                const points = curve.getPoints(100);
+
+                // Create geometry and add custom attributes
+                const geometry = new THREE.BufferGeometry().setFromPoints(points);
+
+                // Create opacity array
+                const opacities = new Float32Array(points.length);
+
+                // Set opacity values from 0 to 1
+                for (let i = 0; i < points.length; i++) {
+                    opacities[i] = i / (points.length - 1);
+                }
+
+                // Add opacity attribute to geometry
+                geometry.setAttribute('opacity', new THREE.BufferAttribute(opacities, 1));
+
+                // Shader material to control the fading effect
+                const material = new THREE.ShaderMaterial({
+                    transparent: true,
+                    vertexShader: `
+                        attribute float opacity;
+                        varying float vOpacity;
+                        void main() {
+                            vOpacity = opacity;
+                            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                        }
+                    `,
+                    fragmentShader: `
+                        varying float vOpacity;
+                        void main() {
+                        gl_FragColor = vec4(1.0, 1.0, 1.0, vOpacity); // RGB values for white with opacity
+                        }
+                    `
+                });
+
+                const arcs = new THREE.Group();
+                for (let i = 0; i < count; i++) {
+                    const line = new THREE.Line(geometry, material.clone());
+
+                    // Slightly offset each line to ensure visibility
+                    line.position.x += i * 0.1; // Adjust as needed to make lines more visible
+                    line.position.y += i * 0.1; // Adjust as needed to make lines more visible
+                    line.position.z += i * 0.1; // Adjust as needed to make lines more visible
+
+                    // Attach user data to each line for tooltip display
+                    line.userData = locationData;
+
+                    arcs.add(line);
+                }
+
+                // Return the arc group and points
+                return { arcGroup: arcs, points: points };
+            }
+
+            // Data for the countries with latitudes, longitudes, and number of overseas Indians
+            const locations = [
+                { country: "USA", lat: 37.0902, lon: -95.7129, number: 5409062, arcCount: 55 },
+                { country: "UAE", lat: 23.4241, lon: 53.8478, number: 3568848, arcCount: 36 },
+                { country: "Malaysia", lat: 4.2105, lon: 101.9758, number: 2914127, arcCount: 30 },
+                { country: "Canada", lat: 56.1304, lon: -106.3468, number: 2875954, arcCount: 29 },
+                { country: "Saudi Arabia", lat: 23.8859, lon: 45.0792, number: 2463509, arcCount: 25 },
+                { country: "Myanmar", lat: 21.9162, lon: 95.9560, number: 2002660, arcCount: 20 },
+                { country: "UK", lat: 55.3781, lon: -3.4360, number: 1864318, arcCount: 19 },
+                { country: "South Africa", lat: -30.5595, lon: 22.9375, number: 1700000, arcCount: 17 },
+                { country: "Sri Lanka", lat: 7.8731, lon: 80.7718, number: 1607500, arcCount: 16 },
+                { country: "Kuwait", lat: 29.3759, lon: 47.9774, number: 995528, arcCount: 10 },
+                { country: "Australia", lat: -25.2744, lon: 133.7751, number: 976000, arcCount: 10 },
+                { country: "Mauritius", lat: -20.3484, lon: 57.5522, number: 894848, arcCount: 9 },
+                { country: "Qatar", lat: 25.3548, lon: 51.1839, number: 836784, arcCount: 9 },
+                { country: "Nepal", lat: 28.3949, lon: 84.1240, number: 700004, arcCount: 7 },
+                { country: "Oman", lat: 21.4735, lon: 55.9754, number: 686635, arcCount: 7 },
+                { country: "Singapore", lat: 1.3521, lon: 103.8198, number: 650000, arcCount: 7 },
+                { country: "Trinidad & Tobago", lat: 10.6918, lon: -61.2225, number: 549545, arcCount: 6 },
+                { country: "Bahrain", lat: 26.0667, lon: 50.5577, number: 327807, arcCount: 4 },
+                { country: "Guyana", lat: 4.8604, lon: -58.9302, number: 321500, arcCount: 4 },
+                { country: "Fiji", lat: -17.7134, lon: 178.0650, number: 316081, arcCount: 4 },
+                { country: "France (Reunion Island)", lat: -21.1151, lon: 55.5364, number: 300159, arcCount: 4 },
+                { country: "New Zealand", lat: -40.9006, lon: 174.8860, number: 270000, arcCount: 3 },
+                { country: "Germany", lat: 51.1657, lon: 10.4515, number: 260864, arcCount: 3 },
+                { country: "Netherlands", lat: 52.1326, lon: 5.2913, number: 228787, arcCount: 3 },
+                { country: "Italy", lat: 41.8719, lon: 12.5674, number: 206503, arcCount: 3 },
+                { country: "Suriname", lat: 3.9193, lon: -56.0278, number: 160160, arcCount: 2 },
+                { country: "Philippines", lat: 12.8797, lon: 121.7740, number: 150010, arcCount: 2 },
+                { country: "Thailand", lat: 15.8700, lon: 100.9925, number: 150000, arcCount: 2 },
+                { country: "Indonesia", lat: -0.7893, lon: 113.9213, number: 134817, arcCount: 2 },
+                { country: "France", lat: 46.6034, lon: 1.8883, number: 119000, arcCount: 2 },
+                { country: "Israel", lat: 31.0461, lon: 34.8516, number: 105000, arcCount: 2 }
+            ];
+
+            // Store all arc points for sequential animation
+            const allArcPoints = [];
+
+            // Coordinates for New Delhi
+            const newDelhi = latLonToVector3(28.6139, 77.2090); // New Delhi
+
+            // Create and add arcs for each location
+            locations.forEach(location => {
+                const destination = latLonToVector3(location.lat, location.lon);
+                const arcCount = location.arcCount; // Get the number of lines from the location object
+                const { arcGroup, points } = createFadingArc(newDelhi, destination, 50, arcCount, location); // Pass location as userData
+                scene.add(arcGroup);
+                allArcPoints.push(points); // Store points for sequential animation
+            });
+
+            // Create a moving sphere
+            const movingSphere = new THREE.Mesh(
+                new THREE.SphereGeometry(0.5, 16, 16),
+                new THREE.MeshBasicMaterial({ color: 0xff8040 })
+            );
+            scene.add(movingSphere);
+
+            // Function to animate particle sequentially along each arc
+            let arcIndex = 0;
+            let t = 0;
+            function animateParticle() {
+                if (arcIndex >= allArcPoints.length) {
+                    arcIndex = 0; // Reset to the first arc
+                }
+
+                const points = allArcPoints[arcIndex];
+                const pointIndex = Math.floor(t * (points.length - 1));
+                const point = points[pointIndex];
+                movingSphere.position.set(point.x, point.y, point.z);
+
+                t += 0.01; // Adjust speed
+                if (t > 1) {
+                    t = 0; // Reset t
+                    arcIndex++; // Move to the next arc
+                }
+
+                requestAnimationFrame(animateParticle);
+            }
+            animateParticle(); // Start animation loop
+
+            // Animation loop
+            const animate = function () {
+                requestAnimationFrame(animate);
+                controls.update();
+                renderer.render(scene, camera);
+            };
+            animate();
+
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        });
+    </script>
+</body>
+
+</html>

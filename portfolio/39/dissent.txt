@@ -1,0 +1,47 @@
+From the screenshots, it appears that there are several key variables driving the dynamics of the insurgency model. Based on both the SD and AB models, we can categorize them as follows:
+
+### Primary Variables (Group Populations)
+1. **Government Supporters** (# of people in this category)
+2. **Dissidents** (# of people in this category)
+3. **Insurgents** (# of people in this category)
+4. **Removed Insurgents** (# of people in this category)
+
+### Flow Rates (Transitions Between Groups)
+5. **Recruitment Rate** (flow from Dissidents to Insurgents)
+6. **Becoming Dissident Rate** (flow from Government Supporters to Dissidents)
+7. **Removing Insurgents Rate** (flow from Insurgents to Removed Insurgents)
+
+### Parameters Influencing Flow Rates and Behavior
+8. **Normal Propensity to be Recruited** (likelihood of dissidents becoming insurgents)
+9. **Regime Social and Economic Efforts** (influences government support)
+10. **Propensity to Protest** (dissidents' likelihood of protesting)
+11. **Protest Intensity** (how intense the protests are)
+12. **Contact Rate** (how often people interact and communicate, spreading messages)
+13. **Appeasement Rate** (rate at which dissidents are appeased by the regime)
+14. **Avg. Time as Dissident** (average time someone stays a dissident)
+15. **Desired Time to Remove Insurgents** (goal for how quickly the regime wants to neutralize insurgents)
+16. **Removal Effectiveness** (how effectively insurgents are removed)
+
+### Messaging and Incident Factors
+17. **Perceived Intensity of Anti-Regime Messages** (how strongly the population perceives anti-regime messages)
+18. **Effect of Anti-Regime Messages on Recruitment** (impact of anti-regime messages on recruitment of dissidents)
+19. **Normal Frequency of Anti-Regime Messages** (how often such messages are sent)
+20. **Violent Incident Intensity** (how intense violent incidents are)
+21. **Relative Strength of Violent Incidents** (effectiveness of incidents in creating opposition)
+22. **Effect of Incidents on Anti-Regime Messages** (impact of violent incidents on recruitment or dissidence)
+
+### Other Variables
+23. **People Birth Rate** (the rate at which new people enter the population)
+24. **People Reaction Delay on Anti-Regime Messages** (delay in people reacting to anti-regime messaging)
+25. **Strength of Incident Effect on Anti-Regime Messages** (how strongly incidents affect perceptions and behavior)
+
+### Feedback Loops
+26. **Regime Opponents** (total number of opponents, combining dissidents and insurgents)
+27. **Insurgent Fraction** (fraction of the total population that are insurgents)
+28. **Dissidents Fraction** (fraction of the population that are dissidents)
+29. **Propensity to Commit Violence** (likelihood of insurgents committing violent acts)
+
+### Summary
+There are **29 distinct variables** listed above, though some are parameters, others are population counts, and many are transition or influencing factors that control the dynamics of insurgency, dissidence, and government control.
+
+These variables interact in feedback loops, contributing to the overall behavior of the insurgency model.

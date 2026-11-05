@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Train Tracks with Dots Moving Along Paths</title>
+</head>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #ffffff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        flex-direction: column;
+        -webkit-font-smoothing: antialiased;
+        font-family: Georgia, 'Times New Roman', Times, serif;
+
+    }
+
+    .railway-container {
+        position: relative;
+        width: 100%;
+        height: 400px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .track {
+        position: relative;
+        width: 100%;
+        height: 50px;
+        background-color: #777;
+        margin: 20px 0;
+        border: 5px solid #333;
+        overflow: hidden;
+    }
+
+    .track-gap {
+        position: relative;
+        height: 150px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    /* Stairs: Dividing sections (Gaps between the blocks) */
+    .stairs {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        width: 80px;
+        height: 100%;
+    }
+
+    .left-stairs {
+        align-items: flex-start;
+    }
+
+    .right-stairs {
+        align-items: flex-end;
+    }
+
+    .stair-rect {
+        width: 100px;
+        height: 40px;
+        background-color: #888;
+        margin: 10px 0;
+    }
+
+    .stair1 {
+        background-color: #aaa;
+    }
+
+    .stair2 {
+        background-color: #999;
+    }
+
+    .stair3 {
+        background-color: #888;
+    }
+
+    .stair4 {
+        background-color: #777;
+    }
+
+    /* Train */
+    .train {
+        display: flex;
+        position: relative;
+        top: 0;
+        z-index: 1;
+    }
+
+    .train-car {
+        width: 100px;
+        height: 50px;
+        background-color: #f00;
+        margin-right: 5px;
+        border-radius: 5px;
+    }
+
+    .track-lines {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: repeating-linear-gradient(to right,
+                #333 0px,
+                #333 10px,
+                transparent 10px,
+                transparent 20px);
+    }
+
+    /* C-shaped Rectangles */
+    .c-shape {
+        width: 100px;
+        height: 40px;
+        border: 5px solid #333;
+        background-color: #ddd;
+        position: relative;
+    }
+
+    .c-left {
+        border-left: none;
+        margin-right: 5px;
+    }
+
+    .c-right {
+        border-right: none;
+        margin-left: 5px;
+    }
+
+    /* Dots */
+    .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        position: absolute;
+        box-shadow: 0 0 8px 0 green;
+        transition: box-shadow 0.5s ease-in-out;
+    }
+
+    .red-dot {
+        background-color: red;
+    }
+
+    .cyan-dot {
+        background-color: cyan;
+    }
+
+    /* Train 1 */
+    .train1 {
+        animation: moveRight 8s linear infinite;
+    }
+
+    /* Train 2 */
+    .train2 {
+        animation: moveLeft 8s linear infinite;
+    }
+
+    .train1,
+    .train2 {
+        animation-timing-function: ease-in-out;
+    }
+
+    /* Animation for train 1 (left to right) */
+    @keyframes moveRight {
+
+        0%,
+        10% {
+            left: -100%;
+        }
+
+        40%,
+        60% {
+            left: 10%;
+        }
+
+        90%,
+        100% {
+            left: 200%;
+        }
+    }
+
+    /* Animation for train 2 (right to left) */
+    @keyframes moveLeft {
+
+        0%,
+        10% {
+            right: -100%;
+        }
+
+        40%,
+        60% {
+            right: -10%;
+        }
+
+        90%,
+        100% {
+            right: 200%;
+        }
+    }
+
+    /* GUI Styles */
+    .gui {
+        position: absolute;
+        top: 20px;
+        margin-top: 20%;
+        right: 20px;
+        background-color: white;
+        padding: 20px;
+        border: 2px solid #ccc;
+        border-radius: 10px;
+    }
+
+    .gui h2 {
+        margin-top: 0;
+        font-size: 18px;
+        color: #333;
+    }
+
+    .gui div {
+        margin-bottom: 10px;
+    }
+
+    /* Timer */
+    .timer {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        margin-top: 20%;
+        background-color: white;
+        padding: 20px;
+        border: 2px solid #ccc;
+        border-radius: 10px;
+        font-size: 14px;
+        color: #333;
+    }
+
+    /* Description Styles */
+    .description {
+    
+        position: absolute;
+        bottom: 0px;
+        top:70%;
+        /* Adjust as needed */
+        left: 23%;
+        right:20%;
+        /* Adjust as needed */
+        background-color: rgba(255, 255, 255, 0.8);
+        /* Semi-transparent background */
+        padding: 10px;
+        border-radius: 10px;
+        width: 900px;
+        /* Fixed width */
+        font-size: 16px;
+        /* Adjust text size */
+        color: #000;
+        z-index: 2;
+        /* Ensure it appears above other elements */
+    }
+</style>
+
+<body>
+
+    <div class="railway-container">
+        <!-- Upper Track -->
+        <div class="track track1">
+            <div class="track-lines"></div>
+            <div class="train train1">
+                <div class="train-car"></div>
+                <div class="train-car"></div>
+                <div class="train-car"></div>
+                <div class="train-car"></div>
+                <div class="train-car"></div>
+                <div class="train-car"></div>
+                <div class="train-car"></div>
+                <div class="train-car"></div>
+                <div class="train-car"></div>
+                <div class="train-car"></div>
+            </div>
+        </div>
+
+        <!-- Gap with stairs (Stair gaps) -->
+        <div class="track-gap">
+            <div class="stairs left-stairs">
+                <div class="stair-rect stair1"></div>
+                <div class="stair-rect stair2"></div>
+                <div class="stair-rect stair3"></div>
+                <div class="stair-rect stair4"></div>
+                <div class="stair-rect stair5"></div>
+            </div>
+
+            <div class="c-shape c-left"></div>
+            <div class="c-shape c-right"></div>
+
+            <div class="stairs right-stairs">
+                <div class="stair-rect stair1"></div>
+                <div class="stair-rect stair2"></div>
+                <div class="stair-rect stair3"></div>
+                <div class="stair-rect stair4"></div>
+                <div class="stair-rect stair5"></div>
+            </div>
+        </div>
+
+        <!-- Lower Track -->
+        <div class="track track2">
+            <div class="track-lines"></div>
+            <div class="train train2">
+                <div class="train-car"></div>
+                <div class="train-car"></div>
+                <div class="train-car"></div>
+                <div class="train-car"></div>
+                <div class="train-car"></div>
+                <div class="train-car"></div>
+                <div class="train-car"></div>
+                <div class="train-car"></div>
+                <div class="train-car"></div>
+                <div class="train-car"></div>
+                <div class="train-car"></div>
+                <div class="train-car"></div>
+            </div>
+        </div>
+
+        <!-- Dots for Simulation -->
+        <div id="red-dot-container"></div>
+        <div id="cyan-dot-container"></div>
+
+        <!-- GUI for Metrics -->
+        <div class="gui">
+            <h2>Metrics</h2>
+            <div>Crowd Density: <span id="crowd-density">0</span></div>
+            <div>Passenger Waiting Time: <span id="average-waiting-time">0</span> seconds</div>
+            <div>Platform Congestion: <span id="platform-congestion">0</span></div>
+        </div>
+
+        <!-- Timer for Train Arrival -->
+        <div class="timer">
+            <h2>Next Train in: <span id="train-timer">10</span> seconds</h2>
+        </div>
+    </div>
+
+    <!-- Description -->
+    <div class="description">
+        <p>This simulation models a metro train station environment where various elements such as trains, tracks, and colorful
+            moving dots (representing people) come together to depict the flow and behavior of passengers. Each component
+            plays a specific role:</p>
+    
+        <p><strong>Trains and Tracks:</strong> These elements outline the station's layout and simulate the basic mechanics
+            of train movements, which helps contextualize the passenger flow within the station.</p>
+    
+        <p><strong>Moving Dots (Passengers):</strong> The different colored dots represent passengers, with colors
+            indicating their actions: red for exiting and cyan for boarding. This animation illustrates the routes
+            passengers take, visualizing the flow and density of the crowd.</p>
+    
+        <p><strong>Stairs and Gaps:</strong> These features represent the structural aspects of the station that influence
+            passenger movement. They help segment the station, demonstrating how passengers navigate physical barriers and
+            transitions between tracks.</p>
+    
+        <p><strong>Metrics Tracking:</strong> The simulation quantifies elements such as crowd density, waiting times, and
+            platform congestion in real-time based on the movement of the dots. This functionality provides immediate
+            insights into how changes in train schedules or passenger behavior might impact these metrics.</p>
+    
+        <p><strong>Train Arrival Timer:</strong> A countdown timer updates every second to indicate when the next train will
+            arrive or depart. This element is essential for illustrating how the timing of train arrivals affects passenger
+            flow and station congestion.</p>
+
+        <p>In summary, this simulation provides a dynamic representation of train station operations, allowing users to
+            visualize passenger flow and the effects of various factors on transit efficiency.</p>
+            <br>
+        
+    </div>
+
+
+    <script>
+        const redDotContainer = document.getElementById('red-dot-container');
+        const cyanDotContainer = document.getElementById('cyan-dot-container');
+        const crowdDensityElement = document.getElementById('crowd-density');
+        const waitingTimeElement = document.getElementById('average-waiting-time');
+        const platformCongestionElement = document.getElementById('platform-congestion');
+        const trainTimerElement = document.getElementById('train-timer');
+
+        let crowdDensity = 0;
+        let totalWaitingTime = 0;
+        let passengerCount = 0;
+        let platformCongestion = 0;
+        let trainsAtStation = false;
+        let trainArrivalCountdown = 10;
+
+        // Update train timer every second
+        setInterval(() => {
+            if (trainArrivalCountdown === 0) {
+                trainArrivalCountdown = 10; // Reset timer after train arrives
+                trainsAtStation = !trainsAtStation;
+                if (trainsAtStation) {
+                    // Start animation of dots as train arrives
+                    loadPaths();
+                }
+            } else {
+                trainArrivalCountdown--;
+            }
+            trainTimerElement.textContent = trainArrivalCountdown;
+        }, 1000);
+
+        // Function to create and animate multiple dots along a path
+        function createMultipleMovingDots(path, colorClass, container, numDots = 5, delay = 200, exiting = false) {
+            for (let j = 0; j < numDots; j++) {
+                setTimeout(() => {
+                    createMovingDot(path, colorClass, container, exiting);
+                }, j * delay); // Stagger each dot by 'delay' milliseconds
+            }
+        }
+
+        // Function to animate a dot along a path
+        function createMovingDot(path, colorClass, container, exiting = false) {
+            const dot = document.createElement('div');
+            dot.classList.add('dot', colorClass);
+            container.appendChild(dot);
+
+            let i = 0;
+            let startTime = Date.now();
+
+            function moveDot() {
+                if (i < path.length) {
+                    dot.style.left = `${path[i].x}px`;
+                    dot.style.top = `${path[i].y}px`;
+                    i++;
+                    requestAnimationFrame(moveDot);
+                } else {
+                    container.removeChild(dot); // Remove the dot once it's done moving
+                    // If this is a boarding passenger (not exiting), update metrics
+                    if (!exiting) {
+                        // Calculate waiting time for boarding passengers
+                        let waitingTime = (Date.now() - startTime) / 1000; // seconds
+                        totalWaitingTime += waitingTime;
+                        passengerCount++;
+                        crowdDensity--;
+                        platformCongestion--;
+                    }
+                    updateMetrics();
+                }
+            }
+
+            if (!exiting) {
+                crowdDensity++;
+                platformCongestion++;
+            }
+
+            // Update dot color based on waiting time
+            setInterval(() => {
+                let waitingTime = (Date.now() - startTime) / 1000;
+                if (waitingTime > 8) {
+                    dot.style.boxShadow = '0 0 16px 0 red';
+                } else if (waitingTime > 4) {
+                    dot.style.boxShadow = '0 0 16px 0 yellow';
+                } else {
+                    dot.style.boxShadow = '0 0 16px 0 green';
+                }
+            }, 1000);
+
+            moveDot();
+        }
+
+        // Load JSON data for in and out paths
+        function loadPaths() {
+            const inFiles = ['line1.json', 'line2.json', 'line3.json', 'line4.json', 'line5.json', 'line6.json', 'line7.json', 'line8.json'];
+            const outFiles = ['line9.json', 'line10.json', 'line11.json', 'line12.json', 'line13.json', 'line14.json', 'line15.json', 'line16.json', 'line17.json', 'line18.json', 'line19.json', 'line20.json'];
+
+            if (trainsAtStation) {
+                // Passengers boarding the train (cyan)
+                inFiles.forEach((file, index) => {
+                    fetch(file)
+                        .then(response => response.json())
+                        .then(data => {
+                            const pathCoordinates = data[0];
+                            createMultipleMovingDots(pathCoordinates, 'cyan-dot', cyanDotContainer, 100, 300);
+                        })
+                        .catch(error => console.error(`Error loading ${file}:`, error));
+                });
+
+                // Passengers exiting the train (red)
+                outFiles.forEach((file, index) => {
+                    fetch(file)
+                        .then(response => response.json())
+                        .then(data => {
+                            const pathCoordinates = data[0];
+                            createMultipleMovingDots(pathCoordinates, 'red-dot', redDotContainer, 100, 300, true);
+                        })
+                        .catch(error => console.error(`Error loading ${file}:`, error));
+                });
+            }
+        }
+
+        // Update GUI metrics
+        function updateMetrics() {
+            crowdDensityElement.textContent = crowdDensity;
+            waitingTimeElement.textContent = (passengerCount > 0 ? (totalWaitingTime / passengerCount).toFixed(2) : 0);
+            platformCongestionElement.textContent = platformCongestion;
+        }
+    </script>
+
+</body>
+
+</html>

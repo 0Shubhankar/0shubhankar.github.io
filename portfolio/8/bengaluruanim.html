@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Bengaluru Dead-End Roads Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../vendor/shared/lib-9eaeb463f1b3/dist/maplibre-gl.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        #map {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script src="../vendor/shared/lib-1c09437b70d7/dist/maplibre-gl.js"></script>
+    <script>
+        const map = new maplibregl.Map({
+            container: 'map',
+            style: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
+            center: [77.5896, 12.9768], // Initial center of the map
+            zoom: 13.8,
+            pitch: 60,
+            bearing: 17.6,
+            antialias: true
+        });
+
+        map.addControl(new maplibregl.NavigationControl(), 'top-right');
+
+        map.on('load', function () {
+            map.addSource('bengaluruDeadEnds', {
+                type: 'geojson',
+                data: './bengaluru_dead_end_edges.geojson' // Ensure this path is correct
+            });
+
+            map.addLayer({
+                id: 'dead-ends',
+                type: 'line',
+                source: 'bengaluruDeadEnds',
+                layout: {},
+                paint: {
+                    'line-color': '#ff0000',
+                    'line-width': 4
+                }
+            });
+
+            let colorState = false; // toggle state
+
+            setInterval(() => {
+                const newColor = colorState ? '#ff0000' : '#ffffff';
+                map.setPaintProperty('dead-ends', 'line-color', newColor);
+                colorState = !colorState; // toggle the state
+            }, 1000); // Change color every second
+
+            let userInteracted = false;
+            let timeoutId;
+
+            const views = [
+                { center: [77.5946, 12.9716], zoom: 13.8, pitch: 90, bearing: 30, speed: 0.5 }, // Central view
+                { center: [77.6799, 12.9716], zoom: 13.5, pitch: 70, bearing: 120, speed: 0.6 }, // East
+                { center: [77.4799, 12.9716], zoom: 13.7, pitch: 60, bearing: 110, speed: 0.5 }, // West
+                { center: [77.5946, 13.0800], zoom: 13.4, pitch: 80, bearing: 130, speed: 0.6 }, // North
+                { center: [77.5946, 12.8800], zoom: 13.0, pitch: 55, bearing: 140, speed: 0.5 }, // South
+                { center: [77.7100, 12.9500], zoom: 13.3, pitch: 85, bearing: 160, speed: 0.7 }, // North-east
+                { center: [77.5000, 12.9500], zoom: 13.9, pitch: 65, bearing: 170, speed: 0.6 }, // North-west
+                { center: [77.7100, 12.9200], zoom: 13.2, pitch: 60, bearing: 150, speed: 0.5 }, // South-east
+                { center: [77.5000, 12.9200], zoom: 13.2, pitch: 75, bearing: 140, speed: 0.7 }, // South-west
+                { center: [77.6200, 13.0200], zoom: 13.5, pitch: 50, bearing: 120, speed: 0.6 }, // North-north-east
+                { center: [77.5700, 12.9000], zoom: 13.8, pitch: 90, bearing: 150, speed: 0.5 }, // South-south-west
+                { center: [77.6300, 12.9700], zoom: 13.6, pitch: 75, bearing: 130, speed: 0.6 }, // Central-east
+                { center: [77.5700, 12.9400], zoom: 13.4, pitch: 70, bearing: 120, speed: 0.5 }, // Central-west
+                { center: [77.6500, 12.9600], zoom: 13.7, pitch: 60, bearing: 110, speed: 0.7 }, // Near Sarjapur Road
+                { center: [77.5600, 13.0000], zoom: 13.5, pitch: 50, bearing: 100, speed: 0.6 }  // Near Yelahanka
+            ];
+
+            let viewIndex = 0;
+
+            const changeView = () => {
+                if (userInteracted) {
+                    // Skip changing the view if the user has interacted
+                    timeoutId = setTimeout(changeView, 20000); // Resume after 20 seconds
+                    userInteracted = false; // Reset user interaction flag
+                    return;
+                }
+
+                if (viewIndex < views.length) {
+                    const { center, zoom, pitch, bearing, speed } = views[viewIndex];
+                    map.flyTo({
+                        center: center,
+                        zoom: zoom,
+                        pitch: pitch,
+                        bearing: bearing,
+                        speed: speed, // Speed of the transition
+                        curve: 1, // Animation curve
+                        easing: t => t // Linear easing
+                    });
+                    viewIndex++;
+                    timeoutId = setTimeout(changeView, 5000); // Change view every 5 seconds
+                } else {
+                    viewIndex = 0;
+                    timeoutId = setTimeout(changeView, 5000); // Restart the animation loop
+                }
+            };
+
+            const resetTimeout = () => {
+                clearTimeout(timeoutId);
+                userInteracted = true;
+                timeoutId = setTimeout(changeView, 2000); // Resume after 20 seconds
+            };
+
+            // Add event listeners to detect user map movement
+            map.on('movestart', resetTimeout);
+
+            changeView();
+        });
+    </script>
+</body>
+
+</html>

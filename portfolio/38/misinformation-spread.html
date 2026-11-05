@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Information Spread Simulation</title>
+    <style>
+         body,
+        html {
+           width: 100%;
+            height: 100%;
+            margin: 0px;
+            display: flex;
+            background-color: black;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            -webkit-font-smoothing: antialiased;
+
+        }
+
+        #canvas {
+            margin: 0px;
+            display: block;
+            background-color: black;
+            flex: 3;
+        }
+
+        #metrics {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            font-size: 12px;
+            z-index: 100;
+            width: 250px;
+        }
+
+        .progress-bar {
+            background-color: #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress {
+            height: 10px;
+            border-radius: 5px;
+        }
+
+        #explanation {
+        position: absolute;
+        bottom: 0px;
+        top:94%;
+        /* Adjust as needed */
+        left: 20%;
+        right:20%;
+        /* Adjust as needed */
+        background-color: 000;
+        /* Semi-transparent background */
+        padding: 10px;
+        border-radius: 10px;
+        /* width: 900px; */
+        /* Fixed width */
+        font-size: 16px;
+        /* Adjurgb(255, 255, 255) */
+        color: rgb(255, 255, 255);
+        z-index: 2;
+        line-height: 1.6;
+        }
+
+        
+    </style>
+    <script src="../vendor/shared/lib-9092ba184a7e/dist/dat.gui.min.js"></script>
+    <script src="../vendor/shared/lib-25023b521d77/dist/three.min.js"></script>
+    <script src="../vendor/shared/lib-1b307bf3cbda/dist/OrbitControls.js"></script>
+</head>
+
+<body>
+    <div id="metrics">
+        <h3>Simulation Metrics</h3>
+        <p><strong>Rate of Spread:</strong> <span id="spreadRate">0</span></p>
+        <p><strong>Conversion Ratio:</strong> <span id="conversionRatio">0%</span></p>
+        <div class="progress-bar">
+            <div id="conversionProgress" class="progress" style="background-color: #4caf50; width: 0%;"></div>
+        </div>
+        <p><strong>Resistant Nodes:</strong> <span id="resistantNodes">0</span></p>
+        <div class="progress-bar">
+            <div id="resistantProgress" class="progress" style="background-color: #f44336; width: 0%;"></div>
+        </div>
+        <p><strong>Average Path Length:</strong> <span id="pathLength">0</span></p>
+        <p><strong>Node Influence Score:</strong> <span id="influenceScore">0</span></p>
+    </div>
+
+
+    <div id = "explanation">
+
+    <p>This simulation is a visual model of how information spreads through a network of connected points, known as nodes.
+        These nodes can either accept or reject the information based on several factors, such as susceptibility, which
+        represents how likely the nodes are to believe the information.
+        The simulation allows users to adjust parameters, such as susceptibility thresholds and information persuasiveness,
+        to observe how these variables affect the spread of information.
+        You can start the simulation by clicking 'Start Spread' in the GUI panel and use the sliders to modify the settings
+        and see the impact in real-time.
+        The purpose of the simulation is to demonstrate how misinformation or correct information can propagate across a
+        network and how different parts of the system are affected.</p>
+
+    
+    <p>In the simulation, a set of nodes is created. These nodes are represented by small glowing spheres, and they
+        symbolize individuals, organizations, or systems within a network. Each node is connected to other nodes by lines,
+        which represent the flow of information between them.</p>
+    
+    <p>The process of information flow starts from the root node, which is the first node created in the center. The root
+        node begins to spread information, which could be true or false. This is visualized by small particles or dots
+        moving from one node to another along the connecting lines. When the information reaches a node, that node decides
+        whether to accept or reject the information based on its susceptibility, which determines how easily it believes the
+        information.</p>
+    
+    <p>Each node has a susceptibility level, which is a value that indicates how likely it is to believe and spread
+        misinformation. If a node’s susceptibility is high, the node turns red, showing that it has accepted the
+        misinformation. However, if a node has a low susceptibility or is connected to weaker, less influential nodes, it
+        can resist the misinformation. Resistant nodes stay in their original color, such as green, to indicate that they
+        did not accept the misinformation.</p>
+    
+    <p>The particles continue to move between nodes, visualizing how information or misinformation spreads across the
+        network. As the simulation progresses, some nodes turn red, showing they have accepted the misinformation, while
+        others remain green, indicating resistance.</p>
+    
+    <p>A network is created by first generating a root node. New nodes are then connected to the root node and to other
+        existing nodes, forming a web-like structure. These new nodes are connected to others using curved lines, simulating
+        the relationships between individuals, organizations, or entities in a social or informational network.</p>
+    
+    <p>After the network is built, the simulation initiates the spread of information. Information particles travel between
+        the nodes, with the speed and likelihood of spreading determined by the strength of the connections between nodes.
+        Each node calculates whether it will accept or reject the information based on its susceptibility score. If the
+        node's susceptibility is high enough, it will turn red to indicate that it has accepted the misinformation.</p>
+    
+    <p>As the simulation runs, various metrics are tracked in real-time and are displayed on the left side of the screen.
+        These metrics include the rate of spread, which measures how fast misinformation is spreading through the network,
+        and the conversion ratio, which shows the percentage of nodes that have accepted the misinformation. This is
+        displayed as a green progress bar. Another important metric is the number of resistant nodes, showing how many nodes
+        resisted the misinformation. This is represented by a red progress bar. Additionally, the average path length
+        indicates how far the misinformation has traveled through the network, and the node influence score measures how
+        many nodes each individual node has influenced.</p>
+    
+    <p>Each node is assigned a random susceptibility value, which determines how likely it is to accept misinformation. When
+        the information reaches a node, the simulation compares the node's susceptibility to a threshold value, which can be
+        adjusted through the control panel. If the node's susceptibility is higher than this threshold, it changes color to
+        red, indicating that it has accepted the misinformation.</p>
+    
+    <p>Once a node accepts misinformation, it can continue to spread it to the nodes it is connected to, creating a chain
+        reaction. Particles, or small dots, flow between the connected nodes to visualize the spread of information or
+        misinformation, moving along the lines that connect the nodes in the network.</p>
+    
+    <p>Throughout the simulation, various metrics are calculated, including how many nodes have accepted misinformation, how
+        many nodes have resisted, and how far the information has spread across the network. The simulation also tracks
+        which nodes are the most influential by counting how many other nodes they have convinced or converted.</p>
+    
+    <p>Users can interact with the simulation using the control panel provided on the right side of the screen. This control
+        panel allows users to adjust the colors of the nodes and the information particles, as well as control how fast the
+        information spreads and how persuasive the information is. Additionally, users can adjust the susceptibility of the
+        nodes and press a start button to begin the spread of information once the network is built.</p>
+    
+    <p>On the left side of the screen, a real-time metrics panel is displayed. It shows important statistics such as how
+        fast the misinformation is spreading, how many nodes are converting to misinformation, and how many nodes are
+        resisting it. These metrics are updated dynamically as the simulation progresses.</p>
+    
+    <p>This simulation is a tool for studying how information or misinformation spreads through a network. By
+        adjusting parameters such as susceptibility and connection strength, users can observe how easily a network can be
+        influenced or how resistant it is to false information. This model can be useful for understanding the dynamics of
+        social media, studying epidemic models, or modeling the spread of rumors and public opinion. In summary, this
+        simulation provides a visual and interactive way to explore how networks of people or systems behave when exposed to
+        spreading information, especially misinformation.</p>
+    </div>
+
+
+   
+    <script>
+        let scene, camera, renderer, controls;
+        let nodes = [];
+        let connections = [];
+        let dataParticles = [];
+        let toDevelop = [];
+        let spreadInformation = false;
+        let conversionCount = 0, spreadRate = 0, resistantCount = 0, totalPaths = 0;
+        let influenceScores = {};
+
+        const metrics = {
+            spreadRate: document.getElementById('spreadRate'),
+            conversionRatio: document.getElementById('conversionRatio'),
+            conversionProgress: document.getElementById('conversionProgress'),
+            resistantNodes: document.getElementById('resistantNodes'),
+            resistantProgress: document.getElementById('resistantProgress'),
+            pathLength: document.getElementById('pathLength'),
+            influenceScore: document.getElementById('influenceScore')
+        };
+
+        const opts = {
+            range: 180,
+            baseConnections: 3,
+            addedConnections: 5,
+            baseSize: 2.5,
+            sizeMultiplier: 0.7,
+            allowedDist: 40,
+            baseDist: 40,
+            addedDist: 30,
+            repaintColor: '#000000',
+            nodeColor: '#00ff99',
+            misinformationColor: '#ff3333',
+            dataSpeed: 0.03,
+            susceptibilityThreshold: 0.5,
+            informationPersuasiveness: 0.2,
+            maxDepth: 4,
+        };
+
+        init();
+        animate();
+
+        function init() {
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(opts.repaintColor);
+
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 100, 300);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.25;
+            controls.screenSpacePanning = false;
+            controls.minDistance = 50;
+            controls.maxDistance = 500;
+
+            const rootNode = createNode(0, 0, 0, opts.baseSize, 'root');
+            nodes.push(rootNode);
+            toDevelop.push({ node: rootNode, depth: 0 });
+            influenceScores[rootNode.id] = 0;
+
+            const gui = new dat.GUI();
+            gui.addColor(opts, 'repaintColor').onChange(() => scene.background.set(opts.repaintColor));
+            gui.addColor(opts, 'nodeColor');
+            gui.addColor(opts, 'misinformationColor');
+            gui.add(opts, 'dataSpeed', 0.001, 0.1).step(0.001);
+            gui.add(opts, 'susceptibilityThreshold', 0, 1).step(0.01).name('Susceptibility Threshold');
+            gui.add(opts, 'informationPersuasiveness', 0, 1).step(0.01).name('Information Persuasiveness');
+            gui.add({ start: startInformationSpread }, 'start').name('Start Spread');
+
+            developNodes();
+        }
+
+        function startInformationSpread() {
+            spreadInformation = true;
+        }
+
+        function developNodes() {
+            while (toDevelop.length > 0) {
+                const { node, depth } = toDevelop.shift();
+                if (depth < opts.maxDepth) {
+                    createConnections(node, depth + 1);
+                }
+            }
+        }
+
+        function createNode(x, y, z, size, type) {
+            const geometry = new THREE.SphereGeometry(size, 16, 16);
+            const material = new THREE.MeshPhongMaterial({
+                color: opts.nodeColor,
+                emissive: opts.nodeColor,
+                emissiveIntensity: 0.6,
+                shininess: 100,
+            });
+            const node = new THREE.Mesh(geometry, material);
+            node.position.set(x, y, z);
+            node.userData = {
+                type: type || 'neutral',
+                susceptibility: Math.random(),
+                hasMisinformation: false,
+                influence: 0,
+            };
+            scene.add(node);
+            influenceScores[node.id] = 0;
+            return node;
+        }
+
+        function createConnections(node, depth) {
+            const connectionsNum = opts.baseConnections + Math.floor(Math.random() * opts.addedConnections);
+
+            for (let i = 0; i < connectionsNum; i++) {
+                const dist = opts.baseDist + Math.random() * opts.addedDist;
+                const angle1 = Math.random() * Math.PI * 2;
+                const angle2 = Math.random() * Math.PI * 2;
+
+                const x = node.position.x + dist * Math.sin(angle1) * Math.cos(angle2);
+                const y = node.position.y + dist * Math.sin(angle1) * Math.sin(angle2);
+                const z = node.position.z + dist * Math.cos(angle1);
+
+                const newNode = createNode(x, y, z, opts.baseSize * opts.sizeMultiplier, 'neutral');
+                nodes.push(newNode);
+
+                const material = new THREE.LineBasicMaterial({ color: opts.nodeColor });
+                const curve = new THREE.CubicBezierCurve3(
+                    node.position,
+                    new THREE.Vector3(node.position.x + dist / 4, node.position.y + dist / 4, node.position.z + dist / 4),
+                    new THREE.Vector3(newNode.position.x - dist / 4, newNode.position.y - dist / 4, newNode.position.z - dist / 4),
+                    newNode.position
+                );
+                const geometry = new THREE.BufferGeometry().setFromPoints(curve.getPoints(50));
+                const connection = new THREE.Line(geometry, material);
+                scene.add(connection);
+                connections.push(connection);
+
+                createDataParticle(node.position, newNode.position);
+
+                toDevelop.push({ node: newNode, depth: depth });
+            }
+        }
+
+        function createDataParticle(startPos, endPos) {
+            const geometry = new THREE.SphereGeometry(0.5, 8, 8);
+            const material = new THREE.MeshBasicMaterial({ color: opts.misinformationColor });
+            const particle = new THREE.Mesh(geometry, material);
+            scene.add(particle);
+
+            dataParticles.push({
+                particle: particle,
+                startPos: startPos.clone(),
+                endPos: endPos.clone(),
+                progress: 0
+            });
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (spreadInformation) {
+                spreadRate = 0;
+                resistantCount = 0;
+                nodes.forEach(node => {
+                    if (!node.userData.hasMisinformation) {
+                        const connectedNodes = getConnectedNodes(node);
+                        connectedNodes.forEach(connectedNode => {
+                            attemptMisinformationSpread(node, connectedNode);
+                        });
+                    }
+                });
+            }
+
+            dataParticles.forEach(data => {
+                data.progress += opts.dataSpeed;
+                if (data.progress >= 1) data.progress = 0;
+                data.particle.position.lerpVectors(data.startPos, data.endPos, data.progress);
+            });
+
+            controls.update();
+            renderer.render(scene, camera);
+
+            updateMetrics();
+        }
+
+        function getConnectedNodes(node) {
+            const connectedNodes = [];
+            connections.forEach(connection => {
+                const points = connection.geometry.attributes.position.array;
+                if (points.includes(node.position.x) && points.includes(node.position.y) && points.includes(node.position.z)) {
+                    nodes.forEach(n => {
+                        if (n !== node && !connectedNodes.includes(n)) {
+                            connectedNodes.push(n);
+                        }
+                    });
+                }
+            });
+            return connectedNodes;
+        }
+
+        function attemptMisinformationSpread(fromNode, toNode) {
+            const connectionStrength = Math.random();
+            const infoFactor = connectionStrength * opts.informationPersuasiveness;
+            const susceptibility = toNode.userData.susceptibility;
+
+            if (!toNode.userData.hasMisinformation && susceptibility + infoFactor > opts.susceptibilityThreshold) {
+                toNode.userData.hasMisinformation = true;
+                toNode.material.color.set(opts.misinformationColor);
+                spreadRate++;
+                conversionCount++;
+
+                influenceScores[fromNode.id]++;
+                totalPaths += 1;
+            } else {
+                resistantCount++;
+            }
+        }
+
+        function updateMetrics() {
+            const conversionRatio = ((conversionCount / nodes.length) * 100).toFixed(2);
+            const avgPathLength = totalPaths === 0 ? 0 : (totalPaths / conversionCount).toFixed(2);
+            const maxInfluence = Math.max(...Object.values(influenceScores));
+
+            metrics.spreadRate.innerText = spreadRate;
+            metrics.conversionRatio.innerText = `${conversionRatio}%`;
+            metrics.conversionProgress.style.width = `${conversionRatio}%`;
+            metrics.resistantNodes.innerText = resistantCount;
+            metrics.resistantProgress.style.width = `${(resistantCount / nodes.length) * 100}%`;
+            metrics.pathLength.innerText = avgPathLength;
+            metrics.influenceScore.innerText = maxInfluence;
+        }
+
+        window.addEventListener('resize', function () {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+
+    
+
+</body>
+
+</html>

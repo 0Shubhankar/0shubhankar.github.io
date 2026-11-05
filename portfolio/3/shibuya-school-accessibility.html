@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exploring School Accessibility in Shibuya: Isochrone Maps Analysis</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            -webkit-font-smoothing: antialiased;
+            background-color: #ffffff;
+            color: #333333;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .section,
+        .html-content {
+            width: 50%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .section img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .html-content iframe {
+            width: 95%;
+            height: 88%;
+            border: none;
+        }
+
+        .text-overlay {
+            position: absolute;
+            z-index: 2;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+            transition: opacity 2s ease-in-out, transform 2s ease-in-out;
+        }
+
+        .text-overlay h2 {
+            font-size: 2vw;
+            margin: 0 0 10px 0;
+        }
+
+        .text-overlay p {
+            font-size: 1.5em;
+            line-height: 1.4;
+        }
+
+        .article-section p,
+        .article-section ul {
+            line-height: 1.6;
+            font-size: 1.1em;
+            max-width: 800px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="section" id="section1">
+            <img src="isochrone_maps.gif" alt="Isochrone Maps GIF">
+            <div class="text-overlay">
+                <h2>Exploring School Accessibility in Shibuya, Japan</h2>
+                <p>Isochrone Maps Analysis</p>
+            </div>
+        </div>
+
+        <div class="html-content">
+            <iframe src="shibuya_schools_isochrones.html"></iframe>
+        </div>
+    </div>
+    <div class="article-section">
+        <h3>Overview</h3>
+        <p>The objective of this process was to generate isochrone maps for multiple school locations in Shibuya, Tokyo,
+            Japan, representing areas reachable within specific walking times. Using OSMnx, the study area was
+            configured,
+            the walking network was acquired, and the location data was cleaned to focus on high schools, middle
+            schools,
+            and primary schools. A walking speed of 4.5 km/h was set, travel times were calculated, and isochrones for
+            5,
+            10, 15, and 25-minute intervals were created.</p>
+
+        <h3>Analysis</h3>
+        <p>The maps illustrate isochrone maps for multiple school locations in Shibuya, Tokyo, Japan, highlighting areas
+            accessible within specific walking times. The maps reveal that accessibility zones are concentrated in the
+            southeastern part of Shibuya, indicating that schools are primarily located in this region. The color
+            gradient
+            from dark blue to light yellow represents travel times, with darker colors indicating longer travel times (up to 25 minutes) and lighter colors indicating shorter travel times
+            (5 minutes).</p>
+
+        <p>The distribution of schools is observed to be clustered in southeastern neighborhood, providing multiple
+            schooling
+            options within walking distance in the southeastern part of Shibuya. The smooth and consistent change in
+            accessibility zones suggests effective urban planning, supporting easy access to schools within reasonable
+            walking distances. However, large areas in the northern and western parts of Shibuya lack accessibility
+            zones,
+            indicating potential areas for further investigation to ensure equitable access to educational facilities.
+        </p>
+
+        <p>The well-defined isochrone boundaries indicate high-quality pedestrian infrastructure in the analyzed areas,
+            suggesting that the southeastern part of Shibuya is well-served by educational facilities. Despite its
+            limitations, this analysis provides valuable insights into the current state of school accessibility in
+            Shibuya.</p>
+
+        <h3>Limitations</h3>
+        <ul>
+            <li><strong>Geographic Scope:</strong> The analysis is focused solely on Shibuya and does not consider the impact on nearby regions, potentially overlooking insights from other areas. The clustering of schools within Shibuya may not accurately represent
+            the overall distribution and accessibility of schools in the surrounding areas.</li>
+            <li><strong>Data Scope:</strong> The analysis includes only high schools, middle schools, and primary
+                schools, excluding other educational institutions like vocational schools, international schools, and
+                special education schools, which may limit the comprehensiveness of the analysis. The analysis is based
+                on data from OpenStreetMap, which may have inaccuracies or incomplete information about school locations
+                and pedestrian pathways.</li>
+            <li><strong>Temporal Scope:</strong> The analysis represents a static snapshot of accessibility based on
+                current infrastructure and does not account for potential future changes in urban development, school
+                locations, or infrastructure improvements.</li>
+        </ul>
+    </div>
+
+    <script src="../vendor/shared/lib-6d633d59411b/dist/gsap.min.js"></script>
+    <script src="../vendor/shared/lib-f10f0ab507c1/dist/ScrollMagic.min.js"></script>
+    <script src="../vendor/shared/lib-8e216972d268/dist/animation.gsap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // ScrollMagic controller
+            const controller = new ScrollMagic.Controller();
+
+            // Move and fade out text overlay for image section 1
+            new ScrollMagic.Scene({
+                triggerElement: '#section1',
+                triggerHook: 0.5,
+                duration: '100%'
+            })
+                .setTween(gsap.to('#section1 .text-overlay', { y: '-100%', opacity: 0, ease: 'power1.inOut', delay: 0 }))
+                .addTo(controller);
+
+            // Move the image up after the text has fully moved up
+            new ScrollMagic.Scene({
+                triggerElement: '#section1',
+                triggerHook: 0,
+                offset: document.querySelector('#section1 .text-overlay').offsetHeight, // Starts after the text overlay has moved up
+                duration: '50%'
+            })
+                .setTween(gsap.to('#section1 img', { y: '0%', opacity: 1, ease: 'power1.inOut', delay: 0 }))
+                .addTo(controller);
+        });
+    </script>
+</body>
+
+</html>

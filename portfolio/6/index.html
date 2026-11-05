@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Leaflet Map with Custom Animated Icons</title>
+    <link rel="stylesheet" href="../vendor/shared/lib-301c4190d5f2/dist/leaflet.css" />
+    <script src="../vendor/shared/lib-51d788816744/dist/papaparse.min.js"></script>
+
+    <style>
+        html,
+        body {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+            background: black;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+
+        .moving-text-container {
+            overflow: hidden;
+            position: relative;
+            width: 30px;
+            /* Adjust width as needed */
+        }
+
+        .moving-text {
+            position: absolute;
+            white-space: nowrap;
+        }
+
+        .leaflet-control-custom {
+            background-color: #00ff41;
+            padding: 10px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100px;
+            border-radius: 5px;
+            color: white;
+        }
+
+        .leaflet-control-custom button {
+            background: none;
+            border: none;
+            font-size: 2.0em;
+            cursor: pointer;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script src="../vendor/shared/lib-d39c45fd86ca/dist/leaflet.js"></script>
+    <script type="module">
+        import { getCustomIcon, createAnimationClass } from './customIcon.js';
+
+        // Initialize the Leaflet map
+        var map = L.map('map').setView([38.8928901311895, -77.020314939909], 13);
+
+        // Add CartoDB Dark Matter tile layer
+        L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | Data source: <a href="https://opendata.dc.gov/datasets/3f28bc3ad77f49079efee0ac05d8464c_0/explore" target="_blank">Open Data DC</a>'
+            }).addTo(map);
+
+        let allData = [];
+        let currentDisplayedCount = 200;
+
+        // Function to create a single hollow circle
+        function createHollowCircle(lat, lon) {
+            const circleOptions = {
+                color: 'green',
+                fillColor: 'transparent',
+                fillOpacity: 0,
+                weight: 2
+            };
+
+            const radius = 10; // Adjust radius as needed
+            L.circle([lat, lon], { ...circleOptions, radius }).addTo(map);
+        }
+
+        // Function to load CSV data
+        function loadCSVData(url) {
+            Papa.parse(url, {
+                download: true,
+                header: true,
+                complete: function (results) {
+                    console.log('CSV Data:', results); // Debugging statement
+
+                    // Parse sentiment scores and sort data
+                    allData = results.data.filter(row => row.sentiment_score && !isNaN(row.sentiment_score));
+                    allData.sort((a, b) => Math.abs(b.sentiment_score) - Math.abs(a.sentiment_score));
+
+                    displayData(currentDisplayedCount);
+                }
+            });
+        }
+
+        // Function to display data
+        function displayData(count) {
+            const animationClass = createAnimationClass(20); // Adjust speed as needed
+            map.eachLayer(function (layer) {
+                if (layer instanceof L.Marker || layer instanceof L.Circle) {
+                    map.removeLayer(layer);
+                }
+            });
+            allData.slice(0, count).forEach(row => {
+                const text = row.COMMENTS;
+                const lat = parseFloat(row.Y);
+                const lon = parseFloat(row.X);
+                console.log(`Lat: ${lat}, Lon: ${lon}, Text: ${text}, Sentiment: ${row.sentiment_score}`); // Debugging statement
+                if (!isNaN(lat) && !isNaN(lon) && text) {
+                    // Create hollow circle
+                    createHollowCircle(lat, lon);
+
+                    // Create marker with custom icon inside the circle
+                    const icon = getCustomIcon(text, animationClass);
+                    const marker = L.marker([lat, lon], {
+                        icon,
+                        iconAnchor: [15, 15], // Center the icon
+                        riseOnHover: true
+                    }).addTo(map).bindPopup(text);
+                } else {
+                    console.warn(`Invalid data at row:`, row); // Debugging statement
+                }
+            });
+        }
+
+        // Load CSV data
+        loadCSVData('cleaned_csv_file.csv'); // Replace with the path to your CSV file
+
+        // Add custom control to increase the number of displayed rows
+        L.Control.Custom = L.Control.extend({
+            onAdd: function (map) {
+                var div = L.DomUtil.create('div', 'leaflet-control-custom');
+
+                var increaseButton = L.DomUtil.create('button', '', div);
+                increaseButton.innerHTML = '+';
+                L.DomEvent.on(increaseButton, 'click', function () {
+                    currentDisplayedCount += 100;
+                    displayData(currentDisplayedCount);
+                });
+
+                var label = L.DomUtil.create('span', '', div);
+                label.innerHTML = 'Comments';
+
+                var decreaseButton = L.DomUtil.create('button', '', div);
+                decreaseButton.innerHTML = '-';
+                L.DomEvent.on(decreaseButton, 'click', function () {
+                    if (currentDisplayedCount > 100) {
+                        currentDisplayedCount -= 100;
+                        displayData(currentDisplayedCount);
+                    }
+                });
+
+                return div;
+            }
+        });
+
+        L.control.custom = function (opts) {
+            return new L.Control.Custom(opts);
+        }
+
+        L.control.custom({ position: 'topright' }).addTo(map);
+
+
+    </script>
+</body>
+
+</html>

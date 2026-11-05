@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>D3 Cluster Animation with CSV Data</title>
+    <script src="../vendor/shared/lib-5e32778fbbdd/dist/d3.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        svg {
+            display: block;
+        }
+
+        .tooltip {
+            position: absolute;
+            text-align: center;
+            width: auto;
+            height: auto;
+            padding: 8px;
+            font: 12px sans-serif;
+            background: lightsteelblue;
+            border: 0px;
+            border-radius: 8px;
+            pointer-events: none;
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Animated Clusters with D3.js and CSV Data</h1>
+    <script>
+        var width = window.innerWidth,
+            height = window.innerHeight,
+            padding = 1.5,
+            clusterPadding = 6,
+            maxRadius = 30,
+            m = 5; // Number of distinct clusters (0-4)
+
+        var color = d3.scale.category10().domain(d3.range(m));
+        var clusters = new Array(m);
+        var nodes = [];
+
+        d3.csv("cleaned_csv_file2.csv", function (error, data) {
+            if (error) throw error;
+
+            var sentimentScale = d3.scale.linear()
+                .domain([d3.min(data, function (d) { return +d.sentiment_score; }), 0])
+                .range([5, maxRadius]);
+
+            data.forEach(function (d) {
+                d.cluster = +d.cluster;
+                d.sentiment_score = +d.sentiment_score;
+
+                var radius = sentimentScale(d.sentiment_score) / 4;
+
+                var node = {
+                    cluster: d.cluster,
+                    radius: radius,
+                    x: Math.cos(d.cluster / m * 2 * Math.PI) * 200 + width / 2 + Math.random(),
+                    y: Math.sin(d.cluster / m * 2 * Math.PI) * 200 + height / 2 + Math.random(),
+                    comments: d.COMMENTS,
+                    sentiment_score: d.sentiment_score
+                };
+
+                if (!clusters[d.cluster] || (radius > clusters[d.cluster].radius)) clusters[d.cluster] = node;
+                nodes.push(node);
+            });
+
+            createVisualization();
+        });
+
+        function createVisualization() {
+            var nodeCount = nodes.length;
+
+            var force = d3.layout.force()
+                .nodes(nodes)
+                .size([width, height])
+                .gravity(Math.min(0.1, 1000 / nodeCount)) // Adjust gravity based on number of nodes
+                .charge(-Math.min(30, 1000 / nodeCount)) // Adjust charge based on number of nodes
+                .alpha(0.1) // Start with a lower alpha value for a slower start
+                .on("tick", tick)
+                .start();
+
+            var svg = d3.select("body").append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+            var tooltip = d3.select("body").append("div")
+                .attr("class", "tooltip");
+
+            var node = svg.selectAll("circle")
+                .data(nodes)
+                .enter().append("circle")
+                .style("fill", function (d) { return color(d.cluster); })
+                .call(force.drag)
+                .on("mouseover", function (d) {
+                    tooltip.transition()
+                        .duration(200)
+                        .style("opacity", .9);
+                    tooltip.html(d.comments)
+                        .style("left", (d3.event.pageX + 5) + "px")
+                        .style("top", (d3.event.pageY - 28) + "px");
+                })
+                .on("mouseout", function (d) {
+                    tooltip.transition()
+                        .duration(500)
+                        .style("opacity", 0);
+                });
+
+            node.transition()
+                .duration(750)
+                .delay(function (d, i) { return i * 5; })
+                .attrTween("r", function (d) {
+                    var i = d3.interpolate(0, d.radius);
+                    return function (t) { return d.radius = i(t); };
+                });
+
+            function tick(e) {
+                node.each(cluster(10 * e.alpha * e.alpha))
+                    .each(collide(.5))
+                    .attr("cx", function (d) { return d.x; })
+                    .attr("cy", function (d) { return d.y; });
+            }
+
+            function cluster(alpha) {
+                return function (d) {
+                    var cluster = clusters[d.cluster];
+                    if (cluster === d) return;
+                    var x = d.x - cluster.x,
+                        y = d.y - cluster.y,
+                        l = Math.sqrt(x * x + y * y),
+                        r = d.radius + cluster.radius;
+                    if (l != r) {
+                        l = (l - r) / l * alpha;
+                        d.x -= x *= l;
+                        d.y -= y *= l;
+                        cluster.x += x;
+                        cluster.y += y;
+                    }
+                };
+            }
+
+            function collide(alpha) {
+                var quadtree = d3.geom.quadtree(nodes);
+                return function (d) {
+                    var r = d.radius + maxRadius + Math.max(padding, clusterPadding),
+                        nx1 = d.x - r,
+                        nx2 = d.x + r,
+                        ny1 = d.y - r,
+                        ny2 = d.y + r;
+                    quadtree.visit(function (quad, x1, y1, x2, y2) {
+                        if (quad.point && (quad.point !== d)) {
+                            var x = d.x - quad.point.x,
+                                y = d.y - quad.point.y,
+                                l = Math.sqrt(x * x + y * y),
+                                r = d.radius + quad.point.radius + (d.cluster === quad.point.cluster ? padding : clusterPadding);
+                            if (l < r) {
+                                l = (l - r) / l * alpha;
+                                d.x -= x *= l;
+                                d.y -= y *= l;
+                                quad.point.x += x;
+                                quad.point.y += y;
+                            }
+                        }
+                        return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
+                    });
+                };
+            }
+        }
+    </script>
+</body>
+
+</html>

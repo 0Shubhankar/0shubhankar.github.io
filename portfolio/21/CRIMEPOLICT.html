@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Policy Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+    
+        body,
+        html {
+            height: 100%;
+            font-family: 'Times New Roman', Times, serif;
+        }
+    
+        .container,
+        .text-section {
+            max-width: 60%;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffffff;
+        }
+    
+        .background-image {
+            background-image: url('https://picsum.photos/1920/1080');
+            background-size: cover;
+            background-position: center;
+            height: 100%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+    
+        .content {
+            position: relative;
+            color: #fff;
+            text-align: center;
+            z-index: 2;
+        }
+    
+        .content h1 {
+            font-size: 3.6em;
+            margin-bottom: 0.5em;
+        }
+    
+        .content h2 {
+            font-size: 1.8em;
+            margin-bottom: 1em;
+        }
+    
+        .text-section p {
+            margin-bottom: 1.5em;
+            font-size: 1.44em;
+            line-height: 1.0;
+        }
+    
+        .decision-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2em;
+        }
+    
+        .decision-section img {
+            width: 50%;
+            max-height: 400px;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+    
+        .decision-text {
+            width: 50%;
+            font-size: 1.44em;
+            line-height: 1.0;
+        }
+    
+        .option-boxes {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2em;
+        }
+    
+        .option {
+            width: 45%;
+            padding: 1.5em;
+            background-color: #00ffbf;
+            border: 2px solid #ccc;
+            text-align: center;
+            cursor: pointer;
+            font-size: 1.14em;
+        }
+    
+        .option:hover {
+            background-color: #ddd;
+        }
+    
+        .hidden {
+            display: none;
+        }
+
+        .container {
+        transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+        transform: translateY(20px);
+        opacity: 0;
+        }
+
+        .container.show {
+        transform: translateY(0);
+        opacity: 1;
+        }
+
+        html {
+        scroll-behavior: smooth;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="background-image">
+        <div class="overlay"></div>
+        <div class="content">
+            <h1>Policy Game Title</h1>
+            <h2>Subheading or Tagline</h2>
+        </div>
+    </div>
+
+    <div class="text-section">
+        <!-- Introductory text -->
+        <p><strong>Welcome to Spudsville, Mayor Tater! 🥔🏙️</strong></p>
+        
+        <p>In the once peaceful town of Spudsville, crime is on the rise—someone’s been mashing more than just potatoes! 🕵️‍♂️
+        </p>
+        
+        <p>Burglaries, runaway, and late-night thefts have the citizens on edge. At the heart of it all is
+            Mayor Tater, a spud-loving leader juggling crime rates with keeping Spudsville’s starch-based economy afloat.</p>
+        
+        <p>As the streets of Spudsville grow more dangerous, it’s up to Mayor Tater to peel back the layers of this crime wave
+            and restore order before the city crumbles like a bad batch of fries! 🍟</p>
+        
+        <p><strong>HOW DOES MAYOR TATER RESPOND?</strong></p>
+        
+        <p><strong>Increase Police Presence</strong></p>
+        <p>Deploy more officers across Spudsville! Will a stronger force of Tater Troopers bring order, or will it fry the
+            city’s already tight budget? 🚓🥔</p>
+        
+        <p><strong>Implement Public Surveillance</strong></p>
+        <p>Set up cameras across the city to keep a closer eye on crime. Will it help, or will the citizens of Spudsville feel
+            spied on in their potato patches? 🎥🍟</p>
+        
+        <p><strong>What’s your move, Mayor? 🌍🌍</strong></p>
+    
+        <div class="option-boxes">
+            <div class="option" id="optionA">Increase Police Presence
+        </div>
+            <div class="option" id="optionB">Implement Public Surveillance
+    </div>
+        </div>
+    </div>
+        
+    <!-- Containers for options -->
+        <div id="container-option-A" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p><strong>Tater Troopers on Patrol, Mayor! 🚔🥔</strong></p>
+                    
+                    <p>You’ve chosen to Increase Police Presence across Spudsville, unleashing the Tater Troopers to restore order! The
+                        streets are a little safer, but now you face a bigger decision: How will you guide this growing force?</p>
+                    
+                    <p><strong>Implement a “Zero Tolerance” Policy on Crime</strong></p>
+                    <p>Crack down hard on crime with a strict no-nonsense policy. Will Spudsville finally feel secure, or will it lead to
+                        mashed potatoes of over-policing? 🥔🚨</p>
+                    
+                    <p><strong>Invest in Community Policing</strong></p>
+                    <p>Take a softer approach—focus on building relationships between police and local communities. Will this bring the
+                        peace, or will it take too long to make a dent in crime? 🏘️👮‍♂️</p>
+                    
+                    <p><strong>What’s next, Mayor Tater? 🌍</strong></p>
+</p>
+                </div>
+            </div>
+            <!-- - **New Choices After Consequence**: -->
+            <div class="option-boxes">
+                <div class="option" id="optionA1">Increase police presence and implement a “zero tolerance” policy on crime.</div>
+                <div class="option" id="optionA2">Invest in community policing and focus on building relationships between police and local communities.
+            </div>
+            </div>
+        </div>
+        <div id="container-option-B" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p>Eyes on Spudsville, Mayor! 🎥🥔</p>
+                
+                <p>You’ve chosen to Implement Public Surveillance, installing cameras across Spudsville to keep an eye on the tater
+                    thieves and fry bandits! But now, the next big decision looms—how far will you take it?</p>
+                
+                <p><strong>Option B1: Deploy Full Surveillance</strong><br>
+                    Roll out the tech—cameras and facial recognition across public areas. Will this catch the criminals, or will
+                    Spudsville’s citizens feel like they’re living in a potato-powered dystopia? 🕵️‍♂️🎥</p>
+                
+                <p><strong>Option B2: Focus on Social Programs</strong><br>
+                    Reject widespread surveillance and invest in social programs to tackle crime at the root. But will the lack of
+                    cameras make Spudsville more vulnerable to potato pilferers? 🏘️🌱</p>
+                
+                <p>What’s your next move, Mayor Tater? 🌍</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionB1">Deploy surveillance technologies, including cameras and facial recognition, in public areas.</div>
+                <div class="option" id="optionB2">Reject widespread surveillance and focus on social programs to prevent crime.</div>
+            </div>
+        </div>
+        <div id="container-option-A1" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Zero Tolerance Takes Over, Mayor! 🥔🚨</p>
+                    
+                    <p>You’ve chosen to implement a "Zero Tolerance" Policy on Crime, cracking down hard on Spudsville’s criminals. The
+                        streets are safer, but tensions are rising. Now, you must choose how to deal with the growing pressure. Will you
+                        handle the backlash or stick to your guns?</p>
+                    
+                    <p><strong>A1.1: Address Public Backlash with Police Accountability</strong><br>
+                        Ease the public's worries by adding accountability measures—monitoring, oversight, and transparency. Will this calm
+                        Spudsville’s concerns or be seen as a half-baked compromise? 🎥🚓</p>
+                    
+                    <p><strong>A1.2: Double Down on Law-and-Order</strong><br>
+                        Go all-in! Dismiss civil liberty concerns and tighten the grip on crime. But will Spudsville feel secure or
+                        smothered under this heavy-handed approach? 🥔🔒</p>
+                    
+                    <p>What’s your move, Mayor Tater? 🌍</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionA1.1">Address public backlash by implementing police accountability measures.</div>
+                <div class="option" id="optionA1.2">Double down on the law-and-order approach, dismissing civil liberty concerns.
+</div>
+            </div>
+        </div>
+      
+
+        <div id="container-option-A2" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Building Bridges, Mayor! 🏘️👮‍♂️</p>
+                    
+                    <p>You’ve chosen to Invest in Community Policing, focusing on relationships between the Tater Troopers and Spudsville’s
+                        residents. Crime rates are slowly dropping, and trust is growing—but some say it’s not happening fast enough. While
+                        most are cheering your efforts, the pressure is on for quicker results.</p>
+                    
+                    <p><strong>New Choices After Consequence:</strong></p>
+                    
+                    <p><strong>A2.1: Combine Community Policing with Targeted Enforcement</strong><br>
+                        Keep community policing but ramp up enforcement in high-crime areas. Will this balance trust and action, or will it
+                        feel like a crackdown in certain parts of Spudsville? 🚓🎯</p>
+                    
+                    <p><strong>A2.2: Invest in Social Programs</strong><br>
+                        Focus more on the root causes of crime—poverty, education, and social support. Will this long-term approach pay off,
+                        or is it too slow to address the current crisis? 🌱📚</p>
+                    
+                    <p>What’s your move, Mayor? 🌍</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionA2.1">ombine community policing with targeted enforcement in high-crime areas.</div>
+                <div class="option" id="optionA2.2">Invest in social programs that address the root causes of crime, such as poverty and education.</div>
+            </div>
+        </div>
+
+        <div id="container-option-B1" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p>Big Brother in Spudsville, Mayor! 🎥🥔</p>
+                
+                <p>You chose to Deploy Surveillance Technologies, with cameras and facial recognition now watching over Spudsville.
+                    Crime prevention has improved, and law enforcement is responding faster than ever. But there’s a catch—privacy
+                    concerns are growing, and public trust is shaky in some parts of town. The pressure is on!</p>
+                
+                <p><strong>New Choices After Consequence:</strong></p>
+                
+                <p><strong>B1.1: Implement Stricter Privacy Regulations</strong><br>
+                    Reassure the public by introducing rules to protect privacy and ensure responsible use of surveillance. Will this
+                    restore trust without weakening crime prevention? 🔒👀</p>
+                
+                <p><strong>B1.2: Expand Surveillance</strong><br>
+                    Double down! Increase coverage to bring crime even lower, ignoring civil liberties concerns. Will Spudsville become
+                    safer, or will it spark outrage? 🎥🔍</p>
+                
+                <p>Your move, Mayor Tater! 🌍</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionB1.1">Implement stricter privacy regulations to ensure that surveillance is used responsibly.</div>
+                <div class="option" id="optionB1.2">Expand surveillance coverage to further reduce crime, ignoring civil liberties concerns.</div>
+            </div>
+        </div>
+
+        <div id="container-option-B2" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p>Social Programs Over Surveillance, Mayor! 🏘️🌱</p>
+                
+                <p>You’ve chosen to Reject Widespread Surveillance and focus on social programs to prevent crime. Civil liberties
+                    advocates and local communities are cheering, but with less direct action, some areas are seeing an uptick in crime.
+                    The media and political opposition are getting louder, demanding results. The pressure is on, Mayor!</p>
+                
+                <p><strong>New Choices After Consequence:</strong></p>
+                
+                <p><strong>B2.1: Pilot a Community-Based Crime Monitoring Program</strong><br>
+                    Launch neighborhood watches and community patrols to keep crime in check. Will this strengthen local ties or feel
+                    like a band-aid solution? 🕵️‍♂️🏘️</p>
+                
+                <p><strong>B2.2: Invest Heavily in Job Training, Education, and Social Services</strong><br>
+                    Go all-in on tackling the root causes of crime with major investments in social services. Will this long-term
+                    solution pay off, or will Gotham's streets stay dangerous in the short term? 🌱💼</p>
+                
+                <p>What’s next, Mayor? 🌍</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionB2.1">Start a pilot program with community-based crime monitoring (e.g., neighborhood watches)</div>
+                <div class="option" id="optionB2.2">Invest heavily in job training, education, and social services to address the root causes of crime</div>
+            </div>
+        </div>
+
+
+        <!-----------------------------------------------------------        S block options  START   ------------------------------------------------------------------------------>
+
+        <div id="container-option-A1.1" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p>Accountability in Action, Mayor! 🎥🚓</p>
+                
+                <p>You chose to <strong>Address Public Backlash with Police Accountability</strong>, adding oversight and transparency
+                    to ease concerns. While some in Spudsville are applauding the move, public opinion is still divided, and the media
+                    isn’t making it easy on you! 😬</p>
+                
+                <p>Reports are rolling in, questioning whether your approach to crime prevention is effective enough or just a political
+                    move to calm the crowd. As the media shapes the narrative, public perception of you, Mayor, is starting to dip. The
+                    pressure is mounting, and now you need to figure out how to manage the media storm and win back trust. 🌍</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.A">Move ahead decisively to tackle the challenge of media perception and public opinion</div>
+            </div>
+        </div>
+
+        <div id="container-option-A1.2" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Law-and-Order Backfires, Mayor! 🚓🥔</p>
+                    
+                    <p>You chose to <strong>Double Down on the Law-and-Order Approach</strong>, dismissing civil liberty concerns and
+                        cracking down hard on crime. At first, it seemed like a strong move, but it didn’t pan out. 😬</p>
+                    
+                    <p>While crime initially dropped, public outcry over heavy-handed policing grew louder. Civil liberties groups, local
+                        communities, and even some of the Tater Troopers themselves started to push back. The intense policing strained
+                        relationships between law enforcement and the public, leading to protests and further distrust. Instead of restoring
+                        order, the hardline approach created more division in Spudsville.</p>
+                    
+                    <p>Time for a new plan, Mayor! 🌍</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="Play-againA1.2">Play-againA1.2</div>
+            </div>
+        </div>
+
+        <div id="container-option-A2.1" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>### Balancing Trust and Toughness, Mayor! 🚓🎯
+                    
+                    You’ve chosen to **Combine Community Policing with Targeted Enforcement**, hoping to balance trust-building with a
+                    stronger hand in high-crime areas. But the media isn't making things easy! While some Spudsvillians see this as a smart
+                    compromise, others feel like it's just a step back toward heavy-handed policing. 😬
+                    
+                    The media is stirring the pot, reporting that some neighborhoods feel targeted, and public opinion is beginning to sour.
+                    People are questioning if this is the right direction, and you’re finding yourself at the center of the storm. Time to
+                    manage the narrative, Mayor—before it spins out of control! 🌍</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.B">Move ahead decisively to tackle the challenge of media perception and public opinion</div>
+            </div>
+        </div>
+
+
+        <div id="container-option-A2.2" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p>Social Programs for the Win... or Not, Mayor? 🌱🏘️</p>
+                
+                <p>You’ve chosen to <strong>Invest in Social Programs</strong>, tackling the root causes of crime with a focus on
+                    poverty, education, and social support. It’s a long-term solution, but the media and some Spudsvillians are growing
+                    impatient. 😬</p>
+                
+                <p>While progress is happening slowly, the media is questioning whether this approach is too soft to address the current
+                    crime wave. Reports are circulating that the plan is too slow to curb rising crime rates, and public opinion is
+                    starting to falter. Now, the challenge ahead is to manage the growing media storm and reassure the city that you’re
+                    on the right path! 🌍</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.C">Move ahead decisively to tackle the challenge of media perception and public opinion</div>
+            </div>
+        </div>
+
+
+        <div id="container-option-B1.1" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p>Privacy Protections in Place, Mayor! 🔒👀</p>
+                
+                <p>You chose to <strong>Implement Stricter Privacy Regulations</strong>, introducing rules to protect Spudsville’s
+                    residents from surveillance overreach. While it’s a move to reassure the public, the media is split. Some see it as
+                    a positive step, but others say it’s a band-aid fix that still leaves civil liberties at risk. 😬</p>
+                
+                <p>The media’s reports are starting to shape public perception, with some wondering if crime prevention will weaken or
+                    if these new measures go far enough. The trust you hoped to restore is shaky at best. Now, it’s up to you to manage
+                    the narrative before things spiral. 🌍</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.D">Move ahead decisively to tackle the challenge of media perception and public opinion</div>
+            </div>
+        </div>
+
+        <div id="container-option-B1.2" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Expanding Surveillance Backfires, Mayor! 🎥🥔</p>
+                    
+                    <p>You chose to <strong>Expand Surveillance Coverage</strong>, ignoring civil liberty concerns in hopes of further
+                        reducing crime. While cameras multiplied across Spudsville, it didn’t go as planned. 😬</p>
+                    
+                    <p>Though crime prevention improved in some areas, the public grew increasingly uncomfortable with the constant
+                        monitoring. Civil liberties groups protested, claiming an invasion of privacy. Tensions rose, and residents felt
+                        spied on rather than protected. Trust in the government eroded, especially in low-income communities, where
+                        surveillance was seen as overreach. Instead of creating safety, it led to widespread distrust and frustration.</p>
+                    
+                    <p>Time for a rethink, Mayor! 🌍</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="Play-againB1.2">Play-againB1.2</div>
+            </div>
+        </div>
+        <div id="container-option-B2.1" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p><strong>Neighborhood Watches in Action, Mayor! 🕵️‍♂️🏘️</strong></p>
+                
+                <p>You chose to <strong>Pilot a Community-Based Crime Monitoring Program</strong>, launching neighborhood watches and
+                    patrols to keep crime in check. While some in Spudsville appreciate the local involvement, the media is having a
+                    field day with this one. Critics are calling it a “band-aid solution,” claiming it’s too little, too late for
+                    serious crime prevention. 😬</p>
+                
+                <p>As the media fans the flames, public opinion is wavering. Some believe it’s a positive step toward community trust,
+                    while others think it’s not enough to tackle the rising crime rates. Now, the challenge is to manage the fallout and
+                    steer Spudsville forward! 🌍</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.E">Move ahead decisively to tackle the challenge of media perception and public opinion</div>
+            </div>
+        </div>
+        <div id="container-option-B2.2" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p><strong>Investing in the Future, Mayor! 🌱💼</strong></p>
+                
+                <p>You chose to <strong>Invest Heavily in Job Training, Education, and Social Services</strong>, tackling the root
+                    causes of crime with major resources. While it’s a bold, long-term approach, the media isn’t so sure. Critics are
+                    saying Gotham’s streets are still dangerous, and this plan is moving too slowly to address the immediate crime
+                    spike. 😬</p>
+                
+                <p>Reports are swirling, and public opinion is starting to divide. Some praise your forward-thinking strategy, while
+                    others feel the city is vulnerable in the short term. Now, the pressure’s on to manage expectations and keep Gotham
+                    on board with your vision! 🌍</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.F">Move ahead decisively to tackle the challenge of media perception and public opinion</div>
+            </div>
+        </div>
+
+
+
+<!-- S block options keep in mind SA1,SA2,B1B2C1C2D1D2E1E2F1F2 ALL ARE SAME AS S1 and S2 so same option will go here  -->
+        <div id="container-option-S.A" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p><strong>Media Storm Ahead, Mayor! 🎥📰</strong></p>
+                
+                <p>Public opinion is split on your crime prevention approach, and the media isn’t making things any easier. Reports are
+                    flying in, and public sentiment isn’t in your favor. Now, it’s time to decide how you’ll tackle this head-on.</p>
+                
+                <p><strong>Decision S: How do you manage public perception and the media?</strong></p>
+                
+                <p><strong>Option S.1: Hold Public Forums</strong><br>
+                    Engage directly with citizens and the press. Show transparency by listening to concerns and fostering open dialogue.
+                    Will this rebuild trust or open up more criticism? 🎤🗣️</p>
+                
+                <p><strong>Option S.2: Launch a Media Campaign</strong><br>
+                    Take control of the narrative with a full-scale media campaign to win the public over. Will this reshape public
+                    opinion, or will it come off as spin? 🎬📰</p>
+                
+                <p>Your move, Mayor! 🌍</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.A1">Hold public forums and engage in open dialogue with citizens and the press.</div>
+                <div class="option" id="optionS.A2">Launch a media campaign to shape the narrative in your favor.</div>
+            </div>
+        </div>
+        <div id="container-option-S.B" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p><strong>Media Storm Ahead, Mayor! 🎥📰</strong></p>
+                    
+                    <p>Public opinion is split on your crime prevention approach, and the media isn’t making things any easier. Reports are
+                        flying in, and public sentiment isn’t in your favor. Now, it’s time to decide how you’ll tackle this head-on.</p>
+                    
+                    <p><strong>Decision S: How do you manage public perception and the media?</strong></p>
+                    
+                    <p><strong>Option S.1: Hold Public Forums</strong><br>
+                        Engage directly with citizens and the press. Show transparency by listening to concerns and fostering open dialogue.
+                        Will this rebuild trust or open up more criticism? 🎤🗣️</p>
+                    
+                    <p><strong>Option S.2: Launch a Media Campaign</strong><br>
+                        Take control of the narrative with a full-scale media campaign to win the public over. Will this reshape public
+                        opinion, or will it come off as spin? 🎬📰</p>
+                    
+                    <p>Your move, Mayor! 🌍</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.B1">Hold public forums and engage in open dialogue with citizens and the press</div>
+                <div class="option" id="optionS.B2">Launch a media campaign to shape the narrative in your favor.</div>
+            </div>
+        </div>
+        <div id="container-option-S.C" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p><strong>Media Storm Ahead, Mayor! 🎥📰</strong></p>
+                    
+                    <p>Public opinion is split on your crime prevention approach, and the media isn’t making things any easier. Reports are
+                        flying in, and public sentiment isn’t in your favor. Now, it’s time to decide how you’ll tackle this head-on.</p>
+                    
+                    <p><strong>Decision S: How do you manage public perception and the media?</strong></p>
+                    
+                    <p><strong>Option S.1: Hold Public Forums</strong><br>
+                        Engage directly with citizens and the press. Show transparency by listening to concerns and fostering open dialogue.
+                        Will this rebuild trust or open up more criticism? 🎤🗣️</p>
+                    
+                    <p><strong>Option S.2: Launch a Media Campaign</strong><br>
+                        Take control of the narrative with a full-scale media campaign to win the public over. Will this reshape public
+                        opinion, or will it come off as spin? 🎬📰</p>
+                    
+                    <p>Your move, Mayor! 🌍</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.C1">Hold public forums and engage in open dialogue with citizens and the press</div>
+                <div class="option" id="optionS.C2">Launch a media campaign to shape the narrative in your favor.</div>
+            </div>
+        </div>
+        <div id="container-option-S.D" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p><strong>Media Storm Ahead, Mayor! 🎥📰</strong></p>
+                
+                <p>Public opinion is split on your crime prevention approach, and the media isn’t making things any easier. Reports are
+                    flying in, and public sentiment isn’t in your favor. Now, it’s time to decide how you’ll tackle this head-on.</p>
+                
+                <p><strong>Decision S: How do you manage public perception and the media?</strong></p>
+                
+                <p><strong>Option S.1: Hold Public Forums</strong><br>
+                    Engage directly with citizens and the press. Show transparency by listening to concerns and fostering open dialogue.
+                    Will this rebuild trust or open up more criticism? 🎤🗣️</p>
+                
+                <p><strong>Option S.2: Launch a Media Campaign</strong><br>
+                    Take control of the narrative with a full-scale media campaign to win the public over. Will this reshape public
+                    opinion, or will it come off as spin? 🎬📰</p>
+                
+                <p>Your move, Mayor! 🌍</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.D1">Hold public forums and engage in open dialogue with citizens and the press</div>
+                <div class="option" id="optionS.D2">Launch a media campaign to shape the narrative in your favor.</div>
+            </div>
+        </div>
+        <div id="container-option-S.E" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p><strong>Media Storm Ahead, Mayor! 🎥📰</strong></p>
+                    
+                    <p>Public opinion is split on your crime prevention approach, and the media isn’t making things any easier. Reports are
+                        flying in, and public sentiment isn’t in your favor. Now, it’s time to decide how you’ll tackle this head-on.</p>
+                    
+                    <p><strong>Decision S: How do you manage public perception and the media?</strong></p>
+                    
+                    <p><strong>Option S.1: Hold Public Forums</strong><br>
+                        Engage directly with citizens and the press. Show transparency by listening to concerns and fostering open dialogue.
+                        Will this rebuild trust or open up more criticism? 🎤🗣️</p>
+                    
+                    <p><strong>Option S.2: Launch a Media Campaign</strong><br>
+                        Take control of the narrative with a full-scale media campaign to win the public over. Will this reshape public
+                        opinion, or will it come off as spin? 🎬📰</p>
+                    
+                    <p>Your move, Mayor! 🌍</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.E1">Hold public forums and engage in open dialogue with citizens and the press</div>
+                <div class="option" id="optionS.E2">Launch a media campaign to shape the narrative in your favor.</div>
+            </div>
+        </div>
+        <div id="container-option-S.F" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p><strong>Media Storm Ahead, Mayor! 🎥📰</strong></p>
+                    
+                    <p>Public opinion is split on your crime prevention approach, and the media isn’t making things any easier. Reports are
+                        flying in, and public sentiment isn’t in your favor. Now, it’s time to decide how you’ll tackle this head-on.</p>
+                    
+                    <p><strong>Decision S: How do you manage public perception and the media?</strong></p>
+                    
+                    <p><strong>Option S.1: Hold Public Forums</strong><br>
+                        Engage directly with citizens and the press. Show transparency by listening to concerns and fostering open dialogue.
+                        Will this rebuild trust or open up more criticism? 🎤🗣️</p>
+                    
+                    <p><strong>Option S.2: Launch a Media Campaign</strong><br>
+                        Take control of the narrative with a full-scale media campaign to win the public over. Will this reshape public
+                        opinion, or will it come off as spin? 🎬📰</p>
+                    
+                    <p>Your move, Mayor! 🌍</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.F1">Hold public forums and engage in open dialogue with citizens and the press</div>
+                <div class="option" id="optionS.F2">Launch a media campaign to shape the narrative in your favor.</div>
+            </div>
+        </div>
+        <!-- if option S-ABCDEF selected it will lead to S1 AND S2 which S-ABCDEF(1,2)-->
+        <div id="container-option-S.1" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p><strong>Public Forums in Action, Mayor! 🎤🏛️</strong></p>
+                    
+                    <p>You’ve chosen to <strong>Hold Public Forums</strong>, engaging directly with citizens and the press. Transparency is
+                        paying off—public trust is slowly rising, and media coverage is turning more favorable. But some critics remain, and
+                        your political opponents are using the spotlight to push their own agendas. Now, you must decide how to keep the
+                        momentum going.</p>
+                    
+                    <p><strong>New Choices After Consequence:</strong></p>
+                    
+                    <p><strong>S1.A: Continue Hosting Forums</strong><br>
+                        Double down on public dialogue, keeping engagement high and trust growing. Will this solidify your leadership or
+                        give critics more chances to exploit? 🗣️🤝</p>
+                    
+                    <p><strong>S1.B: Shift to Action</strong><br>
+                        Move away from talk and focus on implementing bold, decisive policies. Will the public appreciate the action, or
+                        will they feel left out of the conversation? 🚨🏙️</p>
+                    
+                    <p>Your move, Mayor! 🌍</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.1A">Continue hosting forums to keep public engagement high and build trust.</div>
+                <div class="option" id="optionS.1B">Shift focus to action rather than dialogue, implementing bold new policies.</div>
+            </div>
+        </div>
+
+
+        <div id="container-option-S.2" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p><strong>Media Campaign in Motion, Mayor! 🎬📰</strong></p>
+                    
+                    <p>You chose to <strong>Launch a Media Campaign</strong>, and it's starting to work—media coverage is more favorable,
+                        and your successes in crime prevention are shining through. But not everyone is buying it. Some citizens feel
+                        manipulated, and your opponents are accusing you of avoiding real dialogue, calling it "all spin." Now, it’s time to
+                        decide your next step.</p>
+                    
+                    <p><strong>New Choices After Consequence:</strong></p>
+                    
+                    <p><strong>S2.A: Engage in Direct Dialogue with Community Leaders</strong><br>
+                        Rebuild trust by talking directly with local leaders, showing you're willing to listen. Will this mend relationships
+                        or just expose more criticism? 🗣️🤝</p>
+                    
+                    <p><strong>S2.B: Expand the Media Campaign</strong><br>
+                        Double down on your media push to counter the criticism. Will this win over the public or backfire as more people
+                        question your transparency? 🎥📰</p>
+                    
+                    <p>What’s your next move, Mayor? 🌍</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.2A">Engage in direct dialogue with community leaders to rebuild trust.</div>
+                <div class="option" id="optionS.2B">Expand the media campaign to counter public criticism.</div>
+            </div>
+        </div>
+        <div id="container-option-S.1A" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p><strong>Forums Continue, Mayor! 🏛️🗣️</strong></p>
+                
+                <p>You’ve chosen to <strong>Continue Hosting Forums</strong> to keep public engagement high and build trust. As you
+                    strengthen transparency, two more critical paths now lie ahead—each could shape Spudsville's future differently.</p>
+                
+                <p><strong>S1.A.A: Continue Prioritizing Security Over Civil Liberties</strong><br>
+                    Focus on showcasing law enforcement’s success and prioritize security measures. This could reassure citizens about
+                    safety, but will it cause growing concern over civil liberties? 🚔🔒</p>
+                
+                <p><strong>S1.A.B: Invest in Long-Term Solutions</strong><br>
+                    Shift attention to education, economic development, and mental health services. Will this long-term strategy solve
+                    the root causes of crime or be seen as too slow for immediate results? 🌱🏫</p>
+                
+                <p>Choose wisely, Mayor! 🌍</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.1AA">Continue prioritizing security over civil liberties, focusing on law enforcement success.</div>
+                <div class="option" id="optionS.1AB">Invest in long-term solutions like education, economic development, and mental health services
+                </div>
+            </div>
+        </div>
+
+        <div id="container-option-S.1B" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p><strong>Bold New Policies in Action, Mayor! 🚨🏛️</strong></p>
+                
+                <p>You’ve chosen to <strong>Shift Focus to Action</strong>, implementing bold new policies to tackle Spudsville’s
+                    challenges head-on. Now, two decisive paths lie before you, each with its own risks and rewards.</p>
+                
+                <p><strong>S1.B.A: Introduce Legislation to Safeguard Civil Liberties</strong><br>
+                    Balance security with freedom by introducing laws to protect civil liberties while maintaining strong security
+                    measures. Will this calm public concerns, or weaken your stance on crime? 🛡️⚖️</p>
+                
+                <p><strong>S1.B.B: Prioritize Security Over Civil Liberties</strong><br>
+                    Double down on tough security measures and focus on law enforcement success. Will this reassure the public on
+                    safety, or spark even more concern over rights and freedoms? 🚔🔒</p>
+                
+                <p>Your next move, Mayor! 🌍</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.1BA">Introduce legislation to safeguard civil liberties while maintaining strong security measures.</div>
+                <div class="option" id="optionS.1BB">Continue prioritizing security over civil liberties, focusing on law enforcement success.
+</div>
+            </div>
+        </div>
+        <div id="container-option-S.2A" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p><strong>Direct Dialogue, but Pressure Mounts, Mayor! 🗣️🤝</strong></p>
+                    
+                    <p>You chose to <strong>Engage in Direct Dialogue with Community Leaders</strong>, hoping to rebuild trust by listening
+                        to their concerns. While this effort has reassured some, the core issue persists: the debate over civil liberties
+                        vs. public safety is only growing louder. Political pressure is escalating. 🔥</p>
+                    
+                    <p>Opposition forces are amplifying their claims, accusing you of focusing too much on civil liberties while neglecting
+                        public safety. Certain parts of the public, still feeling unsafe, are increasingly critical of your leadership.
+                        Despite promising drops in crime rates, your approach has sparked backlash, and the struggle to balance these
+                        opposing forces is still your biggest challenge yet, Mayor. 🌍</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionX.C">Move forward and tackle the civil liberties vs. public safety debate.</div>
+            </div>
+        </div>
+        <div id="container-option-S.2B" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p><strong>Media Blitz Backfires, Mayor! 🎥📰</strong></p>
+                    
+                    <p>You chose to <strong>Expand the Media Campaign</strong> in an attempt to counter the growing criticism. At first, it
+                        seemed like a solid move to shift the narrative, but it didn’t go as planned. 😬</p>
+                    
+                    <p>Rather than calming things down, the public's criticism intensified. Many saw your media push as a way to drown out
+                        their concerns, and the perception grew that you were avoiding real dialogue. People felt their voices weren’t being
+                        heard, and the media's counter-campaign only made it worse. Instead of winning the public over, the strategy
+                        backfired, leaving you facing even more outrage.</p>
+                    
+                    <p>Time for a new approach, Mayor! 🌍</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="Play-againS.2B">Play-again</div>
+            </div>
+        </div>
+        <div id="container-option-S.1AA" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p><strong>Security Over Freedom Backfires, Mayor! 🚔🔒</strong></p>
+                    
+                    <p>You chose to <strong>Continue Prioritizing Security Over Civil Liberties</strong>, showcasing law enforcement success
+                        and focusing on keeping Spudsville safe. But it didn’t go as planned. 😬</p>
+                    
+                    <p>While some citizens felt reassured, the media began hammering you with reports on reduced civil liberties. Public
+                        backlash has intensified, and protests are growing against your administration. Ratings are plummeting, and trust is
+                        eroding as Spudsville citizens feel their freedoms slipping away. The protests are loud, the headlines are harsh,
+                        and the strategy is backfiring.</p>
+                    
+                    <p>It’s time to rethink the approach, Mayor—things aren’t looking good! 🌍</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="Play-againS.1AA">Play-again</div>
+            </div>
+        </div>
+
+        <div id="container-option-S.1AB" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p><strong>Civil Liberties vs. Public Safety: A Growing Challenge, Mayor! ⚖️🚨</strong></p>
+                    
+                    <p>You’ve invested in <strong>Long-Term Solutions</strong>—addressing the root causes of crime through education,
+                        economic development, and mental health services. While crime rates are slowly decreasing, particularly in
+                        high-crime areas, a new storm is brewing. The debate over balancing <strong>civil liberties and public
+                            safety</strong> is intensifying, and your administration is now facing mounting political pressure.</p>
+                    
+                    <p>Political opposition is growing louder, accusing you of neglecting public safety by focusing too much on long-term
+                        solutions. Civil liberties have been curtailed in the process, and certain sectors of the public are turning sharply
+                        against you. While the short-term crime numbers look promising, the challenge of balancing these opposing forces
+                        remains your next big test. 🌍</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionX.A">Move forward and tackle the civil liberties vs. public safety debate.</div>
+            </div>
+        </div>
+        <div id="container-option-S.1BA" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p><strong>Civil Liberties Legislation Under Fire, Mayor! 🛡️⚖️</strong></p>
+                    
+                    <p>You chose to Introduce Legislation to Safeguard Civil Liberties, aiming to strike a balance between
+                        security and freedom. While this effort has reassured some, the debate over how to handle civil liberties vs. public
+                        safety is only intensifying. Your administration is now facing mounting political pressure. 🔥</p>
+                    
+                    <p>Political opposition is louder than ever, accusing you of neglecting public safety by focusing too much on civil
+                        liberties. Meanwhile, certain sectors of the public, feeling unsafe, are turning sharply against you. Despite
+                        short-term crime rates dropping, your stance on civil liberties has sparked a backlash, leaving you grappling with
+                        how to navigate these opposing forces. This remains your greatest challenge yet, Mayor. 🌍</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionX.B">Move forward and tackle the civil liberties vs. public safety debate.</div>
+            </div>
+        </div>
+        <div id="container-option-S.1BB" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p><strong>Security Over Freedom Backfires, Mayor! 🚔🔒</strong></p>
+                    
+                    <p>You chose to <strong>Continue Prioritizing Security Over Civil Liberties</strong>, showcasing law enforcement success
+                        and focusing on keeping Spudsville safe. But it didn’t go as planned. 😬</p>
+                    
+                    <p>While some citizens felt reassured, the media began hammering you with reports on reduced civil liberties. Public
+                        backlash has intensified, and protests are growing against your administration. Ratings are plummeting, and trust is
+                        eroding as Spudsville citizens feel their freedoms slipping away. The protests are loud, the headlines are harsh,
+                        and the strategy is backfiring.</p>
+                    
+                    <p>It’s time to rethink the approach, Mayor—things aren’t looking good! 🌍</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="Play-againS1.BB">Play-again</div>
+            </div>
+        </div>
+        <div id="container-option-S.2B" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p><strong>Media Blitz Backfires, Mayor! 🎥📰</strong></p>
+                    
+                    <p>You chose to <strong>Expand the Media Campaign</strong> in an attempt to counter the growing criticism. At first, it
+                        seemed like a solid move to shift the narrative, but it didn’t go as planned. 😬</p>
+                    
+                    <p>Rather than calming things down, the public's criticism intensified. Many saw your media push as a way to drown out
+                        their concerns, and the perception grew that you were avoiding real dialogue. People felt their voices weren’t being
+                        heard, and the media's counter-campaign only made it worse. Instead of winning the public over, the strategy
+                        backfired, leaving you facing even more outrage.</p>
+                    
+                    <p>Time for a new approach, Mayor! 🌍</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="Play-again">Play Again</div>
+            </div>
+        </div>
+
+                <!-----------------------------------------------------------        S block END   ------------------------------------------------------------------------------>
+
+                <!-----------------------------------------------------------        X block START   ------------------------------------------------------------------------------>
+
+
+        <div id="container-option-X.A" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p><strong>Civil Liberties vs. Public Safety: A Pressing Issue for Mayor Tater 🛡️⚖️</strong></p>
+                
+                <p>Mayor Tater is facing a growing challenge as the debate over civil liberties vs. public safety intensifies in
+                    Spudsville. Public concern is mounting, and the mayor's administration is feeling the pressure to strike the right
+                    balance between keeping the city safe and protecting personal freedoms. With political opposition growing louder,
+                    Mayor Tater now has two options to consider.</p>
+                
+                <p><strong>Option X1: Strengthen Civil Liberties Protections</strong><br>
+                    This option would introduce or reinforce laws that safeguard personal freedoms, building trust with civil liberties
+                    advocates. However, it could limit law enforcement’s ability to respond quickly to crime.</p>
+                
+                <p><strong>Option X2: Prioritize Public Safety with Oversight</strong><br>
+                    Maintain strong security measures, but with oversight to prevent abuses. This could keep crime in check, but civil
+                    liberties advocates might still see it as too invasive.</p>
+                
+                <p>It’s decision time, Mayor!</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionX.A1">Strengthen Civil Liberties Protections</div>
+                <div class="option" id="optionX.A2">Prioritize Public Safety with Oversight</div>
+            </div>
+        </div>
+
+
+        <div id="container-option-X.B" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p><strong>Civil Liberties vs. Public Safety: A Pressing Issue for Mayor Tater 🛡️⚖️</strong></p>
+                
+                <p>Mayor Tater is facing a growing challenge as the debate over civil liberties vs. public safety intensifies in
+                    Spudsville. Public concern is mounting, and the mayor's administration is feeling the pressure to strike the right
+                    balance between keeping the city safe and protecting personal freedoms. With political opposition growing louder,
+                    Mayor Tater now has two options to consider.</p>
+                
+                <p><strong>Option X2: Prioritize Public Safety with Oversight</strong><br>
+                    Keep the Tater Troopers strong, but with accountability! Add oversight to make sure there’s no funny business, but
+                    civil liberties advocates might still be a bit salty. 🍟🚓</p>
+                
+                <p><strong>Option X3: Create a Civilian Oversight Board</strong><br>
+                    Form an independent group to keep an eye on law enforcement. It’ll calm public fears, but the Tater Troopers might
+                    not love the extra eyes on them! 👀🛡️</p>
+                
+                <p>Time to decide, Mayor! 🌍</p>
+
+                
+                </p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionX.B1">Prioritize Public Safety with Oversight</div>
+                <div class="option" id="optionX.B2">Create a Civilian Oversight Board</div>
+            </div>
+        </div>
+
+        <div id="container-option-X.C" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p><strong>Civil Liberties vs. Public Safety: A Pressing Issue for Mayor Tater 🛡️⚖️</strong></p>
+                    
+                    <p>Mayor Tater is facing a growing challenge as the debate over civil liberties vs. public safety intensifies in
+                        Spudsville. Public concern is mounting, and the mayor's administration is feeling the pressure to strike the right
+                        balance between keeping the city safe and protecting personal freedoms. With political opposition growing louder,
+                        Mayor Tater now has two options to consider.</p>
+                    
+                    <p><strong>Option X4: Implement Targeted Public Safety Measures</strong><br>
+                        Zero in on high-crime areas! This option means focusing law enforcement where it's really needed, leaving low-risk
+                        areas with fewer restrictions. But watch out—some communities might feel unfairly singled out! 🎯🚨</p>
+                    
+                    <p><strong>Option X5: Invest in Preventive Measures</strong><br>
+                        Take the long road! Focus on education, job creation, and mental health to tackle the root causes of crime. It’s a
+                        slow burn, but it could reduce crime long-term. The downside? It might not stop crime quickly enough for impatient
+                        Spudsvillians! 🌱💼</p>
+                    
+                    <p>What’ll it be, Mayor? 🌍</p>
+
+                
+                
+                </p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionX.C1">Implement Targeted Public Safety Measures</div>
+                <div class="option" id="optionX.C2">Invest in Preventive Measures</div>
+            </div>
+        </div>
+        <div id="container-option-X.A1" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p><strong>🎉 Congratulations, Mayor Tater! 🥔🎉</strong></p>
+                    
+                    <p>You've taken Spudsville on a wild ride, tackling everything from civil liberties debates to targeted crime policies!
+                        Through all the tough calls—whether it was cracking down on high-crime areas or investing in long-term solutions
+                        like education and job creation—you stuck with it and led Spudsville to safer streets. 🚓🏘️</p>
+                    
+                    <p>The public is far happier now than when you first stepped in, and Spudsville is thriving under your leadership. The
+                        once divided potato patch has come together, and now, you can finally enjoy a victory fry! 🍟💪 Well done, Mayor
+                        Tater! 🌍</p>
+
+                </div>
+            </div>
+        </div>
+        <div id="container-option-X.B1" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p><strong>🎉 Congratulations, Mayor Tater! 🥔🎉</strong></p>
+                    
+                    <p>You've taken Spudsville on a wild ride, tackling everything from civil liberties debates to targeted crime policies!
+                        Through all the tough calls—whether it was cracking down on high-crime areas or investing in long-term solutions
+                        like education and job creation—you stuck with it and led Spudsville to safer streets. 🚓🏘️</p>
+                    
+                    <p>The public is far happier now than when you first stepped in, and Spudsville is thriving under your leadership. The
+                        once divided potato patch has come together, and now, you can finally enjoy a victory fry! 🍟💪 Well done, Mayor
+                        Tater! 🌍</p>
+                </div>
+            </div>
+        </div>
+        <div id="container-option-X.C1" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p><strong>🎉 Congratulations, Mayor Tater! 🥔🎉</strong></p>
+                    
+                    <p>You've taken Spudsville on a wild ride, tackling everything from civil liberties debates to targeted crime policies!
+                        Through all the tough calls—whether it was cracking down on high-crime areas or investing in long-term solutions
+                        like education and job creation—you stuck with it and led Spudsville to safer streets. 🚓🏘️</p>
+                    
+                    <p>The public is far happier now than when you first stepped in, and Spudsville is thriving under your leadership. The
+                        once divided potato patch has come together, and now, you can finally enjoy a victory fry! 🍟💪 Well done, Mayor
+                        Tater! 🌍</p>
+                </div>
+            </div>
+        </div>
+        <div id="container-option-X.A2" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p><strong>🎉 Well done, Mayor Tater. 🥔</strong></p>
+                    
+                    <p>You’ve navigated Spudsville through some tough policy decisions, from balancing civil liberties to focusing on
+                        long-term crime solutions. While there’s still room for improvement, you've managed to calm the public and make the
+                        city a safer place. 🚓🏘️</p>
+                    
+                    <p>The public is generally happier now than when you started, but there’s still work to be done. Some decisions could
+                        have gone smoother, and a few folks feel things could’ve been handled better. Still, you’ve made solid progress,
+                        Mayor. Keep at it, and maybe next time you’ll hit the sweet spot. 🍟</p>
+
+                </div>
+            </div>
+        </div>
+        <div id="container-option-X.B2" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p><strong>🎉 Well done, Mayor Tater. 🥔</strong></p>
+                    
+                    <p>You’ve navigated Spudsville through some tough policy decisions, from balancing civil liberties to focusing on
+                        long-term crime solutions. While there’s still room for improvement, you've managed to calm the public and make the
+                        city a safer place. 🚓🏘️</p>
+                    
+                    <p>The public is generally happier now than when you started, but there’s still work to be done. Some decisions could
+                        have gone smoother, and a few folks feel things could’ve been handled better. Still, you’ve made solid progress,
+                        Mayor. Keep at it, and maybe next time you’ll hit the sweet spot. 🍟</p>
+                </div>
+            </div>
+        </div>
+        <div id="container-option-X.C2" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p><strong>🎉 Well done, Mayor Tater. 🥔</strong></p>
+                
+                <p>You’ve navigated Spudsville through some tough policy decisions, from balancing civil liberties to focusing on
+                    long-term crime solutions. While there’s still room for improvement, you've managed to calm the public and make the
+                    city a safer place. 🚓🏘️</p>
+                
+                <p>The public is generally happier now than when you started, but there’s still work to be done. Some decisions could
+                    have gone smoother, and a few folks feel things could’ve been handled better. Still, you’ve made solid progress,
+                    Mayor. Keep at it, and maybe next time you’ll hit the sweet spot. 🍟</p>
+                </div>
+            </div>
+        </div>
+
+
+
+<!-----------------------------------------------------------        X block END   ------------------------------------------------------------------------------>
+
+    <div id="container-play-again" class="container hidden">
+        <div class="option-boxes">
+            <div class="option" id="Play-agin">Play Again</div>
+        </div>
+    </div>
+
+
+
+
+
+    <script>
+        function showContainer(containerId) {
+                const container = document.getElementById(containerId);
+                container.classList.add('show'); // Add class to trigger animation
+                container.style.display = 'block'; // Ensure it's visible
+
+                setTimeout(() => { // Wait a bit to start the scroll after the element is visible
+                    container.scrollIntoView({ behavior: 'smooth' }); // Smooth scroll to the container
+                }, 100);
+            }
+
+            function resetGame() {
+                // Hide all containers
+                const containers = document.querySelectorAll('.container');
+                containers.forEach(container => {
+                    container.style.display = 'none';
+                    container.classList.remove('show'); // Remove any animation classes
+                });
+
+                // Reset the game to initial state (show the first container again)
+                showContainer('text-section');
+                window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll back to the top
+            }
+
+        // Set up event listeners for main options
+        document.getElementById('optionA').addEventListener('click', function () {
+        showContainer('container-option-A'); // Show container for Option 1
+        });
+
+        // Sub-option event listeners
+        document.getElementById('optionB').addEventListener('click', function () {
+        showContainer('container-option-B'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionA1').addEventListener('click', function () {
+        showContainer('container-option-A1'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionA2').addEventListener('click', function () {
+        showContainer('container-option-A2'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionB1').addEventListener('click', function () {
+        showContainer('container-option-B1'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionB2').addEventListener('click', function () {
+        showContainer('container-option-B2'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionA1.1').addEventListener('click', function () {
+        showContainer('container-option-A1.1'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionA1.2').addEventListener('click', function () {
+        showContainer('container-option-A1.2'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionA2.1').addEventListener('click', function () {
+        showContainer('container-option-A2.1'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionA2.2').addEventListener('click', function () {
+        showContainer('container-option-A2.2'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionB1.1').addEventListener('click', function () {
+        showContainer('container-option-B1.1'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionB1.2').addEventListener('click', function () {
+        showContainer('container-option-B1.2'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionB2.1').addEventListener('click', function () {
+        showContainer('container-option-B2.1'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionB2.2').addEventListener('click', function () {
+        showContainer('container-option-B2.2'); // This needs a corresponding container defined in HTML
+        });
+
+        // S block starts 
+
+        document.getElementById('optionS.A').addEventListener('click', function () {
+        showContainer('container-option-S.A'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionS.B').addEventListener('click', function () {
+        showContainer('container-option-S.B'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionS.C').addEventListener('click', function () {
+        showContainer('container-option-S.C'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionS.D').addEventListener('click', function () {
+        showContainer('container-option-S.D'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionS.E').addEventListener('click', function () {
+        showContainer('container-option-S.E'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionS.F').addEventListener('click', function () {
+        showContainer('container-option-S.F'); // This needs a corresponding container defined in HTML
+        });
+
+
+        // Group S1 (optionS.A1, optionS.B1, optionS.C1, optionS.D1, optionS.E1, optionS.F1)
+        document.getElementById('optionS.A1').addEventListener('click', function () {
+        showContainer('container-option-S.1');
+        });
+
+        document.getElementById('optionS.B1').addEventListener('click', function () {
+        showContainer('container-option-S.1');
+        });
+
+        document.getElementById('optionS.C1').addEventListener('click', function () {
+        showContainer('container-option-S.1');
+        });
+
+        document.getElementById('optionS.D1').addEventListener('click', function () {
+        showContainer('container-option-S.1');
+        });
+
+        document.getElementById('optionS.E1').addEventListener('click', function () {
+        showContainer('container-option-S.1');
+        });
+
+        document.getElementById('optionS.F1').addEventListener('click', function () {
+        showContainer('container-option-S.1');
+        });
+
+        // Group S2 (optionS.A2, optionS.B2, optionS.C2, optionS.D2, optionS.E2, optionS.F2)
+        document.getElementById('optionS.A2').addEventListener('click', function () {
+        showContainer('container-option-S.2');
+        });
+
+        document.getElementById('optionS.B2').addEventListener('click', function () {
+        showContainer('container-option-S.2');
+        });
+
+        document.getElementById('optionS.C2').addEventListener('click', function () {
+        showContainer('container-option-S.2');
+        });
+
+        document.getElementById('optionS.D2').addEventListener('click', function () {
+        showContainer('container-option-S.2');
+        });
+
+        document.getElementById('optionS.E2').addEventListener('click', function () {
+        showContainer('container-option-S.2');
+        });
+
+        document.getElementById('optionS.F2').addEventListener('click', function () {
+        showContainer('container-option-S.2');
+        });
+
+
+        document.getElementById('optionS.1A').addEventListener('click', function () {
+        showContainer('container-option-S.1A'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionS.1B').addEventListener('click', function () {
+        showContainer('container-option-S.1B'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionS.2A').addEventListener('click', function () {
+        showContainer('container-option-X.C'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionS.2B').addEventListener('click', function () {
+        showContainer('container-play-again'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionS.1AA').addEventListener('click', function () {
+        showContainer('container-option-S.1AA'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionS.1AB').addEventListener('click', function () {
+        showContainer('container-option-X.A'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionS.1BA').addEventListener('click', function () {
+        showContainer('container-option-X.B'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionS.1BB').addEventListener('click', function () {
+        showContainer('container-option-S.1BB'); // This needs a corresponding container defined in HTML
+        });
+        // X block starts 
+        document.getElementById('optionX.A1').addEventListener('click', function () {
+        showContainer('container-option-X.A1'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionX.B1').addEventListener('click', function () {
+        showContainer('container-option-X.B1'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionX.C1').addEventListener('click', function () {
+        showContainer('container-option-X.C1'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionX.A2').addEventListener('click', function () {
+        showContainer('container-option-X.A2'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionX.B2').addEventListener('click', function () {
+        showContainer('container-option-X.B2'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionX.C2').addEventListener('click', function () {
+        showContainer('container-option-X.C2'); // This needs a corresponding container defined in HTML
+        });
+
+        // Add event listener for the Play Again button
+        document.getElementById('Play-againA1.2').addEventListener('click', function () {
+        resetGame(); // Call the reset function when "Play Again" is clicked
+        });
+
+        document.getElementById('Play-againB1.2').addEventListener('click', function () {
+        resetGame(); // Call the reset function when "Play Again" is clicked
+        });
+
+        document.getElementById('Play-againS.2B').addEventListener('click', function () {
+        resetGame(); // Call the reset function when "Play Again" is clicked
+        });
+
+        document.getElementById('Play-againS.1AA').addEventListener('click', function () {
+        resetGame(); // Call the reset function when "Play Again" is clicked
+        });
+
+        document.getElementById('Play-againS1.BB').addEventListener('click', function () {
+        resetGame(); // Call the reset function when "Play Again" is clicked
+        });
+        document.getElementById('Play-agin').addEventListener('click', function () {
+        resetGame(); // Call the reset function when "Play Again" is clicked
+        });
+
+
+    </script>
+</body>
+
+</html>

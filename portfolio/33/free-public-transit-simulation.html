@@ -1,0 +1,394 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>three.js + Free Bus Ride Simulation with Rotation-based Updates</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js"
+        crossorigin="anonymous"></script>
+    <style>
+        body,
+        html {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #000000;
+            user-select: none;
+            overflow-x: hidden;
+            /* Disable horizontal scrolling */
+            -webkit-font-smoothing: antialiased;
+
+        }
+
+        #container {
+            height: 90vh;
+            /* Full height of the viewport */
+            width: 100vw;
+            /* Full width of the viewport */
+            position: relative;
+            overflow: hidden;
+            /* No scrolling within the container */
+        }
+
+        canvas {
+            display: block;
+        }
+
+        #results {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            color: white;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            font-size: 14px;
+        }
+
+        #description {
+            margin: 0;
+            padding: 20px;
+            background-color: #000000;
+            color: #ffffff;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            line-height: 1.5;
+
+            font-size: 20px;
+            text-align: justify;
+            margin-top: 20px;
+            margin-right: 20%;
+            margin-left: 20%;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Container for the simulation -->
+    <div id="container">
+        <div id="results">
+            <h3>Simulation Results</h3>
+            <p><strong>Cooperators:</strong> <span id="cooperatorPayoff">0</span></p>
+            <p><strong>Defectors:</strong> <span id="defectorPayoff">0</span></p>
+            <p><strong>Loners:</strong> <span id="lonerPayoff">0</span></p>
+        </div>
+    </div>
+
+    <!-- Description section below the container -->
+    <div id="description">
+        <p>
+            Imagine a city offers <strong>free bus rides</strong> as a public good. In this situation, the city needs some
+            people to contribute (e.g., by paying taxes or volunteering) to keep the buses running. However, not everyone
+            contributes. People in this simulation fall into three categories:
+        </p>
+    
+        <p>
+            <strong>1. Cooperators (Blue):</strong> These people <strong>pay their fair share</strong> (either through
+            taxes, donations, or other contributions). Their contribution helps keep the buses running, providing a public
+            good for everyone. In the simulation, cooperators are represented as <strong>blue points</strong>, and their
+            payoff depends on how much the bus system benefits from the contributions of all cooperators.
+        </p>
+    
+        <p>
+            <strong>2. Defectors (Red):</strong> These people <strong>ride the buses without contributing</strong>. They
+            benefit from the free service but don’t pay for it. In the simulation, defectors are <strong>red
+                points</strong>. They free-ride on the public transport system without paying, benefiting from the buses
+            without helping to sustain them.
+        </p>
+    
+        <p>
+            <strong>3. Loners (White):</strong> These people <strong>don’t participate in the bus system at all</strong>.
+            Instead of taking the bus, they might walk, cycle, or use private transport. They don’t contribute to or benefit
+            from the bus system, but they also don’t get caught up in the collapse of the system if too many people defect.
+            In the simulation, loners are <strong>white points</strong>. They receive a fixed payoff (representing the
+            payoff from using alternatives, such as walking or using a car).
+        </p>
+    
+        <p>
+            In the free bus ride scenario, the behavior of cooperators, defectors, and loners reflects different strategies
+            that people might adopt when dealing with public goods like free transport.
+        </p>
+    
+        <p>
+            <strong>Cooperators' Payoff:</strong> The payoff for cooperators depends on how much benefit they receive from a
+            well-functioning bus system. The more cooperators there are, the more effective the system becomes, and the
+            payoff increases.
+        </p>
+    
+        <p>
+            <strong>Defectors' Payoff:</strong> Defectors get to use the bus system without contributing. They enjoy the
+            benefits of free rides without paying taxes or contributing in other ways. However, if too many people defect,
+            the bus system collapses, and the payoff decreases.
+        </p>
+    
+        <p>
+            <strong>Loners' Payoff:</strong> Loners don't use the bus system at all. Instead, they walk or use private
+            transport, receiving a fixed payoff.
+        </p>
+    
+        <p>
+            Let's say we're simulating a <strong>free bus system</strong> in a city:
+        </p>
+    
+        <p>
+            The <strong>cooperators</strong> represent people who contribute to the free bus system by paying taxes or
+            supporting it financially. They benefit because a high number of contributors makes the bus system more reliable
+            and efficient. The <strong>defectors</strong> represent people who use the free bus system but avoid paying
+            taxes or contributing in any way. They still benefit from the service, but if too many people defect, the system
+            might collapse or become unreliable. The <strong>loners</strong> represent people who don't use the bus system
+            at all. They either walk, bike, or use their cars. They have a stable payoff because they don't rely on the
+            public good, but they miss out on any benefits if the bus system is highly efficient and beneficial.
+        </p>
+    
+        <p>
+            <strong>publicGoodRewardMultiplier (r):</strong> In the free bus ride scenario, this represents how effective
+            and valuable the bus system is for those who use it. A high <strong>r</strong> means that the bus system is very
+            beneficial (e.g., fast, reliable, and convenient). A low <strong>r</strong> means the bus system is not very
+            effective, reducing the incentive to cooperate.
+        </p>
+    
+        <p>
+            <strong>lonerFixedPayoff (σ):</strong> This represents the payoff loners receive by opting out of the bus system
+            and using alternative transportation. It could represent walking or private transport. The higher the
+            <strong>σ</strong>, the more attractive it is to be a loner and avoid the public good entirely.
+        </p>
+    
+        <p>
+            <strong>interactionRadius:</strong> This parameter controls how close agents need to be to interact and form
+            connections. In real life, this could represent how connected people are within neighborhoods or city districts.
+            A larger interaction radius means more people are interacting and influencing each other (e.g., more
+            interconnected neighborhoods).
+        </p>
+    
+        <p>
+            <strong>Number of Cooperators, Defectors, and Loners:</strong> These control how many people adopt each
+            strategy. In the free bus ride scenario, this represents how many people choose to cooperate (by supporting the
+            bus system), defect (by using it without supporting it), or opt out entirely (by using alternative
+            transportation).
+        </p>
+    
+        <p>
+            In the simulation, agents representing cooperators, defectors, and loners are distributed on a 3D grid. As the
+            simulation runs, the agents rotate in 3D space, and lines are drawn between cooperators and defectors when they
+            are within a certain distance of each other (the <strong>interactionRadius</strong>). After each full rotation,
+            the system updates the payoffs for each agent type based on their interactions and displays these results on the
+            screen.
+        </p>
+    
+        <p>
+            <strong>Visual Representation:</strong>
+        </p>
+    
+        <p>
+            <strong>Cooperators (blue):</strong> Represent people contributing to the bus system. <strong>Defectors
+                (red):</strong> Represent people using the bus system but not contributing. <strong>Loners (white):</strong>
+            Represent people who don’t use or support the bus system. <strong>Red and Blue Lines:</strong> These lines
+            connect cooperators and defectors when they are close enough to interact.
+        </p>
+    
+        <p>
+            This code provides a <strong>visual simulation</strong> of a public good scenario (like a free bus ride system)
+            using 3D graphics. The mathematical models behind the simulation reflect the payoffs for different strategies
+            (cooperation, defection, or opting out). By adjusting the parameters in the GUI (such as the public good reward
+            multiplier, the loner payoff, and the number of agents), you can explore how different scenarios play out in
+            this simplified, but visually engaging, simulation.
+        </p>
+    </div>
+
+
+    <script type="module">
+        import * as THREE from '../vendor/shared/lib-5e6d7c2d082f/dist/three.module.js';
+        import { OrbitControls } from '../vendor/shared/lib-55f1739cac37/dist/OrbitControls.js';
+        import { EffectComposer } from '../vendor/shared/lib-607ae6b0a29d/dist/EffectComposer.js';
+        import { RenderPass } from '../vendor/shared/lib-2f1c589c4798/dist/RenderPass.js';
+        import { UnrealBloomPass } from '../vendor/shared/lib-fb9e3665d0fd/dist/UnrealBloomPass.js';
+        import { GUI } from '../vendor/shared/lib-6ef06cdec5d6/dist/dat.gui.module.js';
+
+        let scene, camera, renderer, cooperators, defectors, loners, redLines, blueLines, controls, gui, composer;
+        let cooperatorMaterial, defectorMaterial, lonerMaterial;
+        let currentRotation = 0; // Track the current rotation angle
+
+        const params = {
+            publicGoodRewardMultiplier: 2.0,  // Multiplier for how much benefit the public good provides (r)
+            lonerFixedPayoff: 1.0,            // Fixed payoff for loners (σ)
+            numberOfCooperators: 320,         // Number of cooperators (agents who contribute to the public good)
+            numberOfDefectors: 329,           // Number of defectors (agents who benefit without contributing)
+            numberOfLoners: 321,              // Number of loners (agents who opt out of the public good)
+            agentGridSize: 1163,               // Grid size to distribute agents in the simulation
+            interactionRadius: 400,           // Distance within which agents interact and form connections
+            visualBloomStrength: 1.5,         // Strength of the bloom effect in the visualization
+            visualBloomRadius: 0.4,           // Radius of the bloom effect
+            visualBloomThreshold: 0           // Threshold for the bloom effect
+        };
+
+        let cooperatorPayoff = 0, defectorPayoff = 0, lonerPayoff = 0;
+
+        init();
+        animate();
+
+        function init() {
+            const container = document.getElementById('container');
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+            camera.position.z = 1500;
+
+            renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            container.appendChild(renderer.domElement);
+
+            controls = new OrbitControls(camera, renderer.domElement);
+
+            cooperatorMaterial = new THREE.PointsMaterial({ color: 0x0000ff, size: 10, fog: true });
+            defectorMaterial = new THREE.PointsMaterial({ color: 0xff0000, size: 10, fog: true });
+            lonerMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 10, fog: true });
+
+            cooperators = createAgents(params.numberOfCooperators, cooperatorMaterial);
+            defectors = createAgents(params.numberOfDefectors, defectorMaterial);
+            loners = createAgents(params.numberOfLoners, lonerMaterial);
+
+            scene.add(cooperators);
+            scene.add(defectors);
+            scene.add(loners);
+
+            const redLineMaterial = new THREE.LineBasicMaterial({ color: 0xff0000, linewidth: 0.25, fog: true });
+            const blueLineMaterial = new THREE.LineBasicMaterial({ color: 0x0000ff, linewidth: 0.25, fog: true });
+
+            redLines = new THREE.LineSegments(new THREE.BufferGeometry(), redLineMaterial);
+            blueLines = new THREE.LineSegments(new THREE.BufferGeometry(), blueLineMaterial);
+
+            scene.add(redLines);
+            scene.add(blueLines);
+
+            window.addEventListener('resize', onWindowResize, false);
+
+            const renderScene = new RenderPass(scene, camera);
+            composer = new EffectComposer(renderer);
+            composer.addPass(renderScene);
+
+            const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), params.visualBloomStrength, params.visualBloomRadius, params.visualBloomThreshold);
+            composer.addPass(bloomPass);
+
+            gui = new GUI();
+            gui.add(params, 'publicGoodRewardMultiplier', 0, 5).name('Public Good Multiplier').onChange(updateSimulation);
+            gui.add(params, 'lonerFixedPayoff', 0, 5).name('Loner Payoff').onChange(updateSimulation);
+            gui.add(params, 'numberOfCooperators', 100, 500).name('Cooperators').onChange(updateAgents);
+            gui.add(params, 'numberOfDefectors', 100, 500).name('Defectors').onChange(updateAgents);
+            gui.add(params, 'numberOfLoners', 100, 500).name('Loners').onChange(updateAgents);
+            gui.add(params, 'agentGridSize', 500, 2000).name('Grid Size').onChange(updateAgents);
+            gui.add(params, 'interactionRadius', 100, 1000).name('Interaction Radius').onChange(updateLines);
+            gui.add(params, 'visualBloomStrength', 0, 3).name('Bloom Strength').onChange(updateBloom);
+            gui.add(params, 'visualBloomRadius', 0, 1).name('Bloom Radius').onChange(updateBloom);
+            gui.add(params, 'visualBloomThreshold', 0, 1).name('Bloom Threshold').onChange(updateBloom);
+
+            updateLines();
+        }
+
+        function createAgents(count, material) {
+            const geometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(count * 3);
+            for (let i = 0; i < positions.length; i++) {
+                positions[i] = (Math.random() * 2 - 1) * params.agentGridSize;
+            }
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            return new THREE.Points(geometry, material);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            composer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function updateAgents() {
+            scene.remove(cooperators);
+            scene.remove(defectors);
+            scene.remove(loners);
+
+            cooperators = createAgents(params.numberOfCooperators, cooperatorMaterial);
+            defectors = createAgents(params.numberOfDefectors, defectorMaterial);
+            loners = createAgents(params.numberOfLoners, lonerMaterial);
+
+            scene.add(cooperators);
+            scene.add(defectors);
+            scene.add(loners);
+
+            updateLines();
+        }
+
+        function updateBloom() {
+            composer.passes[1].strength = params.visualBloomStrength;
+            composer.passes[1].threshold = params.visualBloomThreshold;
+            composer.passes[1].radius = params.visualBloomRadius;
+        }
+
+        function updateSimulation() {
+            cooperatorPayoff = (params.publicGoodRewardMultiplier * Math.random() * 100).toFixed(2);
+            defectorPayoff = ((params.publicGoodRewardMultiplier / 2) * Math.random() * 100).toFixed(2);
+            lonerPayoff = (params.lonerFixedPayoff * Math.random() * 100).toFixed(2);
+
+            document.getElementById('cooperatorPayoff').innerText = cooperatorPayoff;
+            document.getElementById('defectorPayoff').innerText = defectorPayoff;
+            document.getElementById('lonerPayoff').innerText = lonerPayoff;
+        }
+
+        function updateLines() {
+            redLines.geometry.dispose();
+            blueLines.geometry.dispose();
+
+            redLines.geometry = new THREE.BufferGeometry();
+            blueLines.geometry = new THREE.BufferGeometry();
+
+            const cooperatorPositions = cooperators.geometry.attributes.position.array;
+            const defectorPositions = defectors.geometry.attributes.position.array;
+
+            const redLinePositions = [];
+            const blueLinePositions = [];
+
+            for (let i = 0; i < cooperatorPositions.length; i += 3) {
+                for (let j = 0; j < defectorPositions.length; j += 3) {
+                    const dx = cooperatorPositions[i] - defectorPositions[j];
+                    const dy = cooperatorPositions[i + 1] - defectorPositions[j + 1];
+                    const dz = cooperatorPositions[i + 2] - defectorPositions[j + 2];
+                    const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+                    if (distance < params.interactionRadius) {
+                        if (Math.random() > 0.5) {
+                            redLinePositions.push(cooperatorPositions[i], cooperatorPositions[i + 1], cooperatorPositions[i + 2]);
+                            redLinePositions.push(defectorPositions[j], defectorPositions[j + 1], defectorPositions[j + 2]);
+                        } else {
+                            blueLinePositions.push(cooperatorPositions[i], cooperatorPositions[i + 1], cooperatorPositions[i + 2]);
+                            blueLinePositions.push(defectorPositions[j], defectorPositions[j + 1], defectorPositions[j + 2]);
+                        }
+                    }
+                }
+            }
+
+            redLines.geometry.setAttribute('position', new THREE.Float32BufferAttribute(redLinePositions, 3));
+            blueLines.geometry.setAttribute('position', new THREE.Float32BufferAttribute(blueLinePositions, 3));
+
+            redLines.geometry.computeBoundingSphere();
+            blueLines.geometry.computeBoundingSphere();
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            cooperators.rotation.x += 0.01;
+            defectors.rotation.x += 0.01;
+            loners.rotation.x += 0.01;
+            redLines.rotation.x += 0.01;
+            blueLines.rotation.x += 0.01;
+
+            controls.update();
+            composer.render();
+
+            currentRotation += 0.01;
+            if (currentRotation >= 2 * Math.PI) {
+                updateSimulation();
+                currentRotation = 0;
+            }
+        }
+
+    </script>
+</body>
+
+</html>

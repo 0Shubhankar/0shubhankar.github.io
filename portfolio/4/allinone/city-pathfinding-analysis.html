@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City Maps Analysis</title>
+
+    <style>
+        
+        body {
+            background-color: black;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+            font-weight: 400;
+
+        }
+
+        .section {
+            padding: 40px;
+            border-bottom: 1px solid #ddd;
+            margin-top: 5px; /* Adjust this value to increase or decrease the space above the section */
+        }
+
+
+        .city-buttons {
+            display: flex;
+            justify-content: center; /* Centers horizontally in the container */
+            align-items: center; /* Centers vertically in the container, if needed */
+            /* height: 5vh;  */
+            margin-top: 1px;
+        }
+
+        .text-button {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: grey; /* Sets text color to white */
+            background-color: black;
+            cursor: pointer;
+            text-decoration: none; /* Removes underline from links */
+            border: none; /* Ensures no border is visible */
+            outline: none; /* Typically keep this for accessibility unless you provide a custom focus style */
+            border-radius: 4px; /* Optional: Adds rounded corners to the button */
+        }
+
+        .text-button:hover, .text-button:focus {
+            color: white; /* Changes text color to grey on hover and focus */
+        }
+
+        .map-container {
+            text-align: center;
+            margin-bottom: 5px;
+            width: 100%; /* Set width to full screen */
+        }
+
+        #map-iframe {
+            width: 100%; /* Set width to full screen */
+            height: 90vh; /* Set height to 40% of the viewport height */
+            border: 0; /* Remove the border */
+        }
+        iframe {
+            width: 80%;
+            height: 500px;
+            border: 1px solid #ccc;
+        }
+
+       
+        
+
+     
+    </style>
+        <script>
+            function showMap(city) {
+                document.getElementById('map-iframe').src = city + '.html';
+            }
+        </script>
+</head>
+
+<body>
+
+    <div class="section" id="section-1">
+        <div class="section-heading">
+            <!-- <h1>Astar alogo in action</h1>
+            <h2>using a* visulization</h2> -->
+        </div>
+        <div class="city-buttons">
+            <a href="#" class="text-button" onclick="showMap('NYC'); return false;">New York</a>
+            <a href="#" class="text-button" onclick="showMap('Mumbai'); return false;">Mumbai</a>
+            <a href="#" class="text-button" onclick="showMap('Delhi'); return false;">Delhi</a>
+            <a href="#" class="text-button" onclick="showMap('Bengaluru'); return false;">Bengaluru</a>
+
+        </div>
+
+        <div class="map-container">
+            <iframe id="map-iframe" src="NYC.html" frameborder="0"></iframe>
+        </div>
+        
+</body>
+
+</html>

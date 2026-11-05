@@ -1,0 +1,598 @@
+If you want a broader descriptor that doesn’t confine the project to "map visualization," here are a few alternatives that can represent a wide range of project types while still conveying the essence of the work:
+
+1. **Interactive Data Experience**: This covers projects that involve any form of interactive or visual data representation.
+   - Example: `"Project Type: Interactive Data Experience"`
+
+2. **Visual Data Exploration**: Focuses on the exploratory aspect of working with data through visual tools.
+   - Example: `"Project Type: Visual Data Exploration"`
+
+3. **Geospatial Analysis**: If the project involves location-based data but isn't limited to mapping, this can fit.
+   - Example: `"Project Type: Geospatial Analysis"`
+
+4. **Data-Driven Insights**: A broad term that captures any project aimed at generating insights through data.
+   - Example: `"Project Type: Data-Driven Insights"`
+
+5. **Civic Data Innovation**: If your projects focus on urban planning or city data, this term can apply.
+   - Example: `"Project Type: Civic Data Innovation"`
+
+6. **Dynamic Information Visualization**: This emphasizes the dynamic and visual nature of the project without limiting it to maps.
+   - Example: `"Project Type: Dynamic Information Visualization"`
+
+### Example:
+
+```js
+{
+    projectType: "Interactive Data Experience",
+    description: "Comparing crime rates across major U.S. cities with real-time data visualization.",
+    title: "Comparative Crime Mapping: New York, Los Angeles, and Chicago",
+    titleLink: "1/CrimeThree.html",
+    tags: ["Planning", "Crime", "Data", "JavaScript", "Python", "Leaflet", "OpenStreetMap"],
+    image: "images/urbancrime.png",
+    processText: "Project Process",
+    processLink: "https://your-portfolio-site.com/project-process",
+    failuresText: "Failures & Learnings",
+    failuresLink: "https://your-portfolio-site.com/failures-learnings",
+}
+```
+
+This way, the project isn’t narrowly categorized and remains open to a broader interpretation, while still giving insight into the nature of the work.
+
+Does any of these descriptors feel more aligned with what you're looking for?
+
+
+Here’s how you can replace the **projectType** in your portfolio items with the suggested types based on the title and tags, ensuring each type is a maximum of three words:
+
+### Updated Project Types
+
+1. **Comparative Crime Mapping**: `"Project Type: Geospatial Analysis"`
+2. **Navigating Manhattan**: `"Project Type: Dynamic Information Visualization"`
+3. **A-star Algorithm**: `"Project Type: Data-Driven Insights"`
+4. **School Accessibility**: `"Project Type: Civic Data Innovation"`
+5. **Urban Dynamics**: `"Project Type: Interactive Data Experience"`
+6. **Mapping Sentiment Analysis**: `"Project Type: Visual Data Exploration"`
+7. **Urban Safety**: `"Project Type: Civic Data Innovation"`
+8. **NoExit Nexus**: `"Project Type: Geospatial Analysis"`
+9. **Congestion Pricing**: `"Project Type: Dynamic Information Visualization"`
+10. **City Elements**: `"Project Type: Interactive Data Experience"`
+11. **Gentrification**: `"Project Type: Data-Driven Insights"`
+12. **CityScape Classifier**: `"Project Type: Visual Data Exploration"`
+13. **Urban Ad Evolution**: `"Project Type: Interactive Data Experience"`
+14. **Park Accessibility Score**: `"Project Type: Civic Data Innovation"`
+15. **Parking Print**: `"Project Type: Dynamic Information Visualization"`
+16. **CBD Spectrum**: `"Project Type: Geospatial Analysis"`
+17. **Dynamic Traffic Simulation**: `"Project Type: Data-Driven Insights"`
+18. **Honk If You’re Impatient**: `"Project Type: Dynamic Information Visualization"`
+19. **Gotham City Housing Crisis**: `"Project Type: Civic Data Innovation"`
+20. **Greenville Green**: `"Project Type: Civic Data Innovation"`
+21. **Spudsville Under Siege**: `"Project Type: Data-Driven Insights"`
+22. **Green Lights & Quick Rides**: `"Project Type: Civic Data Innovation"`
+23. **Revitalize Central**: `"Project Type: Civic Data Innovation"`
+24. **City Air Pollution**: `"Project Type: Geospatial Analysis"`
+25. **Global Threads**: `"Project Type: Geospatial Analysis"`
+26. **World Temperature**: `"Project Type: Geospatial Analysis"`
+27. **Global Energy Dynamics**: `"Project Type: Visual Data Exploration"`
+28. **Evolving Cityscapes**: `"Project Type: Data-Driven Insights"`
+29. **Socio-economic impacts**: `"Project Type: Civic Data Innovation"`
+30. **Workplace Proximity Impact**: `"Project Type: Civic Data Innovation"`
+31. **Green Urbanism Simulator**: `"Project Type: Dynamic Information Visualization"`
+32. **Sprawl v/s High Density**: `"Project Type: Geospatial Analysis"`
+33. **Public Goods Payoff Simulator**: `"Project Type: Interactive Data Experience"`
+34. **Urban Flow Simulator**: `"Project Type: Civic Data Innovation"`
+35. **Echo Chambers and Polarization**: `"Project Type: Data-Driven Insights"`
+36. **Affordability & Migration Simulator**: `"Project Type: Civic Data Innovation"`
+37. **Passenger Flow Visualization**: `"Project Type: Dynamic Information Visualization"`
+38. **Misinformation Network**: `"Project Type: Data-Driven Insights"`
+39. **Insurgency Dynamics Simulator**: `"Project Type: Civic Data Innovation"`
+40. **Belonging Dynamics**: `"Project Type: Data-Driven Insights"`
+
+### Example Updated Code Snippet
+Here’s how you would update your code with these new **projectType** values:
+
+```javascript
+const portfolioItems = [
+    {
+        projectType: "Geospatial Analysis", // Updated
+        smallTitle: "Interactive Data Experience",
+        title: "Comparative Crime Mapping: New York, Los Angeles, and Chicago",
+        titleLink: "1/CrimeThree.html",
+        // Other properties...
+    },
+    {
+        projectType: "Dynamic Information Visualization", // Updated
+        smallTitle: "January 2023",
+        title: "Navigating Manhattan: Traffic Insights Around Major Event Venues",
+        titleLink: "2/index.html",
+        // Other properties...
+    },
+    // Repeat for other portfolio items...
+];
+```
+
+Feel free to modify any titles or types based on your preference, and let me know if you need further assistance!
+
+
+
+const portfolioItems = [
+        {
+            projectType: "Comparative Crime Mapping",
+            smallTitle: "Interactive Data Experience",
+            title: "Comparative Crime Mapping: New York, Los Angeles, and Chicago",
+            titleLink: "1/CrimeThree.html",
+            tags: ["Crime", "Urban Crime", "Data", "JavaScript", "Python", "Leaflet", "OpenStreetMap", "Interactive", "Mapping", "New York", "Los Angeles", "Chicago"],
+            image: "images/urbancrime.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Data Visualization",
+            smallTitle: "January 2023",
+            title: "Navigating Manhattan: Traffic Insights Around Major Event Venues",
+            titleLink: "2/index.html",
+            tags: ["Traffic", "Urban Mobility", "Event Impact", "JavaScript", "Leaflet", "GSAP", "ScrollMagic", "Interactive", "Mapping", "Event Spaces", "Vehicle Density", "Day-Night Patterns"],
+            image: "images/image3.jpeg",
+            processText: "Project Methodology",
+            processLink: "https://your-portfolio-site.com/project-methodology",
+            failuresText: "Challenges Faced",
+            failuresLink: "https://your-portfolio-site.com/challenges-faced",
+        },
+        {
+            projectType: "Data Visualization",
+            smallTitle: "January 2023",
+            title: "A-star Algorithm in Action: Visualizing the Path from Manhattan to JFK",
+            titleLink: "4/allinone/presentationboard.html",
+            tags: ["Pathfinding", "A* Algorithm", "Visualization", "heapq", "JavaScript", "Python", "Leaflet", "OSMnx", "NetworkX", "Shortest Path", "Mapping", "Manhattan to JFK"],
+            image: "images/astarmahattan.png",
+            processText: "Project Methodology",
+            processLink: "https://your-portfolio-site.com/project-methodology",
+            failuresText: "Challenges Faced",
+            failuresLink: "https://your-portfolio-site.com/challenges-faced",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "Exploring School Accessibility in Shibuya, Japan",
+            titleLink: "3/shibuya.html",
+            tags: ["School Accessibility", "Isochrone Maps", "Pedestrian Safety", "Data Analysis", "JavaScript", "OSMnx", "OpenStreetMap", "GSAP", "ScrollMagic", "Interactive Visualization", "Mapping", "Shibuya"],
+            image: "images/shibuya2.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "Urban Dynamics and Coffee Shops: A Visual Exploration through Cluster and Density Maps",
+            titleLink: "5/coffee.html",
+            tags: ["Urban Dynamics", "Coffee Shops", "Social Hubs", "Gentrification", "Community Engagement", "JavaScript", "Leaflet", "OpenStreetMap", "Density Maps", "Cluster Maps", "Retail Impact", "Third Places"],
+            image: "images/coffeetitle2.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "Mapping Sentiment Analysis of DC Pedestrian Comments with Machine Learning Models",
+            titleLink: "6/final1.html",
+            tags: ["Sentiment Analysis", "Public Comments", "Pedestrian Safety", "Matrix Rain", "Hugging Face Transformers", "Sentence-Transformers", "Scikit-learn", "Voronoi", "Pandas", "Leaflet", "OpenStreetMap", "KMeans Clustering"],
+            image: "images/dctitle.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "Urban Safety and Spatial Dynamics: A Comprehensive Analysis of Crime Correlation with Urban Attributes in Washington D.C",
+            titleLink: "7/DCPresent.html",
+            tags: ["Urban Safety", "Crime Analysis", "Spatial Dynamics", "R-tree", "D3.js", "Pandas", "Overpass API", "Maplibre", "Three.js", "Leaflet", "OpenStreetMap", "Word Cloud"],
+            image: "images/dccrimetitle.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "NoExit Nexus: Why Are Indian Cities Plagued with Dead-End Streets?",
+            titleLink: "8/presentationboard.html",
+            tags: ["Transport Planning", "Dead-End Streets", "Traffic Congestion", "NetworkX", "Folium", "Geopandas", "OSMnx", "Map Visualization", "MapLibre","Infrastructure", "Mumbai", "Delhi", "Bengaluru"],
+            image: "images/deadendtitle2.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "Congetion Pricing ",
+            titleLink: "9/simulation.html",
+            tags: ["Congestion Pricing", "Transportation Planning", "ERP System", "Leaflet", "Map Visualization", "JavaScript", "Traffic Simulation", "Heatmap", "OpenStreetMap", "Dynamic Controls", "Singapore", "Revenue Tracking"],
+            image: "images/congestionpricetitle.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "City Elements",
+            titleLink: "10/cityelement3.html",
+            tags: ["3D Visualization", "Interactive Network", "City Connectivity", "THREE.js", "OrbitControls", "Python", "Graph Simulation", "Similarity Mapping", "JavaScript", "Dynamic Controls", "dat.GUI", "Interactive Graph"],
+            image: "images/city_elements.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "Gentrification",
+            titleLink: "11/gentrification.html",
+            tags: ["Urban Simulation", "3D Visualization", "THREE.js", "OrbitControls", "dat.GUI", "Gentrification", "Real-Time Interaction", "City Planning", "Economic Indicators", "Infrastructure Simulation", "Demographic Analysis", "Building Density"],           
+            image: "images/gentrificationtitle.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "CityScape Classifier",
+            titleLink: "12/classficationlinkfinal.html",
+            tags: ["Image Gallery", "Highcharts", "Places365 ResNet50", "Radar Chart", "Tweakpane", "Image Classification", "Model training", "Interactive Visualization", "python", "Indian Cities", "Image Classification", "Wikipedia Images"],
+            image: "images/wikipediacity.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "Urban Ad Evolution",
+            titleLink: "13/AddCityV3.html",
+            tags: ["Scroll Animation", "Interactive Story", "Background Transition", "JavaScript", "CSS Animation", "Urban Advertising", "Image-based Animation", "Dynamic Content", "Text and Image Sync", "History of Advertising", "Interactive Visuals", "User Engagement"],
+            image: "images/add:city.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "Park Accessibility Score",
+            titleLink: "14/citypark3.html",
+            tags: ["Park Analysis","Interactive Map", "Isochrone Analysis", "Decay Scores", "Maplibre", "Highcharts", "OpenStreetMap", "OSMnx", "NetworkX", "Python", "Dynamic Chart", "Park Accessibility"],
+            image: "images/greenspace.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "Parking Print",
+            titleLink: "15/wholeCityParkingcopy.html",
+            tags: ["City Parking", "Maplibre", "OpenStreetMap", "City Infrastructure", "Parking Area Analysis", "Urban Transport", "Parking Density", "Interactive Maps", "Parking Space Allocation", "Car Density Mapping", "Parking Infrastructure", "Dynamic Maps"],
+            image: "images/parking.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "CBD Spectrum",
+            titleLink: "16/cities6.html",
+            tags: ["City Visualization", "Activity Ratings", "MapLibre", "Interactive Charts", "Urban Districts", "Business District Analysis", "Doughnut Charts", "Central Business Districts", "Public Spaces Evaluation", "User Preferences", "Data Sorting", "Map Integration"],
+            image: "images/cbd.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "Dynamic Traffic Simulation at Connaught Place: Insights from the Krauss Car-Following Model",
+            titleLink: "17/singlevideo3.html",
+            tags: ["Krauss Car-Following Model", "Traffic Flow Simulation", "Connaught Place Simulation", "SUMO", "Python", "TraCI", "Netedit", "Waiting Time Visualization", "Vehicle Speed Calculation", "Traffic Management", "Acceleration/Deceleration Dynamics", "Urban Mobility Analysis"],
+            image: "images/cpdelhi.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "Honk If You’re Impatient: A Mumbai Traffic Simulation Saga",
+            titleLink: "18/honkingcar3.html",
+            tags: ["SUMO Simulation", "Urban Traffic Modeling", "TraCI Integration", "Python", "Traffic Scenario Analysis", "Vehicle Honking Behavior", "Chhatrapati Shivaji Maharaj Terminus", "Traffic Management Strategies", "Proximity Threshold Simulation", "Driver Patience Sensitivity", "Traffic Flow Dynamics", "Scenario-Based Simulation"],
+            image: "images/cpdelhi.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "Gotham City Housing Crisis: A Planner’s Gamble",
+            titleLink: "19/finalHouseTyping.html",
+            tags: ["Housing Policy Game", "Urban Housing Crisis", "Decision-Making Game", "Gentrification Challenges", "Affordable Housing Policies", "Rent Control Strategies", "High-Density Development", "Homelessness Solutions", "City Management Simulation", "Inclusionary Zoning Policies", "Community Development Initiatives", "Player Choices"],
+            image: "images/cpdelhi.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "Greenville Green: Balancing Parks and Progress",
+            titleLink: "20/finalGreenTyping.html",
+            tags: ["Green Policy Game", "Environmental Justice", "Green Space Development", "Urban Planning Simulation", "Economic Development Balance", "Community Engagement", "Sustainable City Planning", "Park Maintenance Challenges", "Volunteer Programs", "Public-Private Partnerships", "Equitable Resource Allocation", "Urban Green Infrastructure"],
+            image: "images/cpdelhi.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "Spudsville Under Siege: A Crime Prevention Dilemma",
+            titleLink: "21/finalCrimeTyping.html",
+            tags: ["Crime Policy Game", "Crime Prevention", "Public Safety", "Civil Liberties", "Law Enforcement Strategies", "Surveillance and Privacy", "Community Policing", "Media and Public Perception", "Political Leadership", "Social Programs for Crime Reduction", "Ethics in Policing", "Public Policy Simulation"],
+            image: "images/cpdelhi.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "Green Lights & Quick Rides: Optimizing Emergency Response",
+            titleLink: "22/emergency5.html",
+            tags: ["SUMO", "TraCI", "Emergency Vehicle Simulation", "Traffic Signal Preemption", "Dijkstra's Algorithm", "Python", "Urban Mobility", "Traffic Optimization", "Simulation", "Emergency Response Routing", "Krauss Car-Following Model", "New York City"],
+            image: "images/ambulance.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "Revitalize Central: A Mayor's Dilemma",
+            titleLink: "23/finalDowntown.html",
+            tags: ["Urban Revitalization", "Downtown Development", "Public-Private Partnerships", "Economic Incentives", "Mixed-Use Development", "Zoning Reforms", "Affordable Housing", "Economic Development Zones", "Sustainable Growth", "Stakeholder Management", "Urban Planning", "Infrastructure Improvements"],
+            image: "images/ambulance.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "City Air Pollution",
+            titleLink: "24/AirPollution5.html",
+            tags: ["osmnx", "D3.js", "Pandas", "Overpass API", "Maplibre", "Three.js", "Leaflet", "OpenStreetMap"],
+            image: "images/ambulance.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Diaspora Dynamics",
+            smallTitle: "Globe Visualization",
+            title: "Global Threads: Mapping the Migration and Remittance Pathways of the Indian Diaspora",
+            titleLink: "25/indianMigration4.html",
+            tags: ["3D Visualization", "Data Representation", "Globe Visualization", "Particle Animation", "Geospatial Analysis", "Cultural Exchange", "Migration Patterns", "Remittance Flow", "Socio-Economic Dynamics", "User Interaction", "Arcs", "Three.js"],
+            image: "images/ambulance.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "World Temperature",
+            titleLink: "26/temp.html",
+            tags: ["osmnx", "D3.js", "Pandas", "Overpass API", "Maplibre", "Three.js", "Leaflet", "OpenStreetMap"],
+            image: "images/ambulance.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Global Energy Dynamics",
+            smallTitle: "Energy Visualization",
+            title: "Global Energy Dynamics: Production and Consumption Patterns",
+            titleLink: "27/energy.html",
+            tags: ["Energy Visualization", "Carto", "Leaflet", "Mapping", "Energy Production", "Energy Consumption", "Data Analysis", "Environmental Science", "Interactive Map", "Socio-Economic Factors", "Geographical Distribution", "Data Representation"],
+            image: "images/ambulance.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "Evolving Cityscapes: A Migration Simulation",
+            titleLink: "28/simulationincome.html",
+            tags: ["Urban Migration", "Income Distribution", "Population Movement", "Cluster Analysis", "Socio-Economic Dynamics", "City Infrastructure", "Ease of Living", "Economic Factors", "Income Inequality", "Housing Affordability", "Urban Simulation", "Population Dynamics"],
+            image: "images/simulationincome.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "Socio-economic impacts on different neighborhood classes",
+            titleLink: "29/economicimpactonHousing.html",
+            tags: ["Urban Economics", "Scenario Analysis", "Leaflet", "Map Visualization", "Neighborhood Classification", "Economic Boom", "Economic Recession", "Rent Control", "Housing Affordability", "GeoJSON", "Dynamic Map", "Urban Simulation"],
+            image: "images/simulationincome.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+         {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "Workplace Proximity Impact on Housing",
+            titleLink: "30/workplacehousingimpact.html",
+            tags: ["Leaflet", "Map Visualization", "Urban Economics", "Housing Prices", "Transportation Planning", "Workplace Proximity AN", "Congestion Factor", "Public Transport", "Interactive Map", "Neighborhood Classification", "Elasticity", "Workplace Proximity", "Urban Simulation"],
+            image: "images/simulationincome.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "Green Urbanism Simulator",
+            titleLink: "31/greenCitygenerator3.html",
+            tags: ["osmnx", "D3.js", "Pandas", "Overpass API", "Maplibre", "Three.js", "Leaflet", "OpenStreetMap"],
+            image: "images/simulationincome.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "Sprawl v/s High Density",
+            titleLink: "32/sprwalvsdensity3.html",
+            tags: ["osmnx", "D3.js", "Pandas", "Overpass API", "Maplibre", "Three.js", "Leaflet", "OpenStreetMap"],
+            image: "images/simulationincome.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "Public Goods Payoff Simulator: The Free Bus Ride Dilemma",
+            titleLink: "33/fr.html",
+            tags: ["Three.js", "Simulation", "Public Goods", "Free Bus Ride", "Cooperation", "Defection", "Loners", "Agent-based Modeling", "Data Visualization", "Interactive Simulation", "Game Theory", "Social Behavior"],
+            image: "images/simulationincome.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "Urban Flow Simulator",
+            titleLink: "34/taxi5.html",
+            tags: ["Taxi Simulation", "Transportation", "Urban Dynamics", "Commercial Centers", "Traffic Patterns", "Real Estate", "Traffic Patterns", "Interactive Simulation", "GUI", "Urban Mobility", "Dynamic Movement", "Transportation Networks"],
+            image: "images/simulationincome.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "Echo Chambers and Polarization",
+            titleLink: "35/ep3.html",
+            tags: ["Social Dynamics", "Echo Chambers", "Polarization", "Agent-Based Simulation", "Social Connections", "Behavioral Patterns", "Political Affiliation", "Interactive Visualization", "Network Analysis", "Community Formation", "Personal Traits", "Dynamic Clustering"],
+            image: "images/simulationincome.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "Affordability & Migration Simulator",
+            titleLink: "36/texturedCubeUpdate3.html",
+            tags: [ "Housing Affordability", "Socio-Economic Dynamics", "Urban Simulation", "Affordability Index", "Population Density", "Real Estate Prices", "Dynamic Interaction", "Particle Movement", "Data Visualization", "Urban Migration", "Interactive GUI","3D Visualization"],
+            image: "images/simulationincome.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "Passenger Flow Visualization on the Metro Platform",
+            titleLink: "37/crowdmetro6.html",
+            tags: ["Crowd Simulation", "Train Station", "Passenger Flow", "Dynamic Animation", "Real-time Metrics", "Crowd Density", "Platform Congestion", "Interactive Visualization", "Behavioral Modeling", "Public Transport", "Movement Patterns", "Transit Dynamics"],
+            image: "images/simulationincome.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "Misinformation Network",
+            titleLink: "38/simulationmissinfo6f.html",
+            tags: ["Information Spread", "Network Simulation", "Misinformation Dynamics", "Node Interaction", "Social Dynamics", "Data Visualization", "Real-Time Metrics", "User Interaction", "Susceptibility Modeling", "Network Analysis", "Particle Movement", "Influence Tracking"],
+            image: "images/simulationincome.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "Insurgency Dynamics Simulator",
+            titleLink: "39/dissentSimulation6.html",
+            tags: ["Insurgency Simulation", "Agent-Based Modeling", "Socio-Political Dynamics", "Population Dynamics", "Visual Simulation", "User Interaction", "Real-Time Data", "Dynamic Feedback", "Messaging Impact", "Group Transition", "Socio-Economic Factors", "Stickman Visualization"],
+            image: "images/simulationincome.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        {
+            projectType: "Urban Planning",
+            smallTitle: "June 2023",
+            title: "Belonging Dynamics",
+            titleLink: "40/simulationbelonging6.html",
+            tags: ["Belonging Simulation", "Social Dynamics", "Agent-Based Modeling", "Group Behavior", "Real-Time Visualization", "User Interaction", "Socio-Economic Factors", "Diversity and Inclusion", "Community Engagement", "Dynamic Movement", "Stickman Visualization", "Data-Driven Insights"],
+            image: "images/simulationincome.png",
+            processText: "Project Process",
+            processLink: "https://your-portfolio-site.com/project-process",
+            failuresText: "Failures & Learnings",
+            failuresLink: "https://your-portfolio-site.com/failures-learnings",
+        },
+        // Add more portfolio objects here...streamlit run simulation.py
+
+    ];

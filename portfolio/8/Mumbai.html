@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Mumbai Dead-End Roads Map</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../vendor/shared/lib-9eaeb463f1b3/dist/maplibre-gl.css" rel="stylesheet" />
+    <style>
+        #map {
+            height: 100vh;
+            width: 100vw;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script src="../vendor/shared/lib-1c09437b70d7/dist/maplibre-gl.js"></script>
+    <script>
+        const map = new maplibregl.Map({
+            container: 'map',
+            style: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
+            center: [72.8776, 19.0760],
+            zoom: 13.8,
+            pitch: 60,
+            bearing: 17.6,
+            antialias: true
+        });
+
+        map.addControl(new maplibregl.NavigationControl(), 'top-right');
+
+        map.on('load', function () {
+            map.addSource('delhiDeadEnds', {
+                type: 'geojson',
+                data: './Mumbai_dead_end_edges.geojson' // Ensure this path is correct
+            });
+
+            map.addLayer({
+                id: 'dead-ends',
+                type: 'line',
+                source: 'delhiDeadEnds',
+                layout: {},
+                paint: {
+                    'line-color': '#ff0000',
+                    'line-width': 4
+                }
+            });
+
+            let colorState = false;  // toggle state
+
+            setInterval(() => {
+                const newColor = colorState ? '#ff0000' : '#ffffff';
+                map.setPaintProperty('dead-ends', 'line-color', newColor);
+                colorState = !colorState;  // toggle the state
+            }, 1000);  // Change color every second
+        });
+    </script>
+</body>
+
+</html>
+
+<!-- Total Nodes: 24462
+Total Edges: 34229
+Total Length of Roads (meters): 3709567.45
+Percentage of Dead-end Nodes: 19.48% -->
+
+<!-- Total Nodes: 24462
+Total Edges: 34229
+Total Length of Roads (meters): 3709567.45
+Length of Roads Leading to Dead Ends (meters): 493648.65
+Percentage of Dead-end Nodes: 19.48%
+Percentage of Road Length to Dead Ends: 13.31% -->
+
+<!-- Total Nodes: 24462
+Total Edges: 34229
+Total Length of Roads (meters): 3709567.45
+Length of Roads Leading to Dead Ends (meters): 493648.65
+Length of Roads Not Leading to Dead Ends (meters): 3215918.80
+Percentage of Dead-end Nodes: 19.48%
+Percentage of Road Length to Dead Ends: 13.31%
+Percentage of Road Length Not to Dead Ends: 86.69% -->

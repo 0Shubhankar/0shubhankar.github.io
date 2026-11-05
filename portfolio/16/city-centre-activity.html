@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City CBD Activity Ratings</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100vh;
+            background: #222;
+            color: white;
+            flex-direction: row;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: center;
+            width: 70vw;
+            height: 80vh;
+            padding: 10px;
+            overflow-y: auto;
+            /* Allow vertical scrolling */
+        }
+
+        .city {
+            width: 120px;
+            height: 150px;
+            /* Adjusted to accommodate one doughnut chart */
+            margin: 10px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            /* background-color: rgba(0, 127, 127, 0.5); */
+            background-color: transparent; /* Set background to transparent */
+
+            /* Background color for city box */
+            border-radius: 10px;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .city:hover {
+            background-color: rgba(0, 200, 200, 0.7);
+            transform: scale(1.05);
+            cursor: pointer;
+        }
+
+        .city canvas {
+            width: 60px;
+            height: 60px;
+            position: relative;
+        }
+
+        .city.percentage div{
+        top: 50%;
+        left: 50%;
+        }
+
+        .city .percentage {
+            
+        position: absolute;
+        top: 35%;
+        left: 50%;
+        transform: translate(-50%, -50%); /* Center the text exactly */
+        font-size: 18px;
+        font-weight: bold;
+        color: white;
+        pointer-events: none; /* Ensures the text doesn’t interfere with the chart */
+        }
+        .city div {
+        font-size: 14px; /* Reduced from a larger size, adjust as necessary */
+        color: #33ff00; /* Optional, if you want to change the color */
+        margin-top: 1px; /* Ensures there's a little space between the circle and the text */
+        font-weight: normal; /* Optional, if you want less emphasis */
+        margin-bottom:35px;
+        }
+
+
+        .city .city-name {
+        font-size: 12px; /* Adjust the font size to reduce it */
+        color: white; /* Set the color if needed */
+
+        }
+
+
+
+        #menu {
+            position: relative;
+            margin-top: 10px;
+            width: 40%;
+            text-align: center;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        button {
+            color: rgba(127, 255, 255, 0.75);
+            background: transparent;
+            outline: 1px solid rgba(127, 255, 255, 0.75);
+            border: 0px;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        button:hover {
+            background-color: rgba(0, 255, 255, 0.5);
+            transform: scale(1.1);
+        }
+
+        button:active {
+            color: #000000;
+            background-color: rgba(0, 255, 255, 0.75);
+        }
+
+        #map-container {
+            width: 100vw;
+            height: 80vh;
+            margin-right: 20px;
+            background-color: #333;
+            border-radius: 10px;
+        }
+
+
+        h2 {
+        font-family: 'Times New Roman', Times, serif;
+        color: #ff1a98; /* Sets the text color to a dark shade of blue */
+
+        background-color: transparent; /* Sets a light gray background color */
+        padding: 10px; /* Adds padding inside the heading */
+        border-bottom: 2px solid #3498db; /* Adds a blue border at the bottom */
+        margin-top: 20px; /* Adds space above the heading */
+        margin-bottom: 10px; /* Adds space below the heading */
+        border-radius: 5px; /* Rounds the corners of the heading */
+        text-align: center; /* Centers the text inside the heading */
+    }
+
+
+    .data-source {
+        font-family:'Times New Roman', Times, serif; /* Specifies the font style */
+        color: #fe00ad; /* Sets the text color to a soft blue */
+        padding: 8px; /* Adds padding around the text */
+        border-radius: 4px; /* Rounds the corners of the paragraph */
+        display: inline-block; /* Ensures the background only covers the text */
+        margin-top: 20px; /* Adds space above the paragraph */
+    }
+
+    .data-source a {
+        color: #fe00ad; /* Sets the link color to match the text */
+        text-decoration: none; /* Removes underline from the link */
+    }
+
+    .data-source a:hover {
+        text-decoration: underline; /* Adds underline on hover for better usability */
+    }
+    
+
+</style>
+
+
+</head>
+
+<body>
+
+    <div class="container" id="container">
+        <!-- City elements will be dynamically added here by JavaScript -->
+    </div>
+
+    
+
+
+    <div id="map-container">
+        <!-- Map will be displayed here -->
+            <h2 class="map-heading">Our Location</h2>
+
+    </div>
+
+
+
+    <div id="menu">
+        <!-- Section heading for rating activities in the business district -->
+        <h2>How would you rate the following activities in your business district?</h2>
+        <button class="sort" data-sort="Dine/Eat Out" data-type="activity">Dine/Eat Out</button>
+        <button class="sort" data-sort="Discover New Things" data-type="activity">Discover New Things</button>
+        <button class="sort" data-sort="Have Fun" data-type="activity">Have Fun</button>
+        <button class="sort" data-sort="Meet People" data-type="activity">Meet People</button>
+        <button class="sort" data-sort="Raise Children" data-type="activity">Raise Children</button>
+        <button class="sort" data-sort="See Performances/Exhibits" data-type="activity">See
+            Performances/Exhibits</button>
+        <button class="sort" data-sort="Shop" data-type="activity">Shop</button>
+        <button class="sort" data-sort="Start a Family" data-type="activity">Start a Family</button>
+        <button class="sort" data-sort="Work" data-type="activity">Work</button>
+
+        <h2>I would go to my business district more often if there were more...</h2>
+
+
+        <button class="sort" data-sort="Safety" data-type="preference">Safety</button>
+        <button class="sort" data-sort="Parking" data-type="preference">Parking</button>
+        <button class="sort" data-sort="Ability to Discover New Things" data-type="preference">Ability to Discover New
+            Things</button>
+        <button class="sort" data-sort="Restaurants, Cafes, and Bars" data-type="preference">Restaurants, Cafes, and
+            Bars</button>
+        <button class="sort" data-sort="Culture/Events" data-type="preference">Culture/Events</button>
+        <button class="sort" data-sort="Store Variety" data-type="preference">Store Variety</button>
+        <button class="sort" data-sort="Family Activities/Events" data-type="preference">Family
+            Activities/Events</button>
+        <button class="sort" data-sort="Parks" data-type="preference">Parks</button>
+        <button class="sort" data-sort="Accessibility" data-type="preference">Accessibility</button>
+        <button class="sort" data-sort="Walkability" data-type="preference">Walkability</button>
+
+        <p class="data-source">Data Source: <a
+                href="https://www.gensler.com/blog/whats-the-recipe-for-a-great-central-business-district"
+                target="_blank">gensler.com</a></p>
+    </div>
+
+    <script src="../vendor/shared/lib-18524bfc46af/dist/chart.umd.js"></script>
+    <script src="../vendor/shared/lib-1c09437b70d7/dist/maplibre-gl.js"></script>
+    <link href="../vendor/shared/lib-9eaeb463f1b3/dist/maplibre-gl.css" rel="stylesheet" />
+
+    <script>
+        let cityData = [];
+        let preferenceData = [];
+        let cityCoordinates = {};
+
+        // Function to reformat the city and CBD name
+            function formatCityName(fullName) {
+                const parts = fullName.split('-'); // Split the string by '-'
+                if (parts.length === 2) {
+                    return `${parts[1].trim()}, ${parts[0].trim()}`; // Format as "CBD Name, City Name"
+                }
+                return fullName; // Return the original if it doesn't contain '-'
+            }
+
+        // Load both JSON files and the CSV file with coordinates
+        Promise.all([
+            fetch('combined_cbd_activities.json').then(response => response.json()),
+            fetch('combined_cbd_preferences.json').then(response => response.json()),
+            fetch('updated_cbd_coordinates_reformatted.csv').then(response => response.text())
+        ]).then(data => {
+            cityData = data[0].Unknown.CBDs;
+            preferenceData = data[1].Unknown.CBDs;
+
+
+            // Parse the CSV data
+            const csvData = data[2];
+            const lines = csvData.split('\n');
+            lines.slice(1).forEach(line => {
+                const [cityName, lat, lon] = line.split(',');
+                if (cityName && lat && lon) {
+                    cityCoordinates[cityName.trim()] = [parseFloat(lat), parseFloat(lon)];
+                }
+            });
+
+            // Render initial city list with doughnut charts
+            renderCities(cityData, preferenceData, 'Dine/Eat Out', 'activity'); // Initial render with some default criterion
+
+            // Add event listeners for sorting based on different criteria
+            document.querySelectorAll('.sort').forEach(button => {
+                button.addEventListener('click', () => {
+                    const criterion = button.dataset.sort;
+                    const type = button.dataset.type;
+                    const sortedCities = (type === 'activity' ? cityData : preferenceData).sort((a, b) => b[criterion] - a[criterion]);
+                    renderCities(sortedCities, preferenceData, criterion, type);
+                });
+            });
+        });
+
+
+        const container = document.getElementById('container');
+        let map;
+
+        // Function to render the city-CBDs with their corresponding data value
+        function renderCities(cityData, preferenceData, criterion, type) {
+            container.innerHTML = ''; // Clear existing cities
+            cityData.forEach((cityCBD, index) => {
+                const cityElement = document.createElement('div');
+                cityElement.className = 'city';
+
+                // Create canvas for Chart.js (either Activity or Preference)
+                const canvas = document.createElement('canvas');
+                canvas.id = `chart-${index}`;
+                cityElement.appendChild(canvas);
+
+                // Add percentage inside doughnut chart (either Activity or Preference)
+                const percentageDiv = document.createElement('div');
+                percentageDiv.className = 'percentage';
+                cityElement.appendChild(percentageDiv);
+
+                // Add city name
+                // Updated code
+                const cityName = document.createElement('div');
+                cityName.textContent = formatCityName(cityCBD["Region & CBD"]); // Use the new function here
+                cityElement.appendChild(cityName);
+
+                container.appendChild(cityElement);
+
+                // Create doughnut chart for either Activity or Preference
+                const ctx = canvas.getContext('2d');
+                const value = cityCBD[criterion] || 0;
+                const percentage = value; // Assume value is already a percentage
+                percentageDiv.textContent = `${percentage}%`;
+
+                const backgroundColor = (type === 'activity') ? ['#04ffeacd', '#444'] : ['#fe00ad', '#444'];
+
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        datasets: [{
+                            data: [percentage, 100 - percentage],
+                            backgroundColor: backgroundColor,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        cutout: '80%', // Smaller inner circle for a thinner doughnut
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        radius: '80%', // Adjust the percentage to reduce the overall radius
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: { enabled: false }
+                        }
+                    }
+                });
+
+                // Add click event to show map for the city
+                cityElement.addEventListener('click', () => {
+                    showMap(cityCBD["Region & CBD"]);
+                });
+            });
+                        }
+
+            if (!map) {
+                    map = new maplibregl.Map({
+                        container: 'map-container',
+                        style: 'https://tiles.stadiamaps.com/styles/alidade_smooth_dark.json',
+                        center: [-77.0369, 38.9072], // Default center on Washington, D.C.
+                        zoom: 12 // Default zoom level
+                    });
+                }
+
+        
+
+            function showMap(cityName) {
+                    console.log('Attempting to show map for:', cityName); // Debug: Log the city name being requested
+
+                    if (!map) {
+                        map = new maplibregl.Map({
+                            container: 'map-container',
+                            style: 'https://tiles.stadiamaps.com/styles/alidade_smooth_dark.json',
+                            center: [-77.0369, 38.9072], // Default center on Washington, D.C.
+                            zoom: 12 // Default zoom level for city
+                        });
+                    }
+
+                     // Retrieve and set the coordinates
+                const cityCoordinatesData = cityCoordinates[cityName.trim()];
+                if (cityCoordinatesData) {
+                    const [lat, lon] = cityCoordinatesData;
+                    map.flyTo({
+                        center: [lon, lat],
+                        zoom: 12,
+                        speed: 2,
+                        curve: 1
+                    });
+                    document.getElementById('map-instruction').textContent = `Viewing: ${cityName}`;
+                } else {
+                    console.log('No coordinates found for:', cityName);
+                    document.getElementById('map-instruction').textContent = "No coordinates found. Try another city.";
+                }
+            }
+
+
+
+                    </script>
+    
+    </body>
+    
+    </html>
+    

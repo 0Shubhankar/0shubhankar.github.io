@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video without Controls</title>
+    <!-- Load MathJax -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js"
+        crossorigin="anonymous"></script>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: auto;
+            /* Enable scrolling */
+                        -webkit-font-smoothing: antialiased;
+
+        }
+
+        #videoContainer {
+            position: relative;
+            /* Adjusted for better positioning */
+            margin: 20px auto;
+            /* Center the video container */
+            width: 90%;
+            /* Adjust width as needed */
+            padding: 20px;
+            background: #ffffff;
+            /* Background color */
+            box-sizing: border-box;
+            /* Include padding in box size */
+        }
+
+        #fullscreenVideo {
+            width: 100%;
+            max-height: 60vh;
+            /* Limit video height */
+            background-size: cover;
+        }
+
+        #videoDescription {
+            color: black;
+            font-size: 16px;
+            text-align: justify;
+            margin-top: 20px;
+            margin-right: 10%;
+            margin-left: 10%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="videoContainer">
+        <video id="fullscreenVideo" autoplay muted loop>
+            <source src="waitingTimeCPSimulation.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <p id="videoDescription">
+            The Krauss Car-Following Model provides a framework for simulating the interactions between vehicles in
+            traffic based on their speeds and the distances between them. This model's primary goal is to calculate a
+            safe operating speed for each vehicle that prevents collisions while allowing traffic to flow as freely as
+            possible.</p>
+        <p id="videoDescription" >
+            <strong>Safe Speed Calculation:</strong>
+            This calculation is central to preventing rear-end collisions by determining the maximum safe speed a
+            vehicle can travel given the current traffic conditions:
+            $$v_{safe} = \frac{s_i(t) \cdot v_i(t)}{s_i(t) + \tau \cdot v_i(t)}$$
+        </p>
+        <p id="videoDescription">Here:
+        <ul id="videoDescription">
+            <li><i>s_i(t)</i> is the distance to the vehicle in front, ensuring that there is enough space to stop or
+                slow down if the leading vehicle decelerates.</li>
+            <li><i>v_i(t)</i> is the current speed of the vehicle, integrating the vehicle's ability to react within a
+                safe margin.</li>
+            <li><i>tau</i> represents the reaction time, allowing for driver response before adjustments in speed are
+                required.</li>
+        </ul>
+        </p>
+        <p id="videoDescription">
+
+        <strong>Acceleration/Deceleration Dynamics:</strong>
+        The model also determines the appropriate acceleration or deceleration needed at each timestep to adjust the
+        vehicle's speed towards the calculated <i>v_{safe}</i>:
+        $$a_i(t) = \min \left( a_{max}, \frac{v_{safe} - v_i(t)}{\Delta t} \right)$$
+        <ul id="videoDescription">
+            <li><i>a_{max}</i> is the maximum acceleration/deceleration the vehicle can safely achieve.</li>
+            <li><i>Delta t</i> is the timestep in seconds, providing the interval over which speed adjustments are
+                calculated.</li>
+        </ul>
+
+        <p id="videoDescription"> For the simulation of Connaught Place, which runs for 3600 seconds, the dynamics of traffic flow and congestion
+        are mapped using the Krauss model's calculations:
+        </p>
+        <p id="videoDescription">
+
+        <strong>Visualization of Waiting Times:</strong>
+        The simulation uses color coding to represent the waiting time of vehicles, reflecting periods when vehicles are
+        stationary or moving much slower than the calculated <i>v_{safe}</i>:
+        $$T_{wait} = \sum_{\text{all } t \text{ where } v_i(t) = 0} \Delta t$$
+        The colors transition as follows:
+        <ul id="videoDescription">
+            <li>Blue (0-30 seconds): Indicates minimal waiting times, typical of moving traffic.</li>
+            <li>Cyan (30-100 seconds): Represents short-term stopping, possibly at traffic signals.</li>
+            <li>Shades of Green (100-200 seconds): Signify increasing waiting times, likely in
+                stop-and-go traffic.</li>
+            <li>Yellow (200-300 seconds): Points to longer delays, common in heavier traffic.</li>
+            <li>Red (>300 seconds): Denotes extensive waiting times, typical of traffic jams or
+                congested intersections.</li>
+        </ul>
+        </p>
+        <p id="videoDescription">
+
+        This method of visualization provides immediate, understandable feedback on the impact of traffic conditions
+        over the course of the simulation, allowing observers to quickly gauge the effectiveness of current traffic
+        management strategies and the general flow of traffic in a complex urban environment like Connaught Place, Delhi.
+        </p>
+    </div>
+
+</body>
+
+</html>

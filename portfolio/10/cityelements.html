@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive 3D Network Graph</title>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #222;
+            color: #fff;
+        }
+
+        #visualization {
+            flex: 1;
+            /* Fills the rest of the screen */
+            width: 100%;
+            height: 90vh;
+        }
+
+        canvas {
+            width: 100%;
+            height: 90%;
+        }
+
+        #description {
+            padding: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            margin: 10px 0;
+        }
+
+        p {
+            font-size: 1.1em;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="visualization"></div> <!-- This div will contain the 3D visualization -->
+
+    <div id="description">
+        <h2>Welcome to the City Relationship Explorer</h2>
+        <p>
+            This interactive 3D visualization helps you explore how different parts of a city are connected based on
+            their similarities. Each point on the globe represents a different part of the city, such as neighborhoods,
+            landmarks, or
+            important facilities.
+        </p>
+        <p><strong>What You’re Seeing:</strong></p>
+        <p>
+            - <strong>Labeled Points:</strong> Each point on the globe corresponds to a city element. These could be
+            different locations or key parts of the city. The labels help identify them.<br>
+            - <strong>Connecting Lines:</strong> The lines between points represent relationships or similarities
+            between these city elements. The closer or more connected two points are, the stronger the relationship,
+            which is shown through thicker or brighter lines.
+        </p>
+        <p><strong>How It Works:</strong></p>
+        <p>
+            1. <strong>Exploring Connections:</strong> Move your mouse over any point on the globe, and you'll see the
+            lines connecting it to other points get highlighted. This shows which elements are more closely related to
+            each other.<br>
+            2. <strong>Zoom and Rotate:</strong> Use your mouse to zoom in and out or rotate the globe to explore
+            different areas. This makes it easy to focus on specific regions or connections within the city.<br>
+            3. <strong>Customization:</strong> Using the control panel on the side, you can adjust the size of the
+            globe, font size, and even the colors of the lines and text.
+        </p>
+    </div>
+
+    <script src="../vendor/shared/lib-51d788816744/dist/papaparse.min.js"></script>
+    <script src="../vendor/shared/lib-4659aba89717/dist/dat.gui.min.js"></script>
+    <script src="../vendor/shared/lib-51d788816744/dist/papaparse.min.js"></script>
+    <script src="../vendor/shared/lib-4659aba89717/dist/dat.gui.min.js"></script>
+    <script type="module">
+        import * as THREE from '../vendor/shared/lib-a64c14149358/dist/three.module.js';
+        import { OrbitControls } from '../vendor/shared/lib-4eca773b8753/dist/OrbitControls.js';
+
+        let scene, camera, renderer, controls, raycaster, mouse;
+        const pointMap = new Map();
+        const lineMap = new Map();
+        const params = {
+            sphereRadius: 54,
+            fontSize: 24,
+            nonHighlightedLineColor: "#bbbbbb",
+            nonHighlightedTextColor: "#ffffff",
+            highlightedColor: "#ff4500"
+        };
+
+        init();
+        loadCSVData();
+        animate();
+
+        function init() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 150;
+
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setClearColor(0x000000);
+            document.getElementById('visualization').appendChild(renderer.domElement);
+
+            controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.25;
+            controls.minDistance = 50;
+            controls.maxDistance = 300;
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+
+            const pointLight = new THREE.PointLight(0xffffff, 1);
+            camera.add(pointLight);
+            scene.add(camera);
+
+            const gui = new dat.GUI();
+            gui.add(params, 'sphereRadius', 10, 100).name('Sphere Radius').onChange(updatePositions);
+            gui.add(params, 'fontSize', 10, 40).name('Font Size').onChange(updateFont);
+            gui.addColor(params, 'nonHighlightedLineColor').name('Line Color').onChange(updateLineColor);
+            gui.addColor(params, 'nonHighlightedTextColor').name('Text Color').onChange(updateTextColor);
+            gui.addColor(params, 'highlightedColor').name('Highlighted Color');
+
+            window.addEventListener('resize', onWindowResize, false);
+            document.addEventListener('mousemove', onMouseMove, false);
+        }
+
+        function createTextSprite(message, color = params.nonHighlightedTextColor, fontSize = params.fontSize) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 256;
+            canvas.height = 128;
+            const context = canvas.getContext('2d');
+            context.font = `Bold ${fontSize}px Arial`;
+            context.fillStyle = color;
+            context.textAlign = 'center';
+            context.fillText(message, canvas.width / 2, canvas.height / 2);
+
+            const texture = new THREE.Texture(canvas);
+            texture.needsUpdate = true;
+
+            const material = new THREE.SpriteMaterial({ map: texture, transparent: true });
+            const sprite = new THREE.Sprite(material);
+            sprite.scale.set(12, 6, 1);
+            return sprite;
+        }
+
+        function loadCSVData() {
+            Papa.parse('city5.csv', {
+                download: true,
+                header: true,
+                complete: function (results) {
+                    results.data.forEach((row, index) => {
+                        const phi = Math.acos(2 * (index / results.data.length) - 1);
+                        const theta = Math.sqrt(results.data.length * Math.PI) * phi;
+
+                        const x = params.sphereRadius * Math.sin(phi) * Math.cos(theta);
+                        const y = params.sphereRadius * Math.sin(phi) * Math.sin(theta);
+                        const z = params.sphereRadius * Math.cos(phi);
+
+                        const sprite = createTextSprite(row.Description);
+                        sprite.position.set(x, y, z);
+                        scene.add(sprite);
+                        pointMap.set(row.Description, sprite);
+                    });
+                    loadSimilarityData();
+                }
+            });
+        }
+
+        function loadSimilarityData() {
+            Papa.parse('similarities.csv', {
+                download: true,
+                header: true,
+                complete: function (results) {
+                    results.data.forEach((row) => {
+                        const sprite1 = pointMap.get(row['Description 1']);
+                        const sprite2 = pointMap.get(row['Description 2']);
+                        const similarity = parseFloat(row.Similarity);
+
+                        if (sprite1 && sprite2 && similarity >= 0.5) {
+                            const material = new THREE.LineBasicMaterial({
+                                color: params.nonHighlightedLineColor,
+                                opacity: similarity,
+                                transparent: true
+                            });
+                            const points = [sprite1.position, sprite2.position];
+                            const geometry = new THREE.BufferGeometry().setFromPoints(points);
+                            const line = new THREE.Line(geometry, material);
+                            scene.add(line);
+
+                            if (!lineMap.has(sprite1)) lineMap.set(sprite1, []);
+                            if (!lineMap.has(sprite2)) lineMap.set(sprite2, []);
+                            lineMap.get(sprite1).push(line);
+                            lineMap.get(sprite2).push(line);
+                        }
+                    });
+                }
+            });
+        }
+
+
+        function onMouseMove(event) {
+            event.preventDefault();
+
+            // Update the mouse coordinates for raycasting
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            // Cast a ray from the camera to the scene
+            raycaster.setFromCamera(mouse, camera);
+
+            // Get the list of objects the ray intersects with
+            const intersects = raycaster.intersectObjects(Array.from(pointMap.values()));
+
+            // If there is an intersection with a sprite
+            if (intersects.length > 0) {
+                const intersectedSprite = intersects[0].object;
+                resetHighlights(); // Reset any previously highlighted lines
+
+                // Highlight the lines connected to the intersected sprite
+                if (lineMap.has(intersectedSprite)) {
+                    lineMap.get(intersectedSprite).forEach(line => {
+                        line.material.color.set(params.highlightedColor); // Set color to red
+                        line.material.linewidth = 2; // Increase line width for emphasis
+                        line.material.opacity = 1; // Make the line fully visible
+                        line.material.needsUpdate = true; // Mark the material for update
+                    });
+                }
+            } else {
+                // If no sprite is intersected, reset the lines to their original state
+                resetHighlights();
+            }
+        }
+
+        function resetHighlights() {
+            // Loop through all lines and reset their color and width to default values
+            lineMap.forEach(lines => {
+                lines.forEach(line => {
+                    line.material.color.set(params.nonHighlightedLineColor); // Default color
+                    line.material.linewidth = 1; // Default line width
+                    line.material.opacity = 0.5; // Default opacity for non-highlighted lines
+                    line.material.needsUpdate = true; // Mark the material for update
+                });
+            });
+        }
+
+        function updatePositions() {
+            pointMap.forEach((sprite, description) => {
+                const index = Array.from(pointMap.keys()).indexOf(description);
+                const numPoints = pointMap.size;
+                const phi = Math.acos(2 * (index / numPoints) - 1);
+                const theta = Math.sqrt(numPoints * Math.PI) * phi;
+
+                sprite.position.x = params.sphereRadius * Math.sin(phi) * Math.cos(theta);
+                sprite.position.y = params.sphereRadius * Math.sin(phi) * Math.sin(theta);
+                sprite.position.z = params.sphereRadius * Math.cos(phi);
+            });
+        }
+
+        function updateFont() {
+            pointMap.forEach((sprite, description) => {
+                scene.remove(sprite); // Remove the old sprite
+                const updatedSprite = createTextSprite(description);
+                updatedSprite.position.copy(sprite.position);
+                scene.add(updatedSprite);
+                pointMap.set(description, updatedSprite);
+            });
+        }
+
+        function updateLineColor() {
+            lineMap.forEach(lines => {
+                lines.forEach(line => {
+                    line.material.color.set(params.nonHighlightedLineColor);
+                    line.material.needsUpdate = true;
+                });
+            });
+        }
+
+        function updateTextColor() {
+            pointMap.forEach((sprite, description) => {
+                scene.remove(sprite);
+                const updatedSprite = createTextSprite(description);
+                updatedSprite.position.copy(sprite.position);
+                scene.add(updatedSprite);
+                pointMap.set(description, updatedSprite);
+            });
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+    </script>
+</body>
+
+</html>

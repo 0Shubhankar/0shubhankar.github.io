@@ -1,0 +1,145 @@
+<head>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        #tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 5px;
+            border-radius: 3px;
+            pointer-events: none;
+            display: none;
+        }
+    </style>
+
+    <script type="importmap">
+        { 
+            "imports": {
+                "three": "../vendor/shared/lib-28f7db420fe3/dist/three.module.js"
+            } 
+        }
+    </script>
+    <script type="module">
+        import * as THREE from 'three';
+        window.THREE = THREE;
+    </script>
+
+    <script src="../vendor/shared/lib-89aa57bf7c60/dist/three-globe.min.js" defer></script>
+</head>
+
+<body>
+    <div id="globeViz"></div>
+    <div id="tooltip"></div>
+
+    <script type="module">
+        import { TrackballControls } from '../vendor/shared/lib-fdf9a4f920c9/dist/TrackballControls.js';
+
+        // Delhi coordinates
+        const delhi = { lat: 28.6139, lon: 77.2090 };
+
+        // Target locations with arc count
+        const locations = [
+            { country: "USA", lat: 37.0902, lon: -95.7129, number: 5409062, arcCount: 55, color: 'red' },
+            { country: "UAE", lat: 23.4241, lon: 53.8478, number: 3568848, arcCount: 36, color: 'green' },
+            { country: "Malaysia", lat: 4.2105, lon: 101.9758, number: 2914127, arcCount: 30, color: 'blue' },
+            { country: "Canada", lat: 56.1304, lon: -106.3468, number: 2875954, arcCount: 29, color: 'purple' },
+            // ... more countries
+        ];
+
+        // Generate arcs data from Delhi to target locations with arc count
+        const arcsData = locations.flatMap(location => {
+            return Array.from({ length: location.arcCount }, () => ({
+                startLat: delhi.lat,
+                startLng: delhi.lon,
+                endLat: location.lat,
+                endLng: location.lon,
+                color: location.color,
+                strokeWidth: Math.random() * 0.5 + 0.5, // Randomize width for visual effect
+                arcDashLength: 0.4,
+                arcDashGap: 4,
+                arcDashInitialGap: Math.random() * 5,
+                arcDashAnimateTime: 1000,
+                tooltip: `${location.country}: ${location.number} overseas Indians`
+            }));
+        });
+
+        const Globe = new ThreeGlobe()
+            .globeImageUrl('earth-night.jpg')
+            .arcsData(arcsData)
+            .arcColor('color')
+            .arcStroke('strokeWidth')
+            .arcDashLength('arcDashLength')
+            .arcDashGap('arcDashGap')
+            .arcDashInitialGap('arcDashInitialGap')
+            .arcDashAnimateTime('arcDashAnimateTime');
+
+        // Setup renderer
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('globeViz').appendChild(renderer.domElement);
+
+        // Setup scene
+        const scene = new THREE.Scene();
+        scene.add(Globe);
+        scene.add(new THREE.AmbientLight(0xcccccc, Math.PI));
+        scene.add(new THREE.DirectionalLight(0xffffff, 0.6 * Math.PI));
+
+        // Setup camera
+        const camera = new THREE.PerspectiveCamera();
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        camera.position.z = 500;
+
+        // Add camera controls
+        const tbControls = new TrackballControls(camera, renderer.domElement);
+        tbControls.minDistance = 101;
+        tbControls.rotateSpeed = 5;
+        tbControls.zoomSpeed = 0.8;
+
+        // Add tooltip functionality
+        const tooltip = document.getElementById('tooltip');
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+
+        document.addEventListener('mousemove', onMouseMove);
+
+        function onMouseMove(event) {
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            raycaster.setFromCamera(mouse, camera);
+
+            const intersects = raycaster.intersectObjects(Globe.children, true);
+            if (intersects.length > 0) {
+                const intersect = intersects[0];
+                const object = intersect.object;
+                const data = object.userData;
+
+                if (data.tooltip) {
+                    tooltip.style.left = `${event.clientX + 5}px`;
+                    tooltip.style.top = `${event.clientY + 5}px`;
+                    tooltip.innerHTML = data.tooltip;
+                    tooltip.style.display = 'block';
+                }
+            } else {
+                tooltip.style.display = 'none';
+            }
+        }
+
+        // Kick-off renderer
+        (function animate() { // IIFE
+            tbControls.update();
+            renderer.render(scene, camera);
+            requestAnimationFrame(animate);
+        })();
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>

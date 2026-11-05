@@ -1,0 +1,121 @@
+<head>
+    <style>
+        body {
+            margin: 0;
+        }
+    </style>
+
+    <script type="importmap">
+        { 
+            "imports": {
+                "three": "../vendor/shared/lib-28f7db420fe3/dist/three.module.js"
+            } 
+        }
+    </script>
+    <script type="module">
+        import * as THREE from 'three';
+        window.THREE = THREE;
+    </script>
+
+    <script src="../vendor/shared/lib-89aa57bf7c60/dist/three-globe.min.js" defer></script>
+</head>
+
+<body>
+    <div id="globeViz"></div>
+
+    <script type="module">
+        import { TrackballControls } from '../vendor/shared/lib-fdf9a4f920c9/dist/TrackballControls.js';
+
+        // Delhi coordinates
+        const delhi = { lat: 28.6139, lon: 77.2090 };
+
+        // Target locations
+        const locations = [
+            { country: "USA", lat: 37.0902, lon: -95.7129, number: 5409062, arcCount: 55 },
+            { country: "UAE", lat: 23.4241, lon: 53.8478, number: 3568848, arcCount: 36 },
+            { country: "Malaysia", lat: 4.2105, lon: 101.9758, number: 2914127, arcCount: 30 },
+            { country: "Canada", lat: 56.1304, lon: -106.3468, number: 2875954, arcCount: 29 },
+            { country: "Saudi Arabia", lat: 23.8859, lon: 45.0792, number: 2463509, arcCount: 25 },
+            { country: "Myanmar", lat: 21.9162, lon: 95.9560, number: 2002660, arcCount: 20 },
+            { country: "UK", lat: 55.3781, lon: -3.4360, number: 1864318, arcCount: 19 },
+            { country: "South Africa", lat: -30.5595, lon: 22.9375, number: 1700000, arcCount: 17 },
+            { country: "Sri Lanka", lat: 7.8731, lon: 80.7718, number: 1607500, arcCount: 16 },
+            { country: "Kuwait", lat: 29.3759, lon: 47.9774, number: 995528, arcCount: 10 },
+            { country: "Australia", lat: -25.2744, lon: 133.7751, number: 976000, arcCount: 10 },
+            { country: "Mauritius", lat: -20.3484, lon: 57.5522, number: 894848, arcCount: 9 },
+            { country: "Qatar", lat: 25.3548, lon: 51.1839, number: 836784, arcCount: 9 },
+            { country: "Nepal", lat: 28.3949, lon: 84.1240, number: 700004, arcCount: 7 },
+            { country: "Oman", lat: 21.4735, lon: 55.9754, number: 686635, arcCount: 7 },
+            { country: "Singapore", lat: 1.3521, lon: 103.8198, number: 650000, arcCount: 7 },
+            { country: "Trinidad & Tobago", lat: 10.6918, lon: -61.2225, number: 549545, arcCount: 6 },
+            { country: "Bahrain", lat: 26.0667, lon: 50.5577, number: 327807, arcCount: 4 },
+            { country: "Guyana", lat: 4.8604, lon: -58.9302, number: 321500, arcCount: 4 },
+            { country: "Fiji", lat: -17.7134, lon: 178.0650, number: 316081, arcCount: 4 },
+            { country: "France (Reunion Island)", lat: -21.1151, lon: 55.5364, number: 300159, arcCount: 4 },
+            { country: "New Zealand", lat: -40.9006, lon: 174.8860, number: 270000, arcCount: 3 },
+            { country: "Germany", lat: 51.1657, lon: 10.4515, number: 260864, arcCount: 3 },
+            { country: "Netherlands", lat: 52.1326, lon: 5.2913, number: 228787, arcCount: 3 },
+            { country: "Italy", lat: 41.8719, lon: 12.5674, number: 206503, arcCount: 3 },
+            { country: "Suriname", lat: 3.9193, lon: -56.0278, number: 160160, arcCount: 2 },
+            { country: "Philippines", lat: 12.8797, lon: 121.7740, number: 150010, arcCount: 2 },
+            { country: "Thailand", lat: 15.8700, lon: 100.9925, number: 150000, arcCount: 2 },
+            { country: "Indonesia", lat: -0.7893, lon: 113.9213, number: 134817, arcCount: 2 },
+            { country: "France", lat: 46.6034, lon: 1.8883, number: 119000, arcCount: 2 },
+            { country: "Israel", lat: 31.0461, lon: 34.8516, number: 105000, arcCount: 2 }
+        ];
+
+        // Generate arcs data from Delhi to target locations
+        const arcsData = locations.map(location => ({
+            startLat: delhi.lat,
+            startLng: delhi.lon,
+            endLat: location.lat,
+            endLng: location.lon,
+            color: 'pink', // Set arc color as needed
+            strokeWidth: location.arcCount / 10, // Set the arc thickness based on arcCount
+            arcDashLength: 0.4,
+            arcDashGap: 4,
+            arcDashInitialGap: Math.random() * 5,
+            arcDashAnimateTime: 1000
+        }));
+
+        const Globe = new ThreeGlobe()
+            .globeImageUrl('earth-night.jpg')
+            .arcsData(arcsData)
+            .arcColor('color')
+            .arcDashLength('arcDashLength')
+            .arcDashGap('arcDashGap')
+            .arcDashInitialGap('arcDashInitialGap')
+            .arcDashAnimateTime('arcDashAnimateTime');
+
+        // Setup renderer
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('globeViz').appendChild(renderer.domElement);
+
+        // Setup scene
+        const scene = new THREE.Scene();
+        scene.add(Globe);
+        scene.add(new THREE.AmbientLight(0xcccccc, Math.PI));
+        scene.add(new THREE.DirectionalLight(0xffffff, 0.6 * Math.PI));
+
+        // Setup camera
+        const camera = new THREE.PerspectiveCamera();
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        camera.position.z = 500;
+
+        // Add camera controls
+        const tbControls = new TrackballControls(camera, renderer.domElement);
+        tbControls.minDistance = 101;
+        tbControls.rotateSpeed = 5;
+        tbControls.zoomSpeed = 0.8;
+
+        // Kick-off renderer
+        (function animate() { // IIFE
+            // Frame cycle
+            tbControls.update();
+            renderer.render(scene, camera);
+            requestAnimationFrame(animate);
+        })();
+    </script>
+</body>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Extended Nested Categories Visualization with Blinking Effect</title>
+    <script src="../vendor/shared/lib-5e378598ab8e/dist/d3.min.js"></script>
+    <style>
+        .chart {
+            margin: 20px;
+            display: inline-block;
+            position: relative;
+            width: 700px;
+            height: 600px;
+        }
+
+        .chart-title {
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .tooltip {
+            position: absolute;
+            text-align: center;
+            width: auto;
+            padding: 5px;
+            font-size: 12px;
+            background: lightsteelblue;
+            border: 1px solid #666;
+            border-radius: 8px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.1;
+            }
+        }
+
+        .rect {
+            animation-name: blink;
+            animation-duration: var(--blink-duration, 2s);
+            /* Default blink rate */
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="visualization" class="chart">
+        <div class="tooltip" id="tooltip" style="opacity: 0;"></div>
+    </div>
+
+
+    <script>
+        d3.json('specific_counts_Within_100m.json').then(function (data) {
+                const svgWidth = 700, svgHeight = 670;
+                const svg = d3.select("#visualization").append("svg")
+                    .attr("width", svgWidth)
+                    .attr("height", svgHeight);
+
+                const center = { x: svgWidth / 2, y: svgHeight / 2 };
+                const baseRadius = 100;
+                const categories = ["public_transport", "building", "landuse", "shop", "amenity", "name"];
+                const tooltip = d3.select("#tooltip");
+                const categoryColors = {
+                    "public_transport": "#ff0011",
+                    "building": "#ff0011",
+                    "landuse": "#ff0011",
+                    "shop": "#ff0315",
+                    "amenity": "#ff0011",
+                    "name": "#ff0335"
+                };
+
+                categories.forEach((category, catIndex) => {
+                    let entries = Object.entries(data[category]).map(([type, occurrences]) => ({ type, occurrences }));
+                    entries.sort((a, b) => b.occurrences - a.occurrences);
+                    entries = entries.slice(0, 25);
+
+                    const maxOccurrences = entries[0].occurrences;
+                    const minOccurrences = entries[entries.length - 1].occurrences;
+                    const rectScale = d3.scaleLinear()
+                        .domain([0, maxOccurrences])
+                        .range([10, 30]); // Scale rectangle sizes
+
+                    const angleStep = 2 * Math.PI / entries.length;
+                    const radius = baseRadius + 40 * catIndex;
+
+                    const svgGroup = svg.append("g")
+                        .attr("transform", `translate(${center.x}, ${center.y})`);
+
+                    svgGroup.append("circle")
+                        .attr("r", radius)
+                        .attr("fill", "none")
+                        .attr("stroke", "pink");
+                    
+                          // Adding text "500m" at the center of the circle
+                    svgGroup.append("text")
+                        .attr("x", 0) // Centered horizontally
+                        .attr("y", 0) // Centered vertically
+                        .attr("text-anchor", "middle")
+                        .attr("fill", "red")
+                        .style("font-size", "24px")
+                        .style("font-weight", "bold")
+                        .text("100m");
+
+                    entries.forEach((entry, index) => {
+                        const angle = angleStep * (catIndex % 2 === 0 ? index : entries.length - index - 1);
+                        const rectSize = rectScale(entry.occurrences);
+                        const outerRadius = radius + rectSize / 2 + 10;
+                        const x = outerRadius * Math.cos(angle);
+                        const y = outerRadius * Math.sin(angle);
+
+                        const blinkDuration = 5 - 4 * ((entry.occurrences - minOccurrences) / (maxOccurrences - minOccurrences)); // Faster blink for higher occurrences
+
+                        svgGroup.append("rect")
+                            .attr("class", "rect")
+                            .attr("x", x - rectSize / 2)
+                            .attr("y", y - rectSize / 2)
+                            .attr("width", rectSize)
+                            .attr("height", rectSize)
+                            .attr("fill", categoryColors[category])
+                            .attr("transform", `rotate(${angle * 180 / Math.PI}, ${x}, ${y})`)
+                            .style("--blink-duration", `${blinkDuration}s`)
+                            .on("mouseover", function (event) {
+                                tooltip.style("opacity", 1)
+                                    .html(`${entry.type}: ${entry.occurrences}`)
+                                    .style("left", (event.pageX + 10) + "px")
+                                    .style("top", (event.pageY - 10) + "px");
+                            })
+                            .on("mouseout", function () {
+                                tooltip.style("opacity", 0);
+                            });
+                    });
+                });
+            });
+
+    </script>
+</body>
+
+</html>

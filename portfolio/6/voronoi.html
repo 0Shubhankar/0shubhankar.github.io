@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Clustered Nodes with D3.js Voronoi diagram</title>
+    <script src="../vendor/shared/lib-63416471585d/dist/d3.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            overflow: hidden;
+            background-color: #1e1e1e;
+            color: #ffffff;
+        }
+
+        h1 {
+            text-align: center;
+            color: #00ff41;
+        }
+
+        svg {
+            display: block;
+        }
+
+        .tooltip {
+            position: absolute;
+            text-align: center;
+            width: auto;
+            height: auto;
+            padding: 8px;
+            font: 12px sans-serif;
+            background: #00ff41;
+            border: 0px;
+            border-radius: 8px;
+            pointer-events: none;
+            opacity: 0;
+            color: #1e1e1e;
+        }
+        .attribution {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: right;
+            color: #00ff41;
+            padding: 10px;
+            font-size: 0.8em;
+        }
+
+        .attribution {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: right;
+            color: #00ff41;
+            padding: 15px 50px; /* Adjust padding */
+            font-size: 0.8em;
+            box-sizing: border-box;
+        }
+
+        .attribution a {
+            color: #00ff41;
+            text-decoration: none;
+        }
+
+        .attribution a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Clustered Nodes with D3.js</h1>
+    <div class="attribution">
+        Data Source: <a href="https://opendata.dc.gov/datasets/3f28bc3ad77f49079efee0ac05d8464c_0/explore"
+            target="_blank">Opendata DC</a>
+    <script>
+        var width = window.innerWidth,
+            height = window.innerHeight,
+            maxRadius = 10,
+            m = 5; // Number of distinct clusters (0-4)
+
+        var colors = ["#004d00", "#007a00", "#00a300", "#00d000", "#00ff41"];
+        var color = d3.scaleOrdinal().domain(d3.range(m)).range(colors);
+
+        var clusters = new Array(m);
+        var nodes = [];
+
+        d3.csv("cleaned_csv_file2.csv", function (error, data) {
+            if (error) throw error;
+
+            var sentimentScale = d3.scaleLinear()
+                .domain([d3.min(data, function (d) { return +d.sentiment_score; }), 0])
+                .range([2, maxRadius]);
+
+            data.forEach(function (d) {
+                d.cluster = +d.cluster;
+                d.sentiment_score = +d.sentiment_score;
+
+                var radius = sentimentScale(d.sentiment_score);
+
+                var node = {
+                    cluster: d.cluster,
+                    radius: radius,
+                    comments: d.COMMENTS,
+                    sentiment_score: d.sentiment_score
+                };
+
+                if (!clusters[d.cluster] || (radius > clusters[d.cluster].radius)) clusters[d.cluster] = node;
+                nodes.push(node);
+            });
+
+            // Define cluster centers
+            var clusterCenters = [];
+            for (var i = 0; i < m; i++) {
+                clusterCenters.push({
+                    x: (width / (m + 1)) * (i + 1),
+                    y: height / 2
+                });
+            }
+
+            createVisualization(clusterCenters);
+        });
+
+        function createVisualization(clusterCenters) {
+            var svg = d3.select("body").append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+            var tooltip = d3.select("body").append("div")
+                .attr("class", "tooltip");
+
+            var simulation = d3.forceSimulation(nodes)
+                .force("center", d3.forceCenter(width / 2, height / 2))
+                .force("x", d3.forceX().strength(0.1).x(function (d) {
+                    return clusterCenters[d.cluster].x;
+                }))
+                .force("y", d3.forceY().strength(0.1).y(function (d) {
+                    return clusterCenters[d.cluster].y;
+                }))
+                .force("cluster", clusteringForce(clusterCenters))
+                .force("collide", d3.forceCollide().radius(function (d) { return d.radius + 1; }).iterations(2))
+                .on("tick", ticked);
+
+            function clusteringForce(clusterCenters) {
+                return function (alpha) {
+                    nodes.forEach(function (d) {
+                        var cluster = clusterCenters[d.cluster];
+                        var x = d.x - cluster.x,
+                            y = d.y - cluster.y,
+                            l = Math.sqrt(x * x + y * y),
+                            r = d.radius + 10; // Add some padding for the cluster center
+                        if (l != r) {
+                            l = (l - r) / l * alpha;
+                            d.x -= x *= l;
+                            d.y -= y *= l;
+                            cluster.x += x;
+                            cluster.y += y;
+                        }
+                    });
+                };
+            }
+
+            function ticked() {
+                var u = svg.selectAll("circle")
+                    .data(nodes);
+
+                u.enter()
+                    .append("circle")
+                    .attr("r", function (d) { return d.radius; })
+                    .style("fill", function (d) { return color(d.cluster); })
+                    .merge(u)
+                    .attr("cx", function (d) { return d.x; })
+                    .attr("cy", function (d) { return d.y; })
+                    .on("mouseover", function (d) {
+                        tooltip.transition()
+                            .duration(200)
+                            .style("opacity", .9);
+                        tooltip.html(d.comments)
+                            .style("left", (d3.event.pageX + 5) + "px")
+                            .style("top", (d3.event.pageY - 28) + "px");
+                    })
+                    .on("mouseout", function (d) {
+                        tooltip.transition()
+                            .duration(500)
+                            .style("opacity", 0);
+                    });
+
+                u.exit().remove();
+            }
+        }
+    </script>
+</body>
+
+</html>

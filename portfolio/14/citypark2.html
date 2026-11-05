@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Map with Isochrone and Decay Scores</title>
+    <link rel="stylesheet" href="../vendor/shared/lib-9eaeb463f1b3/dist/maplibre-gl.css">
+
+    <script src="../vendor/shared/lib-6042d64ed8cf/dist/highcharts.js"></script>
+    <script src="../vendor/shared/lib-b4f1751e1021/dist/highcharts-more.js"></script>
+
+    <style>
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+    
+        #citySelector {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            background: #333;
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+        }
+    
+        select {
+            background: rgba(0, 0, 0, 0.8);
+            border: none;
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+        }
+    
+        #radarChartContainer {
+            position: absolute;
+            top: 60px;
+            /* Moved down to avoid covering the city box */
+            right: 50px;
+            width: 300px;
+            height: 300px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+            z-index: 1000;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="citySelector">
+        <select onchange="loadCityData(this.value)">
+            <option value="">Select a City</option>
+            <option value="bengaluru">Bengaluru</option>
+            <option value="delhi">Delhi</option>
+            <option value="mumbai">Mumbai</option>
+            <option value="chicago">Chicago</option>
+            <option value="newyork">New York</option>
+            <option value="london">London</option>
+            <option value="losangeles">Los Angeles</option>
+            <option value="cairo">Cairo</option>
+            <option value="istanbul">Istanbul</option>
+            <option value="paris">Paris</option>
+            <option value="shanghai">Shanghai</option>
+        </select>
+    </div>
+    <div id="map"></div>
+    <div id="radarChartContainer"></div>
+    <script src="../vendor/shared/lib-1c09437b70d7/dist/maplibre-gl.js"></script>
+
+    <script>
+        
+        const map = new maplibregl.Map({
+                container: 'map', // container ID
+                style: 'https://tiles.stadiamaps.com/styles/alidade_smooth_dark.json', // style URL
+                center: [78.9629, 20.5937], // initial position [lng, lat]
+                zoom: 5 // initial zoom
+            });
+
+            function loadCityData(city) {
+                var cityCoordinates = {
+                    'bengaluru': [77.5946, 12.9716, 12],
+                    'delhi': [77.1025, 28.7041, 12],
+                    'mumbai': [72.8777, 19.0760, 12],
+                    'chicago': [-87.6298, 41.8781, 12],
+                    'newyork': [-74.0060, 40.7128, 12],
+                    'london': [-0.1278, 51.5074, 12],
+                    'losangeles': [-118.2437, 34.0522, 12],
+                    'cairo': [31.2357, 30.0444, 12],
+                    'istanbul': [28.9784, 41.0082, 12],
+                    'paris': [2.3522, 48.8566, 12],
+                    'shanghai': [121.4737, 31.2304, 12]
+                };
+
+                if (city && cityCoordinates[city]) {
+                    var coordinates = cityCoordinates[city];
+                    map.flyTo({ center: [coordinates[0], coordinates[1]], zoom: coordinates[2] });
+
+                    var geojsonURL = `updated_parks_with_all_metrics_and_silhouette_${city}.geojson`;
+                    fetch(geojsonURL)
+                        .then(response => response.json())
+                        .then(data => {
+                            // Assuming data is a correct GeoJSON object
+                            if (map.getLayer('city-parks')) {
+                                map.removeLayer('city-parks');
+                                map.removeSource('city-parks');
+                            }
+                            map.addSource('city-parks', {
+                                type: 'geojson',
+                                data: data
+                            });
+                            map.addLayer({
+                                id: 'city-parks',
+                                type: 'fill',
+                                source: 'city-parks',
+                                layout: {},
+                                paint: {
+                                    'fill-color': '#34c924',
+                                    'fill-opacity': 0.7
+                                }
+                            });
+
+                            map.on('click', 'city-parks', function (e) {
+                                updateChart(e.features[0]);
+                            });
+                        })
+                        .catch(error => console.error('Error loading the GeoJSON data:', error));
+                }
+            }
+
+        function updateChart(feature) {
+                var name = feature.properties.name || "Park"; // Default to "Park" if name is null
+
+                // Extract scores and calculate maximum for normalization
+                var scores = [
+                    feature.properties.isochrone_areas["5"],
+                    feature.properties.isochrone_areas["10"],
+                    feature.properties.isochrone_areas["15"],
+                    feature.properties.isochrone_areas["25"]
+                ];
+
+                console.log("Raw scores before normalization:", scores);  // Debugging log
+
+                var maxScore = Math.max(...scores);  // Find the maximum score
+                maxScore = maxScore === 0 ? 1 : maxScore; // Avoid division by zero by setting maxScore to 1 if it's 0
+
+                // Normalize scores to a scale of 0 to 10
+                var normalizedScores = scores.map(function (score) {
+                    if (score === 0) {
+                        return 0; // Return 0 directly if the original score is 0
+                    }
+                    var normalized = (score / maxScore) * 10;
+                    var errorMargin = 0.01 + Math.random() * 0.09; // Random error margin between 1% and 10%
+                    return normalized * (1 + errorMargin); // Apply error margin after normalization
+                });
+
+                console.log("Normalized scores with error margins:", normalizedScores);  // Debugging log
+
+                Highcharts.chart('radarChartContainer', {
+                    chart: {
+                        polar: true,
+                        type: 'area',
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)'
+                    },
+                    title: {
+                        text: 'Accessibility Scores for ' + name,
+                        style: {
+                            color: '#FFFFFF'
+                        }
+                    },
+                    pane: {
+                        startAngle: 0,
+                        endAngle: 360
+                    },
+                    xAxis: {
+                        categories: ['5 min', '10 min', '15 min', '25 min'],
+                        tickmarkPlacement: 'on',
+                        lineWidth: 0,
+                        labels: {
+                            style: {
+                                color: '#A0A0A3'
+                            }
+                        }
+                    },
+                    yAxis: {
+                        gridLineInterpolation: 'polygon',
+                        lineWidth: 0,
+                        min: 0,
+                        labels: {
+                            style: {
+                                color: '#A0A0A3'
+                            }
+                        }
+                    },
+                    tooltip: {
+                        shared: true,
+                        pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}</b><br/>'
+                    },
+                    legend: {
+                        enabled: false
+                    },
+                    series: [{
+                        name: 'Park Score',
+                        data: normalizedScores,
+                        pointPlacement: 'on',
+                        color: '#34c924',
+                        fillColor: 'rgba(52, 201, 36, 0.1)'
+                    }]
+                });
+            }
+
+    </script>
+</body>
+
+</html>

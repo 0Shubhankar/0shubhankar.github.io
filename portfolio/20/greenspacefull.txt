@@ -1,0 +1,142 @@
+You're right! Let me restore the top choices for **Decision 1** (A) and **Decision 2** (B) while maintaining coherence with the subsequent options and outcomes. Here is the complete revision with those top-level choices included:
+
+---
+
+### ** A: Addressing Poor Access to Green Spaces**
+
+#### Scenario:
+Low-income neighborhoods in the city suffer from poor access to parks and green space. This lack of green space contributes to environmental inequality, health disparities, and lower quality of life. You are tasked with addressing this imbalance.
+
+**Decision 1**: How do you begin improving access to green spaces?
+
+- **Option A**: **Large-scale park development or small green spaces?**
+
+   - **A1**: **Invest in a large-scale park development project in low-income areas.**
+     - **Immediate Consequences**:
+       - New parks are built quickly, increasing green space and community satisfaction.
+       - High upfront costs strain the city budget, reducing available funds for other city needs.
+     - **New Choices After Consequence**:
+       - **A1.1**: Cut funding from other infrastructure projects to maintain the momentum of green space development.
+           - **Consequence**: Green space projects continue, but public dissatisfaction grows due to cuts in transportation, housing, or other critical infrastructure.
+       - **A1.2**: Explore public-private partnerships to share development costs.
+           - **Consequence**: Development is slower but reduces the strain on the city budget. Corporations may gain influence over park design and locations.
+
+   - **A2**: **Start by planting trees and creating small green spaces in vacant lots.**
+     - **Immediate Consequences**:
+       - Tree canopy and small green areas increase in low-income neighborhoods at a lower cost.
+       - Improvements are slower, but the impact is more sustainable in the long run.
+     - **New Choices After Consequence**:
+       - **A2.1**: Apply for grants to expand green space projects over time.
+           - **Consequence**: Green space expansion is gradual but consistent, allowing for more thoughtful, community-oriented development.
+       - **A2.2**: Engage the community to participate in tree planting and green space maintenance.
+           - **Consequence**: Community involvement reduces costs and builds local pride, but progress may depend on volunteer availability and enthusiasm.
+
+---
+
+### ** B: Balancing Environmental Justice with Economic Development**
+
+#### Scenario:
+While improving green spaces, businesses and developers are concerned that these projects will slow down economic development, especially in areas designated for commercial growth.
+
+**Decision 2**: How do you balance green space development with economic interests?
+
+- **Option B**: **Balance green space with economic interests?**
+
+   - **B1**: **Allocate commercial zones alongside new parks to encourage business growth.**
+     - **Immediate Consequences**:
+       - Businesses benefit from access to prime commercial locations near parks.
+       - Some green space may be compromised to accommodate commercial zones, lowering public satisfaction in low-income areas.
+     - **New Choices After Consequence**:
+       - **B1.1**: Increase park development in residential areas to counterbalance the loss of green space in commercial zones.
+           - **Consequence**: Public satisfaction in residential areas improves, but city funds are further strained by simultaneous investments in both green spaces and commercial zones.
+       - **B1.2**: Introduce zoning laws that limit business expansion near parks.
+           - **Consequence**: Public satisfaction improves, but businesses push back, claiming that the restrictions hurt economic growth potential.
+
+   - **B2**: **Prioritize green space development exclusively in residential zones.**
+     - **Immediate Consequences**:
+       - Public support increases as residential communities see improved green space access.
+       - Businesses and developers push back, arguing that growth potential is being ignored.
+     - **New Choices After Consequence**:
+       - **B2.1**: Work with developers to offer incentives for building eco-friendly businesses near green spaces.
+           - **Consequence**: Businesses are more willing to cooperate, but the incentives may delay green space development as negotiations occur.
+       - **B2.2**: Implement a moratorium on commercial development in residential green zones.
+           - **Consequence**: Public support remains high in residential areas, but the economy may slow as businesses are unable to expand.
+
+---
+
+### ** S: Addressing Long-Term Green Space Maintenance**
+
+#### Scenario:
+While creating parks and planting trees in low-income neighborhoods is a priority, you must now consider long-term maintenance. Without proper care, these spaces may fall into disrepair, reducing their effectiveness and public support.
+
+**Decision 3**: How do you ensure sustainable maintenance of new green spaces?
+
+- **Option S.1**: Create a city-wide green space maintenance fund using tax revenues.
+   - **Immediate Consequences**:
+     - The fund ensures that green spaces are maintained long-term, preventing decay.
+     - Raising taxes may cause backlash, particularly from wealthier residents and businesses.
+   
+   - **New Choices After Consequence**:
+     - **S.1A**: Justify the tax increase with public campaigns highlighting environmental and health benefits.
+         - **Consequence**: Public acceptance grows, but some wealthier residents continue to oppose the tax.
+                S1.AA: Offer tax breaks to wealthier residents
+                Smooth things over by giving the wealthy a small tax break. Public satisfaction improves, and the parks get their funding—win-win! 🎉
+
+                S1.AB: Host a ‘Green Gala’ fundraiser
+                Throw a fancy event to raise extra funds! Sure, you’ll raise some money, but will it be enough? Also, what if the mayor’s dance moves steal the spotlight? 💃💸
+
+
+     - **S.1B**: Create a public-private partnership for long-term green space maintenance.
+         - **Consequence**: Private funds help maintain green spaces, but corporate influence over park management increases, potentially causing public concern.
+
+                S1.BA Limit corporate involvement
+                Rein in the businesses, setting clear boundaries. The public cheers, but corporate donors might pull back their funding. 💸
+
+                S1.BB: Let corporations name the parks
+                Allow them to plaster their logos all over. Corporate funds skyrocket, but now you’ve got “Soda Pop Park” and “Tech Town Greenspace”... not exactly the vibe. 🏞️
+
+- **Option S.2**: Partner with local communities to manage green spaces through volunteer programs.
+   - **Immediate Consequences**:
+     - Community involvement reduces maintenance costs and builds stronger ties to the parks.
+     - Volunteers may be inconsistent, leading to potential periods of neglect.
+   
+   - **New Choices After Consequence**:
+     - **S.2A**: Offer stipends to incentivize consistent volunteer participation.
+         - **Consequence**: Volunteer reliability improves, but costs increase, requiring additional funding.
+     - **S.2B**: Rely solely on volunteers, with limited city oversight.
+         - **Consequence**: Maintenance is highly variable, leading to some green spaces thriving while others fall into neglect.
+
+---
+
+### ** X: Environmental Justice Concerns**
+
+#### Scenario:
+Some wealthier areas of the city already have ample green space, while low-income neighborhoods remain underserved. This has led to increased environmental justice concerns, as the gap between rich and poor in terms of access to green space continues to widen.
+
+**Decision 4**: How do you address the environmental justice gap?
+
+- **Option X.A1**: Implement an equitable green space policy that prioritizes low-income areas.
+   - **Immediate Consequences**:
+     - The gap between rich and poor neighborhoods in terms of green space access begins to close.
+     - Wealthier residents and businesses argue that resources are being unfairly allocated.
+   
+   - **New Choices After Consequence**:
+     - **X.A1A**: Hold public hearings to explain the equity-based policy and its long-term benefits.
+         - **Consequence**: Public understanding improves, but some opposition remains from wealthier groups.
+     - **X.A1B**: Introduce a tax on wealthier neighborhoods to help fund green space initiatives in underserved areas.
+         - **Consequence**: Funding for low-income areas increases, but the wealthier population becomes increasingly resentful.
+
+- **Option X.A2**: Spread resources evenly across all neighborhoods, regardless of income.
+   - **Immediate Consequences**:
+     - No neighborhood is left behind, ensuring green space development city-wide.
+     - Low-income neighborhoods continue to suffer from a lack of sufficient green spaces, as wealthier areas receive an equal share of resources.
+   
+   - **New Choices After Consequence**:
+     - **X.A2A**: Return to prioritizing low-income areas in future green space development phases.
+         - **Consequence**: Some progress is made in low-income neighborhoods, but the timeline for achieving equity is extended.
+     - **X.A2B**: Encourage wealthier neighborhoods to self-fund additional green space improvements.
+         - **Consequence**: Wealthier areas maintain and improve their green spaces, but low-income neighborhoods continue to lag.
+
+---
+
+This ensures that the top-level decisions (A and B) are restored, providing a clearer structure for how each set of choices impacts the following consequences.

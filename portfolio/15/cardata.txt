@@ -1,0 +1,149 @@
+Here are some potential sources where you may find data on the total number of cars for each city. These sources include government databases, transportation agencies, and research portals.
+
+### 1. **Delhi, India**
+   - **Ministry of Road Transport and Highways, India**: [Parivahan](https://parivahan.gov.in/parivahan/)
+   - **Delhi Government Transport Department**: [Transport Department, Delhi](https://transport.delhi.gov.in/)
+
+### 2. **Mumbai, India**
+   - **Transport Department, Maharashtra**: [Transport Department, Maharashtra](https://transport.maharashtra.gov.in/)
+   - **Mumbai Metropolitan Region Development Authority (MMRDA)**: [MMRDA](https://mmrda.maharashtra.gov.in/)
+
+### 3. **Bengaluru, India**
+   - **Karnataka State Road Transport Corporation (KSRTC)**: [KSRTC](https://www.ksrtc.in/)
+   - **Bruhat Bengaluru Mahanagara Palike (BBMP)**: [BBMP](https://www.bbmp.gov.in/)
+
+### 4. **New York, USA**
+   - **New York City Department of Transportation (NYC DOT)**: [NYC DOT](https://www.nyc.gov/html/dot/html/about/about.shtml)
+   - **Federal Highway Administration (FHWA)**: [FHWA](https://www.fhwa.dot.gov/)
+
+### 5. **Los Angeles, USA**
+   - **Los Angeles Department of Transportation (LADOT)**: [LADOT](https://ladot.lacity.org/)
+   - **California Department of Motor Vehicles (DMV)**: [California DMV](https://www.dmv.ca.gov/portal/)
+
+### 6. **Chicago, USA**
+   - **Chicago Metropolitan Agency for Planning (CMAP)**: [CMAP](https://www.cmap.illinois.gov/)
+   - **Illinois Department of Transportation (IDOT)**: [IDOT](http://idot.illinois.gov/)
+
+### 7. **Shanghai, China**
+   - **Shanghai Municipal Transport Commission**: [Shanghai Transportation](http://jtw.sh.gov.cn/)
+   - **National Bureau of Statistics of China**: [NBS China](http://www.stats.gov.cn/)
+
+### 8. **Beijing, China**
+   - **Beijing Municipal Transport Commission**: [Beijing Transportation](http://jtw.beijing.gov.cn/)
+   - **National Bureau of Statistics of China**: [NBS China](http://www.stats.gov.cn/)
+
+### 9. **Shenzhen, China**
+   - **Shenzhen Transport Bureau**: [Shenzhen Transport](http://jtys.sz.gov.cn/)
+   - **National Bureau of Statistics of China**: [NBS China](http://www.stats.gov.cn/)
+
+### 10. **Istanbul, Turkey**
+   - **Istanbul Metropolitan Municipality (IMM)**: [IMM](https://www.ibb.istanbul/)
+   - **Turkish Statistical Institute (TurkStat)**: [TurkStat](http://www.turkstat.gov.tr/)
+
+### 11. **Moscow, Russia**
+   - **Moscow Department of Transport and Road Infrastructure Development**: [Moscow Transport](https://transport.mos.ru/)
+   - **Federal State Statistics Service (Rosstat)**: [Rosstat](https://eng.gks.ru/)
+
+### 12. **London, UK**
+   - **Transport for London (TfL)**: [TfL](https://tfl.gov.uk/)
+   - **UK Department for Transport**: [UK DfT](https://www.gov.uk/government/organisations/department-for-transport)
+
+### 13. **Saint Petersburg, Russia**
+   - **Saint Petersburg Transport Committee**: [St. Petersburg Transport](http://gov.spb.ru/gov/otrasl/tr_infr_kom/)
+   - **Federal State Statistics Service (Rosstat)**: [Rosstat](https://eng.gks.ru/)
+
+### 14. **Berlin, Germany**
+   - **Berlin Senate Department for the Environment, Transport and Climate Protection**: [Berlin Transport](https://www.berlin.de/senuvk/)
+   - **Federal Statistical Office of Germany (Destatis)**: [Destatis](https://www.destatis.de/EN/Homepage.html)
+
+### 15. **Madrid, Spain**
+   - **Madrid City Council**: [Madrid Mobility](https://www.madrid.es/portal/site/munimadrid)
+   - **Spanish Statistical Office (INE)**: [INE](https://www.ine.es/)
+
+### 16. **Kinshasa, DRC**
+   - **Ministry of Transport and Communications, DRC**: [Transport Ministry, DRC](http://www.mintranscom.cd/)
+   - **National Institute of Statistics, DRC**: [INS DRC](http://www.ins-rdc.org/)
+
+### 17. **Lagos, Nigeria**
+   - **Lagos State Transport Management Authority (LASTMA)**: [LASTMA](https://lastma.lagosstate.gov.ng/)
+   - **National Bureau of Statistics, Nigeria**: [NBS Nigeria](https://www.nigerianstat.gov.ng/)
+
+### 18. **Cairo, Egypt**
+   - **Egyptian Ministry of Transport**: [Ministry of Transport, Egypt](http://www.mot.gov.eg/)
+   - **Central Agency for Public Mobilization and Statistics (CAPMAS)**: [CAPMAS](http://www.capmas.gov.eg/)
+
+### 19. **Paris, France**
+   - **Île-de-France Mobilités**: [IDF Mobilités](https://www.iledefrance-mobilites.fr/)
+   - **French National Institute of Statistics and Economic Studies (INSEE)**: [INSEE](https://www.insee.fr/en/)
+
+### 20. **Tokyo, Japan**
+   - **Tokyo Metropolitan Government Bureau of Transportation**: [Tokyo Transport](https://www.metro.tokyo.lg.jp/english/)
+   - **Japan Statistical Yearbook (Statistics Bureau of Japan)**: [Statistics Bureau Japan](https://www.stat.go.jp/english/)
+
+### 21. **Mexico City, Mexico**
+   - **Secretariat of Mobility (SEMOVI)**: [SEMOVI](https://www.semovi.cdmx.gob.mx/)
+   - **National Institute of Statistics and Geography (INEGI)**: [INEGI](https://en.www.inegi.org.mx/)
+
+### 22. **São Paulo, Brazil**
+   - **São Paulo Municipal Transport Department**: [São Paulo Transport](https://www.prefeitura.sp.gov.br/cidade/secretarias/transportes/)
+   - **Brazilian Institute of Geography and Statistics (IBGE)**: [IBGE](https://www.ibge.gov.br/en/)
+
+### 23. **Buenos Aires, Argentina**
+   - **Buenos Aires Transport Secretary**: [Buenos Aires Transport](https://www.buenosaires.gob.ar/transporte)
+   - **National Institute of Statistics and Censuses (INDEC)**: [INDEC](https://www.indec.gob.ar/)
+
+### 24. **Rio de Janeiro, Brazil**
+   - **Rio de Janeiro Department of Transport**: [Rio Transport](https://www.rio.rj.gov.br/web/smtr)
+   - **Brazilian Institute of Geography and Statistics (IBGE)**: [IBGE](https://www.ibge.gov.br/en/)
+
+### 25. **Sydney, Australia**
+   - **Transport for New South Wales (TfNSW)**: [TfNSW](https://www.transport.nsw.gov.au/)
+   - **Australian Bureau of Statistics (ABS)**: [ABS](https://www.abs.gov.au/)
+
+### 26. **Melbourne, Australia**
+   - **Transport for Victoria (TfV)**: [TfV](https://transport.vic.gov.au/)
+   - **Australian Bureau of Statistics (ABS)**: [ABS](https://www.abs.gov.au/)
+
+### 27. **Auckland, New Zealand**
+   - **Auckland Transport (AT)**: [Auckland Transport](https://at.govt.nz/)
+   - **Statistics New Zealand (Stats NZ)**: [Stats NZ](https://www.stats.govt.nz/)
+
+These sources provide a starting point for finding car ownership data for each city. You may need to explore transportation reports, statistical yearbooks, or vehicle registration data within these websites.
+
+
+
+
+
+our estmimates car data 
+
+Here is the updated list of cities arranged from highest to lowest in terms of the number of vehicles, with the revised figure for Lagos:
+
+1. **São Paulo, Brazil**: 8.9 million vehicles
+2. **Delhi, India**: 12 million vehicles
+3. **Moscow, Russia**: 4.95 million vehicles
+4. **Istanbul, Turkey**: 4.5 million vehicles
+5. **Mumbai, India**: 4.6 million vehicles
+6. **Shenzhen, China**: 4.263 million vehicles
+7. **Beijing, China**: 6,256,000 vehicles
+8. **Shanghai, China**: 3,957,200 vehicles
+9. **Melbourne, Australia**: 3,880,388 vehicles (estimated)
+10. **Tokyo, Japan**: 3.09 million vehicles
+11. **Mexico City, Mexico**: 3 million vehicles
+12. **Sydney, Australia**: 3,370,250 vehicles (estimated)
+13. **Los Angeles, USA**: 2,499,764 vehicles
+14. **London, UK**: 2.56 million vehicles
+15. **New York, USA**: 2 million cars
+16. **Saint Petersburg, Russia**: 2,498,000 vehicles (approximately)
+17. **Chicago, USA**: 2,059,791 vehicles (based on 75% car ownership)
+18. **Cairo, Egypt**: 2.3 million vehicles
+19. **Bengaluru, India**: 2.3 million vehicles (private cars)
+20. **Rio de Janeiro, Brazil**: 10,756,000 vehicles (as of June 2019)
+21. **Buenos Aires, Argentina**: 1.8 million vehicles
+22. **Madrid, Spain**: 1.8 million vehicles
+23. **Berlin, Germany**: 1,244,061 vehicles
+24. **Lagos, Nigeria**: 1,041,768 vehicles
+25. **Auckland, New Zealand**: 1,205,569 vehicles
+26. **Paris, France**: 783,920 vehicles (based on 37% car ownership)
+27. **Kinshasa, DRC**: 855,000 vehicles (based on 5% car ownership)
+
+This list now reflects the revised figure for Lagos, which is approximately 1,041,768 cars based on the given data.

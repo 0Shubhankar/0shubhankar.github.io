@@ -1,0 +1,498 @@
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Image Gallery</title>
+        <!-- <link rel="stylesheet" href="styles.css"> -->
+
+        <style>
+                    *,
+            *:after,
+            *:before {
+                box-sizing: border-box;
+                scroll-behavior: smooth;
+                /* Smooth scrolling behavior */
+            }
+
+            body {
+                display: flex;
+                justify-content: flex-end;
+                min-height: 100vh;
+                font-family: "SF Pro Text", "SF Pro Icons", "AOS Icons", "Helvetica Neue", Helvetica, Arial, sans-serif, system-ui;
+            }
+
+            body::after {
+                content: "";
+                position: fixed;
+                right: 0;
+                width: calc(var(--snap-size) + 2rem);
+                background: canvas;
+                mask: linear-gradient(white, transparent calc(var(--snap-size) * 1.5) calc(100% - (var(--snap-size) * 1.5)), white);
+                top: 0;
+                height: 100vh;
+                pointer-events: none;
+                z-index: 10;
+            }
+
+            body::before {
+                --size: 40px;
+                --line: color-mix(in lch, canvasText 15%, hsla(0, 100%, 50%, 0.25));
+                content: '';
+                height: 100vh;
+                width: 100vw;
+                position: fixed;
+                background: linear-gradient(90deg,
+                        var(--line) 1px,
+                        transparent 1px var(--size)) 50% 50% / var(--size) var(--size),
+                    linear-gradient(var(--line) 1px, transparent 1px var(--size)) 50% 50% / var(--size) var(--size);
+                mask: linear-gradient(-200deg, transparent 65%, white);
+
+                top: 0;
+                transform-style: flat;
+                pointer-events: none;
+                z-index: -1;
+            }
+
+            html {
+                color-scheme: dark only;
+                scroll-behavior: smooth;
+                /* Smooth scrolling behavior */
+                scroll-snap-type: y mandatory;
+                /* Ensures that scrolling will snap to the nearest element */
+            }
+
+            :root {
+                --count: 0;
+                /* Number of images */
+                --snap-size: 48px;
+                /* Size of the snap area */
+                --offset: 0;
+                /* Offset for the animation */
+            }
+
+            @media(min-width: 768px) {
+                :root {
+                    --offset: 2;   
+                    /* This above value change the twist fo the image on aside */
+                }
+            }
+
+            main {
+                padding-left: 1rem;
+                padding-right: calc(var(--snap-size) * 5);
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                display: grid;
+                height: calc(100vh * var(--count));
+                /* Total height based on number of images */
+                grid-template-rows: repeat(var(--count), 1fr);
+                /* Each row is 1 fraction of the total height */
+                place-items: center;
+                animation: img-reel 50s both steps(calc(var(--count) - 1));
+                /* Animation duration of 50 seconds */
+                animation-timeline: scroll(root);
+                /* The timeline of the animation is based on scroll */
+                pointer-events: auto;
+            }
+
+            @media(max-width: 768px) {
+                main {
+                    display: none;
+                }
+            }
+
+            @keyframes img-reel {
+                to {
+                    translate: 0 calc(-100% + 100vh);
+                    /* Translates the images to give a scrolling effect */
+                }
+            }
+
+            aside {
+                width: var(--snap-size);
+                margin-top: calc(50vh - (var(--snap-size) * 0.25));
+                margin-bottom: calc(50vh - (var(--snap-size) * 0.5));
+                z-index: 2;
+            }
+
+            aside ul {
+                margin: 0;
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                list-style-type: none;
+                position: relative;
+                right: 1rem;
+                align-items: flex-end;
+                transform-style: preserve-3d;
+            }
+            @property --active {
+                initial-value: 0;
+                inherits: true;
+                syntax: '<number>';
+            }
+            li {
+                scroll-snap-align: center;
+                /* Aligns the element to the center when snapping */
+                scroll-margin-block: calc(50vh - var(--snap-size));
+                /* Margin for the snapping */
+                container-type: size;
+                flex: 1 1 var(--snap-size);
+                aspect-ratio: 1;
+                animation: scale 1s both linear;
+                /* Animation duration of 1 second for scaling */
+                animation-timeline: view();
+                animation-range: cover calc(50% - (var(--snap-size) * var(--offset))) cover calc(50% + (var(--snap-size) * var(--offset)));
+                transform-origin: 100% 50%;
+            }
+            @media(min-width: 768px) {
+                li {
+                    filter: saturate(0.2);
+                    /* Reduces saturation */
+                    animation: scale-l 1s both linear;
+                    /* Animation duration of 1 second for scaling on large screens */
+                    animation-timeline: view();
+                    animation-range: cover calc(50% - (var(--snap-size) * var(--offset))) cover calc(50% + (var(--snap-size) * var(--offset)));
+                }
+            }
+            @keyframes scale {
+                50% {
+                    --active: 1;
+                    /* The active element */
+                    z-index: 1000;
+                }
+            }
+            @keyframes scale-l {
+                50% {
+                    translate: -120% 0;
+                    scale: 2;
+                    /* Scales the image */
+                    transform: translate3d(0, 0, 1000px);
+                    filter: saturate(1);
+                    /* Increases saturation */
+                    z-index: 1000;
+                }
+            }
+            li img {
+                height: 100%;
+                width: 100%;
+                border-radius: 6px;
+            }
+            li a {
+                min-width: 100cqw;
+                min-height: 100cqh;
+                max-width: 600px;
+                max-height: 600px;
+                width: 100%;
+                height: 100%;
+                display: block;
+                border: 4px solid transparent;
+                border-radius: 12px;
+                position: relative;
+                position: absolute;
+                right: 0;
+                top: 50%;
+                transform-origin: 100% 50%;
+                translate: calc((var(--active) * (var(--snap-size) + 1rem)) * -1) -50%;
+                width: calc((var(--active) * (100vw - (var(--snap-size) + 3rem))));
+                height: calc((var(--active) * (100vw - (var(--snap-size) + 3rem))));
+                aspect-ratio: 1;
+                z-index: calc(1 + (var(--active) * 999));
+            }
+            aside span {
+                position: absolute;
+                width: 1px;
+                height: 1px;
+                padding: 0;
+                margin: -1px;
+                overflow: hidden;
+                clip: rect(0, 0, 0, 0);
+                white-space: nowrap;
+                border-width: 0;
+            }
+            main img {
+                width: 100%;
+                max-width: 600px;
+                max-height: 90vh;
+                object-fit: cover;
+            }
+            /* Ensure images and their containers are displayed correctly */
+            .image-container {
+                position: relative;
+                width: 100%;
+                max-width: 600px;
+                margin: auto;
+            }
+            .image-container img {
+                display: block;
+                width: 100%;
+                height: auto;
+                max-height: 90vh;
+                object-fit: cover;
+            }
+            /* Class to hide image containers */
+            .hidden {
+                display: none;
+            }
+            .image-container a {
+                text-decoration: none;
+                color: inherit;
+                display: block;
+                /* Ensures the link covers the entire image-container */
+            }
+            .image-container a img {
+                display: block;
+                width: 100%;
+                height: auto;
+            } 
+
+            .dg .cr {
+            align-items: center;
+            justify-content: space-between;
+            }
+
+            .dg .property-name {
+        
+            white-space: nowrap;
+            overflow: auto;
+            text-overflow: ellipsis;
+            max-width: 120px; /* Adjust as necessary */
+            }
+            .dg {
+            position: fixed !important;
+            left: 20px !important;
+            top: 10px !important;
+            z-index: 1100 !important;  /* Ensure it is above other content */
+            width: 220px !important;    /* Adjust the width to fit the dropdown */
+            }
+
+            .image-container {
+            display: flex;
+            flex-direction: column; /* Stacks children (image and chart) vertically */
+            align-items: flex-start; /* Aligns children to the start (left side) */
+            width: 100%; /* Adjust this width as needed, or set max-width */
+            max-width: 600px; /* Limiting max width */
+            margin: auto; /* Centering the container on the page */
+            }
+
+            img {
+                width: 100%; /* Image takes full width of the container */
+                height: auto; /* Maintains aspect ratio */
+            }
+
+            .chart-container {
+                width: 300px; /* Width of the radar chart */
+                height: 300px; /* Height of the radar chart */
+                margin-top: 10px; /* Space between image and chart */
+            }
+
+
+        /* Adjust body content to avoid overlap with GUI */
+        body {
+            padding-left: 25px; /* Adjust this value based on the width of the dat.GUI panel */
+        }
+        </style>
+    </head>
+        
+        <script src="../vendor/shared/lib-4659aba89717/dist/dat.gui.min.js"></script>
+        <script src="../vendor/shared/lib-18524bfc46af/dist/chart.umd.js"></script>
+        <script src="../vendor/shared/lib-6042d64ed8cf/dist/highcharts.js"></script>
+        <script src="../vendor/shared/lib-b4f1751e1021/dist/highcharts-more.js"></script>
+        <script src="../vendor/shared/lib-063793bccbc4/dist/exporting.js"></script>
+
+
+
+
+    <body>
+        <aside>
+            <nav>
+                <ul id="image-nav">
+                    <!-- Navigation items will be generated here -->
+                </ul>
+            </nav>
+        </aside>
+        <main id="image-main">
+            <!-- Main image content will be generated here -->
+        </main>
+            <script>
+            let imageData = {};
+            let cityOptions = [];
+            const maxImages = 50;
+
+            // Fetch the JSON data from the file
+            fetch('filtered_classification_results.json')
+                .then(response => response.json())
+                .then(data => {
+                    imageData = data;
+                    cityOptions = Object.keys(data);
+                    initGUI();
+                    loadCityImages(cityOptions[0]);
+                })
+                .catch(error => console.error('Error loading the JSON file:', error));
+
+            // Function to load images from the selected city
+            function loadCityImages(city) {
+                    const images = imageData[city];
+                    const limitedImages = images.slice(0, maxImages);
+
+                    document.documentElement.style.setProperty('--count', limitedImages.length.toString());
+
+                    const imageNav = document.getElementById('image-nav');
+                    const imageMain = document.getElementById('image-main');
+
+                    imageNav.innerHTML = '';
+                    imageMain.innerHTML = '';
+
+                    limitedImages.forEach((imageData, index) => {
+                        const imageCounter = index + 1;
+                        const imageUrl = imageData.image_link;
+
+                        // Create navigation and main image elements
+                        const navItem = createNavItem(imageCounter, imageUrl);
+                        imageNav.appendChild(navItem);
+
+                        const mainDiv = document.createElement('div');
+                        mainDiv.id = `img-${imageCounter}-main`;
+                        mainDiv.className = 'image-container';
+                        imageMain.appendChild(mainDiv);
+
+                        const mainImg = document.createElement('img');
+                        mainImg.src = imageUrl;
+                        mainImg.alt = `Image ${imageCounter}`;
+                        mainImg.loading = "lazy";
+                        mainDiv.appendChild(mainImg);
+
+                        // Create radar chart next to the image
+                        const chartDiv = document.createElement('div');
+                        chartDiv.style.width = '300px'; // Adjust size as needed
+                        chartDiv.style.height = '300px'; // Adjust size as needed
+                        mainDiv.appendChild(chartDiv);
+
+                        // Prepare data for the radar chart
+                        const categories = [];
+                        const data = [];
+                        for (let i = 1; i <= 10; i++) {
+                            if (imageData[`top_${i}`]) {
+                                categories.push(imageData[`top_${i}`].class);
+                                data.push(imageData[`top_${i}`].probability);
+                            }
+                        }
+
+                        // Initialize the radar chart
+                        Highcharts.chart(chartDiv, {
+                            chart: {
+                                polar: true,
+                                type: 'line',
+                                backgroundColor: '#121212'
+                            
+                            },
+                            credits: {
+                                enabled: false,
+                            },
+
+                            exporting: {
+                                enabled: false // Disable exporting tools
+                            },
+
+                            
+                            title: {
+                                text: '',
+                                style: {
+                                    color: '#ffffff'
+                                }
+                            },
+                            pane: {
+                                size: '80%'
+                            },
+                            xAxis: {
+                                categories: categories,
+                                tickmarkPlacement: 'on',
+                                lineWidth: 0,
+                                labels: {
+                                    style: {
+                                        color: '#ffffff'
+                                    }
+                                }
+                            },
+                            yAxis: {
+                                gridLineInterpolation: 'polygon',
+                                lineWidth: 0,
+                                min: 0,
+                                labels: {
+                                    style: {
+                                        color: '#00FF00'
+                                    },
+                                    formatter: function () {
+                                        return (this.value * 100).toFixed(0) + '%';
+                                    }
+                                }
+                            },
+                            series: [{
+                                name: 'Probability',
+                                data: data,
+                                pointPlacement: 'on',
+                                marker: {
+                                    enabled: true,
+                                    radius: 4,
+                                    fillColor: '#00FF00' // Radium green points
+
+                                },
+                                lineWidth: 2,
+                                lineColor: '#00FF00', // Radium green lines
+                                fillColor: {
+                                    linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                                    stops: [
+                                        [0, 'rgba(0, 255, 0, 0.5)'],
+                                        [1, 'rgba(0, 255, 0, 0.1)']
+                                    ]
+                                }
+                            }]
+                        });
+                    });
+                }
+
+                function createNavItem(imageCounter, imageUrl) {
+                    const navItem = document.createElement('li');
+                    const navLink = document.createElement('a');
+                    navLink.href = `#img-${imageCounter}-main`;
+                    const navImg = document.createElement('img');
+                    navImg.src = imageUrl;
+                    navImg.alt = `Image ${imageCounter}`;
+                    navImg.loading = "lazy";
+                    navLink.appendChild(navImg);
+                    navItem.appendChild(navLink);
+                    return navItem;
+                }
+
+
+
+            // Initialize dat.GUI and create city selection
+            function initGUI() {
+                const gui = new dat.GUI();
+                const params = {
+                    city: cityOptions[0], // Default to the first city
+                };
+
+                gui.add(params, 'city', cityOptions).onChange(value => {
+                    loadCityImages(value);
+                });
+            }
+        </script>
+        <script>
+            // Delegate because city image links are created after data loads.
+            document.addEventListener('click', (event) => {
+                const link = event.target.closest('a[href^="#img-"]');
+                if (!link) return;
+                const target = document.getElementById(link.getAttribute('href').slice(1));
+                if (!target) return;
+                event.preventDefault();
+                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+        </script>
+    </body>
+
+    </html>

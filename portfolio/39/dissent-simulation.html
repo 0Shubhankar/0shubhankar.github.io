@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stickman Emitting Letters with 29 Variables</title>
+    <style>
+        body,
+        html {
+            width: 100%;
+            height: 100%;
+            margin: 0px;
+            display: flex;
+            background-color: black;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            -webkit-font-smoothing: antialiased;
+
+        }
+
+        #canvas {
+            margin: 0px;
+            display: block;
+            background-color: black;
+            flex: 3;
+        }
+
+        #info {
+        padding: 20px;
+        color: white;
+        position: absolute; /* You can use absolute positioning if you want to place it specifically */
+        top: 20px; /* Adjust this to control vertical position */
+        left: 20px; /* Adjust this to control horizontal position */
+        }
+
+
+        #explanation {
+        position: absolute;
+        bottom: 0px;
+        top:100%;
+        /* Adjust as needed */
+        left: 20%;
+        right:20%;
+        /* Adjust as needed */
+        background-color: 000;
+        /* Semi-transparent background */
+        padding: 10px;
+        border-radius: 10px;
+        /* width: 900px; */
+        /* Fixed width */
+        font-size: 16px;
+        /* Adjurgb(255, 255, 255) */
+        color: rgb(255, 255, 255);
+        z-index: 2;
+        line-height: 1.6;
+
+        /* Ensure it appears above other elements */
+    }
+
+        h2 {
+            color: white;
+        }
+
+        h3 {
+            color:white;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #333;
+            color: white;
+        }
+
+        td {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Info section (for dynamic data) -->
+    <div id="info">
+        <h2>Dynamic Stats</h2>
+        <p id="populationData">Population: </p>
+        <p id="feedbackData">Feedback: </p> <!-- New section for dynamically calculated feedback loops -->
+    </div>
+
+    <!-- Canvas where stickmen are displayed -->
+    <canvas id="canvas"></canvas>
+
+    <!-- Explanation Section -->
+    <div id="explanation">
+        <h2>Overview of the Simulation</h2>
+        <p>This simulation models an insurgency scenario where different groups of individuals (represented by stick
+            figures) interact and transition between categories based on socio-political factors. The population
+            consists of four main groups:</p>
+        <ul>
+            <li><strong>Supporters (Green)</strong>: People who support the current regime.</li>
+            <li><strong>Dissidents (Orange)</strong>: People who oppose the regime but are not yet involved in violence.
+            </li>
+            <li><strong>Insurgents (Red)</strong>: People who are actively rebelling or involved in violence against the
+                regime.</li>
+            <li><strong>Removed Insurgents (Gray)</strong>: Insurgents who have been neutralized or removed by the
+                regime.</li>
+        </ul>
+        <p>The goal of this simulation is to visualize the dynamic interactions between these groups over time, and
+            allow the user to adjust key parameters that influence how people move from one group to another.</p>
+
+        <h2>Components of the Simulation</h2>
+
+        <h3>Canvas</h3>
+        <p><strong>What you see</strong>: Stick figures on the canvas, each represented by a color based on their group
+            (Supporters, Dissidents, Insurgents, or Removed Insurgents). These stick figures emit random particles
+            (letters) to give the visual impression of action.</p>
+        <p><strong>Behavior</strong>: Over time, these stick figures will change color as they transition between groups
+            based on the parameters controlled by the user through the interface.</p>
+
+        <h3>Data Display on the Left</h3>
+        <p>This section shows the <strong>real-time population</strong> of each group and provides feedback on how the
+            population is evolving:</p>
+        <ul>
+            <li><strong>Supporters</strong>: The current number of people supporting the regime.</li>
+            <li><strong>Dissidents</strong>: The current number of people opposing the regime.</li>
+            <li><strong>Insurgents</strong>: The current number of people actively rebelling.</li>
+            <li><strong>Removed Insurgents</strong>: The current number of insurgents neutralized by the regime.</li>
+        </ul>
+        <p><strong>Feedback</strong> includes:</p>
+        <ul>
+            <li><strong>Total Opposition</strong>: Sum of the Dissidents and Insurgents (i.e., total number of people
+                opposing the regime).</li>
+            <li><strong>Insurgent Fraction</strong>: The percentage of the total population that are insurgents.</li>
+            <li><strong>Dissident Fraction</strong>: The percentage of the total population that are dissidents.</li>
+        </ul>
+
+        <h2>Interaction with the Simulation (dat.GUI Controls)</h2>
+        <p>You can control how the simulation evolves using a panel on the right-hand side with sliders that adjust 
+            different variables. These variables are grouped into several categories:</p>
+
+        <h3>Group Population Sliders</h3>
+        <p>These sliders control the <strong>initial population</strong> of each group. Moving these sliders will
+            instantly change the number of people in each group at the start of the simulation:</p>
+        <ul>
+            <li><strong>Supporters</strong>: Controls how many people start out as supporters (Green).</li>
+            <li><strong>Dissidents</strong>: Controls how many people start out as dissidents (Orange).</li>
+            <li><strong>Insurgents</strong>: Controls how many people start out as insurgents (Red).</li>
+            <li><strong>Removed Insurgents</strong>: Controls how many people start out as removed insurgents (Gray).
+            </li>
+        </ul>
+        <p>Adjusting these sliders will <strong>reinitialize</strong> the stick figures on the canvas to reflect the new
+            distribution.</p>
+
+        <h3>Flow Rate Sliders</h3>
+        <p>These sliders control how fast people transition between the groups based on various factors:</p>
+        <ul>
+            <li><strong>Recruitment Rate</strong>: The rate at which Dissidents are recruited into Insurgents. A higher
+                value means more Dissidents will become Insurgents faster.</li>
+            <li><strong>Becoming Dissident Rate</strong>: The rate at which Supporters become Dissidents. A higher value
+                indicates a faster transition from Supporters to Dissidents.</li>
+            <li><strong>Removing Insurgents Rate</strong>: The rate at which Insurgents are neutralized and become
+                Removed Insurgents.</li>
+        </ul>
+
+        <h3>Parameters Influencing Flow Rates</h3>
+        <p>These parameters affect the transition rates mentioned above:</p>
+        <ul>
+            <li><strong>Propensity to be Recruited</strong>: Affects the Recruitment Rate. A higher value means
+                Dissidents are more likely to become Insurgents.</li>
+            <li><strong>Regime Efforts</strong>: Affects the Removing Insurgents Rate. A higher value indicates the
+                regime is more effective at neutralizing insurgents.</li>
+            <li><strong>Protest Intensity</strong>: Affects the Becoming Dissident Rate. A higher value indicates more
+                intense protests, leading to more Supporters becoming Dissidents.</li>
+            <li><strong>Appeasement Rate</strong>: The rate at which Dissidents are turned back into Supporters by the
+                regime’s appeasement efforts.</li>
+        </ul>
+
+        <h3>Messaging & Incident Factors</h3>
+        <p>These factors influence how fast people move between groups based on external messaging and incidents:</p>
+        <ul>
+            <li><strong>Anti-Regime Message Intensity</strong>: Affects both the Becoming Dissident Rate and the
+                Recruitment Rate. A higher value means more powerful anti-regime messages, causing more Supporters to
+                become Dissidents and more Dissidents to become Insurgents.</li>
+            <li><strong>Effect of Messages on Recruitment</strong>: Affects the Recruitment Rate. A higher value means
+                anti-regime messages are more effective at recruiting Dissidents into Insurgents.</li>
+            <li><strong>Frequency of Anti-Regime Messages</strong>: Affects both the Becoming Dissident Rate and the
+                Recruitment Rate. A higher value means more frequent messages, leading to more transitions from
+                Supporters to Dissidents and from Dissidents to Insurgents.</li>
+            <li><strong>Violent Incident Intensity</strong>: Affects the Removing Insurgents Rate. A higher value means
+                more intense violent incidents, allowing the regime to neutralize Insurgents faster.</li>
+            <li><strong>Strength of Violent Incidents</strong>: Affects both the Becoming Dissident Rate and the
+                Recruitment Rate. A higher value means violent incidents are more effective at increasing the number of
+                Dissidents and Insurgents.</li>
+        </ul>
+
+        <h3>Other Variables</h3>
+        <ul>
+            <li><strong>People Birth Rate</strong>: This variable adds new people to the Supporter group over time.</li>
+            <li><strong>People Reaction Delay</strong>: This variable controls how long it takes for people to react to
+                anti-regime messages and incidents. A higher value delays their reaction, slowing the transitions
+                between groups.</li>
+        </ul>
+
+        <h2>How the Simulation Works</h2>
+
+        <h3>How Transitions Happen</h3>
+        <p>The transitions between groups happen based on the flow rates you set using the sliders. For example:</p>
+        <ul>
+            <li>If the <strong>Recruitment Rate</strong> is high, you will see more Dissidents (Orange) turn into
+                Insurgents (Red) over time.</li>
+            <li>If the <strong>Removing Insurgents Rate</strong> is high, you will see more Insurgents (Red) turning
+                into Removed Insurgents (Gray).</li>
+            <li>If the <strong>Protest Intensity</strong> is high, more Supporters (Green) will become Dissidents
+                (Orange) faster.</li>
+        </ul>
+
+        <h3>Dynamic Feedback</h3>
+        <p>As you adjust the sliders, the simulation updates in real-time:</p>
+        <ul>
+            <li><strong>Stickman Colors Change</strong>: Stick figures on the canvas will change colors to reflect the
+                changes in group transitions.</li>
+            <li><strong>Population Data Updates</strong>: The left-side panel will update to reflect the changes in
+                population counts and percentages as people transition between groups.</li>
+        </ul>
+
+        <h3>Visual Elements</h3>
+        <p>The stick figures represent the people, and their color changes as they move from one group to another. They
+            also emit random particles (letters), adding a sense of action and dynamism to the simulation.</p>
+
+        <h2>How to Use the Simulation</h2>
+        <p>Follow these steps to use the simulation effectively:</p>
+        <ol>
+            <li><strong>Set Initial Populations</strong>: Use the <strong>Supporters</strong>,
+                <strong>Dissidents</strong>, <strong>Insurgents</strong>, and <strong>Removed Insurgents</strong>
+                sliders to set the initial population of each group.</li>
+            <li><strong>Control Flow Rates</strong>: Use the <strong>Recruitment Rate</strong>, <strong>Becoming
+                    Dissident Rate</strong>, and <strong>Removing Insurgents Rate</strong> to control how fast people
+                move between groups.</li>
+            <li><strong>Adjust Socio-Political Factors</strong>: Modify the <strong>Messaging</strong>, <strong>Incident
+                    Factors</strong>, and <strong>Other Variables</strong> (e.g., <strong>Propensity to be
+                    Recruited</strong>, <strong>Protest Intensity</strong>, <strong>Anti-Regime Message
+                    Intensity</strong>) to influence how messaging and violence impact the population dynamics.</li>
+            <li><strong>Observe Real-Time Changes</strong>: Watch the <strong>stickmen</strong> change colors and the
+                <strong>data panel</strong> update in real time as you adjust the sliders.</li>
+            <li><strong>Experiment</strong>: Play with different settings to explore how different regimes of messaging,
+                violence, and appeasement affect the dynamics between Supporters, Dissidents, Insurgents, and Removed
+                Insurgents.</li>
+        </ol>
+
+        <h2>Summary of Key Controls and Their Effects</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Control</th>
+                    <th>Effect</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Supporters</strong></td>
+                    <td>Sets the initial number of regime supporters (green stickmen).</td>
+                </tr>
+                <tr>
+                    <td><strong>Dissidents</strong></td>
+                    <td>Sets the initial number of dissidents (orange stickmen).</td>
+                </tr>
+                <tr>
+                    <td><strong>Insurgents</strong></td>
+                    <td>Sets the initial number of insurgents (red stickmen).</td>
+                </tr>
+                <tr>
+                    <td><strong>Removed Insurgents</strong></td>
+                    <td>Sets the initial number of neutralized insurgents (gray stickmen).</td>
+                </tr>
+                <tr>
+                    <td><strong>Recruitment Rate</strong></td>
+                    <td>Controls how fast dissidents become insurgents.</td>
+                </tr>
+                <tr>
+                    <td><strong>Becoming Dissident Rate</strong></td>
+                    <td>Controls how fast supporters become dissidents.</td>
+                </tr>
+                <tr>
+                    <td><strong>Removing Insurgents Rate</strong></td>
+                    <td>Controls how fast insurgents are neutralized.</td>
+                </tr>
+                <tr>
+                    <td><strong>Propensity to be Recruited</strong></td>
+                    <td>Increases the likelihood that dissidents become insurgents.</td>
+                </tr>
+                <tr>
+                    <td><strong>Regime Efforts</strong></td>
+                    <td>Increases the regime's effectiveness in neutralizing insurgents.</td>
+                </tr>
+                <tr>
+                    <td><strong>Protest Intensity</strong></td>
+                    <td>Increases the likelihood that supporters become dissidents.</td>
+                </tr>
+                <tr>
+                    <td><strong>Appeasement Rate</strong></td>
+                    <td>Increases the rate at which dissidents return to being supporters.</td>
+                </tr>
+                <tr>
+                    <td><strong>Anti-Regime Message Intensity</strong></td>
+                    <td>Increases the effectiveness of anti-regime messages in creating dissidents.</td>
+                </tr>
+                <tr>
+                    <td><strong>Effect of Messages on Recruitment</strong></td>
+                    <td>Increases the effectiveness of messages in recruiting insurgents.</td>
+                </tr>
+                <tr>
+                    <td><strong>Frequency of Anti-Regime Messages</strong></td>
+                    <td>Increases the frequency of anti-regime messaging.</td>
+                </tr>
+                <tr>
+                    <td><strong>Violent Incident Intensity</strong></td>
+                    <td>Increases the regime's ability to neutralize insurgents.</td>
+                </tr>
+                <tr>
+                    <td><strong>Strength of Violent Incidents</strong></td>
+                    <td>Increases the effectiveness of violence in increasing insurgents/dissidents.</td>
+                </tr>
+                <tr>
+                    <td><strong>People Birth Rate</strong></td>
+                    <td>Adds new people to the Supporters group over time.</td>
+                </tr>
+                <tr>
+                    <td><strong>People Reaction Delay</strong></td>
+                    <td>Controls how long it takes people to react to messaging and incidents.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Conclusion</h2>
+            <p>This simulation allows you to explore how different socio-political factors affect population dynamics in a regime
+                facing opposition and insurgency. By adjusting the various parameters, you can simulate different scenarios and
+                observe how populations evolve in response to messaging, protests, and regime actions.</p>
+
+            </div>
+    </body>
+
+    <script src="../vendor/shared/lib-9092ba184a7e/dist/dat.gui.min.js"></script>
+    <script>
+        // Canvas setup
+        var canvas = document.getElementById("canvas");
+        canvas.width = document.body.clientWidth || document.documentElement.clientWidth;
+        canvas.height = document.body.clientHeight || document.documentElement.clientHeight;
+        var ctx = canvas.getContext("2d");
+
+        var charSize = 10;
+        var particleText = 'fufufjufjndakbafbibfodbfiebfweICBIBCDWOCH';
+        var colors = ['#00FF00', '#FF9900', '#FF0000', '#AAAAAA']; // Green, Orange, Red, Gray
+
+        // Create initial groups - make adjustable in GUI
+        var groupCounts = {
+            supporters: 60, // Green
+            dissidents: 20, // Orangea
+            insurgents: 15, // Red
+            removedInsurgents: 5  // Gray
+        };
+
+        var characters = [];
+
+        // Reinitialize characters based on group counts
+        function initializeCharacters() {
+            characters = []; // Clear characters array
+            let totalCharacters = groupCounts.supporters + groupCounts.dissidents + groupCounts.insurgents + groupCounts.removedInsurgents;
+            if (totalCharacters > 100) totalCharacters = 100; // Ensure maximum number of characters doesn't exceed 100
+
+            for (let i = 0; i < totalCharacters; i++) {
+                let group;
+                if (i < groupCounts.supporters) group = 0; // Green
+                else if (i < groupCounts.supporters + groupCounts.dissidents) group = 1; // Orange
+                else if (i < groupCounts.supporters + groupCounts.dissidents + groupCounts.insurgents) group = 2; // Red
+                else group = 3; // Gray
+
+                characters.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    group: group,
+                    particles: [] // Empty array to hold emitted particles
+                });
+            }
+        }
+
+        initializeCharacters();
+
+        // Function to emit particles (letters)
+        function emitParticle(char) {
+            var randomChar = particleText[Math.floor(Math.random() * particleText.length)];
+            var particle = {
+                text: randomChar,
+                x: char.x,
+                y: char.y - charSize,
+                size: 10,
+                speedX: (Math.random() - 0.5) * 2,
+                speedY: (Math.random() - 0.5) * 2,
+                life: 100
+            };
+            char.particles.push(particle);
+        }
+
+        // Function to update stickmen and particles
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            characters.forEach(char => {
+                // Set color based on the group
+                ctx.strokeStyle = colors[char.group];
+                ctx.fillStyle = colors[char.group];
+
+                // Draw stickman head (hollow circle)
+                ctx.beginPath();
+                ctx.arc(char.x, char.y, charSize, 0, 2 * Math.PI);
+                ctx.closePath();
+                ctx.stroke();
+
+                // Draw stickman body
+                ctx.beginPath();
+                ctx.moveTo(char.x, char.y + charSize);
+                ctx.lineTo(char.x, char.y + 3 * charSize);
+                ctx.closePath();
+                ctx.stroke();
+
+                // Left and right arms
+                ctx.beginPath();
+                ctx.moveTo(char.x, char.y + charSize);
+                ctx.lineTo(char.x - charSize, char.y + 2 * charSize);
+                ctx.moveTo(char.x, char.y + charSize);
+                ctx.lineTo(char.x + charSize, char.y + 2 * charSize);
+                ctx.closePath();
+                ctx.stroke();
+
+                // Left and right legs
+                ctx.beginPath();
+                ctx.moveTo(char.x, char.y + 3 * charSize);
+                ctx.lineTo(char.x - charSize, char.y + 4 * charSize);
+                ctx.moveTo(char.x, char.y + 3 * charSize);
+                ctx.lineTo(char.x + charSize, char.y + 4 * charSize);
+                ctx.closePath();
+                ctx.stroke();
+
+                // Emit particles randomly
+                if (Math.random() < 0.05) {
+                    emitParticle(char);
+                }
+
+                // Draw particles
+                char.particles.forEach((particle, i) => {
+                    particle.x += particle.speedX;
+                    particle.y += particle.speedY;
+                    particle.life--;
+
+                    ctx.fillText(particle.text, particle.x, particle.y);
+                    if (particle.life <= 0) {
+                        char.particles.splice(i, 1); // Remove particle if its life is over
+                    }
+                });
+            });
+
+            requestAnimationFrame(draw);
+        }
+
+        // Initialize GUI with variables (including adjustable group counts)
+
+                var gui = new dat.GUI({ width: 350 });
+
+        var guiData = {
+            // Group populations (adjustable by user)
+            'Supporters': groupCounts.supporters,
+            'Dissidents': groupCounts.dissidents,
+            'Insurgents': groupCounts.insurgents,
+            'Removed Insurgents': groupCounts.removedInsurgents,
+
+            // Flow Rates
+            'Recruitment Rate': 10, // Dissidents → Insurgents
+            'Becoming Dissident Rate': 5, // Supporters → Dissidents
+            'Removing Insurgents Rate': 8, // Insurgents → Removed
+
+            // Parameters Influencing Flow Rates
+            'Propensity to be Recruited': 10,
+            'Regime Efforts': 50,
+            'Protest Intensity': 20,
+            'Appeasement Rate': 10,
+
+            // Messaging & Incident Factors
+            'Anti-Regime Message Intensity': 25,
+            'Effect of Messages on Recruitment': 30,
+            'Frequency of Anti-Regime Messages': 20,
+            'Violent Incident Intensity': 50,
+            'Strength of Violent Incidents': 50,
+
+            // Other Variables
+            'People Birth Rate': 2,
+            'People Reaction Delay': 2
+        };
+
+        // Add sliders for the group counts and update simulation and display when they change
+        gui.add(guiData, 'Supporters', 0, 100).onChange(value => {
+            groupCounts.supporters = value;
+            initializeCharacters(); // Reinitialize with new counts
+            updateSimulation(); // Ensure the simulation is updated
+            updateDataDisplay(); // Ensure the data display is updated
+        });
+
+        gui.add(guiData, 'Dissidents', 0, 100).onChange(value => {
+            groupCounts.dissidents = value;
+            initializeCharacters();
+            updateSimulation();
+            updateDataDisplay();
+        });
+
+        gui.add(guiData, 'Insurgents', 0, 100).onChange(value => {
+            groupCounts.insurgents = value;
+            initializeCharacters();
+            updateSimulation();
+            updateDataDisplay();
+        });
+
+        gui.add(guiData, 'Removed Insurgents', 0, 100).onChange(value => {
+            groupCounts.removedInsurgents = value;
+            initializeCharacters();
+            updateSimulation();
+            updateDataDisplay();
+        });
+
+        // Add sliders for flow rates and other variables
+        for (const key in guiData) {
+            if (key !== 'Supporters' && key !== 'Dissidents' && key !== 'Insurgents' && key !== 'Removed Insurgents') {
+                gui.add(guiData, key, 0, 100).onChange(() => {
+                    updateSimulation(); // Update simulation when any other slider changes
+                    updateDataDisplay(); // Update the data display as well
+                });
+            }
+        }
+
+        // Function to calculate flow rates dynamically based on GUI inputs
+        function calculateFlowRates() {
+            // Recruitment: Dissidents -> Insurgents
+            var recruitmentRate = guiData['Recruitment Rate']
+                * guiData['Propensity to be Recruited']
+                * guiData['Effect of Messages on Recruitment']
+                * guiData['Frequency of Anti-Regime Messages']
+                * guiData['Strength of Violent Incidents']
+                * (1 - guiData['People Reaction Delay'] / 100)
+                / 100000;
+
+            // Becoming Dissident: Supporters -> Dissidents
+            var becomingDissidentRate = guiData['Becoming Dissident Rate']
+                * guiData['Protest Intensity']
+                * guiData['Anti-Regime Message Intensity']
+                * guiData['Frequency of Anti-Regime Messages']
+                * guiData['Strength of Violent Incidents']
+                * (1 - guiData['People Reaction Delay'] / 100)
+                / 100000;
+
+            // Removing Insurgents: Insurgents -> Removed Insurgents
+            var removingInsurgentsRate = guiData['Removing Insurgents Rate']
+                * guiData['Regime Efforts']
+                * guiData['Violent Incident Intensity']
+                / 10000;
+
+            // Appeasement Rate: Dissidents -> Supporters
+            var appeasementRate = guiData['Appeasement Rate']
+                * guiData['Regime Efforts']
+                / 100;
+
+            return { recruitmentRate, becomingDissidentRate, removingInsurgentsRate, appeasementRate };
+        }
+
+        // Function to update the simulation based on flow rates
+        function updateSimulation() {
+            var flowRates = calculateFlowRates();
+
+            // Transition logic based on flow rates
+            var newInsurgents = Math.floor(flowRates.recruitmentRate * groupCounts.dissidents / 100);
+            var newDissidents = Math.floor(flowRates.becomingDissidentRate * groupCounts.supporters / 100);
+            var removedInsurgents = Math.floor(flowRates.removingInsurgentsRate * groupCounts.insurgents / 100);
+            var appeasedSupporters = Math.floor(flowRates.appeasementRate * groupCounts.dissidents / 100);
+
+            // Update group counts based on flow rates
+            groupCounts.dissidents -= newInsurgents;
+            groupCounts.insurgents += newInsurgents;
+
+            groupCounts.supporters -= newDissidents;
+            groupCounts.dissidents += newDissidents;
+
+            groupCounts.insurgents -= removedInsurgents;
+            groupCounts.removedInsurgents += removedInsurgents;
+
+            // Update appeasement (Dissidents -> Supporters)
+            groupCounts.dissidents -= appeasedSupporters;
+            groupCounts.supporters += appeasedSupporters;
+
+            // Continuously update the stickman colors without reinitializing
+            characters.forEach(char => {
+                if (char.group === 0 && newDissidents > 0) {
+                    char.group = 1; // Supporters (Green) to Dissidents (Orange)
+                    newDissidents--;
+                } else if (char.group === 1 && newInsurgents > 0) {
+                    char.group = 2; // Dissidents (Orange) to Insurgents (Red)
+                    newInsurgents--;
+                } else if (char.group === 2 && removedInsurgents > 0) {
+                    char.group = 3; // Insurgents (Red) to Removed Insurgents (Gray)
+                    removedInsurgents--;
+                } else if (char.group === 1 && appeasedSupporters > 0) {
+                    char.group = 0; // Dissidents (Orange) to Supporters (Green)
+                    appeasedSupporters--;
+                }
+            });
+
+            // Update data display on the left
+            updateDataDisplay();
+        }
+
+        // Function to dynamically calculate feedback loops (e.g., total opposition, population fractions)
+        function calculateFeedback() {
+            var totalPopulation = groupCounts.supporters + groupCounts.dissidents + groupCounts.insurgents + groupCounts.removedInsurgents;
+            var totalOpposition = groupCounts.dissidents + groupCounts.insurgents;
+            var insurgentFraction = (groupCounts.insurgents / totalPopulation * 100).toFixed(2);
+            var dissidentFraction = (groupCounts.dissidents / totalPopulation * 100).toFixed(2);
+
+            return {
+                totalOpposition,
+                insurgentFraction,
+                dissidentFraction
+            };
+        }
+
+        // Update real-time data display
+        function updateDataDisplay() {
+            document.getElementById("populationData").innerText =
+                `Supporters: ${groupCounts.supporters}, Dissidents: ${groupCounts.dissidents}, 
+                    Insurgents: ${groupCounts.insurgents}, Removed Insurgents: ${groupCounts.removedInsurgents}`;
+
+            // Dynamically update feedback loop values
+            var feedback = calculateFeedback();
+            document.getElementById("feedbackData").innerText =
+                `Total Opposition: ${feedback.totalOpposition}, 
+                    Insurgent Fraction: ${feedback.insurgentFraction}%, 
+                    Dissident Fraction: ${feedback.dissidentFraction}%`;
+        }
+
+        // Start rendering and updating
+        draw();
+        updateDataDisplay();
+    </script>
+    
+    </html>

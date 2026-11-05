@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive 3D Scene with Orbit Controls and Points</title>
+    <style>
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        #tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 5px;
+            border-radius: 5px;
+            display: none;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="tooltip"></div>
+
+    <!-- Load PapaParse and dat.GUI -->
+    <script src="../vendor/shared/lib-51d788816744/dist/papaparse.min.js"></script>
+    <script src="../vendor/shared/lib-4659aba89717/dist/dat.gui.min.js"></script>
+
+    <script type="module">
+        import * as THREE from '../vendor/shared/lib-a64c14149358/dist/three.module.js';
+        import { OrbitControls } from '../vendor/shared/lib-4eca773b8753/dist/OrbitControls.js';
+
+        let scene, camera, renderer, controls, raycaster, mouse, tooltip, highlightedLines = [], highlightedPoints = [];
+        const pointsArray = [];
+        const pointMap = new Map();
+        const lineMap = new Map();
+        const params = {
+            pointColor: '#00ffff',
+            lineColor: '#bbbbbb',
+            highlightColor: '#ff0000',
+            pointSize: 1.4,
+            sphereRadius: 15,
+            lineWidth: 5
+        };
+
+        init();
+        loadCSVData();
+        animate();
+        setInterval(changePointColorsRandomly, 2); // Change colors every 2 seconds
+
+        function init() {
+            // Scene setup
+            scene = new THREE.Scene();
+
+            // Camera setup
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 50;
+
+            // Renderer setup
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            // Controls setup
+            controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.25;
+            controls.screenSpacePanning = false;
+            controls.minDistance = 1; // Allow full zoom in
+            controls.maxDistance = 1000; // Allow full zoom out
+
+            // Raycaster and mouse setup for detecting clicks
+            raycaster = new THREE.Raycaster();
+            mouse = new THREE.Vector2();
+
+            // Tooltip setup
+            tooltip = document.getElementById('tooltip');
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0x404040); // soft white light
+            scene.add(ambientLight);
+
+            // Event listeners for mouse movement and click
+            window.addEventListener('mousemove', onMouseMove, false);
+            window.addEventListener('click', onMouseClick, false);
+
+            // GUI setup
+            const gui = new dat.GUI();
+            gui.addColor(params, 'pointColor').name('Point Color').onChange(updatePointColors);
+            gui.addColor(params, 'lineColor').name('Line Color').onChange(updateLineColors);
+            gui.addColor(params, 'highlightColor').name('Highlight Color');
+            gui.add(params, 'pointSize', 0.1, 10).name('Point Size').onChange(updatePointSize);
+            gui.add(params, 'lineWidth', 1, 10).name('Line Width').onChange(updateLineWidth);
+        }
+
+        function loadCSVData() {
+            Papa.parse('city5.csv', {
+                download: true,
+                header: true,
+                complete: function (results) {
+                    const numPoints = results.data.length;
+
+                    results.data.forEach((row, index) => {
+                        const phi = Math.acos(2 * (index / numPoints) - 1);
+                        const theta = Math.sqrt(numPoints * Math.PI) * phi;
+
+                        const x = params.sphereRadius * Math.sin(phi) * Math.cos(theta);
+                        const y = params.sphereRadius * Math.sin(phi) * Math.sin(theta);
+                        const z = params.sphereRadius * Math.cos(phi);
+
+                        const position = new THREE.Vector3(x, y, z);
+                        pointsArray.push({ position: position, description: row.Description });
+                        pointMap.set(row.Description, position);
+
+                        const pointGeometry = new THREE.BufferGeometry().setFromPoints([position]);
+                        const pointMaterial = new THREE.PointsMaterial({
+                            color: params.pointColor,
+                            size: params.pointSize,
+                            map: new THREE.TextureLoader().load('https://threejs.org/examples/textures/sprites/circle.png'),
+                            transparent: true,
+                            depthWrite: false
+                        });
+
+                        const point = new THREE.Points(pointGeometry, pointMaterial);
+                        point.userData = { description: row.Description, originalColor: pointMaterial.color.getHexString() };
+                        scene.add(point);
+                    });
+
+                    loadSimilarityData();
+                }
+            });
+        }
+
+        function loadSimilarityData() {
+            Papa.parse('similarities.csv', {
+                download: true,
+                header: true,
+                complete: function (results) {
+                    const threshold = 0.5; // Adjust the threshold as needed
+
+                    results.data.forEach((row) => {
+                        const position1 = pointMap.get(row['Description 1']);
+                        const position2 = pointMap.get(row['Description 2']);
+                        const similarity = parseFloat(row.Similarity);
+
+                        if (position1 && position2 && similarity >= threshold) {
+                            const material = new THREE.LineBasicMaterial({
+                                color: params.lineColor,
+                                opacity: similarity,
+                                transparent: true,
+                                linewidth: 1 // Initial line width
+                            });
+                            const geometry = new THREE.BufferGeometry().setFromPoints([position1, position2]);
+                            const line = new THREE.Line(geometry, material);
+                            line.userData = {
+                                descriptions: [row['Description 1'], row['Description 2']],
+                                originalColor: params.lineColor,
+                                similarity: similarity
+                            };
+                            scene.add(line);
+
+                            if (!lineMap.has(row['Description 1'])) {
+                                lineMap.set(row['Description 1'], []);
+                            }
+                            lineMap.get(row['Description 1']).push(line);
+
+                            if (!lineMap.has(row['Description 2'])) {
+                                lineMap.set(row['Description 2'], []);
+                            }
+                            lineMap.get(row['Description 2']).push(line);
+                        }
+                    });
+                }
+            });
+        }
+
+        function onMouseMove(event) {
+            event.preventDefault();
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(scene.children);
+
+            if (intersects.length > 0) {
+                const intersectedObject = intersects[0].object;
+                if (intersectedObject.userData.description) {
+                    tooltip.style.display = 'block';
+                    tooltip.style.left = event.clientX + 'px';
+                    tooltip.style.top = event.clientY + 'px';
+                    tooltip.innerHTML = intersectedObject.userData.description;
+                } else if (intersectedObject.isLine) {
+                    const lineDescription = intersectedObject.userData.descriptions.join(' - ');
+                    tooltip.style.display = 'block';
+                    tooltip.style.left = event.clientX + 'px';
+                    tooltip.style.top = event.clientY + 'px';
+                    tooltip.innerHTML = `${lineDescription}<br>Similarity: ${intersectedObject.userData.similarity.toFixed(2)}`;
+
+                    // Increase line width on hover
+                    intersectedObject.material.linewidth = params.lineWidth;
+                    intersectedObject.material.needsUpdate = true;
+                }
+            } else {
+                tooltip.style.display = 'none';
+                resetHoveredLines();
+            }
+        }
+
+        function onMouseClick(event) {
+            event.preventDefault();
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(scene.children);
+
+            if (intersects.length > 0) {
+                const intersectedObject = intersects[0].object;
+                if (intersectedObject.userData.description) {
+                    highlightConnections(intersectedObject.userData.description);
+                }
+            } else {
+                resetHighlightedLines();
+                resetHighlightedPoints();
+            }
+        }
+
+        function highlightConnections(description) {
+            resetHighlightedLines();
+            resetHighlightedPoints();
+
+            if (lineMap.has(description)) {
+                lineMap.get(description).forEach((line) => {
+                    // Change line color and width
+                    line.material.color.set(params.highlightColor);
+                    line.material.linewidth = params.lineWidth;
+                    line.material.needsUpdate = true;
+
+                    highlightedLines.push(line);
+
+                    // Highlight connected points
+                    line.userData.descriptions.forEach((desc) => {
+                        const point = pointMap.get(desc);
+                        if (point) {
+                            point.material.color.set(params.highlightColor); // Highlight color for points
+                            highlightedPoints.push(point);
+                        }
+                    });
+                });
+            }
+        }
+
+        function resetHighlightedLines() {
+            highlightedLines.forEach((line) => {
+                line.material.color.set(line.userData.originalColor); // Reset to original color
+                line.material.linewidth = 1; // Reset to original line width
+                line.material.needsUpdate = true;
+            });
+            highlightedLines = [];
+        }
+
+        function resetHoveredLines() {
+            scene.children.forEach((child) => {
+                if (child.isLine) {
+                    child.material.linewidth = 1; // Reset to original line width
+                    child.material.needsUpdate = true;
+                }
+            });
+        }
+
+        function resetHighlightedPoints() {
+            highlightedPoints.forEach((point) => {
+                point.material.color.set(point.userData.originalColor); // Reset to original color
+            });
+            highlightedPoints = [];
+        }
+
+        function updatePointColors() {
+            scene.children.forEach((child) => {
+                if (child.isPoints) {
+                    child.material.color.set(params.pointColor);
+                    child.userData.originalColor = params.pointColor;
+                }
+            });
+        }
+
+        function updateLineColors() {
+            scene.children.forEach((child) => {
+                if (child.isLine) {
+                    child.material.color.set(params.lineColor);
+                    child.userData.originalColor = params.lineColor;
+                }
+            });
+        }
+
+        function updatePointSize() {
+            scene.children.forEach((child) => {
+                if (child.isPoints) {
+                    child.material.size = params.pointSize;
+                }
+            });
+        }
+
+        function updateLineWidth() {
+            scene.children.forEach((child) => {
+                if (child.isLine) {
+                    child.material.linewidth = params.lineWidth;
+                }
+            });
+        }
+
+        function changePointColorsRandomly() {
+            scene.children.forEach((child) => {
+                if (child.isPoints) {
+                    const randomColor = new THREE.Color(Math.random(), Math.random(), Math.random());
+                    child.material.color.set(randomColor);
+                    child.userData.originalColor = randomColor.getHexString();
+                }
+            });
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update(); // only required if controls.enableDamping or controls.autoRotate is true
+            renderer.render(scene, camera);
+        }
+    </script>
+</body>
+
+</html>

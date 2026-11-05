@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Central City</title>
+    <style>
+        /* Base styles */
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 0 10%;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+    
+        .typewriter {
+            font-size: 24px;
+            border-right: 2px solid;
+            white-space: pre-wrap;
+            overflow: hidden;
+            animation: blink 0.75s step-end infinite;
+            margin-bottom: 20px;
+            text-align: center;
+            max-width: 100%;
+        }
+    
+        @keyframes blink {
+    
+            from,
+            to {
+                border-color: transparent
+            }
+    
+            50% {
+                border-color: transparent
+            }
+        }
+    
+        .options {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+    
+        .button {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 18px;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            border: 2px solid #333;
+            background-color: #fff;
+            transition: background-color 0.3s, color 0.3s;
+        }
+    
+        .button:hover {
+            background-color: #333;
+            color: #fff;
+        }
+    
+        /* Downtown Revitalization - Default active */
+        body {
+            background-color: #000000;
+            /* Dark Gray */
+            color: #ffffff;
+            /* Light Gray */
+        }
+    
+        .button {
+            background-color: #ff6600;
+            /* Gold */
+            color: #333333;
+            /* Dark Gray */
+        }
+    
+        .button:hover {
+            background-color: #333333;
+            color: #FFD700;
+        }
+    
+     
+     
+    </style>
+
+</head>
+
+<body>
+    <div id="storyText" class="story-text typewriter"></div>
+    <div id="optionsContainer" class="options"></div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const storyText = document.getElementById('storyText');
+            const optionsContainer = document.getElementById('optionsContainer');
+            function typeText(text, callback) {
+                let i = 0;
+                storyText.innerHTML = ""; // Clear previous text
+                const speed = 50; // Speed of typing
+                function type() {
+                    if (i < text.length) {
+                        storyText.innerHTML += text.charAt(i);
+                        i++;
+                        setTimeout(type, speed);
+                    } else if (callback) {
+                        callback();
+                    }
+                }
+                type(); // Start typing effect
+            }
+            function displayStep(step) {
+                const currentStep = steps[step];
+                optionsContainer.innerHTML = ''; // Clear previous options
+                optionsContainer.style.opacity = 0; // Reset opacity to 0 for fade-in effect
+                typeText(currentStep.text, () => {
+                    currentStep.options.forEach(option => {
+                        const button = document.createElement('button');
+                        button.textContent = option.text;
+                        button.className = 'button';
+                        button.onclick = () => displayStep(option.nextStep);
+                        optionsContainer.appendChild(button);
+                    });
+                    setTimeout(() => optionsContainer.style.opacity = 1, 100); // Fade in options after 100ms
+                });
+            }
+            const steps = {
+                "start": {
+                    "text": "Welcome to Central City! As the newly elected Mayor, you face the challenge of revitalizing Central City's once-bustling Downtown area. 🌆✨ The business district, previously thriving, is now quiet, suffering from high rents and low foot traffic. The economic downturn, deepened by the aftermath of the pandemic, calls for decisive action to rejuvenate this essential area. The path you choose will shape your legacy and Central City’s recovery.",
+                    "options": [
+                        { "text": "Economic Incentives for Businesses", "nextStep": "a" },
+                        { "text": "Urban Development and Infrastructure Improvements", "nextStep": "b" }
+                    ]
+                },
+                "a": {
+                    "text": "You've chosen to provide Economic Incentives for Businesses. Quick financial boosts like tax breaks could stabilize businesses fast, but they might lead to reliance on subsidies and strain city budgets.",
+                    "options": [
+                        { "text": "Expand and Diversify Economic Incentives", "nextStep": "a1" },
+                        { "text": "Implement a Phased Reduction of Incentives", "nextStep": "a2" }
+                    ]
+                },
+                "a1": {
+                    "text": "You decide to extend benefits to sectors like tech, retail, and the arts to diversify the economic base. This strategy could enrich the business environment but requires careful management to meet each sector's unique needs.",
+                    "options": [
+                        { "text": "Enhanced Sector-Specific Support", "nextStep": "a11" },
+                        { "text": "Broad Unrestricted Incentives", "nextStep": "a12" }
+                    ]
+                },
+                "a11": {
+                    "text": "You focus incentives on key sectors like tech and green enterprises, tailoring support to drive innovation and sustainable growth. This could lead to rapid development in targeted industries, ensuring effective use of resources to foster lasting growth.",
+                    "options": [
+                        { "text": "Ensure Sustainable Growth Without Displacement", "nextStep": "s" }
+                    ]
+                },
+                "a12": {
+                    "text": "You decide to provide incentives across all sectors without focusing on specific industries. This approach is easier to implement but risks inefficient resource use, potentially leading to economic imbalances and lackluster overall impact.",
+                    "options": [
+                        { "text": "Restart", "nextStep": "start" }
+                    ]
+                },
+                "a2": {
+                    "text": "You opt for a phased reduction of incentives, gradually encouraging businesses to operate independently. This approach aims to balance fiscal responsibility while fostering a self-sufficient business community, although it may make new businesses hesitant.",
+                    "options": [
+                        { "text": "Mandate Maximum Rent for Commercial Spaces", "nextStep": "a21" },
+                        { "text": "Implement Tax Incentives for Landlords Who Lower Rents", "nextStep": "a22" }
+                    ]
+                },
+                "a21": {
+                    "text": "You implement rent caps to stabilize overhead costs for businesses adjusting to reduced incentives. This could ease financial planning but might raise concerns about market manipulation and impact on property owners.",
+                    "options": [
+                        { "text": "Ensure Sustainable Growth Without Displacement", "nextStep": "s" }
+                    ]
+                },
+                "a22": {
+                    "text": "You offer tax breaks to landlords who voluntarily lower rents, relying on their cooperation. However, this approach could have varied impacts across the market, depending on landlord participation.",
+                    "options": [
+                        { "text": "Ensure Sustainable Growth Without Displacement", "nextStep": "s" }
+                    ]
+                },
+                "b": {
+                    "text": "You choose Urban Development and Infrastructure Improvements. Investing in infrastructure promises long-term growth and a vibrant urban space, but these benefits take time to materialize and require substantial initial funding.",
+                    "options": [
+                        { "text": "Public-Private Partnerships (PPPs) for Urban Development", "nextStep": "b1" },
+                        { "text": "Comprehensive Zoning and Land Use Reforms", "nextStep": "b2" }
+                    ]
+                },
+                "b1": {
+                    "text": "You decide to partner with the private sector to enhance public transit and green spaces. This approach brings new capital and ideas but requires careful oversight to align with public interests.",
+                    "options": [
+                        { "text": "Establish a Dedicated PPP Oversight Committee", "nextStep": "b11" },
+                        { "text": "Structure Shared-Risk Agreements", "nextStep": "b12" }
+                    ]
+                },
+                "b11": {
+                    "text": "You establish a specialized committee to oversee and ensure that all partnership agreements align with public interests. This move aims to prevent undue influence by private entities and ensure transparent project management, balancing innovation with public accountability.",
+                    "options": [
+                        { "text": "Ensure Sustainable Growth Without Displacement", "nextStep": "s" }
+                    ]
+                },
+                "b12": {
+                    "text": "You negotiate contracts that equitably distribute risks, protecting public investments while holding private partners accountable. However, the complexity of these agreements could deter potential partners, stalling key projects.",
+                    "options": [
+                        { "text": "Restart", "nextStep": "start" }
+                    ]
+                },
+                "b2": {
+                    "text": "You decide to revise zoning laws to promote a mix of residential, commercial, and cultural spaces. This approach could spur economic diversity but may face resistance and take time to yield results.",
+                    "options": [
+                        { "text": "Implement a Phased Zoning Rollout", "nextStep": "b21" },
+                        { "text": "Develop Strategic Compliance Measures", "nextStep": "b22" }
+                    ]
+                },
+                "b21": {
+                    "text": "You gradually introduce changes to ease the community into new regulations, reducing shock and opposition. While this method promotes smoother transitions, it may delay the visible impacts of revitalization.",
+                    "options": [
+                        { "text": "Ensure Sustainable Growth Without Displacement", "nextStep": "s" }
+                    ]
+                },
+                "b22": {
+                    "text": "You set up stringent enforcement mechanisms to ensure adherence to the new zoning laws. This ensures that the reforms are effective but could create tension with property owners and developers resistant to change.",
+                    "options": [
+                        { "text": "Ensure Sustainable Growth Without Displacement", "nextStep": "s" }
+                    ]
+                },
+                "s": {
+                    "text": "Sustaining Growth, Mayor! 🌆⚖️ Challenges remain in maintaining growth post-revitalization. You must decide how to keep the momentum going without causing gentrification that could drive original residents and businesses away.",
+                    "options": [
+                        { "text": "Promote Mixed-Use Development", "nextStep": "s1" },
+                        { "text": "Establish Economic Development Zones", "nextStep": "s2" }
+                    ]
+                },
+                "s1": {
+                    "text": "Mixed-Use Development in Motion, Mayor! 🏙️🏠 You’ve chosen to promote mixed-use development, focusing on maintaining diversity and affordability in the downtown area. Two paths lie ahead, but one holds more promise than the other.",
+                    "options": [
+                        { "text": "Leave Affordability to Market Forces", "nextStep": "s1a" },
+                        { "text": "Offer Incentives for Building Mixed-Use Properties", "nextStep": "s1b" }
+                    ]
+                },
+                "s1a": {
+                    "text": "You choose to let the market naturally determine affordability within mixed-use developments. While this simplifies regulation, it risks driving up property values and rents, displacing original residents and local businesses, and ultimately failing to maintain downtown's inclusivity.",
+                    "options": [
+                        { "text": "Rely on Developer Promises Alone", "nextStep": "s1aa" },
+                        { "text": "Encourage Public-Private Partnerships for Affordable Units", "nextStep": "s1ab" }
+                    ]
+                },
+                "s1aa": {
+                    "text": "You decide to trust developers to include affordable units without additional incentives or oversight. This approach minimizes city intervention but leaves affordability entirely in the hands of the market, risking further displacement.",
+                    "options": [
+                        { "text": "Restart", "nextStep": "start" }
+                    ]
+                },
+                "s1ab": {
+                    "text": "You work with private developers to voluntarily include affordable units in exchange for city benefits like zoning flexibility or infrastructure support. This partnership could ensure a balance between profit and affordability.",
+                    "options": [
+                        { "text": "Navigate Stakeholder Conflicts to Find Common Ground", "nextStep": "xa" }
+                    ]
+                },
+                "s1b": {
+                    "text": "You set a minimum percentage of affordable units in all new mixed-use developments. This approach ensures a balance of income levels, preventing gentrification and keeping downtown accessible to a wider population.",
+                    "options": [
+                        { "text": "Streamline the Permitting Process", "nextStep": "s1ba" },
+                        { "text": "Offer Tax Breaks for Developers", "nextStep": "s1bb" }
+                    ]
+                },
+                "s1ba": {
+                    "text": "You simplify and expedite the approval process for developers who meet affordable housing requirements. This could accelerate development and attract more builders, ensuring that mixed-use projects progress without unnecessary delays.",
+                    "options": [
+                        { "text": "Navigate Stakeholder Conflicts to Find Common Ground", "nextStep": "xb" }
+                    ]
+                },
+                "s1bb": {
+                    "text": "You provide tax incentives to developers who include affordable units in their mixed-use projects. While this financial boost could encourage participation, it might reduce city revenues and lead to budget constraints.",
+                    "options": [
+                        { "text": "Restart", "nextStep": "start" }
+                    ]
+                },
+                "s2": {
+                    "text": "Economic Development Zones in Progress, Mayor! 🏗️📊 You’ve established economic development zones to boost targeted areas with tax incentives and support for local businesses. Moving forward, you face two distinct paths to sustain this development:",
+                    "options": [
+                        { "text": "Prioritize Local Business Growth", "nextStep": "s2a" },
+                        { "text": "Attract Large Corporations", "nextStep": "s2b" }
+                    ]
+                },
+                "s2a": {
+                    "text": "You provide additional support to small and local businesses within the zones, ensuring they can compete and thrive as the area grows. This could include grants, reduced fees, or easier access to capital, helping protect the unique character of downtown.",
+                    "options": [
+                        { "text": "Navigate Stakeholder Conflicts to Find Common Ground", "nextStep": "xc" }
+                    ]
+                },
+                "s2b": {
+                    "text": "You offer incentives to attract major corporations to the development zones, hoping to spur large-scale economic activity. While this could bring rapid growth, it may shift the focus away from smaller local businesses, causing tension and potential displacement.",
+                    "options": [
+                        { "text": "Restart", "nextStep": "start" }
+                    ]
+                },
+                "xa": {
+                    "text": "Stakeholder Conflict Escalates, Mayor! ⚖️🏙️ You’re now facing a critical challenge in the Downtown Revitalization effort. Multiple stakeholder groups—property owners, local businesses, residents, and political factions—are clashing over the future direction of the downtown area. With differing priorities and visions, these conflicts are stalling progress and threatening the revitalization plan.",
+                    "options": [
+                        { "text": "Establish a Downtown Revitalization Advisory Board", "nextStep": "w1" },
+                        { "text": "Conduct Comprehensive Stakeholder Impact Assessments", "nextStep": "w2" }
+                    ]
+                },
+                "xb": {
+                    "text": "Stakeholder Conflict Escalates, Mayor! ⚖️🏙️ You’re now facing a critical challenge in the Downtown Revitalization effort. Multiple stakeholder groups—property owners, local businesses, residents, and political factions—are clashing over the future direction of the downtown area. With differing priorities and visions, these conflicts are stalling progress and threatening the revitalization plan.",
+                    "options": [
+                        { "text": "Establish a Downtown Revitalization Advisory Board", "nextStep": "w1" },
+                        { "text": "Conduct Comprehensive Stakeholder Impact Assessments", "nextStep": "w2" }
+                    ]
+                },
+                "xc": {
+                    "text": "Stakeholder Conflict Escalates, Mayor! ⚖️🏙️ You’re now facing a critical challenge in the Downtown Revitalization effort. Multiple stakeholder groups—property owners, local businesses, residents, and political factions—are clashing over the future direction of the downtown area. With differing priorities and visions, these conflicts are stalling progress and threatening the revitalization plan.",
+                    "options": [
+                        { "text": "Establish a Downtown Revitalization Advisory Board", "nextStep": "w1" },
+                        { "text": "Conduct Comprehensive Stakeholder Impact Assessments", "nextStep": "w2" }
+                    ]
+                },
+                "w1": {
+                    "text": "Congratulations, Mayor! 🎉🏙️ You’ve navigated through a series of complex decisions in the effort to revitalize Downtown Central City. From promoting mixed-use development to prioritizing local business growth, your leadership has kept the city on track toward a vibrant and inclusive future. By streamlining processes and encouraging collaboration with private partners, you’ve laid the groundwork for sustainable economic growth. Now, with the creation of the Downtown Revitalization Advisory Board, you’ve ensured that all stakeholders have a voice, fostering collaboration and shared decision-making. Your commitment to bringing everyone together marks a major step forward for Central City’s revitalization. Bravo, Mayor! 👏🌟"
+                },
+                "w2": {
+                    "text": "Well Done, Mayor! 🏙️📊 You’ve made steady progress in the revitalization of Downtown Central City, from incentivizing local businesses to promoting mixed-use development. Your efforts have set the stage for a stronger downtown. Now, by choosing to Conduct Comprehensive Stakeholder Impact Assessments, you’re taking a thoughtful approach to ensure that each group's needs are considered moving forward. Though this option may not bring immediate excitement, it shows your dedication to a balanced, inclusive process. While the road ahead remains challenging, this step ensures a more thoughtful and informed path for Central City’s future."
+                },
+                "restart": {
+                    "text": "You have reached a deadlock or end. Do you want to restart?",
+                    "options": [
+                        { "text": "Restart", "nextStep": "start" }
+                    ]
+                }
+            };
+
+            displayStep('start');
+        });
+    </script>
+</body>
+
+</html>

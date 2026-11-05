@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>People Connection with Echo Chambers and Polarization Score</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #000000;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        #canvas-container {
+            flex: 1;
+            /* Makes the canvas take the full height available, leaving room for the description */
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        #tooltip {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px;
+            border-radius: 4px;
+            pointer-events: none;
+            font-size: 14px;
+            display: none;
+            z-index: 100;
+        }
+
+        #description {
+            padding: 20px;
+            background-color: #000000;
+            color: #ffffff;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            line-height: 1.6;
+            font-size: 16px;
+            text-align: justify;
+            margin-left: 20%;
+            margin-right: 20%;
+        }
+
+        .small-italic {
+            font-size: 1.0em;
+            font-style: italic;
+            color: #555;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Canvas container to ensure it doesn't overlap with the description -->
+    <div id="canvas-container">
+        <canvas id="peopleCanvas"></canvas>
+        <div id="tooltip"></div>
+    </div>
+
+    <div class="small-italic">
+        <p>This simulation shows how people form connections and the emergence of echo chambers and polarization based
+            on factors like income, profession, political alignment, and other personal traits.</p>
+    </div>
+
+    <div id="description">
+        <p>This visualization illustrates how social dynamics like echo chambers and polarization arise in a simulated
+            population. By adjusting various parameters, users can explore how different social and economic factors
+            influence the formation of these phenomena. Here’s how to interpret and understand the visualization:</p>
+
+        <p><strong>Understanding Echo Chambers</strong></p>
+        <p><em>What are Echo Chambers?</em><br> Echo chambers are social environments where people primarily connect
+            with others who share similar beliefs, traits, or opinions. These connections reinforce their perspectives,
+            limiting exposure to differing viewpoints.</p>
+
+        <p><strong>Understanding Polarization</strong></p>
+        <p><em>What is Polarization?</em><br> Polarization occurs when groups or individuals hold opposing views or
+            characteristics, creating division. Politically, polarization means individuals with different political
+            views rarely connect or interact.</p>
+    </div>
+
+    <!-- Include Skypack for dat.GUI -->
+    <script type="module">
+        import * as dat from '../vendor/shared/lib-6ef06cdec5d6/dist/dat.gui.module.js';
+
+        const canvas = document.getElementById('peopleCanvas');
+        const ctx = canvas.getContext('2d');
+        const tooltip = document.getElementById('tooltip');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const params = {
+            personCount: 100,
+            connectionRadius: 150,
+            incomeScore: 80,        // Preference for similar income
+            professionScore: 70,    // Preference for similar profession
+            proximityScore: 50,     // Preference for geographic proximity
+            similarityScore: 60,    // General similarity for culture, gender, etc.
+            politicalAffiliationScore: 50, // Preference for political alignment
+            showEchoChambers: false,
+            showPolarization: false
+        };
+
+        class Person {
+            constructor(id) {
+                this.id = id;
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.radius = 5;
+                this.income = Math.floor(Math.random() * 100);
+                this.education = Math.floor(Math.random() * 100);
+                this.race = Math.floor(Math.random() * 4);
+                this.culture = Math.floor(Math.random() * 5);
+                this.personality = Math.random();
+                this.age = Math.floor(Math.random() * 3);
+                this.profession = Math.floor(Math.random() * 5);
+                this.politicalAffiliation = Math.floor(Math.random() * 3);
+                this.hobbies = [Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)];
+                this.gender = Math.random() < 0.5 ? "male" : "female";
+                this.lifeEvent = Math.floor(Math.random() * 3);
+                this.vx = (Math.random() - 0.5) * 2;
+                this.vy = (Math.random() - 0.5) * 2;
+            }
+
+            move() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x + this.radius > canvas.width || this.x - this.radius < 0) this.vx = -this.vx;
+                if (this.y + this.radius > canvas.height || this.y - this.radius < 0) this.vy = -this.vy;
+            }
+
+            draw(color = 'rgba(255, 255, 255, 0.5)') {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+                ctx.fillStyle = color;
+                ctx.fill();
+                ctx.closePath();
+            }
+
+            isHovered(mouseX, mouseY) {
+                return Math.sqrt((mouseX - this.x) ** 2 + (mouseY - this.y) ** 2) < this.radius;
+            }
+        }
+
+        let people = [];
+        for (let i = 0; i < params.personCount; i++) people.push(new Person(i));
+
+        let activeConnections = [];
+        let clusters = [];
+        let movingDots = [];
+        const colors = ['#FF5733', '#33FF57', '#3357FF', '#F333FF', '#33FFF7', '#F7FF33'];
+        const dotSpeed = 0.02;
+
+        function shouldConnect(personA, personB) {
+            let score = 0;
+            score += params.incomeScore * (1 - Math.abs(personA.income - personB.income) / 100);
+            score += params.professionScore * (personA.profession === personB.profession ? 1 : 0);
+            score += params.proximityScore * (Math.sqrt((personA.x - personB.x) ** 2 + (personA.y - personB.y) ** 2) < params.connectionRadius ? 1 : 0);
+            score += params.similarityScore * (
+                (personA.race === personB.race ? 1 : 0) +
+                (personA.culture === personB.culture ? 1 : 0) +
+                (personA.gender === personB.gender ? 1 : 0) +
+                (personA.age === personB.age ? 1 : 0)
+            );
+            score += params.politicalAffiliationScore * (personA.politicalAffiliation === personB.politicalAffiliation ? 1 : 0);
+
+            const polarization = Math.abs(personA.politicalAffiliation - personB.politicalAffiliation);
+
+            if (params.showPolarization && polarization > 1) {
+                return 'polarization';
+            }
+
+            return score >= 300 ? 'connected' : 'notConnected';
+        }
+
+        function manageConnections() {
+            activeConnections = [];
+            clusters = [];
+            movingDots = [];
+
+            people.forEach((personA, i) => {
+                let cluster = [personA];
+                people.slice(i + 1).forEach(personB => {
+                    const connectionType = shouldConnect(personA, personB);
+                    if (connectionType === 'connected' || connectionType === 'polarization') {
+                        activeConnections.push({ personA, personB, connectionType });
+
+                        // Initialize a moving dot for each connection
+                        movingDots.push({ personA, personB, t: 0 });
+
+                        cluster.push(personB);
+                    }
+                });
+                clusters.push(cluster);
+            });
+
+            clusters = clusters.filter(cluster => cluster.length > 1);
+        }
+
+        function drawPeople() {
+            people.forEach(person => person.draw());
+        }
+
+        function movePeople() {
+            people.forEach(person => person.move());
+        }
+
+        function drawClusters() {
+            clusters.forEach((cluster, idx) => {
+                const color = colors[idx % colors.length];
+                cluster.forEach(person => {
+                    if (params.showEchoChambers) {
+                        person.draw(color);
+                    } else {
+                        person.draw();
+                    }
+                });
+            });
+        }
+
+        function animateActiveConnections() {
+            activeConnections.forEach(connection => {
+                const { personA, personB, connectionType } = connection;
+                let color;
+
+                if (connectionType === 'polarization' && params.showPolarization) {
+                    const maxPoliticalDifference = 10;
+                    const polarizationDifference = Math.abs(personA.politicalAffiliation - personB.politicalAffiliation);
+                    const polarizationLevel = Math.min(polarizationDifference / maxPoliticalDifference, 1);
+                    const redIntensity = Math.floor(255 * polarizationLevel);
+                    const greenIntensity = Math.floor(255 * (1 - polarizationLevel));
+
+                    color = `rgb(${redIntensity}, ${greenIntensity}, 0)`;
+                } else if (connectionType === 'connected') {
+                    const clusterIndexA = clusters.findIndex(cluster => cluster.includes(personA));
+                    color = params.showEchoChambers ? colors[clusterIndexA % colors.length] : '#FFFFFF';
+                } else {
+                    color = '#AAAAAA';
+                }
+
+                ctx.beginPath();
+                ctx.moveTo(personA.x, personA.y);
+                ctx.lineTo(personB.x, personB.y);
+                ctx.strokeStyle = color;
+                ctx.stroke();
+            });
+        }
+
+        function animateMovingDots() {
+            movingDots.forEach(dot => {
+                const { personA, personB } = dot;
+
+                // Calculate the current position of the dot using linear interpolation (lerp)
+                const x = personA.x + dot.t * (personB.x - personA.x);
+                const y = personA.y + dot.t * (personB.y - personA.y);
+
+                // Draw the dot
+                ctx.beginPath();
+                ctx.arc(x, y, 3, 0, Math.PI * 2);
+                ctx.fillStyle = '#FF0000';
+                ctx.fill();
+                ctx.closePath();
+
+                // Update the 't' parameter to move the dot along the line
+                dot.t += dotSpeed;
+
+                // Loop the dot back to the start once it reaches the end of the line
+                if (dot.t > 1) dot.t = 0;
+            });
+        }
+
+        function displayTooltip(person, mouseX, mouseY) {
+            tooltip.style.display = 'block';
+            tooltip.style.left = `${mouseX + 15}px`;
+            tooltip.style.top = `${mouseY + 15}px`;
+            tooltip.innerHTML = `
+                IncomeScore: ${person.income}<br>
+                EducationScore: ${person.education}<br>
+                EthnicityScore: ${person.race}<br>
+                CultureScore: ${person.culture}<br>
+                PersonalityScore: ${person.personality.toFixed(2)}<br>
+                AgeScore: ${person.age}<br>
+                ProfessionScore: ${person.profession}<br>
+                PoliticalViewScore: ${person.politicalAffiliation}<br>
+                HobbiesScore: ${person.hobbies.join(', ')}<br>
+                GenderIdentityScore: ${person.gender}<br>
+                LifeEventScore: ${person.lifeEvent}`;
+        }
+
+        function hideTooltip() {
+            tooltip.style.display = 'none';
+        }
+
+        canvas.addEventListener('mousemove', event => {
+            const mouseX = event.clientX;
+            const mouseY = event.clientY;
+            const hoveredPerson = people.find(person => person.isHovered(mouseX, mouseY));
+            if (hoveredPerson) {
+                displayTooltip(hoveredPerson, mouseX, mouseY);
+            } else {
+                hideTooltip();
+            }
+        });
+
+        function calculatePolarization() {
+            let intraClusterSimilarity = 0;
+            let interClusterSimilarity = 0;
+            let intraComparisons = 0;
+            let interComparisons = 0;
+
+            clusters.forEach(cluster => {
+                cluster.forEach((personA, idx) => {
+                    for (let i = idx + 1; i < cluster.length; i++) {
+                        intraClusterSimilarity += Math.abs(personA.politicalAffiliation - cluster[i].politicalAffiliation);
+                        intraComparisons++;
+                    }
+                });
+            });
+
+            for (let i = 0; i < clusters.length; i++) {
+                for (let j = i + 1; j < clusters.length; j++) {
+                    clusters[i].forEach(personA => {
+                        clusters[j].forEach(personB => {
+                            interClusterSimilarity += Math.abs(personA.politicalAffiliation - personB.politicalAffiliation);
+                            interComparisons++;
+                        });
+                    });
+                }
+            }
+
+            let avgIntra = intraComparisons > 0 ? intraClusterSimilarity / intraComparisons : 0;
+            let avgInter = interComparisons > 0 ? interClusterSimilarity / interComparisons : 0;
+            return avgInter - avgIntra;
+        }
+
+        function drawMetrics() {
+            ctx.fillStyle = 'white';
+            ctx.font = '16px Arial';
+            ctx.fillText(`Echo Chambers: ${clusters.length}`, 20, 20);
+            ctx.fillText(`Polarization Score: ${calculatePolarization().toFixed(2)}`, 20, 40);
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            movePeople();
+            manageConnections();
+            drawPeople();
+            drawClusters();
+            animateActiveConnections();
+            animateMovingDots();  // Add the moving dots animation here
+            drawMetrics();
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            animate();
+        });
+
+        const gui = new dat.GUI({ width: 350 });
+
+        gui.add(params, 'personCount', 10, 500).step(1).name("Person Count").onChange(value => {
+            people = [];
+            for (let i = 0; i < value; i++) people.push(new Person(i));
+        });
+
+        gui.add(params, 'connectionRadius', 50, 300).step(10).name("Connection Radius").onChange(value => {
+            params.connectionRadius = value;
+        });
+
+        gui.add(params, 'incomeScore', 0, 100).step(5).name("Income Preference").onChange(value => {
+            params.incomeScore = value;
+        });
+
+        gui.add(params, 'professionScore', 0, 100).step(5).name("Profession Preference").onChange(value => {
+            params.professionScore = value;
+        });
+
+        gui.add(params, 'proximityScore', 0, 100).step(5).name("Proximity Preference").onChange(value => {
+            params.proximityScore = value;
+        });
+
+        gui.add(params, 'similarityScore', 0, 100).step(5).name("General Similarity").onChange(value => {
+            params.similarityScore = value;
+        });
+
+        gui.add(params, 'politicalAffiliationScore', 0, 100).step(5).name("Political Preference").onChange(value => {
+            params.politicalAffiliationScore = value;
+        });
+
+        gui.add(params, 'showEchoChambers').name('Show Echo Chambers');
+        gui.add(params, 'showPolarization').name('Show Polarized Groups');
+    </script>
+</body>
+
+</html>

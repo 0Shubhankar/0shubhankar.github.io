@@ -134,9 +134,39 @@ const setupScrollStories = () => {
 setupScrollStories();
 desktopQuery.addEventListener("change", setupScrollStories);
 
+const projectDestinations = {
+  "Multi-City A* Route-Finding System": "portfolio/4/allinone/city-pathfinding-analysis.html",
+  "Dead-End Street Network Analysis": "portfolio/8/dead-end-roads-analysis.html",
+  "Shibuya School Accessibility Mapping": "portfolio/3/shibuya-school-accessibility.html",
+  "Green Space Accessibility and Park Usability Index": "portfolio/14/park-accessibility.html",
+  "Global Air Pollution Globe": "portfolio/24/air-pollution-visualization.html",
+  "Global Energy Production and Consumption Map": "portfolio/27/energy-map.html",
+  "Temperature and Climate Globe Visualization": "portfolio/26/global-temperature-visualization.html",
+  "Manhattan Event Congestion Analysis": "portfolio/2/index.html",
+  "Ambulance Dispatch and Emergency Vehicle Simulation": "portfolio/22/emergency-response-comparison.html",
+  "Global Parking Supply and CBD Parking Analysis": "portfolio/15/city-parking-analysis.html",
+  "Congestion Pricing and Road Pricing Study": "portfolio/9/road-pricing-simulation.html",
+  "Taxi and Commercial Center Simulation": "portfolio/34/taxi-commercial-centre.html",
+  "Vehicle Waiting Time Visualization": "portfolio/17/waiting-time-visualization.html",
+  "Gentrification and Neighborhood Change Model": "portfolio/11/gentrification-simulation.html",
+  "Central Business District Activity Analysis": "portfolio/16/city-centre-activity.html",
+  "Metro Crowd Evacuation Simulation": "portfolio/37/metro-crowd-simulation.html",
+  "Honking Behavior and Urban Traffic Noise Simulation": "portfolio/18/traffic-honking-simulation.html",
+  "Social Belonging Simulation": "portfolio/40/belonging-simulation.html",
+  "Echo Chamber and Polarization Simulation": "portfolio/35/echo-chamber-polarization.html",
+  "Free Bus Ride and Public Goods Simulation": "portfolio/33/free-public-transit-simulation.html",
+  "Social Unrest and Dissent Simulation": "portfolio/39/dissent-simulation.html",
+  "Misinformation Spread Simulation": "portfolio/38/misinformation-spread.html",
+  "Green City Generator": "portfolio/31/green-city-generator.html",
+  "City Image Classification and Urban Identity": "portfolio/12/image-classification.html",
+  "Coffee Shop Density and Location Analysis": "portfolio/5/coffee-shop-analysis.html"
+};
+
 document.addEventListener("click", (event) => {
-  if (event.target.closest(".project-card h3")) {
-    window.location.href = "archived.html";
+  const heading = event.target.closest(".project-card h3");
+  if (heading) {
+    const destination = projectDestinations[heading.textContent.trim()];
+    window.location.href = destination || "archived.html";
   }
 });
 

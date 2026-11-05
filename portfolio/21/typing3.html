@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Story with Multi-Step Options</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #000000;
+            padding: 0 10%;
+            box-sizing: border-box;
+        }
+
+        .typewriter {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 24px;
+            color: #ffffff;
+            border-right: 2px solid;
+            white-space: pre-wrap;
+            overflow: hidden;
+            animation: blink 0.75s step-end infinite;
+            margin-bottom: 20px;
+            text-align: center;
+            max-width: 100%;
+        }
+
+        .options {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .button {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 18px;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            border: 2px solid #333;
+            background-color: #fff;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .hint {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 20px;
+            color: #fff;
+            margin-top: 20px;
+            white-space: pre-wrap;
+            overflow: hidden;
+            border-right: 2px solid;
+            display: none;
+            animation: blink 0.75s step-end infinite;
+            text-align: center;
+            max-width: 100%;
+        }
+
+        @keyframes blink {
+
+            from,
+            to {
+                border-color: transparent
+            }
+
+            50% {
+                border-color: black
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="typewriter" id="typewriter"></div>
+    <div class="options" id="options"></div>
+    <div class="hint" id="hint"></div>
+
+    <script>
+        const speed = 50; // Speed of typing (milliseconds)
+
+        // Story structure
+        const story = [
+            {
+                text: "In the once peaceful town of Spudsville, crime is on the rise—someone’s been mashing more than just potatoes!\nWhat would you do?",
+                options: [
+                    { text: "Increase Police Presence", nextStep: 1 },
+                    { text: "Implement Public Surveillance", nextStep: 2 }
+                ]
+            },
+            {
+                text: "Increase Police Presence.\nDeploying more officers across Spudsville! Will a stronger force of Tater Troopers bring order, or will it fry the city’s already tight budget? 🚓🥔",
+                options: [
+                    { text: "Implement a “Zero Tolerance” Policy", nextStep: 3 },
+                    { text: "Invest in Community Policing", nextStep: 4 }
+                ]
+            },
+            {
+                text: "Implement Public Surveillance.\nSetting up cameras across the city to keep a closer eye on crime. Will it help, or will the citizens of Spudsville feel spied on in their potato patches? 🎥🍟",
+                options: [
+                    { text: "Expand Surveillance Network", nextStep: 5 },
+                    { text: "Introduce Privacy Safeguards", nextStep: 6 }
+                ]
+            },
+            {
+                text: "You chose to implement a “Zero Tolerance” Policy.\nCracking down on every infraction—will this restore peace, or create an atmosphere of fear? 🚨🥔",
+                options: [
+                    { text: "Evaluate the Impact", nextStep: 7 },
+                    { text: "Continue with Policy", nextStep: 8 }
+                ]
+            },
+            {
+                text: "Invest in Community Policing.\nFocusing on building trust between police and local communities. Will this bring lasting peace, or take too long to show results? 🏘️👮‍♂️",
+                options: [
+                    { text: "Increase Community Outreach", nextStep: 7 },
+                    { text: "Review and Adjust Strategy", nextStep: 8 }
+                ]
+            },
+            {
+                text: "Expand Surveillance Network.\nCameras are everywhere now! Will the extra eyes catch all crimes, or just make people uneasy? 📹👁️",
+                options: [
+                    { text: "Monitor Results", nextStep: 7 },
+                    { text: "Scale Back Surveillance", nextStep: 8 }
+                ]
+            },
+            {
+                text: "Introduce Privacy Safeguards.\nBalancing surveillance with citizens’ privacy. Will this satisfy the community, or will criminals exploit the gaps? 🛡️🔍",
+                options: [
+                    { text: "Evaluate Community Response", nextStep: 7 },
+                    { text: "Tighten Surveillance", nextStep: 8 }
+                ]
+            },
+            {
+                text: "You’ve completed your first policy decision. Evaluate your choices and see how they impact the community. 🎉",
+                options: [
+                    { text: "Restart", nextStep: 0 }
+                ]
+            },
+            {
+                text: "You’ve reached a deadlock. Sometimes there are no perfect answers. Reflect on your choices and see how you could improve next time. 🔄",
+                options: [
+                    { text: "Restart", nextStep: 0 }
+                ]
+            }
+        ];
+
+        let currentStep = 0;
+
+        function typeText(text, callback) {
+            let index = 0;
+            const typewriterElement = document.getElementById("typewriter");
+            typewriterElement.innerHTML = ""; // Clear previous text
+
+            function typeCharacter() {
+                if (index < text.length) {
+                    typewriterElement.innerHTML += text.charAt(index);
+                    index++;
+                    setTimeout(typeCharacter, speed);
+                } else if (callback) {
+                    callback();
+                }
+            }
+            typeCharacter();
+        }
+
+        function showOptions(options) {
+            const optionsElement = document.getElementById("options");
+            optionsElement.innerHTML = ""; // Clear previous options
+            optionsElement.style.display = "block";
+
+            options.forEach(option => {
+                const button = document.createElement("button");
+                button.className = "button";
+                button.textContent = option.text;
+                button.onclick = () => {
+                    optionsElement.style.display = "none"; // Hide options
+                    showStep(option.nextStep); // Show next step
+                };
+                optionsElement.appendChild(button);
+            });
+        }
+
+        function showStep(stepIndex) {
+            currentStep = stepIndex;
+            const step = story[stepIndex];
+
+            typeText(step.text, () => {
+                showOptions(step.options);
+            });
+        }
+
+        // Start the story
+        window.onload = () => {
+            showStep(0);
+        };
+    </script>
+</body>
+
+</html>

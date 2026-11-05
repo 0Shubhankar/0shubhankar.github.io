@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full Screen Video</title>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            /* Hide scrollbars */
+            -webkit-font-smoothing: antialiased;
+
+        }
+
+        #fullscreenVideo {
+            position: absolute;
+            /* Use fixed position to cover the whole screen */
+            right: 0;
+            align-items: center;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -100;
+            /* Optional: makes sure it stays below other content */
+            background-size: full;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+
+    <video id="fullscreenVideo" controls autoplay muted loop>
+        <source src="waitingTimeCPSimulation.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+</body>
+
+</html>

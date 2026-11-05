@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>3D Map with Crime Data</title>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel='stylesheet' href='../vendor/shared/lib-9eaeb463f1b3/dist/maplibre-gl.css' />
+    <script src='../vendor/shared/lib-1c09437b70d7/dist/maplibre-gl.js'></script>
+    <script src="../vendor/shared/lib-f23951908ba6/dist/papaparse.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body,
+        #map {
+            height: 100%;
+        }
+        .maplibregl-ctrl.maplibregl-ctrl-attrib {
+            z-index: 1; /* Ensure it's not hidden behind other elements */
+        }
+    </style>
+</head>
+
+
+
+
+<body>
+    <div id="map"></div>
+
+    <script>
+        const map = new maplibregl.Map({
+            container: 'map',
+            style: 'https://tiles.stadiamaps.com/styles/alidade_smooth.json',
+            center: [-76.9931501206, 38.9222116506], // Washington, D.C. coordinates
+            zoom: 17,
+            pitch: 70, // Tilt the map for 3D effect
+            bearing: 60, // Rotate the map
+            interactive: true
+        });
+
+        // Add zoom and rotation controls to the map.
+        map.addControl(new maplibregl.NavigationControl())
+
+
+        // Add 3D buildings layer
+        map.on('load', () => {
+            
+
+            // Load crime data
+            fetch('Crime_Incidents_in_2020.csv')
+                .then(response => response.text())
+                .then(csv => {
+                    const data = Papa.parse(csv, { header: true, dynamicTyping: true }).data;
+                    const geojson = {
+                        type: 'FeatureCollection',
+                        features: data.map(row => ({
+                            type: 'Feature',
+                            geometry: {
+                                type: 'Point',
+                                coordinates: [row.LONGITUDE, row.LATITUDE]
+                            },
+                            properties: {
+                                OFFENSE: row.OFFENSE,
+                                REPORT_DAT: row.REPORT_DAT,
+                                METHOD: row.METHOD,
+                                COUNT: 1
+                            }
+                        }))
+                    };
+
+                    // Aggregate crimes by location
+                    const aggregated = {};
+                    geojson.features.forEach(feature => {
+                        const coords = feature.geometry.coordinates.join(',');
+                        if (!aggregated[coords]) {
+                            aggregated[coords] = feature;
+                            aggregated[coords].properties.COUNT = 1;
+                        } else {
+                            aggregated[coords].properties.COUNT += 1;
+                        }
+                    });
+
+                    const aggregatedFeatures = Object.values(aggregated);
+                    const aggregatedGeojson = {
+                        type: 'FeatureCollection',
+                        features: aggregatedFeatures
+                    };
+
+                    map.addSource('crimeData', {
+                        type: 'geojson',
+                        data: aggregatedGeojson
+                    });
+
+                    map.addLayer({
+                        id: 'crimePoints',
+                        type: 'circle',
+                        source: 'crimeData',
+                        paint: {
+                            'circle-color': [
+                                'case',
+                                ['>', ['get', 'COUNT'], 5],
+                                'red',
+                                'rgba(255,0,0,0.5)'
+                            ],
+                            'circle-radius': [
+                                'interpolate',
+                                ['linear'],
+                                ['zoom'],
+                                12,
+                                5,
+                                16,
+                                10
+                            ]
+                        }
+                    });
+
+                    // Add the inner static circle
+                   map.addLayer({
+                        id: 'crimePointsInner',
+                        type: 'circle',
+                        source: 'crimeData',
+                        paint: {
+                            'circle-color': [
+                                'case',
+                                ['<', ['get', 'COUNT'], 5], 'pink', // Pink for crime less than 5
+                                'red'  // Red for others
+                            ],
+                            'circle-radius': [
+                                'interpolate',
+                                ['linear'],
+                                ['zoom'],
+                                12,
+                                3,
+                                16,
+                                6
+                            ],
+                            'circle-opacity': [
+                                'case',
+                                ['<', ['get', 'COUNT'], 5], 0.3, // Lower opacity for less crime
+                                0.8  // Higher opacity otherwise
+                            ]
+                        }
+                    });
+
+                    map.addLayer({
+                        id: 'crimePointsHollow',
+                        type: 'circle',
+                        source: 'crimeData',
+                        paint: {
+                            'circle-color': 'transparent', // Transparent fill
+                            'circle-stroke-color': [
+                                'case',
+                                ['<', ['get', 'COUNT'], 5], 'pink', // Pink for crime less than 5
+                                'red'  // Red for others
+                            ],
+                            'circle-stroke-width': [
+                                'interpolate',
+                                ['linear'],
+                                ['zoom'],
+                                12,
+                                2,
+                                16,
+                                4
+                            ],
+                            'circle-radius': [
+                                'interpolate',
+                                ['linear'],
+                                ['zoom'],
+                                12,
+                                ['*', 5, ['sqrt', ['get', 'COUNT']]],
+                                16,
+                                ['*', 10, ['sqrt', ['get', 'COUNT']]]
+                            ]
+                        }
+                    });
+
+                    // Adjusting the animateBlink function to incorporate different opacities for different crime counts
+                    function animateBlink(timestamp) {
+                        map.getSource('crimeData')._data.features.forEach(feature => {
+                            const count = feature.properties.COUNT;
+                            const baseOpacity = count < 5 ? 0.3 : 0.8; // Different base opacity
+                            const variableOpacity = Math.abs(Math.sin(timestamp / 1000)) * baseOpacity;
+
+                            map.setPaintProperty('crimePointsHollow', 'circle-stroke-opacity', variableOpacity);
+                        });
+
+                        requestAnimationFrame(animateBlink);
+                    }
+
+                    requestAnimationFrame(animateBlink); // Start the animation loop
+
+
+
+                    // Add popups
+                    map.on('click', 'crimePoints', function (e) {
+                        const coordinates = e.features[0].geometry.coordinates.slice();
+                        const description = `
+                        <strong>Offense:</strong> ${e.features[0].properties.OFFENSE}<br>
+                        <strong>Date:</strong> ${e.features[0].properties.REPORT_DAT}<br>
+                        <strong>Method:</strong> ${e.features[0].properties.METHOD}<br>
+                        <strong>Count:</strong> ${e.features[0].properties.COUNT}
+                    `;
+
+                        new maplibregl.Popup()
+                            .setLngLat(coordinates)
+                            .setHTML(description)
+                            .addTo(map);
+                    });
+
+                    // Change the cursor to a pointer when the mouse is over the crimePoints layer.
+                    map.on('mouseenter', 'crimePoints', function () {
+                        map.getCanvas().style.cursor = 'pointer';
+                    });
+
+                    // Change it back to a pointer when it leaves.
+                    map.on('mouseleave', 'crimePoints', function () {
+                        map.getCanvas().style.cursor = '';
+                    });
+                });
+        });
+    </script>
+</body>
+
+</html>

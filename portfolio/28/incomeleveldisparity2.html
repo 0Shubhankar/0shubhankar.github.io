@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Clusters with Moving Dots</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js"
+        crossorigin="anonymous"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #000000;
+            flex-direction:column;
+            -webkit-font-smoothing: antialiased;
+
+
+        }
+
+        canvas {
+        background-color: #000000;
+        border: 1px solid #000000;
+        width: 1000px; /* Set explicit width */
+        height: 800px; /* Set explicit height */
+        display: block; /* Ensure the canvas behaves like a block element */
+        margin: 0 auto; /* Center the canvas horizontally */
+        }
+
+    </style>
+</head>
+
+<body>
+    <canvas id="clusterCanvas" width="1000" height="800"></canvas>
+
+    <script>
+        const canvas = document.getElementById('clusterCanvas');
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
+        let hoveredCluster = null; // To store which cluster is being hovered
+
+        // Define the center of the circle
+        const centerX = width / 2;
+        const centerY = height / 2;
+        const radius = Math.min(width, height) / 3; // Adjust radius as needed
+
+        // Generate points in a circle with an additional point at the center
+        const points = [
+            { x: centerX, y: centerY }, // Center point
+            ...Array.from({ length: 8 }, (_, i) => ({
+                x: centerX + radius * Math.cos(2 * Math.PI * i / 8),
+                y: centerY + radius * Math.sin(2 * Math.PI * i / 8)
+            }))
+        ];
+
+        // Income categories and ease of living
+        const incomeLevels = ['poor', 'lowIncome', 'lowerMiddleClass', 'middleClass', 'upperMiddleClass', 'rich'];
+        const incomeColors = {
+            poor: '#ff6666',               // Red
+            lowIncome: '#ff9966',          // Orange-red
+            lowerMiddleClass: '#ffcc66',   // Orange
+            middleClass: '#99ff66',        // Light green
+            upperMiddleClass: '#66ffcc',   // Cyan
+            rich: '#66ccff'                // Light blue
+        };
+        const easeOfLivingFactors = Array.from({ length: 9 }, (_, i) => i + 1); // Ease of living from 1 to 9
+
+        // Function to distribute dots into income categories
+        function distributeIncome(totalDots) {
+            const distribution = {
+                poor: Math.round(totalDots * 0.15),
+                lowIncome: Math.round(totalDots * 0.20),
+                lowerMiddleClass: Math.round(totalDots * 0.25),
+                middleClass: Math.round(totalDots * 0.25),
+                upperMiddleClass: Math.round(totalDots * 0.10),
+                rich: Math.round(totalDots * 0.05)
+            };
+            return distribution;
+        }
+
+        // Each point has a cluster with an initial number of dots, a random ease of living factor, and movement counters
+        const totalDots = 600;
+        const incomeDistribution = distributeIncome(totalDots);
+        const clusters = points.map(() => ({
+            dots: generateDots(incomeDistribution),
+            easeOfLiving: easeOfLivingFactors[Math.floor(Math.random() * easeOfLivingFactors.length)],
+            movementCounter: initializeMovementCounter()
+        }));
+
+        // Function to generate dots with income levels
+        function generateDots(incomeDistribution) {
+            let dots = [];
+            for (const [income, count] of Object.entries(incomeDistribution)) {
+                for (let i = 0; i < count; i++) {
+                    dots.push({
+                        income,
+                        x: 0,
+                        y: 0,
+                        targetX: 0,
+                        targetY: 0,
+                        color: incomeColors[income]
+                    });
+                }
+            }
+            return dots;
+        }
+
+        // Function to initialize movement counters for each income category
+        function initializeMovementCounter() {
+            return {
+                poor: { entered: 0, left: 0 },
+                lowIncome: { entered: 0, left: 0 },
+                lowerMiddleClass: { entered: 0, left: 0 },
+                middleClass: { entered: 0, left: 0 },
+                upperMiddleClass: { entered: 0, left: 0 },
+                rich: { entered: 0, left: 0 }
+            };
+        }
+
+        // Initialize the positions of the dots within their clusters
+        function initializeClusters() {
+            clusters.forEach((cluster, index) => {
+                cluster.dots.forEach(dot => {
+                    dot.x = points[index].x + Math.random() * 20 - 10;
+                    dot.y = points[index].y + Math.random() * 20 - 10;
+                    dot.targetX = dot.x;
+                    dot.targetY = dot.y;
+                });
+            });
+        }
+
+        // Function to find the best target cluster based on income and ease of living
+        function findBestCluster(dot, isIncrease) {
+            const currentCluster = clusters.find(cluster => cluster.dots.includes(dot));
+            if (!currentCluster) return null;
+
+            // Sort clusters based on ease of living
+            const sortedClusters = clusters.slice().sort((a, b) => isIncrease ? a.easeOfLiving - b.easeOfLiving : b.easeOfLiving - a.easeOfLiving);
+
+            for (let cluster of sortedClusters) {
+                if (isIncrease && cluster.easeOfLiving > currentCluster.easeOfLiving) {
+                    return cluster;
+                } else if (!isIncrease && cluster.easeOfLiving < currentCluster.easeOfLiving) {
+                    return cluster;
+                }
+            }
+
+            return null; // No suitable cluster found
+        }
+
+
+        
+        // Function to move a dot based on income changes
+        function moveDotBasedOnIncome(dot) {
+            const incomeChange = Math.random() < 0.5 ? 1 : -1; // Randomly increase or decrease income
+            const isIncrease = incomeChange === 1;
+
+            // Update income level
+            const currentIndex = incomeLevels.indexOf(dot.income);
+            const newIndex = currentIndex + incomeChange;
+
+            if (newIndex >= 0 && newIndex < incomeLevels.length) {
+                const oldIncome = dot.income; // Store old income before updating
+                dot.income = incomeLevels[newIndex];
+                dot.color = incomeColors[dot.income];
+
+                // Find the best cluster to move to
+                const targetCluster = findBestCluster(dot, isIncrease);
+                if (targetCluster) {
+                    moveDotToCluster(dot, targetCluster, oldIncome);
+                }
+            }
+        }
+
+        // Function to move a dot to a specific cluster and update counters
+        function moveDotToCluster(dot, targetCluster, oldIncome) {
+            const currentCluster = clusters.find(cluster => cluster.dots.includes(dot));
+            if (!currentCluster) return;
+
+            // Remove the dot from the current cluster and update movement counter
+            const index = currentCluster.dots.indexOf(dot);
+            if (index > -1) {
+                currentCluster.dots.splice(index, 1);
+                currentCluster.movementCounter[oldIncome].left++; // Update leave counter
+            }
+
+            // Set new target position
+            const targetPoint = points[clusters.indexOf(targetCluster)];
+            dot.targetX = targetPoint.x + Math.random() * 50 - 25;
+            dot.targetY = targetPoint.y + Math.random() * 50 - 25;
+
+            // Add the dot to the target cluster and update movement counter
+            targetCluster.dots.push(dot);
+            targetCluster.movementCounter[dot.income].entered++; // Update enter counter
+        }
+
+        // Function to avoid dot overlap
+        function avoidOverlap(dot, clusterDots) {
+            clusterDots.forEach(otherDot => {
+                if (dot !== otherDot) {
+                    const dx = otherDot.x - dot.x;
+                    const dy = otherDot.y - dot.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    const minDistance = 6; // Minimum distance to avoid overlap
+
+                    if (distance < minDistance) {
+                        const angle = Math.atan2(dy, dx);
+                        const moveDistance = minDistance - distance;
+                        dot.x -= Math.cos(angle) * moveDistance;
+                        dot.y -= Math.sin(angle) * moveDistance;
+                    }
+                }
+            });
+        }
+
+       // Add this array for cluster labels
+        const clusterLabels = [
+            'City Center',
+            'North Town',
+            'North East Town',
+            'East Town',
+            'South East Town',
+            'South Town',
+            'South West Town',
+            'West Town',
+            'North West Town'
+        ];
+
+        // Update the drawClusters function to include labels
+        function drawClusters() {
+            clusters.forEach((cluster, index) => {
+                // Draw cluster center
+                ctx.fillStyle = '#333';
+                ctx.beginPath();
+                ctx.arc(points[index].x, points[index].y, 5, 0, 2 * Math.PI);
+                ctx.fill();
+
+                // Draw dots
+                cluster.dots.forEach(dot => {
+                    ctx.fillStyle = dot.color;
+                    ctx.beginPath();
+                    ctx.arc(dot.x, dot.y, 3, 0, 2 * Math.PI);
+                    ctx.fill();
+                });
+
+                // Draw cluster label
+                ctx.fillStyle = '#FFFFFF'; // Set label color
+                ctx.font = '16px Times New Roman'; // Set font size and type
+                ctx.fillText(clusterLabels[index], points[index].x + 55, points[index].y - 20); // Adjust position as needed
+            });
+
+            // Draw hover label if a cluster is hovered
+            if (hoveredCluster) {
+                drawHoverLabel(hoveredCluster);
+            }
+        }
+
+
+        // Draw the hover label with detailed information
+        function drawHoverLabel(cluster) {
+                const index = clusters.indexOf(cluster);
+                const mouseX = canvas.mouseX;
+                const mouseY = canvas.mouseY;
+
+                // Set font to calculate text dimensions
+                ctx.fillStyle = '#FFFFFF'; // Text color
+                ctx.font = '16px Times New Roman';
+
+                // Calculate dimensions for the label box
+                const labelWidth = 220;
+                const labelHeight = 150; // Adjusted for enough space
+                const padding = 10; // Padding around text
+
+                // Draw background rectangle for label
+                ctx.fillStyle = '#000000'; // Black background
+                ctx.fillRect(mouseX + 20, mouseY + 20, labelWidth, labelHeight);
+                ctx.strokeStyle = '#000';
+                ctx.strokeRect(mouseX + 20, mouseY + 20, labelWidth, labelHeight);
+
+                // Draw text for ease of living and movement counters
+                ctx.fillStyle = '#FFFFFF'; // Set text color to white
+                ctx.fillText(`Ease of Living Factor: ${cluster.easeOfLiving}`, mouseX + 20, mouseY + 40); // Increased top margin
+
+                let counterY = mouseY + 60; // Adjusted starting position for movement counters
+                for (const [income, counter] of Object.entries(cluster.movementCounter)) {
+                    ctx.fillText(`${income}: +${counter.entered} -${counter.left}`, mouseX + 20, counterY);
+                    counterY += 15;
+                }
+            }
+
+
+
+        // Update dot positions towards their target and avoid overlap
+        function updateDots() {
+            clusters.forEach(cluster => {
+                cluster.dots.forEach(dot => {
+                    const dx = dot.targetX - dot.x;
+                    const dy = dot.targetY - dot.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    const speed = 1; // Adjust speed to control the movement
+
+                    if (distance > speed) {
+                        dot.x += (dx / distance) * speed;
+                        dot.y += (dy / distance) * speed;
+                    } else {
+                        dot.x = dot.targetX;
+                        dot.y = dot.targetY;
+                    }
+
+                    // Avoid overlap
+                    avoidOverlap(dot, cluster.dots);
+                });
+            });
+        }
+
+        // Check if mouse is over a cluster
+        function checkMouseOverClusters(mouseX, mouseY) {
+            hoveredCluster = null;
+            clusters.forEach((cluster, index) => {
+                const dx = points[index].x - mouseX;
+                const dy = points[index].y - mouseY;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                if (distance < 20) { // 20 is the radius to detect hover
+                    hoveredCluster = cluster;
+                }
+            });
+        }
+
+        // Animation loop
+        function animate() {
+            ctx.clearRect(0, 0, width, height); // Clear the canvas
+            updateDots(); // Update dots' positions
+            drawClusters(); // Draw clusters and dots
+            requestAnimationFrame(animate); // Repeat the animation
+        }
+
+        // Start the animation
+        initializeClusters();
+        animate();
+
+        // Simulate income changes and movements every second
+        setInterval(() => {
+            clusters.forEach(cluster => {
+                cluster.dots.forEach(dot => {
+                    if (Math.random() < 0.1) { // 10% chance of income change
+                        moveDotBasedOnIncome(dot);
+                    }
+                });
+            });
+        }, 1000); // Check for income changes every second
+
+        // Add mousemove event listener to track hover
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            canvas.mouseX = e.clientX - rect.left;
+            canvas.mouseY = e.clientY - rect.top;
+            checkMouseOverClusters(canvas.mouseX, canvas.mouseY);
+        });
+
+    </script>
+</body>
+
+</html>

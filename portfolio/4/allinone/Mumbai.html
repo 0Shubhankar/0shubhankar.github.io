@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Pathfinding Visualization</title>
+    <link rel="stylesheet" href="../../vendor/shared/lib-301c4190d5f2/dist/leaflet.css" />
+    <script src="../../vendor/shared/lib-d39c45fd86ca/dist/leaflet.js"></script>
+    <style>
+        #map {
+            height: 1000px;
+            width: 100%;
+        }
+
+        .blinking {
+            animation: blinkingText 1s infinite;
+        }
+
+        @keyframes blinkingText {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .fire {
+            color: #FF4500;
+            /* Fire color */
+        }
+
+        .lightning {
+            color: #ADD8E6;
+            /* Lightning color */
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script>
+        // Load JSON files
+        async function loadJSON(url) {
+            const response = await fetch(url);
+            return response.json();
+        }
+
+        async function initializeMap() {
+            // Load the JSON data
+            const shortestPath = await loadJSON('shortest_pathM.json');
+            const details = await loadJSON('detailsM.json');
+
+            // Calculate the midpoint between the start and end points
+            const startLat = shortestPath[0].lat;
+            const startLon = shortestPath[0].lon;
+            const endLat = shortestPath[shortestPath.length - 1].lat;
+            const endLon = shortestPath[shortestPath.length - 1].lon;
+            const midLat = (startLat + endLat) / 2;
+            const midLon = (startLon + endLon) / 2;
+
+            // Initialize the map centered around the midpoint
+            const map = L.map('map').setView([midLat, midLon], 12);
+
+
+            // Add the Dark Mode tile layer
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+            }).addTo(map);
+
+            // Add blinking start and end points
+            const startMarker = L.circle([shortestPath[0].lat, shortestPath[0].lon], {
+                color: 'red',
+                radius: 10
+            }).addTo(map).bindTooltip("Juhu", {
+                permanent: true,
+                className: "blinking fire"
+            });
+
+            const endMarker = L.circle([shortestPath[shortestPath.length - 1].lat, shortestPath[shortestPath.length - 1].lon], {
+                color: 'green',
+                radius: 10
+            }).addTo(map).bindTooltip("Gateway of India", {
+                permanent: true,
+                className: "blinking"
+            });
+
+            // Function to convert details into an array sorted by f_score
+            function getSortedNodes(details) {
+                return Object.entries(details).map(([node, data]) => ({
+                    lat: data.coords.lat,
+                    lon: data.coords.lon,
+                    f_score: data.f_score,
+                    g_score: data.g_score,
+                    h_score: data.h_score,
+                    from: data.from
+                })).sort((a, b) => a.f_score - b.f_score);
+            }
+
+            const sortedNodes = getSortedNodes(details);
+
+            // Calculate the number of nodes to draw per interval to complete in 15 seconds
+            const totalAnimationTime = 15000; // 15 seconds in milliseconds
+            const totalNodes = sortedNodes.length;
+            const interval = 5; // 5ms interval for faster animation
+            const nodesPerInterval = Math.ceil(totalNodes / (totalAnimationTime / interval));
+
+            // Animate the exploration of nodes based on f_score
+            let index = 0;
+            const animationInterval = setInterval(() => {
+                let nodesDrawn = 0;
+                while (index < sortedNodes.length && nodesDrawn < nodesPerInterval) {
+                    const node = sortedNodes[index];
+                    L.circle([node.lat, node.lon], {
+                        color: '#D2691E', // Fire color  
+                        radius: 5
+                    }).addTo(map);
+                    index++;
+                    nodesDrawn++;
+                }
+                if (index >= sortedNodes.length) {
+                    clearInterval(animationInterval);
+                    // After exploration, draw the shortest path in reverse
+                    const pathCoordinates = shortestPath.map(point => [point.lat, point.lon]);
+                    let reverseIndex = pathCoordinates.length - 1;
+
+                    map.setView([midLat, midLon], 12, {
+                        animate: true,
+                        duration: 2 // duration in seconds
+                    });
+
+                    // // Move the map to the end point and zoom out
+                    // map.setView([shortestPath[reverseIndex].lat, shortestPath[reverseIndex].lon], 12, {
+                    //     animate: true,
+                    //     duration: 2 // duration in seconds
+                    // });
+
+                    const reverseInterval = setInterval(() => {
+                        if (reverseIndex > 0) {
+                            L.polyline([pathCoordinates[reverseIndex], pathCoordinates[reverseIndex - 1]], {
+                                color: '#ADD8E6', // Lightning color
+                                weight: 3,
+                                opacity: 0.7,
+                            }).addTo(map);
+                            reverseIndex--;
+                        } else {
+                            clearInterval(reverseInterval);
+                        }
+                    }, 25); // Adjust the interval for faster path drawing (25ms)
+                }
+            }, interval);
+        }
+        //             const reverseInterval = setInterval(() => {
+        //                 if (reverseIndex > 0) {
+        //                     L.polyline([pathCoordinates[reverseIndex], pathCoordinates[reverseIndex - 1]], {
+        //                         color: '#ADD8E6', // Lightning color
+        //                         weight: 3,
+        //                         opacity: 0.7
+        //                     }).addTo(map);
+        //                     reverseIndex--;
+        //                 } else {
+        //                     clearInterval(reverseInterval);
+        //                 }
+        //             }, 25); // Adjust the interval for faster path drawing (25ms)
+        //         }
+        //     }, interval);
+        // }
+
+        // Initialize the map and start the animation
+        initializeMap();
+    </script>
+</body>
+
+</html>

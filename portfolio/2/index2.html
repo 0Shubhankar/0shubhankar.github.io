@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Key Locations in Manhattan</title>
+    <link rel="stylesheet" href="../vendor/shared/lib-34b3c0e131eb/dist/leaflet.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="../vendor/shared/lib-6d633d59411b/dist/gsap.min.js"></script>
+    <script src="../vendor/shared/lib-f10f0ab507c1/dist/ScrollMagic.min.js"></script>
+    <script src="../vendor/shared/lib-8e216972d268/dist/animation.gsap.min.js"></script>
+    <script src="../vendor/shared/lib-5d00f470f487/dist/leaflet.js"></script>
+</head>
+
+<body>
+    <div id="map" style="height: 100vh;"></div>
+    <div id="controls">
+        <label for="daySlider">Day of Week:</label>
+        <input type="range" id="daySlider" min="0" max="6" value="0">
+        <span id="dayLabel">Monday</span><br>
+        <label for="timeSlider">Time of Day:</label>
+        <input type="range" id="timeSlider" min="0" max="3" value="0">
+        <span id="timeLabel">Morning</span>
+    </div>
+    <div class="content">
+            <section class="panel intro">
+                <h1>Traffic in Key Event Spaces in Manhattan</h1>
+                <p>Explore the impact of major event spaces on Manhattan traffic. Each location is known for hosting
+                    significant events, which affect traffic patterns in the area. Learn about these locations, the types of
+                    events they host, and the typical traffic levels during and outside these events. Visualizations and
+                    data insights provide a comprehensive overview of how these spaces influence urban mobility.</p>
+                <p>Use the sliders to explore traffic patterns based on different days of the week and times of the day.</p>
+            </section>
+            <section class="panel" id="section1">
+                <h2>Times Square</h2>
+                <p>Times Square is iconic for its bright lights, Broadway theaters, and heavy pedestrian traffic. This
+                    bustling commercial and tourist hub significantly impacts traffic patterns.</p>
+                <ul>
+                    <li>Events: New Year's Eve, street performances, Broadway shows.</li>
+                    <li>Traffic Levels: Very High (3000-4000 vehicles/hour) during events; High (1000-1500 vehicles/hour)
+                        otherwise.</li>
+                </ul>
+            </section>
+            <section class="panel" id="section2">
+                <h2>Madison Square Garden</h2>
+                <p>Madison Square Garden is a multipurpose indoor arena in Midtown Manhattan, home to sports games,
+                    concerts, and large events. It draws substantial crowds, affecting traffic flow in the surrounding area.
+                </p>
+                <ul>
+                    <li>Events: NBA games, concerts, conventions.</li>
+                    <li>Traffic Levels: High (2000-3000 vehicles/hour) during events; Moderate (500-1000 vehicles/hour)
+                        otherwise.</li>
+                </ul>
+            </section>
+            <section class="panel" id="section3">
+                <h2>Lincoln Center</h2>
+                <p>Lincoln Center is renowned for its cultural performances, including opera, ballet, symphony, and theater.
+                    It attracts art enthusiasts, influencing traffic patterns, especially during major performances.</p>
+                <ul>
+                    <li>Events: Opera, ballet, theater performances.</li>
+                    <li>Traffic Levels: High (1500-2000 vehicles/hour) during events; Moderate (500-700 vehicles/hour)
+                        otherwise.</li>
+                </ul>
+            </section>
+            <section class="panel" id="section4">
+                <h2>Central Park</h2>
+                <p>Central Park is a vast urban park hosting outdoor concerts, festivals, and marathons. It serves as a
+                    green oasis in the city, but large events can cause significant traffic disruptions.</p>
+                <ul>
+                    <li>Events: Concerts, festivals, marathons.</li>
+                    <li>Traffic Levels: High (1500-2000 vehicles/hour) during events; Low (200-500 vehicles/hour) otherwise.
+                    </li>
+                </ul>
+            </section>
+            <section class="panel" id="section5">
+                <h2>Rockefeller Center</h2>
+                <p>Rockefeller Center is famous for its seasonal attractions, including ice skating and the annual Christmas
+                    tree lighting. These events draw large crowds and can lead to increased traffic congestion.</p>
+                <ul>
+                    <li>Events: Ice skating, Christmas tree lighting.</li>
+                    <li>Traffic Levels: High (1500-2500 vehicles/hour) during events; Moderate (500-800 vehicles/hour)
+                        otherwise.</li>
+                </ul>
+            </section>
+            <section class="panel" id="section6">
+                <h2>Javits Center</h2>
+                <p>The Javits Center is a major convention center in Manhattan, hosting conferences, trade shows, and
+                    exhibitions. Large events here can significantly impact traffic in the surrounding areas.</p>
+                <ul>
+                    <li>Events: Trade shows, conventions, exhibitions.</li>
+                    <li>Traffic Levels: High (2000-2500 vehicles/hour) during events; Low to Moderate (300-600
+                        vehicles/hour) otherwise.</li>
+                </ul>
+            </section>
+            <section class="panel" id="section7">
+                <h2>Broadway Theaters</h2>
+                <p>Broadway Theaters are the heart of American theater, hosting numerous performances. The concentration of
+                    theaters in this area leads to significant traffic, especially around showtimes.</p>
+                <ul>
+                    <li>Events: Broadway shows, theater performances.</li>
+                    <li>Traffic Levels: Moderate to High (1000-1500 vehicles/hour) during events; Moderate (500-800
+                        vehicles/hour) otherwise.</li>
+                </ul>
+            </section>
+            <section class="panel outro">
+                <h1>Thank You</h1>
+                <p>We hope you enjoyed learning about these key locations in Manhattan. Understanding how these event spaces
+                    impact traffic can help in planning your visits and improving urban mobility.</p>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize the main map
+            var mainMap = L.map('map').setView([40.7580, -73.9855], 16);
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '© OpenStreetMap contributors © CARTO',
+                subdomains: 'abcd',
+                maxZoom: 19
+            }).addTo(mainMap);
+
+            // Sections with geographic and animation details
+            var sections = [
+                { id: "section1", lat: 40.7580, lon: -73.9855, bearing: 90, zoom: 16, pitch: 0 },
+                { id: "section2", lat: 40.7505, lon: -73.9934, bearing: 135, zoom: 16, pitch: 20 },
+                { id: "section3", lat: 40.7730, lon: -73.9820, bearing: 180, zoom: 16, pitch: 30 },
+                { id: "section4", lat: 40.7851, lon: -73.9683, bearing: 45, zoom: 16, pitch: 10 },
+                { id: "section5", lat: 40.7587, lon: -73.9787, bearing: 270, zoom: 16, pitch: 20 },
+                { id: "section6", lat: 40.7577, lon: -74.0025, bearing: 300, zoom: 16, pitch: 5 },
+                { id: "section7", lat: 40.7590, lon: -73.9845, bearing: 120, zoom: 16, pitch: 10 }
+            ];
+
+            var controller = new ScrollMagic.Controller();
+
+            sections.forEach(function (section) {
+                var scene = new ScrollMagic.Scene({
+                    triggerElement: "#" + section.id,
+                    duration: "100%",
+                    triggerHook: 0.5
+                })
+                    .on("enter", function () {
+                        mainMap.flyTo({
+                            center: [section.lon, section.lat],
+                            zoom: section.zoom,
+                            bearing: section.bearing,
+                            pitch: section.pitch
+                        });
+                    })
+                    .addTo(controller);
+            });
+
+            // Slider interactions
+            var daySlider = document.getElementById('daySlider');
+            var timeSlider = document.getElementById('timeSlider');
+            var dayLabel = document.getElementById('dayLabel');
+            var timeLabel = document.getElementById('timeLabel');
+
+            daySlider.addEventListener('input', function () {
+                dayLabel.textContent = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'][this.value];
+            });
+
+            timeSlider.addEventListener('input', function () {
+                timeLabel.textContent = ['Morning', 'Afternoon', 'Evening', 'Night'][this.value];
+            });
+        });
+    </script>
+</body>
+
+</html>

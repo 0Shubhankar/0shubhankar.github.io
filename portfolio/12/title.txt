@@ -1,0 +1,9 @@
+A suitable title for your study, where you are using the ResNet-50 model trained on the Places365 dataset to analyze and understand images of Indian cities from Wikipedia, should accurately reflect the scope and focus of your research while being succinct and engaging. Here are a few suggestions:
+
+1. **"Urban Imprints: Analyzing Indian Cityscapes through the Lens of ResNet-50 and Places365"**
+2. **"Decoding Urban India: A Deep Learning Approach with ResNet-50 on Places365"**
+3. **"Visual Recognition of Indian Urban Landscapes: Insights from ResNet-50 and Places365"**
+4. **"From Landmarks to Streetscapes: Understanding Indian Cities through Deep Learning Models"**
+5. **"Deep Learning and Urban Morphology: Mapping Indian Cities with ResNet-50"**
+
+These titles aim to succinctly convey the use of advanced image recognition technology to interpret urban environments in India, emphasizing both the technological approach and the geographical focus of your study.

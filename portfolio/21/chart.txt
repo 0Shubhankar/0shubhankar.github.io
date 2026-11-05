@@ -1,0 +1,33 @@
+Certainly! Here's the decision tree structure written out in text format for clarity:
+
+1. **Start**
+   - Choose **A** or **B**
+     - If **A**, choose between **A1** and **A2**
+       - **A1** choices:
+         - **A1.1** leads to **S**
+         - **A1.2** leads to a (Restart)
+       - **A2** choices:
+         - **A2.1** leads to **S**
+         - **A2.2** leads to **S**
+     - If **B**, choose between **B1** and **B2**
+       - **B1** choices:
+         - **B1.1** leads to **S**
+         - **B1.2** leads to a (Restart)
+       - **B2** choices:
+         - **B2.1** leads to **S**
+         - **B2.2** leads to **S**
+
+2. **S** (Junction after **A1.1**, **A2.1**, **A2.2**, **B1.1**, **B2.1**, **B2.2**)
+   - Choose **S1** or **S2**
+     - **S1** options:
+       - **S1.A**
+         - **S1.A.A** -> (Restart)
+         - **S1.A.B** -> Choose **XA1** or **XA2**
+       - **S1.B**
+         - **S1.B.A** -> Choose **XB1** or **XB2**
+         - **S1.B.B** -> (Restart)
+     - **S2** options:
+       - **S2.A** -> Choose **XC1** or **XC2**
+       - **S2.B** -> (Restart)
+
+This structure uses a simplified format to show the paths clearly, ensuring that the converging point "S" reflects how both paths A and B meet there before leading to further choices. Let me know if this text representation meets your needs or if any further details need to be adjusted!

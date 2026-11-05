@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map with Clusters</title>
+    <link rel="stylesheet" href="../vendor/shared/lib-34b3c0e131eb/dist/leaflet.css" />
+    <link rel="stylesheet" href="../vendor/shared/lib-72bcb834938f/dist/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js"
+        crossorigin="anonymous"></script>
+
+    <script src="../vendor/shared/lib-5d00f470f487/dist/leaflet.js"></script>
+    
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family:Georgia, 'Times New Roman', Times, serif;
+            -webkit-font-smoothing: antialiased;
+
+        }
+
+        #map {
+            background-color: black;
+            width: 100%;
+            height: 800px;
+        }
+
+        .controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            /* margin-right: 2%; */
+            z-index: 1000;
+            color: white;
+        }
+
+        .tooltip {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+        }
+
+        .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 200px;
+        background-color: white;
+        color: black;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px;
+        position: absolute;
+        z-index: 1001; /* High z-index to ensure visibility */
+        opacity: 0;
+        transition: opacity 0.3s, visibility 0.3s;
+        /* Positioned by JavaScript */
+        }
+
+        .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+        }
+
+        #explanation{
+            color: rgb(255, 255, 255);
+            font-size: 16px;
+            text-align: justify;
+            margin-top: 20px;
+            margin-right: 20%;
+            margin-left: 20%;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            line-height: 1.8;
+
+        }
+
+        .small-italic {
+        font-size: 1.0em; /* Adjusts size to be smaller */
+        font-style: italic; /* Makes text italic */
+        color: #555; /* Optional: changes the text color */
+        margin-left: 20%;
+        margin-right: 20%;
+        text-align: center;
+        }
+
+
+    </style>
+</head>
+
+<body>
+    <div class="controls">
+        <label for="elasticity">Proximity elasticity:
+            <span class="tooltip"><i class="fas fa-info-circle"></i>
+                <span class="tooltiptext">Adjusts the sensitivity of housing prices to distance. Higher values mean
+                    prices decrease more with distance.</span>
+            </span>
+        </label>
+        <input type="range" id="elasticity" min="0.5" max="1.5" step="0.1" value="1">
+        <span id="elasticityValue">1</span>
+        <br>
+
+        <label for="congestion">Congestion Factor:
+            <span class="tooltip"><i class="fas fa-info-circle"></i>
+                <span class="tooltiptext">Represents the impact of traffic congestion. Values closer to 1 indicate worse
+                    transportation conditions.</span>
+            </span>
+        </label>
+        <input type="range" id="congestion" min="0" max="1" step="0.01" value="0.5">
+        <span id="congestionValue">0.5</span>
+        <br>
+
+        <label for="publicTransport">Public Transport Quality:
+            <span class="tooltip"><i class="fas fa-info-circle"></i>
+                <span class="tooltiptext">Rates the quality of public transport in the area. Higher values indicate
+                    better services.</span>
+            </span>
+        </label>
+        <input type="range" id="publicTransport" min="1" max="10" step="1" value="5">
+        <span id="publicTransportValue">5</span>
+
+     <p><i class="fas fa-hand-pointer"></i> Double-tap any building to designate it as workplace area.</p>
+    <br>
+    <!-- Update Button -->
+    <button onclick="updateMapSettings()">Apply Changes</button>
+    </div>
+
+    <div id="map"></div>
+
+    <p class="small-italic">Hover over any building to view detailed insights on how different parameters affect housing prices and rent.</p>
+    </p>
+
+
+    <div id="explanation">
+        <div>
+            <p>Comprehensive Overview of the Leaflet-Based Mapping Application:</p>
+            <p>This web-based mapping application leverages the Leaflet JavaScript library to enable users to visually explore
+                and understand the impact of various urban factors on housing prices across different neighborhoods. Users can
+                interactively select any building on the map to set it as the primary workplace location. This action
+                recalibrates the map to reflect updated socio-economic data, showing how housing prices adjust based on the
+                proximity to the workplace, local traffic congestion levels, and the quality of public transportation.</p>
+        
+            <p>User Interface and Interaction Design:</p>
+            <p>The application features a full-screen map interface against a stark black background, emphasizing the colorful
+                data points and interactive elements. A control panel positioned on the top right of the screen includes sliders
+                for adjusting elasticity, congestion, and public transport quality, each equipped with tooltips for guidance.
+            </p>
+        
+            <p>Dynamic Data Visualization:</p>
+            <p>When a user selects a new workplace location, the app calculates the distance from this new center to various
+                points of interest on the map, incorporating a randomized factor to simulate real-world irregularities in
+                distance impact. The elasticity slider adjusts how responsive the housing prices are to changes in distance from
+                the workplace. The congestion and public transport sliders influence housing prices by simulating the effects of
+                local traffic conditions and the availability and quality of public transit.</p>
+        
+            <p>Mathematical Formulations for Pricing:</p>
+            <p>The application calculates updated housing prices and rents using a multi-factor approach. The proximity price is
+                calculated as Base Price × (1 - (Distance/Max Distance)) × Elasticity. The transportation factor is calculated
+                as (Public Transport Quality/Distance) × (1 - Congestion Factor). The final adjusted price combines these
+                factors, calculated as Proximity Price × (1 + (Transportation Factor/10)). Similarly, the updated rent is
+                calculated using the base rent adjusted by the same transportation factor.</p>
+        
+            <p>Conclusion:</p>
+            <p>This Leaflet-based application serves as an interactive tool for real estate professionals, urban planners, and
+                the general public, providing insights into how urban dynamics like workplace location, congestion, and public
+                transport quality can influence residential housing prices. The interactive adjustments and instant
+                visualizations help users understand the complex interplay between urban living conditions and real estate
+                economics.</p>
+        </div>
+
+    </div>
+
+
+    <script>
+        var map = L.map('map', {
+                center: [37.8244, -122.2316], zoom: 15.5,
+                minZoom: 15, // Minimum zoom level allowed
+                maxZoom: 19  // Maximum zoom level allowed
+            });
+
+        var center = [37.819718, -122.244798]; // Default center
+        var neighborhoods = [
+            { name: 'Workplace', color: 'white', baseRent: 6000, basePrice: 1200000 },
+            { name: 'Middle-Class Household', color: 'yellow', baseRent: 3000, basePrice: 500000 },
+            { name: 'Upper-Middle-Class Household', color: 'orange', baseRent: 4500, basePrice: 800000 },
+            { name: 'Lower-Middle-Class Household', color: 'green', baseRent: 2500, basePrice: 300000 },
+            { name: 'Working-Class Household', color: 'blue', baseRent: 2000, basePrice: 250000 },
+            { name: 'Low-Income Household', color: 'purple', baseRent: 1000, basePrice: 150000 }
+        ];
+
+        function getNeighborhoodDetails(distance) {
+            if (distance < 0.25) return neighborhoods[0];
+            else if (distance < 0.5) return neighborhoods[1];
+            else if (distance < 1) return neighborhoods[2];
+            else if (distance < 1.5) return neighborhoods[3];
+            else if (distance < 2) return neighborhoods[4];
+            else return neighborhoods[5];
+        }
+
+        function calculateDistanceWithOffset(latlng1, latlng2) {
+            var rad = function (x) { return x * Math.PI / 180; };
+            var R = 6371; // Earth’s mean radius in kilometers
+            var dLat = rad(latlng2[0] - latlng1[0]);
+            var dLong = rad(latlng2[1] - latlng1[1]);
+            var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(rad(latlng1[0])) * Math.cos(rad(latlng2[0])) *
+                Math.sin(dLong / 2) * Math.sin(dLong / 2);
+            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            var d = R * c; // Distance in kilometers
+            var irregularity = (Math.random() - 0.5) * 0.9; // Adjust the factor for more/less irregularity
+            return d + irregularity;
+        }
+
+         function updateCenter(newCenter) {
+                center = newCenter;
+                map.eachLayer(function (layer) {
+                    if (layer instanceof L.GeoJSON) {
+                        map.removeLayer(layer);
+                    }
+                });
+                addClusteredGeoJSONToMap('piedmont_building.geojson'); // Refresh clustering with new center
+            }
+
+            map.on('dblclick', function (e) {
+                var clickedLat = e.latlng.lat;
+                var clickedLng = e.latlng.lng;
+                updateCenter([clickedLat, clickedLng]); // Update center and redraw clusters
+            });
+
+        function addClusteredGeoJSONToMap(url) {
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    L.geoJSON(data, {
+                        style: function (feature) {
+                            var buildingCenter = [feature.geometry.coordinates[0][0][1], feature.geometry.coordinates[0][0][0]];
+                            var distance = calculateDistanceWithOffset(center, buildingCenter);
+                            var neighborhoodDetails = getNeighborhoodDetails(distance);
+                            return {
+                                color: neighborhoodDetails.color,
+                                weight: 1,
+                                opacity: 0.6,
+                                fillOpacity: 0.4
+                            };
+                        },
+                        onEachFeature: function (feature, layer) {
+                            layer.on('click', function () {
+                                var buildingCenter = [feature.geometry.coordinates[0][0][1], feature.geometry.coordinates[0][0][0]];
+                                var distance = calculateDistanceWithOffset(center, buildingCenter);
+
+                                // Get user-defined values
+                                const elasticity = parseFloat(document.getElementById('elasticity').value);
+                                const congestionFactor = parseFloat(document.getElementById('congestion').value);
+                                const publicTransportQuality = parseFloat(document.getElementById('publicTransport').value);
+
+                                // Get neighborhood details based on distance
+                                var neighborhoodDetails = getNeighborhoodDetails(distance); // Call your existing function
+
+                                // Calculate updated rent and price
+                                const basePrice = neighborhoodDetails.basePrice; // Use the base price from the neighborhood details
+                                const maxDistance = 2; // Set your max distance as needed
+                                const proximityPrice = basePrice * (1 - (distance / maxDistance)) * elasticity;
+
+                                const transportationFactor = (publicTransportQuality / distance) * (1 - congestionFactor);
+                                const finalPrice = proximityPrice * (1 + (transportationFactor / 10)); // Adjust scaling factor as needed
+
+                                // Update the popup content
+                                layer.bindPopup('Distance: ' + distance.toFixed(2) + ' km' +
+                                    '<br>Household: ' + neighborhoodDetails.name +
+                                    '<br>Base Rent: $' + neighborhoodDetails.baseRent +
+                                    '<br>Updated Rent: $' + (neighborhoodDetails.baseRent * (1 + (transportationFactor / 10))).toFixed(2) +
+                                    '<br>Base Price: $' + basePrice.toFixed(2) +
+                                    '<br>Updated Price: $' + finalPrice.toFixed(2)
+                                    // 'OSMID: ' + feature.properties.osmid 
+                                ).openPopup();
+                            });
+                        }
+                    }).addTo(map);
+                })
+                .catch(err => console.error('Error loading the GeoJSON data: ', err));
+        }
+
+        addClusteredGeoJSONToMap('piedmont_building.geojson'); // Initial load
+        addClusteredGeoJSONToMap('comprehensive_highways_piedmont.geojson');
+
+        // Update displayed values as sliders change
+        document.getElementById('elasticity').oninput = function () {
+            document.getElementById('elasticityValue').textContent = this.value;
+        };
+
+        document.getElementById('congestion').oninput = function () {
+            document.getElementById('congestionValue').textContent = this.value;
+        };
+
+        document.getElementById('publicTransport').oninput = function () {
+            document.getElementById('publicTransportValue').textContent = this.value;
+        };
+    </script>
+</body>
+
+</html>

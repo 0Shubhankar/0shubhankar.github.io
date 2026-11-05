@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Enhanced Leaflet Path Visualization with Custom Controls</title>
+    <link rel="stylesheet" href="../vendor/shared/lib-34b3c0e131eb/dist/leaflet.css" />
+    <link rel="stylesheet" href="../vendor/shared/lib-2b34c3fb1d29/dist/Control.MiniMap.min.css" />
+    <style>
+        #map {
+            height: 90vh;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+             font-family: Georgia, 'Times New Roman', Times, serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        #controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            background: black;
+            color: aliceblue;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .control-group {
+            margin-bottom: 10px;
+        }
+
+        .control-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .control-button {
+            display: block;
+            margin-top: 10px;
+            width: 100%;
+            padding: 10px;
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .revenue-display {
+            margin-top: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: white;
+        }
+
+        .content {
+            font-size: 16px;
+            margin-left: 20%;
+            margin-right: 20%;
+            padding-top: 5vh;
+            line-height: 1.8;
+            background-color: black;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <div id="controls">
+        <div class="control-group">
+            <label class="control-label" for="interval">Drawing Interval (ms):</label>
+            <input type="number" id="interval" value="25" min="10" max="1000" step="10">
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="timeOfDay">Time of Day:</label>
+            <input type="number" id="timeOfDay" value="6" min="6" max="22" step="1">
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="numTrips">Number of Trips:</label>
+            <input type="number" id="numTrips" value="1" min="1" max="10" step="1">
+        </div>
+        <button class="control-button" id="runButton">Run</button>
+        <button class="control-button" id="resetButton">Reset</button>
+        <div class="revenue-display">Total Revenue: $<span id="revenue">0</span></div>
+    </div>
+
+<div class="content">
+    <p>
+        Singapore's Electronic Road Pricing (ERP) system, introduced in 1998, was the world's first electronic toll
+        collection system designed to manage urban congestion through road pricing. The system uses a network of
+        gantries equipped with sensors and cameras to monitor and charge vehicles entering congested zones during peak
+        hours, helping reduce traffic congestion in the city.
+    </p>
+    <p>
+        The success of the ERP system lies in its ability to adjust charges based on real-time traffic conditions,
+        encouraging motorists to alter their travel times or routes. Each vehicle is fitted with an In-Vehicle
+        Unit (IVU) that works with a stored-value card to ensure a seamless and efficient toll collection process,
+        eliminating the need for physical toll booths.
+    </p>
+    <p>
+        Singapore's ERP system has proven to be effective, leading to a reduction in traffic congestion and improvements
+        in air quality, especially in the central areas. The system enjoys widespread public acceptance, partly due to
+        the government's reinvestment of toll revenues into public transportation and infrastructure improvements.
+    </p>
+    <p>
+        However, cities like New York have faced challenges in implementing similar congestion pricing systems. New York's
+        recent efforts have been delayed due to concerns over privacy, the economic impact on commuters, and perceived
+        fairness. A strong car culture and concerns about personal freedom have contributed to public resistance.
+    </p>
+    <p>
+        The successful implementation of congestion pricing schemes in other cities depends on critical factors such as
+        comprehensive planning, effective public communication, investment in public transportation alternatives,
+        adaptive pricing models, and addressing privacy and security concerns proactively.
+    </p>
+    <p>
+        As urban populations grow and traffic congestion becomes a global issue, Singapore's ERP system offers valuable
+        lessons for other cities facing similar challenges.
+    </p>
+
+    <p>
+        This interactive map-based simulation allows users to visualize vehicle trips passing through Singapore’s ERP
+        system, providing insights into how congestion pricing works in the city. The simulation uses Leaflet, a popular
+        JavaScript library, to display a map of Singapore and plot routes of vehicles as they travel through ERP sites.
+    </p>
+    <p>
+        Users can explore various settings through the control panel to adjust parameters such as the drawing interval, the
+        time of day, and the number of vehicle trips. The drawing interval controls how fast paths are drawn on the map:
+        smaller values make the simulation faster, while larger values slow it down. Users can simulate different times of
+        day to see how ERP site intensity changes during peak and off-peak traffic hours, and the number of trips controls
+        the traffic density by adjusting how many vehicle routes are drawn at once.
+    </p>
+    <p>
+        ERP sites, where vehicles are charged, are marked on the map. As a vehicle passes near one of these sites, a marker
+        with a dollar symbol ($) briefly appears, representing a toll being collected. Each time this happens, the total
+        revenue counter is automatically updated. The vehicle routes are drawn dynamically from pre-defined paths stored
+        in the `shortest_paths.json` file, and these paths fade away over time, creating a smooth visual effect that
+        mimics the trails left by vehicles as they move.
+    </p>
+    <p>
+        The simulation also includes a heatmap layer that shows the intensity of traffic at ERP sites. The heatmap’s
+        intensity changes based on the time of day, reflecting real-world congestion patterns. During peak hours, such as
+        in the morning and evening, ERP sites have higher intensity, and more vehicles are likely to be charged.
+    </p>
+    <p>
+        As the simulation runs continuously, it adjusts the heatmap and vehicle routes in real-time, allowing users to
+        explore how congestion pricing adapts to changing traffic conditions. By tweaking the simulation settings, users
+        can observe how different traffic conditions impact the ERP system and its revenue generation.
+    </p>
+    <p>
+        In summary, this simulation provides an engaging way to understand how congestion pricing works in a city like
+        Singapore, where vehicles traveling through ERP sites are charged based on traffic conditions. It offers a
+        real-world example of how such systems can manage traffic flow and generate revenue in urban areas.
+    </p>
+</div>
+
+</div>
+
+
+    <script src="../vendor/shared/lib-5d00f470f487/dist/leaflet.js"></script>
+    <script src="../vendor/shared/lib-466909224ebd/dist/Control.MiniMap.min.js"></script>
+    <script src="../vendor/shared/lib-5cb2beba5c37/dist/leaflet-heat.js"></script>
+    <script>
+        // Custom ERP icon
+        const erpIcon = L.divIcon({
+            className: 'custom-erp-icon',
+            html: '<span style="color: gold; font-size: 20px;">&#36;</span>',
+            iconSize: [20, 20]
+        });
+
+        // Function to check if the current segment passes through any ERP site
+        function isNearERP(lat, lon, erpSites, radius = 0.001) {
+            return erpSites.some(site => {
+                const distance = Math.sqrt(Math.pow(site.lat - lat, 2) + Math.pow(site.lon - lon, 2));
+                return distance < radius;
+            });
+        }
+
+        // Initialize the Leaflet map
+        const map = L.map('map').setView([1.3521, 103.8198], 12); // Center map on Singapore
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        }).addTo(map);
+
+        // Add mini map
+        const miniMapLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png');
+        new L.Control.MiniMap(miniMapLayer, { toggleDisplay: true }).addTo(map);
+
+        // Default settings
+        let settings = {
+            interval: 25,
+            timeOfDay: 6,
+            numTrips: 1
+        };
+
+        let totalRevenue = 0;
+        let pathIntervals = [];
+        const tailLength = 20; // Number of segments for the tail
+        let polylines = [];
+        let currentPaths = [];
+
+        // Load the ERP sites JSON file
+        fetch('erp_sites.json')
+            .then(response => response.json())
+            .then(erpSites => {
+                // Heatmap for ERP sites
+                const erpHeat = L.heatLayer([], { radius: 25, blur: 15, maxZoom: 17 }).addTo(map);
+
+                // Function to update heatmap based on time and intensity
+                function updateHeatmap(hour, intensity) {
+                    const peakHours = [7, 8, 9, 17, 18, 19]; // Typical peak hours
+                    const weightMultiplier = peakHours.includes(hour) ? 2 : 1;
+
+                    const heatmapIntensity = erpSites.map(site => {
+                        const weight = Math.max(0, Math.min(1, weightMultiplier * intensity * Math.sin((hour - 6) * Math.PI / 16)));
+                        return [site.lat, site.lon, weight];
+                    });
+
+                    erpHeat.setLatLngs(heatmapIntensity);
+                    erpHeat.setOptions({
+                        gradient: {
+                            0.0: 'red',
+                            0.5: 'red',
+                            1.0: 'red'
+                        }
+                    });
+                }
+
+                // Animate heatmap
+                let currentHour = settings.timeOfDay;
+                setInterval(() => {
+                    updateHeatmap(currentHour, 1.0); // Using 1.0 as a fixed intensity for now
+                    currentHour = (currentHour + 1) % 24;
+                    if (currentHour < 6) currentHour = 6;
+                    if (currentHour > 22) currentHour = 6;
+                }, 1000); // Change time every second for simulation
+
+                // Load the path JSON file
+                fetch('shortest_paths.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        let pathsData = data;
+
+                        // Function to draw a single path
+                        function drawSinglePath(pathCoordinates) {
+                            let currentIndex = 0;
+                            const pathPolylines = [];
+                            currentPaths.push(pathPolylines);
+
+                            const interval = setInterval(() => {
+                                if (currentIndex >= pathCoordinates.length - 1) {
+                                    clearInterval(interval);
+                                    currentPaths = currentPaths.filter(p => p !== pathPolylines);
+                                    if (currentPaths.length === 0) {
+                                        startDrawingPaths(); // Start drawing new paths
+                                    }
+                                    return;
+                                }
+
+                                const startCoord = pathCoordinates[currentIndex];
+                                const endCoord = pathCoordinates[currentIndex + 1];
+
+                                const polyline = L.polyline([startCoord, endCoord], {
+                                    color: '#ff0037', // Lightning color
+                                    weight: 4,
+                                    opacity: 0.9,
+                                }).addTo(map);
+                                pathPolylines.push(polyline);
+
+                                // Check if the current segment passes near any ERP site and add a $ marker if it does
+                                if (isNearERP(endCoord[0], endCoord[1], erpSites)) {
+                                    const marker = L.marker([endCoord[0], endCoord[1]], { icon: erpIcon }).addTo(map);
+                                    totalRevenue += 1; // Increment revenue by $1
+                                    document.getElementById('revenue').innerText = totalRevenue;
+
+                                    setTimeout(() => {
+                                        let opacity = 1;
+                                        const fadeInterval = setInterval(() => {
+                                            opacity -= 0.1;
+                                            if (opacity <= 0) {
+                                                clearInterval(fadeInterval);
+                                                map.removeLayer(marker);
+                                            } else {
+                                                marker.getElement().style.opacity = opacity;
+                                            }
+                                        }, 100);
+                                    }, 500); // Show marker for 500ms
+                                }
+
+                                // Update opacity and remove the oldest segments to create a fading tail effect
+                                pathPolylines.forEach((polyline, index) => {
+                                    const opacity = 0.9 * ((index / tailLength)); // Gradually decrease opacity
+                                    polyline.setStyle({ opacity });
+                                });
+
+                                if (pathPolylines.length > tailLength) {
+                                    map.removeLayer(pathPolylines.shift()); // Remove the oldest segment
+                                }
+
+                                currentIndex++;
+                            }, settings.interval);
+
+                            polylines.push(pathPolylines);
+                            pathIntervals.push(interval);
+                        }
+
+                        // Function to start drawing multiple paths
+                        function startDrawingPaths() {
+                            clearAllIntervals();
+                            polylines.forEach(path => {
+                                path.forEach(polyline => map.removeLayer(polyline));
+                            });
+                            polylines = [];
+                            currentPaths = [];
+
+                            for (let i = 0; i < settings.numTrips; i++) {
+                                setTimeout(() => {
+                                    const selectedKeys = Object.keys(pathsData);
+                                    const randomKey = selectedKeys[Math.floor(Math.random() * selectedKeys.length)];
+                                    const pathData = pathsData[randomKey];
+                                    const pathCoordinates = pathData.geometry.coordinates.map(coord => [coord[1], coord[0]]); // Convert to Leaflet's lat, lon format
+
+                                    drawSinglePath(pathCoordinates);
+                                }, i * settings.interval * 10); // Stagger the start time of each path
+                            }
+                        }
+
+                        // Clear all intervals
+                        function clearAllIntervals() {
+                            pathIntervals.forEach(clearInterval);
+                            pathIntervals = [];
+                        }
+
+                        // Event listeners for controls
+                        document.getElementById('interval').addEventListener('input', (event) => {
+                            settings.interval = parseInt(event.target.value, 10);
+                            startDrawingPaths();
+                        });
+
+                        document.getElementById('timeOfDay').addEventListener('input', (event) => {
+                            settings.timeOfDay = parseInt(event.target.value, 10);
+                            currentHour = settings.timeOfDay;
+                            updateHeatmap(currentHour, 1.0); // Using 1.0 as a fixed intensity for now
+                        });
+
+                        document.getElementById('numTrips').addEventListener('input', (event) => {
+                            settings.numTrips = parseInt(event.target.value, 10);
+                            startDrawingPaths();
+                        });
+
+                        document.getElementById('runButton').addEventListener('click', startDrawingPaths);
+
+                        document.getElementById('resetButton').addEventListener('click', () => {
+                            clearAllIntervals();
+                            polylines.forEach(path => {
+                                path.forEach(polyline => map.removeLayer(polyline));
+                            });
+                            polylines = [];
+                            currentPaths = [];
+                            totalRevenue = 0;
+                            document.getElementById('revenue').innerText = totalRevenue;
+                        });
+                    })
+                    .catch(error => console.error('Error fetching the path JSON file:', error));
+            })
+            .catch(error => console.error('Error fetching the ERP sites JSON file:', error));
+    </script>
+</body>
+
+</html>

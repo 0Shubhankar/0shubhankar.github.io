@@ -1,0 +1,659 @@
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Image Gallery</title>
+        <!-- <link rel="stylesheet" href="styles.css"> -->
+
+        <style>
+                    *,
+            *:after,
+            *:before {
+                box-sizing: border-box;
+                scroll-behavior: smooth;
+                /* Smooth scrolling behavior */
+            }
+
+            body {
+                display: flex;
+                justify-content: flex-end;
+                min-height: 100vh;
+                font-family: "SF Pro Text", "SF Pro Icons", "AOS Icons", "Helvetica Neue", Helvetica, Arial, sans-serif, system-ui;
+            }
+
+            body::after {
+                content: "";
+                position: fixed;
+                right: 0;
+                width: calc(var(--snap-size) + 2rem);
+                background: canvas;
+                mask: linear-gradient(white, transparent calc(var(--snap-size) * 1.5) calc(100% - (var(--snap-size) * 1.5)), white);
+                top: 0;
+                height: 100vh;
+                pointer-events: none;
+                z-index: 10;
+            }
+
+            body::before {
+                --size: 40px;
+                --line: color-mix(in lch, canvasText 15%, hsla(0, 100%, 50%, 0.25));
+                content: '';
+                height: 100vh;
+                width: 100vw;
+                position: fixed;
+                background: linear-gradient(90deg,
+                        var(--line) 1px,
+                        transparent 1px var(--size)) 50% 50% / var(--size) var(--size),
+                    linear-gradient(var(--line) 1px, transparent 1px var(--size)) 50% 50% / var(--size) var(--size);
+                mask: linear-gradient(-200deg, transparent 65%, white);
+
+                top: 0;
+                transform-style: flat;
+                pointer-events: none;
+                z-index: -1;
+            }
+
+            html {
+                color-scheme: dark only;
+                scroll-behavior: smooth;
+                /* Smooth scrolling behavior */
+                scroll-snap-type: y mandatory;
+                /* Ensures that scrolling will snap to the nearest element */
+            }
+
+            :root {
+                --count: 0;
+                /* Number of images */
+                --snap-size: 48px;
+                /* Size of the snap area */
+                --offset: 0;
+                /* Offset for the animation */
+            }
+
+            @media(min-width: 768px) {
+                :root {
+                    --offset: 2;   
+                    /* This above value change the twist fo the image on aside */
+                }
+            }
+
+            main {
+                padding-left: 1rem;
+                padding-right: calc(var(--snap-size) * 5);
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                display: grid;
+                height: calc(100vh * var(--count));
+                /* Total height based on number of images */
+                grid-template-rows: repeat(var(--count), 1fr);
+                /* Each row is 1 fraction of the total height */
+                place-items: center;
+                animation: img-reel 50s both steps(calc(var(--count) - 1));
+                /* Animation duration of 50 seconds */
+                animation-timeline: scroll(root);
+                /* The timeline of the animation is based on scroll */
+                pointer-events: auto;
+            }
+
+            @media(max-width: 768px) {
+                main {
+                    display: none;
+                }
+            }
+
+            @keyframes img-reel {
+                to {
+                    translate: 0 calc(-100% + 100vh);
+                    /* Translates the images to give a scrolling effect */
+                }
+            }
+
+            aside {
+                width: var(--snap-size);
+                margin-top: calc(50vh - (var(--snap-size) * 0.25));
+                margin-bottom: calc(50vh - (var(--snap-size) * 0.5));
+                z-index: 2;
+            }
+
+            aside ul {
+                margin: 0;
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                list-style-type: none;
+                position: relative;
+                right: 1rem;
+                align-items: flex-end;
+                transform-style: preserve-3d;
+            }
+            @property --active {
+                initial-value: 0;
+                inherits: true;
+                syntax: '<number>';
+            }
+            li {
+                scroll-snap-align: center;
+                /* Aligns the element to the center when snapping */
+                scroll-margin-block: calc(50vh - var(--snap-size));
+                /* Margin for the snapping */
+                container-type: size;
+                flex: 1 1 var(--snap-size);
+                aspect-ratio: 1;
+                animation: scale 1s both linear;
+                /* Animation duration of 1 second for scaling */
+                animation-timeline: view();
+                animation-range: cover calc(50% - (var(--snap-size) * var(--offset))) cover calc(50% + (var(--snap-size) * var(--offset)));
+                transform-origin: 100% 50%;
+            }
+            @media(min-width: 768px) {
+                li {
+                    filter: saturate(0.2);
+                    /* Reduces saturation */
+                    animation: scale-l 1s both linear;
+                    /* Animation duration of 1 second for scaling on large screens */
+                    animation-timeline: view();
+                    animation-range: cover calc(50% - (var(--snap-size) * var(--offset))) cover calc(50% + (var(--snap-size) * var(--offset)));
+                }
+            }
+            @keyframes scale {
+                50% {
+                    --active: 1;
+                    /* The active element */
+                    z-index: 1000;
+                }
+            }
+            @keyframes scale-l {
+                50% {
+                    translate: -120% 0;
+                    scale: 2;
+                    /* Scales the image */
+                    transform: translate3d(0, 0, 1000px);
+                    filter: saturate(1);
+                    /* Increases saturation */
+                    z-index: 1000;
+                }
+            }
+            li img {
+                height: 100%;
+                width: 100%;
+                border-radius: 6px;
+            }
+            li a {
+                min-width: 100cqw;
+                min-height: 100cqh;
+                max-width: 600px;
+                max-height: 600px;
+                width: 100%;
+                height: 100%;
+                display: block;
+                border: 4px solid transparent;
+                border-radius: 12px;
+                position: relative;
+                position: absolute;
+                right: 0;
+                top: 50%;
+                transform-origin: 100% 50%;
+                translate: calc((var(--active) * (var(--snap-size) + 1rem)) * -1) -50%;
+                width: calc((var(--active) * (100vw - (var(--snap-size) + 3rem))));
+                height: calc((var(--active) * (100vw - (var(--snap-size) + 3rem))));
+                aspect-ratio: 1;
+                z-index: calc(1 + (var(--active) * 999));
+            }
+            aside span {
+                position: absolute;
+                width: 1px;
+                height: 1px;
+                padding: 0;
+                margin: -1px;
+                overflow: hidden;
+                clip: rect(0, 0, 0, 0);
+                white-space: nowrap;
+                border-width: 0;
+            }
+            main img {
+                width: 100%;
+                max-width: 600px;
+                max-height: 90vh;
+                object-fit: cover;
+            }
+            /* Ensure images and their containers are displayed correctly */
+            .image-container {
+                position: relative;
+                width: 100%;
+                max-width: 600px;
+                margin: auto;
+            }
+            .image-container img {
+                display: block;
+                width: 100%;
+                height: auto;
+                max-height: 90vh;
+                object-fit: cover;
+            }
+            /* Class to hide image containers */
+            .hidden {
+                display: none;
+            }
+            .image-container a {
+                text-decoration: none;
+                color: inherit;
+                display: block;
+                /* Ensures the link covers the entire image-container */
+            }
+            .image-container a img {
+                display: block;
+                width: 100%;
+                height: auto;
+            } 
+
+
+            .image-container {
+            display: flex;
+            flex-direction: row; /* Aligns chart and image in a row */
+            align-items: center; /* Vertically centers chart and image */
+            width: 100%; 
+            max-width: 1000px; /* Adjusted width to accommodate both chart and image */
+            margin: auto; 
+            }
+
+            img {
+            width: 70%; /* Image takes up 50% of the container's width */
+            height: auto; 
+            }
+
+            .chart-container {
+            width: 50%; /* Chart takes up 50% of the container's width */
+            height: auto;
+            margin-left: 0px; /* Negative margin to shift chart more to the left */
+            margin-right: 100px
+            }
+            #tweakpane-container {
+            position: fixed;  /* Fixed position */
+            top: 10px;        /* Spaced 10px from the top */
+            left: 80px;       /* Spaced 10px from the left */
+            width: 220px;     /* Set a specific width */
+            z-index: 1000;    /* High z-index to ensure it's above other content */
+            }
+
+            #info-icon {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            margin-right: 15%; /* Space between the container and icon */
+            z-index: 1000;    /* High z-index to ensure it's above other content */
+
+            }
+
+            #info-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1050; /* Make sure this is above other content */
+}
+
+#info-modal div {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    background: black !important;
+    color: white !important;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 800px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+
+#close-modal {
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 24px;
+}
+
+
+
+
+
+        /* Adjust body content to avoid overlap with GUI */
+            body {
+            padding-left: 25px; /* Adjust this value based on the width of the dat.GUI panel */
+            }
+        </style>
+    </head>
+        
+        <script src="../vendor/shared/lib-9dcb63f7b92c/dist/tweakpane.js"></script>
+        <script src="../vendor/shared/lib-18524bfc46af/dist/chart.umd.js"></script>
+        <script src="../vendor/shared/lib-6042d64ed8cf/dist/highcharts.js"></script>
+        <script src="../vendor/shared/lib-b4f1751e1021/dist/highcharts-more.js"></script>
+        <script src="../vendor/shared/lib-063793bccbc4/dist/exporting.js"></script>
+
+
+
+
+    <body>
+<div style="position: fixed; top: 10px; left: 10px; display: flex; align-items: center; z-index: 1001;">
+    <div id="tweakpane-container"></div>
+    <!-- Information icon button -->
+    <button id="info-icon"
+        style="background: none; border: none; color: white; font-size: 24px; cursor: pointer; margin-left: 8px;">
+        ℹ️
+    </button>
+    
+<div id="info-modal"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); align-items: center; justify-content: center; z-index: 1050;">
+    <div
+        style="background: white; padding: 20px; border-radius: 8px; max-width: 800px; max-height: 80vh; overflow-y: auto;">
+        <span id="close-modal"
+            style="cursor: pointer; position: absolute; top: 10px; right: 20px; font-size: 24px;">&times;</span>
+        <p><strong>Getting Started</strong></p>
+        
+        <p>Deep learning models are great at interpreting and classifying different environments, and they’re especially
+            interesting for analyzing the landscapes of cities. This project takes the pre-trained Places365 ResNet50 model
+            (Zhou et al., 2017) for a spin to see how well it can classify images from Indian cities—using pictures straight
+            from Wikipedia! The goal? To find out how well a globally trained model handles the unique and complex vibes of
+            Indian urban areas.</p>
+        
+        <p><strong>What Makes Indian Cities Special?</strong></p>
+        
+        <p>Indian cities are a mix of culture, architecture, and planning. Each one feels unique, from the streets to the
+            markets and temples. While the ResNet50 model, trained on the Places365 dataset, is great at spotting general urban
+            features, it sometimes struggles with city-specific details—especially in places like India where the landscapes are
+            diverse and full of character. This project checks how well the model handles those specifics.</p>
+        
+        <p><strong>How I Did It</strong></p>
+        
+        <p>I used the <a href="http://places2.csail.mit.edu/" target="_blank">Places365 pre-trained ResNet50 model</a> to
+            classify images of Indian cities. Here’s how it went down:</p>
+        
+        <p>1. <strong>Loading the Model:</strong> I used the ResNet50 model with its 365 place categories, ready to analyze
+            images based on its training across a range of scenes.</p>
+        <p>2. <strong>Getting the Images Ready:</strong> I pulled images from Wikipedia entries of different Indian cities and
+            prepped them to meet the model's requirements.</p>
+        <p>3. <strong>Letting the Model Do Its Thing:</strong> I fed the images to the model and got back the top 10 possible
+            categories, paying close attention to how well it recognized places like markets, temples, and bustling urban
+            streets.</p>
+        
+        <p><strong>What Happened?</strong></p>
+        
+        <p>The model did pretty well in identifying common city elements like buildings, streets, and vehicles. But when it came
+            to pictures with cultural or historical vibes—well, it wasn’t so sure. A lot of those images don’t exactly scream
+            "urban," so the model struggled a bit, leading to some misclassifications.</p>
+        
+        <p><strong>What I Learned</strong></p>
+        
+        <p>This experiment showed that global models like ResNet50 can be a little too broad when it comes to specific places
+            like Indian cities. The distinct look and feel of Indian architecture and city life don’t always match up with what
+            the model was originally trained on. To fix this, we probably need to:</p>
+        
+        <p>- <strong>Train It Locally:</strong> Integrating locally relevant images into the training dataset could
+        significantly enhance the model's capacity to accurately classify region-specific features (Zhou et al., 2017).</p>
+
+        <p>- <strong>Fine-Tune the Model:</strong> Adjust the model to focus on the specific urban features of Indian cities to
+            make its predictions more accurate and useful.</p>
+        
+        <p><strong>Final Thoughts</strong></p>
+        
+        <p>This was a fun project that highlighted both the power and the limitations of using global pre-trained models for
+            local tasks. With a bit of fine-tuning and more specific training data, models like ResNet50 can become much better
+            at recognizing the unique features of Indian cityscapes.</p>
+        
+        <p><strong>My Takeaway</strong></p>
+        
+        <p>Next time, I plan to add even more images that focus on urban themes. This project started from a curiosity about how
+            well these models perform in city contexts, and while they do okay, there’s definitely room for improvement! The
+            model shows promise, but it needs a bit of tweaking to truly understand the nuances of Indian city life.</p>
+        
+        <p>Oh, and by the way—this was just a fun project! So, if I’ve made any mistakes, please forgive me and let me know with
+        a smile 😊! I’m always happy to learn and improve!</p>
+        
+        <p><strong>References</strong></p>
+        
+        <p>Zhou, B., Lapedriza, A., Khosla, A., Oliva, A., & Torralba, A. (2017). Places: A 10 million Image Database for Scene
+            Recognition. <em>IEEE Transactions on Pattern Analysis and Machine Intelligence</em>. IEEE.</p>
+
+
+    </div>
+</div>
+</div>
+
+        <aside>
+            <nav>
+                <ul id="image-nav">
+                    <!-- Navigation items will be generated here -->
+                </ul>
+            </nav>
+        </aside>
+        <main id="image-main">
+            <!-- Main image content will be generated here -->
+        </main>
+            <script>
+            let imageData = {};
+            let cityOptions = [];
+            const maxImages = 50;
+
+            /* // Fetch the JSON data from the file */
+            fetch('filtered_classification_results.json')
+                .then(response => response.json())
+                .then(data => {
+                    imageData = data;
+                    cityOptions = Object.keys(data);
+                    initGUI();
+                    loadCityImages(cityOptions[10]);
+                })
+                .catch(error => console.error('Error loading the JSON file:', error));
+
+            /* // Function to load images from the selected city */
+            function loadCityImages(city) {
+                    const images = imageData[city];
+                    const limitedImages = images.slice(0); 
+                     /* // Assuming you want all images  */
+
+                    document.documentElement.style.setProperty('--count', limitedImages.length.toString());
+
+                    const imageNav = document.getElementById('image-nav');
+                    const imageMain = document.getElementById('image-main');
+
+                    imageNav.innerHTML = '';
+                    imageMain.innerHTML = '';
+
+                    limitedImages.forEach((imageData, index) => {
+                        const imageCounter = index + 1;
+                        const imageUrl = imageData.image_link;
+
+                        // Create navigation and main image elements
+                        const navItem = createNavItem(imageCounter, imageUrl);
+                        imageNav.appendChild(navItem);
+
+                        const mainDiv = document.createElement('div');
+                        mainDiv.id = `img-${imageCounter}-main`;
+                        mainDiv.className = 'image-container';
+                        imageMain.appendChild(mainDiv);
+
+                        /* // Create radar chart next to the image */
+                        const chartDiv = document.createElement('div');
+                        chartDiv.className = 'chart-container'; // Added chart container class
+                        chartDiv.style.width = '550px'; // Increase chart width
+                        chartDiv.style.height = '550px'; // Increase chart height
+                        chartDiv.style.marginRight = '50px'; // Shift the chart more to the left
+                        mainDiv.appendChild(chartDiv);
+
+                        const mainImg = document.createElement('img');
+                        mainImg.src = imageUrl;
+                        mainImg.alt = `Image ${imageCounter}`;
+                        mainImg.loading = "lazy";
+                        mainDiv.appendChild(mainImg); // Image is appended after the chart
+
+                        /* // Prepare data for the radar chart */
+                        const categories = [];
+                        const data = [];
+                        for (let i = 1; i <= 10; i++) {
+                            if (imageData[`top_${i}`]) {
+                                categories.push(imageData[`top_${i}`].class);
+                                data.push(imageData[`top_${i}`].probability);
+                            }
+                        }
+
+                        /* // Initialize the radar chart */
+                        Highcharts.chart(chartDiv, {
+                            chart: {
+                                polar: true,
+                                type: 'line',
+                                backgroundColor: '#121212',
+                                spacing:[20,20,20,20]
+                            },
+                            credits: {
+                                enabled: false,
+                            },
+                            exporting: {
+                                enabled: false // Disable exporting tools
+                            },
+                            title: {
+                                text: '',
+                                style: {
+                                    color: '#ffffff'
+                                }
+                            },
+                            pane: {
+                                size: '60%'
+                            },
+                            xAxis: {
+                                categories: categories,
+                                tickmarkPlacement: 'on',
+                                lineWidth: 0,
+                                labels: {
+                                    style: {
+                                        color: '#ffffff'
+                                    }
+                                }
+                            },
+                            yAxis: {
+                                gridLineInterpolation: 'polygon',
+                                lineWidth: 0,
+                                min: 0,
+                                labels: {
+                                    style: {
+                                        color: '#00FF00'
+                                    },
+                                    formatter: function () {
+                                        return (this.value * 100).toFixed(0) + '%';
+                                    }
+                                }
+                            },
+                            series: [{
+                                name: 'Probability',
+                                data: data,
+                                pointPlacement: 'on',
+                                marker: {
+                                    enabled: true,
+                                    radius: 4,
+                                    fillColor: '#00FF00' // Radium green points
+                                },
+                                lineWidth: 2,
+                                lineColor: '#00FF00', // Radium green lines
+                                fillColor: {
+                                    linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                                    stops: [
+                                        [0, 'rgba(0, 255, 0, 0.5)'],
+                                        [1, 'rgba(0, 255, 0, 0.1)']
+                                    ]
+                                }
+                            }]
+                        });
+                    });
+                }
+
+                function createNavItem(imageCounter, imageUrl) {
+                    const navItem = document.createElement('li');
+                    const navLink = document.createElement('a');
+                    navLink.href = `#img-${imageCounter}-main`;
+                    const navImg = document.createElement('img');
+                    navImg.src = imageUrl;
+                    navImg.alt = `Image ${imageCounter}`;
+                    navImg.loading = "lazy";
+                    navLink.appendChild(navImg);
+                    navItem.appendChild(navLink);
+                    return navItem;
+                }
+
+
+
+            function initGUI() {
+                    const pane = new Tweakpane.Pane({
+                        container: document.getElementById('tweakpane-container')
+                    });
+
+                    let params = { city: cityOptions[10] };  // Setting the initial city
+
+                    /* // Add a dropdown to the pane */
+                    const input = pane.addInput(params, 'city', {
+                        label: 'City',
+                        options: cityOptions.reduce((result, option) => {
+                            result[option] = option;
+                            return result;
+                        }, {})
+                    });
+
+                    /* // Handle changes explicitly */
+                    input.on('change', (event) => {
+                        console.log("Selected city:", event.value); 
+                         /* // Debugging to confirm change */
+                        loadCityImages(event.value); 
+                         /* // Make sure this function handles the input correctly */
+                    });
+                }
+
+
+        </script>
+
+
+        <script>
+            // Delegate because city image links are created after data loads.
+            document.addEventListener('click', (event) => {
+                const link = event.target.closest('a[href^="#img-"]');
+                if (!link) return;
+                const target = document.getElementById(link.getAttribute('href').slice(1));
+                if (!target) return;
+                event.preventDefault();
+                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+        </script>
+
+        <script>
+            document.getElementById('info-icon').addEventListener('click', function () {
+                document.getElementById('info-modal').style.display = 'flex'; // Show the modal
+            });
+
+            document.getElementById('close-modal').addEventListener('click', function () {
+                document.getElementById('info-modal').style.display = 'none'; // Hide the modal
+            });
+
+            // Optionally close the modal by clicking outside of the modal content
+            window.onclick = function (event) {
+                let modal = document.getElementById('info-modal');
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+        </script>
+
+
+
+    </body>
+
+    </html>

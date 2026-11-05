@@ -1,0 +1,985 @@
+{
+  "notes": "Versions are compatibility pins, not automatic latest upgrades. MathJax remains remote because it dynamically loads extensions/fonts. Edit url, run sync, then check and test affected pages.",
+  "dependencies": [
+    {
+      "id": "lib-4a5eceaa8f68",
+      "url": "https://cdn.jsdelivr.net/gh/python-visualization/folium@v0.14.0/folium/templates/leaflet.awesome.rotate.min.css",
+      "aliases": [
+        "https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"
+      ],
+      "pages": [
+        "3/shibuya_schools_isochrones.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-4a5eceaa8f68/dist/leaflet.awesome.rotate.min.css"
+    },
+    {
+      "id": "lib-26ac4b4d0040",
+      "url": "https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css",
+      "aliases": [
+        "https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"
+      ],
+      "pages": [
+        "3/shibuya_schools_isochrones.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-26ac4b4d0040/dist/all.min.css"
+    },
+    {
+      "id": "lib-37c38033d691",
+      "url": "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css",
+      "aliases": [
+        "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+      ],
+      "pages": [
+        "3/shibuya_schools_isochrones.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-37c38033d691/dist/bootstrap.min.css"
+    },
+    {
+      "id": "lib-f155f3d071cf",
+      "url": "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js",
+      "aliases": [
+        "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+      ],
+      "pages": [
+        "3/shibuya_schools_isochrones.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-f155f3d071cf/dist/bootstrap.bundle.min.js"
+    },
+    {
+      "id": "lib-18524bfc46af",
+      "url": "https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js",
+      "aliases": [
+        "https://cdn.jsdelivr.net/npm/chart.js"
+      ],
+      "pages": [
+        "12/classficationlink.html",
+        "12/image-classification.html",
+        "16/city-centre-activity.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-18524bfc46af/dist/chart.umd.js"
+    },
+    {
+      "id": "lib-6ef06cdec5d6",
+      "url": "https://cdn.jsdelivr.net/npm/dat.gui@0.7.9/build/dat.gui.module.js",
+      "aliases": [
+        "https://cdn.jsdelivr.net/npm/dat.gui/build/dat.gui.module.js",
+        "https://cdn.skypack.dev/dat.gui"
+      ],
+      "pages": [
+        "11/gentrification-simulation.html",
+        "31/greenCitygenerator.html",
+        "31/green-city-generator.html",
+        "31/greenCitygenerator3.html",
+        "32/urban-sprawl-density.html",
+        "33/free-public-transit-simulation.html",
+        "35/echochamber.html",
+        "35/echo-chamber-polarization.html"
+      ],
+      "module": true,
+      "mode": "local",
+      "local": "vendor/shared/lib-6ef06cdec5d6/dist/dat.gui.module.js"
+    },
+    {
+      "id": "lib-a58114980cde",
+      "url": "https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css",
+      "aliases": [
+        "https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"
+      ],
+      "pages": [
+        "3/shibuya_schools_isochrones.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-a58114980cde/dist/leaflet.css"
+    },
+    {
+      "id": "lib-59d28e5bacf9",
+      "url": "https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js",
+      "aliases": [
+        "https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"
+      ],
+      "pages": [
+        "3/shibuya_schools_isochrones.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-59d28e5bacf9/dist/leaflet.js"
+    },
+    {
+      "id": "lib-f23951908ba6",
+      "url": "https://cdn.jsdelivr.net/npm/papaparse@5.3.0/papaparse.min.js",
+      "aliases": [
+        "https://cdn.jsdelivr.net/npm/papaparse@5.3.0/papaparse.min.js"
+      ],
+      "pages": [
+        "7/allcrimehollowcircle.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-f23951908ba6/dist/papaparse.min.js"
+    },
+    {
+      "id": "lib-86c7ea3356c4",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.module.js",
+      "aliases": [
+        "https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.module.js"
+      ],
+      "pages": [
+        "11/gentrification-simulation.html",
+        "31/greenCitygenerator.html",
+        "31/green-city-generator.html",
+        "31/greenCitygenerator3.html",
+        "32/urban-sprawl-density.html"
+      ],
+      "module": true,
+      "mode": "local",
+      "local": "vendor/shared/lib-86c7ea3356c4/dist/three.module.js"
+    },
+    {
+      "id": "lib-1b307bf3cbda",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js",
+      "aliases": [
+        "https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"
+      ],
+      "pages": [
+        "25/indian-migration.html",
+        "26/global-temperature-visualization.html",
+        "36/urban-3d-visualization.html",
+        "38/simulationmissinfo5.html",
+        "38/misinformation-spread.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-1b307bf3cbda/dist/OrbitControls.js"
+    },
+    {
+      "id": "lib-7df2e2f4f588",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/renderers/CSS2DRenderer.js",
+      "aliases": [
+        "https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/renderers/CSS2DRenderer.js"
+      ],
+      "pages": [
+        "36/urban-3d-visualization.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-7df2e2f4f588/dist/CSS2DRenderer.js"
+    },
+    {
+      "id": "lib-9dcb63f7b92c",
+      "url": "https://cdn.jsdelivr.net/npm/tweakpane@3.1.10/dist/tweakpane.js",
+      "aliases": [
+        "https://cdn.jsdelivr.net/npm/tweakpane@3"
+      ],
+      "pages": [
+        "12/image-classification.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-9dcb63f7b92c/dist/tweakpane.js"
+    },
+    {
+      "id": "lib-206206e81796",
+      "url": "https://cdn.jsdelivr.net/gh/dataarts/webgl-globe@2d24ba30/globe/globe.js",
+      "aliases": [
+        "https://cdn.rawgit.com/dataarts/webgl-globe/2d24ba30/globe/globe.js"
+      ],
+      "pages": [
+        "24/air-pollution-visualization.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-206206e81796/dist/globe.js"
+    },
+    {
+      "id": "lib-345b3f26a925",
+      "url": "https://cdn.jsdelivr.net/gh/dataarts/webgl-globe@2d24ba30/globe/third-party/three.min.js",
+      "aliases": [
+        "https://cdn.rawgit.com/dataarts/webgl-globe/2d24ba30/globe/third-party/three.min.js"
+      ],
+      "pages": [
+        "24/air-pollution-visualization.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-345b3f26a925/dist/three.min.js"
+    },
+    {
+      "id": "lib-5e6d7c2d082f",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.136.0/build/three.module.js",
+      "aliases": [
+        "https://cdn.skypack.dev/three@0.136.0/build/three.module.js"
+      ],
+      "pages": [
+        "33/free-public-transit-simulation.html"
+      ],
+      "module": true,
+      "mode": "local",
+      "local": "vendor/shared/lib-5e6d7c2d082f/dist/three.module.js"
+    },
+    {
+      "id": "lib-55f1739cac37",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.136.0/examples/jsm/controls/OrbitControls.js",
+      "aliases": [
+        "https://cdn.skypack.dev/three@0.136.0/examples/jsm/controls/OrbitControls.js"
+      ],
+      "pages": [
+        "33/free-public-transit-simulation.html"
+      ],
+      "module": true,
+      "mode": "local",
+      "local": "vendor/shared/lib-55f1739cac37/dist/OrbitControls.js"
+    },
+    {
+      "id": "lib-607ae6b0a29d",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.136.0/examples/jsm/postprocessing/EffectComposer.js",
+      "aliases": [
+        "https://cdn.skypack.dev/three@0.136.0/examples/jsm/postprocessing/EffectComposer.js"
+      ],
+      "pages": [
+        "33/free-public-transit-simulation.html"
+      ],
+      "module": true,
+      "mode": "local",
+      "local": "vendor/shared/lib-607ae6b0a29d/dist/EffectComposer.js"
+    },
+    {
+      "id": "lib-2f1c589c4798",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.136.0/examples/jsm/postprocessing/RenderPass.js",
+      "aliases": [
+        "https://cdn.skypack.dev/three@0.136.0/examples/jsm/postprocessing/RenderPass.js"
+      ],
+      "pages": [
+        "33/free-public-transit-simulation.html"
+      ],
+      "module": true,
+      "mode": "local",
+      "local": "vendor/shared/lib-2f1c589c4798/dist/RenderPass.js"
+    },
+    {
+      "id": "lib-fb9e3665d0fd",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.136.0/examples/jsm/postprocessing/UnrealBloomPass.js",
+      "aliases": [
+        "https://cdn.skypack.dev/three@0.136.0/examples/jsm/postprocessing/UnrealBloomPass.js"
+      ],
+      "pages": [
+        "33/free-public-transit-simulation.html"
+      ],
+      "module": true,
+      "mode": "local",
+      "local": "vendor/shared/lib-fb9e3665d0fd/dist/UnrealBloomPass.js"
+    },
+    {
+      "id": "lib-b2e43b1d8201",
+      "url": "https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css",
+      "aliases": [
+        "https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"
+      ],
+      "pages": [
+        "3/shibuya_schools_isochrones.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-b2e43b1d8201/dist/leaflet.awesome-markers.css"
+    },
+    {
+      "id": "lib-cd3ff5a40338",
+      "url": "https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js",
+      "aliases": [
+        "https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"
+      ],
+      "pages": [
+        "3/shibuya_schools_isochrones.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-cd3ff5a40338/dist/leaflet.awesome-markers.js"
+    },
+    {
+      "id": "lib-51d788816744",
+      "url": "https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js",
+      "aliases": [
+        "https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"
+      ],
+      "pages": [
+        "10/BallSphereNXV2.html",
+        "10/BallSphereV3.html",
+        "10/BallSphereV4Text.html",
+        "10/BallSphereV5Text.html",
+        "10/cityelement2.html",
+        "10/urban-network-visualization.html",
+        "10/cityelements.html",
+        "24/air-pollution-visualization.html",
+        "5/coffee_cluster.html",
+        "5/density_coffee.html",
+        "6/index.html",
+        "6/index4.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-51d788816744/dist/papaparse.min.js"
+    },
+    {
+      "id": "lib-f10f0ab507c1",
+      "url": "https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.7/ScrollMagic.min.js",
+      "aliases": [
+        "https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.7/ScrollMagic.min.js"
+      ],
+      "pages": [
+        "2/index.html",
+        "2/index2.html",
+        "3/shibuya-school-accessibility.html",
+        "6/template1.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-f10f0ab507c1/dist/ScrollMagic.min.js"
+    },
+    {
+      "id": "lib-8e216972d268",
+      "url": "https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.7/plugins/animation.gsap.min.js",
+      "aliases": [
+        "https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.7/plugins/animation.gsap.min.js"
+      ],
+      "pages": [
+        "2/index.html",
+        "2/index2.html",
+        "3/shibuya-school-accessibility.html",
+        "6/template1.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-8e216972d268/dist/animation.gsap.min.js"
+    },
+    {
+      "id": "lib-99b18ac8985d",
+      "url": "https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js",
+      "aliases": [
+        "https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js"
+      ],
+      "pages": [
+        "34/taxi-commercial-centre.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-99b18ac8985d/dist/dat.gui.min.js"
+    },
+    {
+      "id": "lib-9092ba184a7e",
+      "url": "https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.min.js",
+      "aliases": [
+        "https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.min.js"
+      ],
+      "pages": [
+        "36/urban-3d-visualization.html",
+        "38/simulationmissinfo5.html",
+        "38/misinformation-spread.html",
+        "39/dissent-simulation.html",
+        "39/happyGUI.html",
+        "40/belonging-simulation.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-9092ba184a7e/dist/dat.gui.min.js"
+    },
+    {
+      "id": "lib-4659aba89717",
+      "url": "https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.9/dat.gui.min.js",
+      "aliases": [
+        "https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.9/dat.gui.min.js"
+      ],
+      "pages": [
+        "10/BallSphereNXV2.html",
+        "10/BallSphereV3.html",
+        "10/BallSphereV4Text.html",
+        "10/BallSphereV5Text.html",
+        "10/cityelement2.html",
+        "10/urban-network-visualization.html",
+        "10/cityelements.html",
+        "12/classficationlink.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-4659aba89717/dist/dat.gui.min.js"
+    },
+    {
+      "id": "lib-72bcb834938f",
+      "url": "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css",
+      "aliases": [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      ],
+      "pages": [
+        "30/workplace-housing-impact.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-72bcb834938f/dist/all.min.css"
+    },
+    {
+      "id": "lib-6d633d59411b",
+      "url": "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js",
+      "aliases": [
+        "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"
+      ],
+      "pages": [
+        "2/index.html",
+        "2/index2.html",
+        "3/shibuya-school-accessibility.html",
+        "6/template1.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-6d633d59411b/dist/gsap.min.js"
+    },
+    {
+      "id": "lib-442409bac31a",
+      "url": "https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js",
+      "aliases": [
+        "https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js"
+      ],
+      "pages": [
+        "17/waiting-time-visualization.html",
+        "18/honkingcar.html",
+        "18/traffic-honking-simulation.html",
+        "22/emergency-response-comparison.html",
+        "28/incomeleveldisparity2.html",
+        "28/income-inequality-simulation.html",
+        "30/workplace-housing-impact.html",
+        "33/free-public-transit-simulation.html"
+      ],
+      "module": false,
+      "mode": "remote",
+      "local": "vendor/shared/lib-442409bac31a/dist/tex-mml-chtml.js"
+    },
+    {
+      "id": "lib-4a83d06b25f9",
+      "url": "https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/p5.js",
+      "aliases": [
+        "https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/p5.js"
+      ],
+      "pages": [
+        "6/index2.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-4a83d06b25f9/dist/p5.js"
+    },
+    {
+      "id": "lib-25023b521d77",
+      "url": "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js",
+      "aliases": [
+        "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"
+      ],
+      "pages": [
+        "25/indian-migration.html",
+        "26/global-temperature-visualization.html",
+        "36/urban-3d-visualization.html",
+        "38/simulationmissinfo5.html",
+        "38/misinformation-spread.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-25023b521d77/dist/three.min.js"
+    },
+    {
+      "id": "lib-b4f1751e1021",
+      "url": "https://cdn.jsdelivr.net/npm/highcharts@11.4.8/highcharts-more.js",
+      "aliases": [
+        "https://code.highcharts.com/highcharts-more.js"
+      ],
+      "pages": [
+        "12/classficationlink.html",
+        "12/image-classification.html",
+        "14/citypark2.html",
+        "14/citypark3 copy.html",
+        "14/park-accessibility.html",
+        "14/citypark5 copy.html",
+        "14/citypark5.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-b4f1751e1021/dist/highcharts-more.js"
+    },
+    {
+      "id": "lib-6042d64ed8cf",
+      "url": "https://cdn.jsdelivr.net/npm/highcharts@11.4.8/highcharts.js",
+      "aliases": [
+        "https://code.highcharts.com/highcharts.js"
+      ],
+      "pages": [
+        "12/classficationlink.html",
+        "12/image-classification.html",
+        "14/citypark2.html",
+        "14/citypark3 copy.html",
+        "14/park-accessibility.html",
+        "14/citypark5 copy.html",
+        "14/citypark5.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-6042d64ed8cf/dist/highcharts.js"
+    },
+    {
+      "id": "lib-063793bccbc4",
+      "url": "https://cdn.jsdelivr.net/npm/highcharts@11.4.8/modules/exporting.js",
+      "aliases": [
+        "https://code.highcharts.com/modules/exporting.js"
+      ],
+      "pages": [
+        "12/classficationlink.html",
+        "12/image-classification.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-063793bccbc4/dist/exporting.js"
+    },
+    {
+      "id": "lib-8c616cf01259",
+      "url": "https://code.jquery.com/jquery-3.7.1.min.js",
+      "aliases": [
+        "https://code.jquery.com/jquery-3.7.1.min.js"
+      ],
+      "pages": [
+        "3/shibuya_schools_isochrones.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-8c616cf01259/dist/jquery-3.7.1.min.js"
+    },
+    {
+      "id": "lib-5e32778fbbdd",
+      "url": "https://cdn.jsdelivr.net/npm/d3@3.5.17/d3.min.js",
+      "aliases": [
+        "https://d3js.org/d3.v3.min.js"
+      ],
+      "pages": [
+        "6/cluster.html",
+        "6/cluster2.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-5e32778fbbdd/dist/d3.min.js"
+    },
+    {
+      "id": "lib-63416471585d",
+      "url": "https://cdn.jsdelivr.net/npm/d3@4.13.0/build/d3.min.js",
+      "aliases": [
+        "https://d3js.org/d3.v4.min.js"
+      ],
+      "pages": [
+        "6/voronoi.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-63416471585d/dist/d3.min.js"
+    },
+    {
+      "id": "lib-0b4610b74464",
+      "url": "https://cdn.jsdelivr.net/npm/d3@6.7.0/dist/d3.min.js",
+      "aliases": [
+        "https://d3js.org/d3.v6.min.js"
+      ],
+      "pages": [
+        "40/belonging-simulation.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-0b4610b74464/dist/d3.min.js"
+    },
+    {
+      "id": "lib-5e378598ab8e",
+      "url": "https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js",
+      "aliases": [
+        "https://d3js.org/d3.v7.min.js"
+      ],
+      "pages": [
+        "7/chartfinal1000m.html",
+        "7/chartfinal100m.html",
+        "7/chartfinal2000m.html",
+        "7/chartfinal200m.html",
+        "7/chartfinal500m.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-5e378598ab8e/dist/d3.min.js"
+    },
+    {
+      "id": "lib-252ac8291f4c",
+      "url": "https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css",
+      "aliases": [
+        "https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"
+      ],
+      "pages": [
+        "3/shibuya_schools_isochrones.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-252ac8291f4c/dist/bootstrap-glyphicons.css"
+    },
+    {
+      "id": "lib-2b34c3fb1d29",
+      "url": "https://unpkg.com/leaflet-minimap@3.6.1/dist/Control.MiniMap.min.css",
+      "aliases": [
+        "https://unpkg.com/leaflet-minimap/dist/Control.MiniMap.min.css"
+      ],
+      "pages": [
+        "9/road-pricing-simulation.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-2b34c3fb1d29/dist/Control.MiniMap.min.css"
+    },
+    {
+      "id": "lib-466909224ebd",
+      "url": "https://unpkg.com/leaflet-minimap@3.6.1/dist/Control.MiniMap.min.js",
+      "aliases": [
+        "https://unpkg.com/leaflet-minimap/dist/Control.MiniMap.min.js"
+      ],
+      "pages": [
+        "9/road-pricing-simulation.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-466909224ebd/dist/Control.MiniMap.min.js"
+    },
+    {
+      "id": "lib-a1d99ae3a283",
+      "url": "https://unpkg.com/leaflet-omnivore@0.3.4/leaflet-omnivore.min.js",
+      "aliases": [
+        "https://unpkg.com/leaflet-omnivore/leaflet-omnivore.min.js"
+      ],
+      "pages": [
+        "5/coffee_cluster.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-a1d99ae3a283/dist/leaflet-omnivore.min.js"
+    },
+    {
+      "id": "lib-5cb2beba5c37",
+      "url": "https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js",
+      "aliases": [
+        "https://unpkg.com/leaflet.heat/dist/leaflet-heat.js",
+        "vendor/leaflet-heat.js"
+      ],
+      "pages": [
+        "1/crime.chicago.html",
+        "1/crimeNYC.html",
+        "1/la_crime.html",
+        "5/density_coffee.html",
+        "9/road-pricing-simulation.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-5cb2beba5c37/dist/leaflet-heat.js"
+    },
+    {
+      "id": "lib-049fcce2eef5",
+      "url": "https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css",
+      "aliases": [
+        "https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css"
+      ],
+      "pages": [
+        "5/coffee_cluster.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-049fcce2eef5/dist/MarkerCluster.Default.css"
+    },
+    {
+      "id": "lib-259531961979",
+      "url": "https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css",
+      "aliases": [
+        "https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css"
+      ],
+      "pages": [
+        "5/coffee_cluster.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-259531961979/dist/MarkerCluster.css"
+    },
+    {
+      "id": "lib-8dc2342cf95a",
+      "url": "https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js",
+      "aliases": [
+        "https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"
+      ],
+      "pages": [
+        "5/coffee_cluster.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-8dc2342cf95a/dist/leaflet.markercluster.js"
+    },
+    {
+      "id": "lib-34b3c0e131eb",
+      "url": "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css",
+      "aliases": [
+        "https://unpkg.com/leaflet/dist/leaflet.css",
+        "vendor/leaflet.css"
+      ],
+      "pages": [
+        "1/crime.chicago.html",
+        "1/crimeNYC.html",
+        "1/la_crime.html",
+        "2/index.html",
+        "2/index2.html",
+        "27/energy-map.html",
+        "29/housing-economic-impact.html",
+        "30/workplace-housing-impact.html",
+        "5/coffee_cluster.html",
+        "5/density_coffee.html",
+        "9/road-pricing-simulation.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-34b3c0e131eb/dist/leaflet.css"
+    },
+    {
+      "id": "lib-5d00f470f487",
+      "url": "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js",
+      "aliases": [
+        "https://unpkg.com/leaflet/dist/leaflet.js",
+        "vendor/leaflet.js"
+      ],
+      "pages": [
+        "1/crime.chicago.html",
+        "1/crimeNYC.html",
+        "1/la_crime.html",
+        "2/index.html",
+        "2/index2.html",
+        "27/energy-map.html",
+        "29/housing-economic-impact.html",
+        "30/workplace-housing-impact.html",
+        "5/coffee_cluster.html",
+        "5/density_coffee.html",
+        "9/road-pricing-simulation.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-5d00f470f487/dist/leaflet.js"
+    },
+    {
+      "id": "lib-301c4190d5f2",
+      "url": "https://unpkg.com/leaflet@1.7.1/dist/leaflet.css",
+      "aliases": [
+        "https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+      ],
+      "pages": [
+        "14/citypark5 copy.html",
+        "14/citypark5.html",
+        "4/allinone/Bengaluru.html",
+        "4/allinone/Delhi.html",
+        "4/allinone/Mumbai.html",
+        "4/allinone/NYC.html",
+        "4/test9.html",
+        "6/index.html",
+        "6/index4.html",
+        "6/template1.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-301c4190d5f2/dist/leaflet.css"
+    },
+    {
+      "id": "lib-d39c45fd86ca",
+      "url": "https://unpkg.com/leaflet@1.7.1/dist/leaflet.js",
+      "aliases": [
+        "https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+      ],
+      "pages": [
+        "14/citypark5 copy.html",
+        "14/citypark5.html",
+        "4/allinone/Bengaluru.html",
+        "4/allinone/Delhi.html",
+        "4/allinone/Mumbai.html",
+        "4/allinone/NYC.html",
+        "4/test9.html",
+        "6/index.html",
+        "6/index4.html",
+        "6/template1.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-d39c45fd86ca/dist/leaflet.js"
+    },
+    {
+      "id": "lib-1c09437b70d7",
+      "url": "https://unpkg.com/maplibre-gl@4.5.0/dist/maplibre-gl.js",
+      "aliases": [
+        "https://unpkg.com/maplibre-gl",
+        "https://unpkg.com/maplibre-gl/dist/maplibre-gl.js",
+        "https://unpkg.com/maplibre-gl@4.5.0/dist/maplibre-gl.js"
+      ],
+      "pages": [
+        "14/citypark2.html",
+        "14/citypark3 copy.html",
+        "14/park-accessibility.html",
+        "15/wholeCityParking.html",
+        "15/city-parking-analysis.html",
+        "16/city-centre-activity.html",
+        "7/DCcrimeshow.html",
+        "7/allcrimehollowcircle.html",
+        "8/Bengaluru.html",
+        "8/Delhi.html",
+        "8/Delhianim.html",
+        "8/Mumbai.html",
+        "8/Mumbaianim.html",
+        "8/bengaluruanim.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-1c09437b70d7/dist/maplibre-gl.js"
+    },
+    {
+      "id": "lib-9eaeb463f1b3",
+      "url": "https://unpkg.com/maplibre-gl@4.5.0/dist/maplibre-gl.css",
+      "aliases": [
+        "https://unpkg.com/maplibre-gl/dist/maplibre-gl.css",
+        "https://unpkg.com/maplibre-gl@4.5.0/dist/maplibre-gl.css"
+      ],
+      "pages": [
+        "14/citypark2.html",
+        "14/citypark3 copy.html",
+        "14/park-accessibility.html",
+        "15/wholeCityParking.html",
+        "15/city-parking-analysis.html",
+        "16/city-centre-activity.html",
+        "7/DCcrimeshow.html",
+        "7/allcrimehollowcircle.html",
+        "8/Bengaluru.html",
+        "8/Delhi.html",
+        "8/Delhianim.html",
+        "8/Mumbai.html",
+        "8/Mumbaianim.html",
+        "8/bengaluruanim.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-9eaeb463f1b3/dist/maplibre-gl.css"
+    },
+    {
+      "id": "lib-a64c14149358",
+      "url": "https://unpkg.com/three@0.112/build/three.module.js",
+      "aliases": [
+        "https://unpkg.com/three@0.112/build/three.module.js"
+      ],
+      "pages": [
+        "10/BallSphereNXV2.html",
+        "10/BallSphereV3.html",
+        "10/BallSphereV4Text.html",
+        "10/BallSphereV5Text.html",
+        "10/cityelement2.html",
+        "10/urban-network-visualization.html",
+        "10/cityelements.html"
+      ],
+      "module": true,
+      "mode": "local",
+      "local": "vendor/shared/lib-a64c14149358/dist/three.module.js"
+    },
+    {
+      "id": "lib-4eca773b8753",
+      "url": "https://unpkg.com/three@0.112/examples/jsm/controls/OrbitControls.js",
+      "aliases": [
+        "https://unpkg.com/three@0.112/examples/jsm/controls/OrbitControls.js"
+      ],
+      "pages": [
+        "10/BallSphereNXV2.html",
+        "10/BallSphereV3.html",
+        "10/BallSphereV4Text.html",
+        "10/BallSphereV5Text.html",
+        "10/cityelement2.html",
+        "10/urban-network-visualization.html",
+        "10/cityelements.html"
+      ],
+      "module": true,
+      "mode": "local",
+      "local": "vendor/shared/lib-4eca773b8753/dist/OrbitControls.js"
+    },
+    {
+      "id": "lib-0809644caeac",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/controls/OrbitControls.js",
+      "aliases": [
+        "https://unpkg.com/three@0.120.1/examples/jsm/controls/OrbitControls.js"
+      ],
+      "pages": [
+        "11/gentrification-simulation.html",
+        "31/greenCitygenerator.html",
+        "31/green-city-generator.html",
+        "31/greenCitygenerator3.html",
+        "32/urban-sprawl-density.html"
+      ],
+      "module": true,
+      "mode": "local",
+      "local": "vendor/shared/lib-0809644caeac/dist/OrbitControls.js"
+    },
+    {
+      "id": "lib-a3133eb07bfa",
+      "url": "https://code.jquery.com/jquery-3.6.0.min.js",
+      "aliases": [
+        "vendor/jquery.min.js"
+      ],
+      "pages": [
+        "1/crime.chicago.html",
+        "1/crimeNYC.html",
+        "1/la_crime.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-a3133eb07bfa/dist/jquery-3.6.0.min.js"
+    },
+    {
+      "id": "lib-28f7db420fe3",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "aliases": [
+        "//unpkg.com/three/build/three.module.js"
+      ],
+      "pages": [
+        "25/arcclink.html",
+        "25/arclink2.html"
+      ],
+      "module": true,
+      "mode": "local",
+      "local": "vendor/shared/lib-28f7db420fe3/dist/three.module.js"
+    },
+    {
+      "id": "lib-fdf9a4f920c9",
+      "url": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/TrackballControls.js",
+      "aliases": [
+        "three/addons/controls/TrackballControls.js"
+      ],
+      "pages": [
+        "25/arcclink.html",
+        "25/arclink2.html"
+      ],
+      "module": true,
+      "mode": "local",
+      "local": "vendor/shared/lib-fdf9a4f920c9/dist/TrackballControls.js"
+    },
+    {
+      "id": "lib-89aa57bf7c60",
+      "url": "https://cdn.jsdelivr.net/npm/three-globe@2.31.0/dist/three-globe.min.js",
+      "aliases": [
+        "//unpkg.com/three-globe"
+      ],
+      "pages": [
+        "25/arcclink.html",
+        "25/arclink2.html"
+      ],
+      "module": false,
+      "mode": "local",
+      "local": "vendor/shared/lib-89aa57bf7c60/dist/three-globe.min.js"
+    }
+  ]
+}

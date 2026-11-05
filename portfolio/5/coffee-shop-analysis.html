@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Shop Analysis</title>
+    <style>
+
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            -webkit-font-smoothing: antialiased;
+            font-size: 1.2em;
+        }
+
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            min-height: 85px;
+            overflow: hidden;
+            border-bottom: 2px solid #ccc;
+            background: #fff;
+        }
+
+        .header-content {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            gap: 10px;
+        }
+
+        .iframe-container {
+            flex: 1;
+            overflow: hidden;
+            text-align: center;
+            position: relative;
+        }
+
+        .iframe-container h3 {
+            width: 100%;
+            margin-top: 10px;
+            margin-bottom: 0;
+        }
+
+        .iframe-container p {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            font-size: 0.8em;
+            color: white;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .fixed-header h1 {
+            color: #efefef;
+            font-size: 1.2em;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+
+        .page-content {
+            font-size: 18px;
+            font-weight: 100;
+            margin-left:20%;
+            margin-right:20%;
+            padding-top: 5vh;
+            line-height: 1.8;
+        }
+
+        .attribution {
+            text-align: center;
+            padding: 10px 0;
+            background: #f0f0f0;
+            font-size: 12px;
+        }
+
+        
+
+        h2 {
+            font-size: 1.1em;
+            margin-top: 1em;
+        }
+
+        h3 {
+            font-size: 1.0em;
+            margin-top: 0.5em;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="fixed-header">
+        <div class="header-content">
+            <div class="iframe-container">
+                <h3>Cluster Map of Coffee Shops in the U.S.</h3>
+                <iframe src="coffee_cluster.html"></iframe>
+            </div>
+            <div class="iframe-container">
+                <h3>Density Map of Coffee Shops in the U.S.</h3>
+                <iframe src="density_coffee.html"></iframe>
+            </div>
+        </div>
+    </div>
+    <div class="page-content">
+        <h2>Urban Dynamics and Coffee Shops</h2>
+
+        <h3>Location and Social Activity</h3>
+        <p><strong>Urban Form and Public Space:</strong> The strategic locations of coffee shops provide insights into
+            urban evolution. By mapping their locations, patterns of urban expansion and social activity become evident.
+            Coffee shops are usually situated in vibrant civic areas, serving as indicators of social dynamics within
+            cities. The coffee cluster map highlights high-density areas where coffee shops are concentrated, reflecting
+            active social hubs and vibrant community interactions.</p>
+
+        <h3>Spaces of Consumption and Community</h3>
+        <p><strong>Third Places:</strong> As ‘third places’, coffee shops offer spaces distinct from work and home,
+            fostering relaxation, socialization, and connection development. According to Oldenburg (1999), these spaces
+            are essential for community formation and growth. The density map further illustrates how these spaces are
+            distributed, showing hotspots of community engagement.</p>
+        <p><strong>Modern Community Hubs:</strong> Beyond serving caffeine, coffee shops function as leisure spaces,
+            workplaces, and social hubs, crucial for community development in increasingly isolated urban environments.
+            The cluster map visually supports this, showing coffee shops' role in densely populated areas.</p>
+
+        <h3>Economic Impact and Urban Dynamics</h3>
+        <p><strong>Retail and High Street Impact:</strong> Coffee shops drive foot traffic, significantly impacting the
+            retail sector and high streets. The emergence of specialty coffee shops and independent roasters has
+            diversified the market, generating new economic opportunities. The maps highlight economic hotspots, where
+            the presence of coffee shops stimulates local economies.</p>
+        <p><strong>Gentrification:</strong> Often seen as harbingers of gentrification, coffee shops can signify urban
+            renewal and rising property values. However, they can also lead to displacement and social tensions in
+            certain neighborhoods. The cluster map helps identify these trends, showing where coffee shop proliferation
+            coincides with urban redevelopment.</p>
+
+        <h3>Community Engagement and Development</h3>
+        <p><strong>Social Interaction:</strong> Coffee shops facilitate social interactions and connections, fostering a
+            sense of community. They provide venues for discussions, project collaborations, and a sense of belonging.
+            The density map illustrates areas of high social interaction potential, where coffee shops are densely
+            packed. Hosting a variety of events and activities, coffee shops promote community engagement. These
+            activities range from book clubs and knitting groups to educational talks and cultural events.</p>
+
+        <h3>Challenges and Conflicts</h3>
+        <p><strong>Inclusivity and Exclusion:</strong> While coffee shops can be inclusive, they can also create social
+            divides. The cost of coffee and the ambiance may not appeal to everyone. The rise of chain coffee shops has
+            sparked debates about their role in community building compared to independent shops. The maps can show
+            areas dominated by chains versus independent coffee shops, highlighting potential inclusivity issues.</p>
+
+        <h2>Summary</h2>
+        <p>
+            Coffee shops are crucial to modern urban life, serving as social hubs, economic drivers, and indicators of
+            urban dynamics. Their locations and roles provide valuable insights into urban evolution, community
+            development, and economic impact. The coffee cluster and density maps reveal patterns of social activity,
+            economic hotspots, and potential areas of gentrification, emphasizing their multifaceted influence.
+        </p>
+        <p>
+            These points highlight the significant role coffee shops play in urban economics and social dynamics,
+            emphasizing their importance beyond mere caffeine dispensers to integral components of urban life and
+            community building. The visualizations provided by the maps enhance our understanding of these roles,
+            offering a clear picture of where coffee shops contribute most significantly to urban environments.
+        </p>
+        <p>
+            <strong>References:</strong><br>
+            Oldenburg, R. (1999). <em>The Great Good Place: Cafes, Coffee Shops, Bookstores, Bars, Hair Salons, and
+                Other Hangouts at the Heart of a Community</em>. Marlowe & Company.
+        </p>
+    </div>
+    <div class="attribution">
+        &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap contributors</a> | Data
+        source: <a href="https://www.openstreetmap.org" target="_blank">OpenStreetMap</a>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var header = document.querySelector('.fixed-header');
+            var headerHeight = header.offsetHeight;
+            document.body.style.paddingTop = headerHeight + 'px';
+
+            window.addEventListener('scroll', function () {
+                var scrollOffset = window.scrollY;
+
+                // This reduces the height of the header as you scroll
+                if (scrollOffset < headerHeight) {
+                    header.style.height = (headerHeight - scrollOffset > 0) ? `${headerHeight - scrollOffset}px` : '0px';
+                }
+
+                // Change '800' to the pixel height at which you want the header to disappear
+                if (scrollOffset > headerHeight) {
+                    header.style.display = 'none';  // This line makes the header disappear
+                } else {
+                    header.style.display = 'flex';  // This line will bring back the header when you scroll up
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

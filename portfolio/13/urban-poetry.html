@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scroll Poem Animation</title>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            position: relative;
+        }
+
+        .animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        #animation-box {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: background-image 0.5s ease-in-out;
+        }
+
+        .content {
+            flex: 1;
+            overflow-y: scroll;
+            padding: 20px;
+            background-color: transparent;
+        }
+
+        .text-box {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            margin-bottom: 20px;
+            font-size: 28px;
+            text-align: center;
+            color: white;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9);
+            position: relative;
+        }
+
+        .source-link {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            color: white;
+            font-size: 24px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="animation">
+            <div id="animation-box"></div>
+        </div>
+        <div class="content">
+            <div class="text-box" data-image="https://www.worldhistory.org/uploads/images/9713.jpg?v=1603034117">
+                Rome's red messages: from politics to daily life
+                <a href="https://www.worldhistory.org/uploads/images/9713.jpg?v=1603034117" class="source-link"
+                    target="_blank">🔗</a>
+            </div>
+            <div class="text-box"
+                data-image="https://blogs.hud.ac.uk/media/assets/photo/blogs/historiansatwork/2014/town-crier-reading-the-news.jpg">
+                Voices of the past: Town criers and the news
+                <a href="https://blogs.hud.ac.uk/media/assets/photo/blogs/historiansatwork/2014/town-crier-reading-the-news.jpg"
+                    class="source-link" target="_blank">🔗</a>
+            </div>
+            <div class="text-box"
+                data-image="https://upload.wikimedia.org/wikipedia/commons/0/05/Barter-Chickens_for_Subscription.jpg">
+                Trade and advertising roots in barter
+                <a href="https://upload.wikimedia.org/wikipedia/commons/0/05/Barter-Chickens_for_Subscription.jpg"
+                    class="source-link" target="_blank">🔗</a>
+            </div>
+            <div class="text-box"
+                data-image="https://upload.wikimedia.org/wikipedia/commons/1/10/Hinrichtung_Ludwig_des_XVI.png">
+                Revolution through imagery: The fall of Louis XVI
+                <a href="https://upload.wikimedia.org/wikipedia/commons/1/10/Hinrichtung_Ludwig_des_XVI.png"
+                    class="source-link" target="_blank">🔗</a>
+            </div>
+            <div class="text-box"
+                data-image="https://upload.wikimedia.org/wikipedia/commons/4/42/Chodowiecki_Basedow_Tafel_21_c_Z.jpg">
+                Gutenberg's press: Spreading knowledge and change
+                <a href="https://upload.wikimedia.org/wikipedia/commons/4/42/Chodowiecki_Basedow_Tafel_21_c_Z.jpg"
+                    class="source-link" target="_blank">🔗</a>
+            </div>
+            <div class="text-box"
+                data-image="https://upload.wikimedia.org/wikipedia/commons/b/b9/Printing_and_writing_materials_-_their_evolution_%281904%29_%2814777458662%29.jpg">
+                Press impact: Democratizing knowledge
+                <a href="https://upload.wikimedia.org/wikipedia/commons/b/b9/Printing_and_writing_materials_-_their_evolution_%281904%29_%2814777458662%29.jpg"
+                    class="source-link" target="_blank">🔗</a>
+            </div>
+            <div class="text-box"
+                data-image="https://upload.wikimedia.org/wikipedia/commons/0/0a/Newspaper_market%2C_Paris_1848.JPG">
+                Newspapers: Engaging and informing cities
+                <a href="https://upload.wikimedia.org/wikipedia/commons/0/0a/Newspaper_market%2C_Paris_1848.JPG"
+                    class="source-link" target="_blank">🔗</a>
+            </div>
+            <div class="text-box"
+                data-image="https://images.squarespace-cdn.com/content/5d01a7efbf4ae50001f78eaf/1588430782977-OA3KI5RAU8Y01K543VRT/Ladd-Fig%2B6.jpg?format=1500w&content-type=image%2Fjpeg">
+                Poster power: From streets to public view
+                <a href="https://images.squarespace-cdn.com/content/5d01a7efbf4ae50001f78eaf/1588430782977-OA3KI5RAU8Y01K543VRT/Ladd-Fig%2B6.jpg?format=1500w&content-type=image%2Fjpeg"
+                    class="source-link" target="_blank">🔗</a>
+            </div>
+            <div class="text-box"
+                data-image="https://upload.wikimedia.org/wikipedia/commons/e/e5/%28Portrait_of_Stan_Kenton_and_Bob_Gioga%2C_1947_or_1948%29_%28LOC%29_%285019800401%29.jpg">
+                Music posters: Cultivating community and culture.
+                <a href="https://upload.wikimedia.org/wikipedia/commons/e/e5/%28Portrait_of_Stan_Kenton_and_Bob_Gioga%2C_1947_or_1948%29_%28LOC%29_%285019800401%29.jpg"
+                    class="source-link" target="_blank">🔗</a>
+            </div>
+            
+            <div class="text-box" data-image="https://upload.wikimedia.org/wikipedia/commons/c/cc/Billboard_at_Sein%C3%A4joki.JPG">
+                Urban Canvas: The Evolution of Street Posters
+                <a href="https://upload.wikimedia.org/wikipedia/commons/c/cc/Billboard_at_Sein%C3%A4joki.JPG" class="source-link"
+                    target="_blank">🔗</a>
+            </div>
+            
+            <div class="text-box"
+                data-image="https://upload.wikimedia.org/wikipedia/commons/6/6e/George_William_Joy_-_The_Bayswater_Omnibus.jpg">
+                Omnibus ads: Early transit advertising insights.
+                <a href="https://upload.wikimedia.org/wikipedia/commons/6/6e/George_William_Joy_-_The_Bayswater_Omnibus.jpg"
+                    class="source-link" target="_blank">🔗</a>
+            </div>
+            
+            <div class="text-box"
+                data-image="https://upload.wikimedia.org/wikipedia/commons/9/9f/1908_Billboards_-_Owl_Cigar_and_Royal_Bread.jpg">
+                City Ads Transformed: From Daily Essentials to Digital Displays
+                <a href="https://upload.wikimedia.org/wikipedia/commons/9/9f/1908_Billboards_-_Owl_Cigar_and_Royal_Bread.jpg"
+                    class="source-link" target="_blank">🔗</a>
+            </div>
+            
+            <div class="text-box"
+                data-image="https://cdn.britannica.com/02/151502-050-805604BD/cigarette-sign-Camel-man-smoke-rings-Times-1943.jpg">
+                City landscapes transformed by neon's glow.
+                <a href="https://cdn.britannica.com/02/151502-050-805604BD/cigarette-sign-Camel-man-smoke-rings-Times-1943.jpg"
+                    class="source-link" target="_blank">🔗</a>
+            </div>
+            
+            <div class="text-box"
+                data-image="https://upload.wikimedia.org/wikipedia/commons/9/9c/Camel_Cigaretts_Sign_--_Times_Square_1965.jpg">
+                Neon nights: Illuminating the urban vibe.
+                <a href="https://upload.wikimedia.org/wikipedia/commons/9/9c/Camel_Cigaretts_Sign_--_Times_Square_1965.jpg"
+                    class="source-link" target="_blank">🔗</a>
+            </div>
+            
+            <div class="text-box" data-image="https://upload.wikimedia.org/wikipedia/commons/e/e4/CanalRobinsonsMuseumTram.jpg">
+                Moving messages: Ads on the go.
+                <a href="https://upload.wikimedia.org/wikipedia/commons/e/e4/CanalRobinsonsMuseumTram.jpg" class="source-link"
+                    target="_blank">🔗</a>
+            </div>
+            
+            <div class="text-box" data-image="https://upload.wikimedia.org/wikipedia/commons/0/0b/Walking_Billboard_NL.jpg">
+                Human billboards: Personalizing city ads.
+                <a href="https://upload.wikimedia.org/wikipedia/commons/0/0b/Walking_Billboard_NL.jpg" class="source-link"
+                    target="_blank">🔗</a>
+            </div>
+            
+            <div class="text-box" data-image="https://upload.wikimedia.org/wikipedia/commons/a/a3/Naked_Cowboy_in_Times_Square.jpg">
+                Street performance: Live city advertising.
+                <a href="https://upload.wikimedia.org/wikipedia/commons/a/a3/Naked_Cowboy_in_Times_Square.jpg" class="source-link"
+                    target="_blank">🔗</a>
+            </div>
+            
+            <div class="text-box"
+                data-image="https://upload.wikimedia.org/wikipedia/commons/2/2f/Piccadilly_Circus_in_London_1962_Brighter.jpg">
+                Piccadilly 1962: Neon beginnings.
+                <a href="https://upload.wikimedia.org/wikipedia/commons/2/2f/Piccadilly_Circus_in_London_1962_Brighter.jpg"
+                    class="source-link" target="_blank">🔗</a>
+            </div>
+            
+            <div class="text-box"
+                data-image="https://upload.wikimedia.org/wikipedia/commons/3/37/Picadilly_Circus_London_by_night_2006.jpg">
+                Digital dazzle: Piccadilly's 2000s transformation.
+                <a href="https://upload.wikimedia.org/wikipedia/commons/3/37/Picadilly_Circus_London_by_night_2006.jpg"
+                    class="source-link" target="_blank">🔗</a>
+            </div>
+            
+            <div class="text-box"
+                data-image="https://upload.wikimedia.org/wikipedia/commons/6/6d/Times_Square_--_February_1965.jpg">
+                Neon and the city: A luminous legacy.
+                <a href="https://upload.wikimedia.org/wikipedia/commons/6/6d/Times_Square_--_February_1965.jpg" class="source-link"
+                    target="_blank">🔗</a>
+            </div>
+            
+            <div class="text-box" data-image="https://upload.wikimedia.org/wikipedia/commons/b/bb/42nd_Street_in_New_York.jpg">
+                The bright lights of modernity in urban ads.
+                <a href="https://upload.wikimedia.org/wikipedia/commons/b/bb/42nd_Street_in_New_York.jpg" class="source-link"
+                    target="_blank">🔗</a>
+            </div>
+            
+            <div class="text-box"
+                data-image="https://upload.wikimedia.org/wikipedia/commons/2/28/London_%2C_Piccadilly_Circus_looking_up_Shaftsbury_Ave_%2C_circa_1949_%2CKodachrome_by_Chalmers_Butterfield.jpg">
+                Illuminating history: The impact of neon.
+                <a href="https://upload.wikimedia.org/wikipedia/commons/2/28/London_%2C_Piccadilly_Circus_looking_up_Shaftsbury_Ave_%2C_circa_1949_%2CKodachrome_by_Chalmers_Butterfield.jpg"
+                    class="source-link" target="_blank">🔗</a>
+            </div>
+            
+            <div class="text-box"
+                data-image="https://upload.wikimedia.org/wikipedia/commons/e/e1/%28Rapid_4_cylinder_truck_with_driver_and_two_passengers.%29_%283592124693%29.jpg">
+                Street level ads: Driving brand awareness.
+                <a href="https://upload.wikimedia.org/wikipedia/commons/e/e1/%28Rapid_4_cylinder_truck_with_driver_and_two_passengers.%29_%283592124693%29.jpg"
+                    class="source-link" target="_blank">🔗</a>
+            </div>
+            
+            <div class="text-box"
+                data-image="https://upload.wikimedia.org/wikipedia/commons/7/78/2007_09_21_Bicicletes_publicit%C3%A0ries_a_Val%C3%A8ncia_01.jpg">
+                Bicycle billboards: Eco-friendly city ads.
+                <a href="https://upload.wikimedia.org/wikipedia/commons/7/78/2007_09_21_Bicicletes_publicit%C3%A0ries_a_Val%C3%A8ncia_01.jpg"
+                    class="source-link" target="_blank">🔗</a>
+            </div>
+            
+            <div class="text-box"
+                data-image="https://upload.wikimedia.org/wikipedia/commons/d/da/2013_-_Angel_Diaz_-_S_%5E_S_Floral_-_panoramio.jpg">
+                Graffiti: Urban art meets advertising.
+                <a href="https://upload.wikimedia.org/wikipedia/commons/d/da/2013_-_Angel_Diaz_-_S_%5E_S_Floral_-_panoramio.jpg"
+                    class="source-link" target="_blank">🔗</a>
+            </div>
+            
+            <div class="text-box" data-image="https://upload.wikimedia.org/wikipedia/commons/9/96/Pink_bus.JPG">
+                Bus wraps: Mobile advertising platforms.
+                <a href="https://upload.wikimedia.org/wikipedia/commons/9/96/Pink_bus.JPG" class="source-link"
+                    target="_blank">🔗</a>
+            </div>
+            
+            <div class="text-box"
+                data-image="https://upload.wikimedia.org/wikipedia/commons/b/bc/Trump_executive_Michael_Cohen_004_%285506627084%29.jpg">
+                Branding high-flyers: Luxury in the skies.
+                <a href="https://upload.wikimedia.org/wikipedia/commons/b/bc/Trump_executive_Michael_Cohen_004_%285506627084%29.jpg"
+                    class="source-link" target="_blank">🔗</a>
+            </div>
+            
+            <div class="text-box"
+                data-image="https://upload.wikimedia.org/wikipedia/commons/2/20/Elon_Musk%27s_Tesla_Roadster_%2840110304192%29.jpg">
+                Space ads: Tesla's orbital marketing.
+                <a href="https://upload.wikimedia.org/wikipedia/commons/2/20/Elon_Musk%27s_Tesla_Roadster_%2840110304192%29.jpg"
+                    class="source-link" target="_blank">🔗</a>
+            </div>
+            
+            <div class="text-box"
+                data-image="https://upload.wikimedia.org/wikipedia/commons/9/9d/Metro_de_Paris_-_Ligne_10_-_Mabillon_01.jpg">
+                Subway style: Fashion's underground showcase.
+                <a href="https://upload.wikimedia.org/wikipedia/commons/9/9d/Metro_de_Paris_-_Ligne_10_-_Mabillon_01.jpg"
+                    class="source-link" target="_blank">🔗</a>
+            </div>
+            
+            <div class="text-box" data-image="https://upload.wikimedia.org/wikipedia/commons/2/2a/Beijing_city_subway_passage.jpg">
+                Subway ads: Capturing commuter attention.
+                <a href="https://upload.wikimedia.org/wikipedia/commons/2/2a/Beijing_city_subway_passage.jpg" class="source-link"
+                    target="_blank">🔗</a>
+            </div>
+            
+            <div class="text-box" data-image="https://upload.wikimedia.org/wikipedia/commons/d/dd/101_016_DRI_Ingolstadt.jpg">
+                Train campaigns: Driving social awareness.
+                <a href="https://upload.wikimedia.org/wikipedia/commons/d/dd/101_016_DRI_Ingolstadt.jpg" class="source-link"
+                    target="_blank">🔗</a>
+            </div>
+            
+            <div class="text-box"
+                data-image="https://upload.wikimedia.org/wikipedia/commons/4/47/New_york_times_square-terabass.jpg">
+                Times Square: Epicenter of urban dazzle.
+                <a href="https://upload.wikimedia.org/wikipedia/commons/4/47/New_york_times_square-terabass.jpg" class="source-link"
+                    target="_blank">🔗</a>
+            </div>
+            
+            <div class="text-box"
+                data-image="https://upload.wikimedia.org/wikipedia/commons/0/0a/Cape_Town_%28ZA%29%2C_Wale_Street%2C_Graffiti_--_2024_--_3551.jpg">
+                Make Art Not War: Graffiti's powerful call.
+                <a href="https://upload.wikimedia.org/wikipedia/commons/0/0a/Cape_Town_%28ZA%29%2C_Wale_Street%2C_Graffiti_--_2024_--_3551.jpg"
+                    class="source-link" target="_blank">🔗</a>
+            </div>
+            
+            <div class="text-box"
+                data-image="https://upload.wikimedia.org/wikipedia/commons/e/e6/Aditya_Enclave_-_Ameerpet_-_Hyderabad.jpg">
+                Billboards in Hyderabad: Addressing joblessness.
+                <a href="https://upload.wikimedia.org/wikipedia/commons/e/e6/Aditya_Enclave_-_Ameerpet_-_Hyderabad.jpg"
+                    class="source-link" target="_blank">🔗</a>
+            </div>
+            
+            <div class="text-box"
+                data-image="https://www.billboard.com/wp-content/uploads/media/01-Spotify-Everywhere-campaign-press-2019-billboard-1548.jpg">
+                Meme Takeover: Reinventing urban ad scenes.
+                <a href="https://www.billboard.com/wp-content/uploads/media/01-Spotify-Everywhere-campaign-press-2019-billboard-1548.jpg"
+                    class="source-link" target="_blank">🔗</a>
+            </div>
+
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const animationBox = document.getElementById('animation-box');
+            const textBoxes = document.querySelectorAll('.text-box');
+            const content = document.querySelector('.content');
+            const threshold = window.innerHeight / 2;
+
+            content.addEventListener('scroll', () => {
+                textBoxes.forEach(box => {
+                    const boxTop = box.getBoundingClientRect().top;
+                    const containerTop = content.getBoundingClientRect().top;
+
+                    if (boxTop < window.innerHeight - threshold && boxTop > containerTop - threshold) {
+                        const imageUrl = box.getAttribute('data-image');
+                        animationBox.style.backgroundImage = `url(${imageUrl})`;
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

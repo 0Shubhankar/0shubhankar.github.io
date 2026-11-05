@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Policy Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+    
+        body,
+        html {
+            height: 100%;
+            font-family: 'Times New Roman', Times, serif;
+        }
+    
+        .container,
+        .text-section {
+            max-width: 60%;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffffff;
+        }
+    
+        .background-image {
+            background-image: url('https://picsum.photos/1920/1080');
+            background-size: cover;
+            background-position: center;
+            height: 100%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+    
+        .content {
+            position: relative;
+            color: #fff;
+            text-align: center;
+            z-index: 2;
+        }
+    
+        .content h1 {
+            font-size: 3.6em;
+            margin-bottom: 0.5em;
+        }
+    
+        .content h2 {
+            font-size: 1.8em;
+            margin-bottom: 1em;
+        }
+    
+        .text-section p {
+            margin-bottom: 1.em;
+            font-size: 1.34em;
+            line-height: 1.2;
+        }
+    
+        .decision-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2em;
+        }
+    
+        .decision-section img {
+            width: 55%;
+            height: 550px; /* Increase the height here */
+            object-fit: cover;
+            margin-right: 5px;
+        }
+    
+        .decision-text {
+            width: 50%;
+            font-size: 1.34em;
+            line-height: 1.3;
+        }
+    
+        .option-boxes {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2em;
+        }
+    
+        .option {
+            width: 45%;
+            padding: 1.5em;
+            background-color: #00ffbf;
+            border: 2px solid #ccc;
+            text-align: center;
+            cursor: pointer;
+            font-size: 1.34em;
+        }
+    
+        .option:hover {
+            background-color: #ddd;
+        }
+
+        .center-option {
+        width: 50%; /* Adjust width as needed */
+        margin: 0 auto; /* Center horizontally */
+        }
+    
+        .hidden {
+            display: none;
+        }
+
+        .container {
+        transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+        transform: translateY(20px);
+        opacity: 0;
+        }
+
+        .container.show {
+        transform: translateY(0);
+        opacity: 1;
+        }
+
+        html {
+        scroll-behavior: smooth;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="background-image">
+        <div class="overlay"></div>
+        <div class="content">
+            <h1>Revitalize Central: A Mayor's Dilemma</h1>
+            <h2>Policy Game</h2>
+        </div>
+    </div>
+
+    <div class="text-section">
+        <!-- Start text -->
+        <p>Welcome to Central City, Mayor! 🌆✨</p>
+        
+        <p>Downtown Central City is in need of a major facelift. The once bustling business district is now quiet, with high
+            rents and low foot traffic causing businesses to struggle. The aftermath of the pandemic has only deepened the
+            economic downturn, calling for decisive action to revitalize this essential area.</p>
+        
+        <p><strong>Option A: Economic Incentives for Businesses</strong></p>
+        <p>Quick financial boosts like tax breaks could stabilize businesses fast but might lead to reliance on subsidies and
+            strain city budgets.</p>
+        
+        <p><strong>Option B: Urban Development and Infrastructure Improvements</strong></p>
+        <p>Investing in infrastructure promises long-term growth and a vibrant urban space. However, these benefits take time to
+            materialize and require substantial initial funding.</p>
+        
+        <p>Each choice offers its own blend of immediate relief and enduring growth, challenging Mayor Green to balance
+            short-term needs with long-term visions for the city's heart.</p>
+
+    
+        <div class="option-boxes">
+            <div class="option" id="optionA">Economic Incentives for Businesses.
+        </div>
+            <div class="option" id="optionB">Urban Development and Infrastructure Improvements.
+    </div>
+        </div>
+    </div>
+        
+    <!-- Containers for options -->
+        <div id="container-option-A" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Economic Revitalization Decision Time, Mayor! 🌟💼</p>
+                    
+                    <p>The Mayor has initiated <strong>Option A: Economic Incentives for Businesses</strong> to stimulate Downtown Central
+                        City's economy. Here are the next steps in the strategy:</p>
+                    
+                    <p><strong>Option A-1: Expand and Diversify Economic Incentives</strong></p>
+                    <p>Extend benefits to sectors like tech, retail, and the arts to diversify the economic base. This move aims to enrich
+                        the business environment but requires careful management to meet various sector demands.</p>
+                    
+                    <p><strong>Option A-2: Implement a Phased Reduction of Incentives</strong></p>
+                    <p>Gradually decrease incentives to encourage businesses to operate independently. This approach aims to balance fiscal
+                        responsibility while fostering a self-sufficient business community, although it may make new businesses hesitant.
+                    </p>
+                    
+                    <p>The Mayor's choices will shape the economic landscape of Central City, prioritizing long-term stability and growth.
+                    </p>
+
+                </div>
+            </div>
+            <!-- - **New Choices After Consequence**: -->
+            <div class="option-boxes">
+                <div class="option" id="optionA1">Expand and Diversify Economic Incentives</div>
+                <div class="option" id="optionA2">Implement a Phased Reduction of Incentives</div>
+            </div>
+        </div>
+        <div id="container-option-B" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p>Urban Strategy Decision Time, Mayor! 🏗️🌿</p>
+                
+                <p>The Mayor is revitalizing Downtown Central City, focusing on Urban Development and Infrastructure Improvements. Two
+                    strategic options lie ahead:</p>
+                
+                <p><strong>Option B.1: Public-Private Partnerships (PPPs)</strong></p>
+                <p>Partner with the private sector to enhance public transit and green spaces. This approach brings new capital and
+                    ideas but requires careful oversight to align with public interests.</p>
+                
+                <p><strong>Option B.2: Comprehensive Zoning and Land Use Reforms</strong></p>
+                <p>Revise zoning laws to promote a mix of residential, commercial, and cultural spaces. This could spur economic
+                    diversity but may face resistance and take time to yield results.</p>
+                
+                <p>Each choice demands the Mayor’s keen oversight to ensure long-term success.</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionB1">Public-Private Partnerships (PPPs) for Urban Development</div>
+
+                <div class="option" id="optionB2">Comprehensive Zoning and Land Use Reforms</div>
+            </div>
+        </div>
+        <div id="container-option-A1" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p>Incentive Strategy Forward, Mayor! 🌟</p>
+                
+                <p>After choosing <strong>Option A-1: Expand and Diversify Economic Incentives</strong>, two clear paths now emerge for
+                    how to proceed:</p>
+                
+                <p><strong>Enhanced Sector-Specific Support</strong></p>
+                <p>Focus incentives on key sectors like tech and green enterprises, tailoring support to drive innovation and
+                    sustainable growth. This approach could lead to rapid economic development in targeted industries, ensuring the
+                    city's resources are used effectively to foster lasting growth.</p>
+                
+                <p><strong>Broad Unrestricted Incentives</strong></p>
+                <p>Provide incentives across all sectors without focusing on specific industries. While this is easier to implement, it
+                    risks inefficient resource use, which could result in economic imbalances and a lackluster overall impact.</p>
+                
+                <p>Mayor, it’s time to decide: focused growth or a broader, less targeted approach?</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionA1.1">Enhanced Sector-Specific Support</div>
+                <div class="option" id="optionA1.2">Broad Unrestricted Incentives</div>
+            </div>
+        </div>
+      
+
+        <div id="container-option-A2" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p>Strategic Shifts in Incentive Strategy, Mayor! 🌆📉</p>
+                
+                <p>Having initiated a <strong>Phased Reduction of Incentives</strong>, two pivotal decisions now confront you, Mayor, as
+                    you navigate Downtown Central City’s evolving economic landscape:</p>
+                
+                <p><strong>Mandate Maximum Rent for Commercial Spaces:</strong></p>
+                <p>Implement rent caps to stabilize overhead costs for businesses adjusting to reduced incentives. This could ease
+                    financial planning but may prompt concerns about market manipulation and impact on property owners.</p>
+                
+                <p><strong>Implement Tax Incentives for Landlords Who Lower Rents:</strong></p>
+                <p>Offer tax breaks to landlords reducing rents voluntarily, relying on their cooperation, which could result in
+                    variable impacts across the market.</p>
+                
+                <p>Each choice presents a unique opportunity to manage the economic transition effectively.</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionA2.1">Mandate Maximum Rent for Commercial Spaces</div>
+                <div class="option" id="optionA2.2">Implement Tax Incentives for Landlords Who Lower Rents</div>
+            </div>
+        </div>
+
+        <div id="container-option-B1" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p>Public-Private Synergy Advances, Mayor! 🏗️🤝</p>
+                
+                <p>Choosing to engage in <strong>Public-Private Partnerships (PPPs) for Urban Development</strong>, you're now
+                    positioned to amplify Downtown Central City's growth with private sector collaboration. As we progress, two
+                    strategic enhancements are presented to optimize these partnerships:</p>
+                
+                <p><strong>Option B.1.1: Establish a Dedicated PPP Oversight Committee</strong></p>
+                <p>Create a specialized committee to oversee and ensure that all partnership agreements align with public interests.
+                    This move aims to prevent undue influence by private entities and ensure transparent project management, maintaining
+                    a balance between innovation and public accountability.</p>
+                
+                <p><strong>Option B.1.2: Structure Shared-Risk Agreements</strong></p>
+                <p>Negotiate contracts that equitably distribute risks, protecting public investments while holding private partners
+                    accountable. This approach seeks to safeguard the city’s interests and foster trust in these collaborations,
+                    ensuring that both sides are equally invested in successful outcomes.</p>
+                
+                <p>Each choice is critical in shaping how effectively public and private sectors can cooperate to rejuvenate the city’s
+                    infrastructure and public spaces.</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionB1.1">Establish a Dedicated PPP Oversight Committee</div>
+                <div class="option" id="optionB1.2">Structure Shared-Risk Agreements</div>
+            </div>
+        </div>
+
+        <div id="container-option-B2" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Zoning Reform Choices, Mayor! 🏛️🌆</p>
+                    
+                    <p>Mayor has opted for <strong>Comprehensive Zoning and Land Use Reforms</strong> to enhance Downtown Central City's
+                        development dynamically. Now, it's time to decide how best to implement these crucial changes:</p>
+                    
+                    <p><strong>Implement a Phased Zoning Rollout</strong></p>
+                    <p>Gradually introduce changes to ease the community into new regulations, reducing shock and opposition. While this
+                        method promotes smoother transitions, it may delay the revitalization's visible impacts.</p>
+                    
+                    <p><strong>Develop Strategic Compliance Measures</strong></p>
+                    <p>Set up stringent enforcement mechanisms to ensure adherence to the new zoning laws. This ensures that the reforms are
+                        effective but could create tension with property owners and developers resistant to change.</p>
+                    
+                    <p>Each strategy offers a pathway to successfully reshape the city's landscape, balancing immediate needs with long-term
+                        goals.</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionB2.1">Implement a Phased Zoning Rollout</div>
+                <div class="option" id="optionB2.2">Develop Strategic Compliance Measures</div>
+            </div>
+        </div>
+
+
+        <!-----------------------------------------------------------        S block options  START   ------------------------------------------------------------------------------>
+
+        <div id="container-option-A1.1" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p>Challenges Ahead, Mayor! ⚖️🏙️</p>
+                
+                <p>Having chosen <strong>Enhanced Sector-Specific Support</strong> to drive growth in key sectors like tech and green
+                    enterprises, the strategy has shown promising results. However, new challenges now loom. As Downtown Central City
+                    revitalizes, the risk of gentrification threatens to displace original residents and businesses. Balancing economic
+                    momentum with inclusivity is crucial to avoid pushing out the very communities that make the city unique.</p>
+                
+                <p>Mayor, the path forward is clear: you must find a way to sustain this growth without sacrificing diversity and
+                    affordability in the downtown area. The next decisions will define Central City's future.</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.A">Ensure Sustainable Growth Without Displacement</div>
+            </div>
+        </div>
+
+        <div id="container-option-A1.2" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p>Broad Incentives Fall Short, Mayor! 💼❌</p>
+                
+                <p>Mayor chose <strong>Broad Unrestricted Incentives</strong> to support all business sectors equally. While the
+                    intention was to spur widespread growth, the lack of focus led to inefficient resource allocation. By spreading
+                    incentives too thinly across various industries, the city failed to create meaningful impact in any single sector.
+                    Businesses struggled to gain the targeted support they needed, and the economic boost never materialized as
+                    expected. This broad approach resulted in economic imbalances, with funds being wasted on areas that didn’t need as
+                    much support, ultimately leaving Downtown Central City’s revitalization efforts stagnant and lacking direction.</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option center-option" id="Play-againA1.2">Play-againA1.2</div>
+            </div>
+        </div>
+
+        <div id="container-option-A2.1" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Rent Caps in Place, But Challenges Loom, Mayor! 🏢💼</p>
+                    
+                    <p>Mayor chose to <strong>Mandate Maximum Rent for Commercial Spaces</strong>, stabilizing overhead costs and easing the
+                        transition for businesses as incentives were reduced. While this has helped protect small businesses from rent
+                        spikes, a new challenge now emerges: sustaining growth without triggering gentrification. As the downtown area
+                        revitalizes, higher demand could push out original residents and local businesses, threatening the community’s
+                        diversity.</p>
+                    
+                    <p>To maintain momentum while keeping Central City inclusive, Mayor must carefully balance economic development with
+                        affordability to prevent displacement and ensure long-term, sustainable growth for all.</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.B">Ensure Sustainable Growth Without Displacement</div>
+            </div>
+        </div>
+
+
+        <div id="container-option-A2.2" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p>Tax Incentives in Motion, But Challenges Ahead, Mayor! 🏘️💼</p>
+                
+                <p>Mayor opted to <strong>Implement Tax Incentives for Landlords Who Lower Rents</strong>, offering tax breaks to
+                    encourage voluntary rent reductions. While some landlords participated, the impact across the market has been
+                    inconsistent, with limited success in stabilizing rent levels. Now, the same challenge arises: sustaining growth
+                    post-revitalization without causing gentrification. As downtown demand increases, the risk of displacing original
+                    residents and businesses remains.</p>
+                
+                <p>To keep Central City’s economic momentum alive while maintaining inclusivity, Mayor must balance development with
+                    affordability to prevent the very gentrification these incentives aimed to avoid.</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.C">Ensure Sustainable Growth Without Displacement</div>
+            </div>
+        </div>
+
+
+        <div id="container-option-B1.1" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>PPP Oversight in Place, But New Challenges Arise, Mayor! 🏛️🤝</p>
+                    
+                    <p>Mayor chose to <strong>Establish a Dedicated PPP Oversight Committee</strong>, ensuring transparency and public
+                        accountability in partnerships with private entities. The committee successfully balanced innovation with public
+                        interests, preventing undue influence from private partners. However, the challenge of sustaining growth
+                        post-revitalization remains. As downtown flourishes, the risk of gentrification increases, threatening to displace
+                        original residents and businesses.</p>
+                    
+                    <p>Mayor must now decide how to continue economic development without losing the community’s character. Balancing growth
+                        with inclusivity is key to ensuring Central City’s transformation benefits everyone, not just a select few.</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.D">Ensure Sustainable Growth Without Displacement</div>
+            </div>
+        </div>
+
+        <div id="container-option-B1.2" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p>Shared-Risk Agreements Fall Through, Mayor! 🏗️❌</p>
+                
+                <p>Mayor chose <strong>Structure Shared-Risk Agreements</strong> to ensure a balanced partnership between public and
+                    private entities, aiming to protect the city’s interests while holding private partners accountable. Unfortunately,
+                    this approach didn't work out as planned. Negotiating such frameworks proved to be overly complex, and many private
+                    entities were deterred from entering into public-private partnerships (PPPs). As a result, several key
+                    infrastructure projects stalled, and the anticipated collaboration fell apart, leaving Downtown Central City’s
+                    rejuvenation efforts in limbo.</p>
+                
+                <p>Now, Mayor must find new strategies to push forward the city's revitalization.</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="Play-againB1.2">Play-againB1.2</div>
+            </div>
+        </div>
+        <div id="container-option-B2.1" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Phased Zoning Rollout in Progress, But Challenges Persist, Mayor! 🏙️📐</p>
+                    
+                    <p>Mayor chose to <strong>Implement a Phased Zoning Rollout</strong>, easing the community into new regulations and
+                        reducing resistance. This gradual approach allowed for smoother transitions and minimized opposition from property
+                        owners and businesses. However, the challenge of sustaining growth in downtown Central City remains. As
+                        revitalization takes hold, gentrification risks pushing out original residents and local businesses, threatening the
+                        community’s diversity and affordability.</p>
+                    
+                    <p>To maintain momentum while ensuring inclusivity, Mayor must find a way to balance economic development with
+                        protecting the character of the city and preventing displacement. The future of Central City depends on it.</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.E">Ensure Sustainable Growth Without Displacement</div>
+            </div>
+        </div>
+        <div id="container-option-B2.2" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p>Compliance Measures in Place, But Challenges Loom, Mayor! 🏙️⚖️</p>
+                
+                <p>Mayor chose to <strong>Develop Strategic Compliance Measures</strong>, implementing strict enforcement to ensure the
+                    success of new zoning laws. While this approach ensured that the reforms were followed, it also created some
+                    friction with property owners and developers. Despite the progress, the challenge of sustaining growth in downtown
+                    Central City remains. Gentrification could displace original residents and businesses as revitalization intensifies,
+                    jeopardizing the community's diversity and affordability.</p>
+                
+                <p>Mayor now faces the task of balancing continued economic growth with protecting the downtown area's character,
+                    ensuring inclusivity while preventing displacement. The future of Central City's revitalization depends on this
+                    balance.</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.F">Ensure Sustainable Growth Without Displacement</div>
+            </div>
+        </div>
+
+
+
+<!-- S block options keep in mind SA1,SA2,B1B2C1C2D1D2E1E2F1F2 ALL ARE SAME AS S1 and S2 so same option will go here  -->
+        <div id="container-option-S.A" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p>Sustaining Growth, Mayor! 🌆⚖️</p>
+                
+                <p>Challenges remain to sustain the growth post-revitalization. You must decide how to keep the momentum going without
+                    causing gentrification that could drive original residents and businesses away.</p>
+                
+                <p><strong>New Choices After Consequence:</strong></p>
+                
+                <p><strong>Option S1: Promote Mixed-Use Development</strong></p>
+                <p>Encourage developments that blend residential, commercial, and cultural spaces. This will help maintain diversity and
+                    affordability by ensuring a mix of income levels and businesses remain downtown.</p>
+                
+                <p><strong>Option S2: Establish Economic Development Zones</strong></p>
+                <p>Designate specific areas for economic growth with tax incentives and support for local businesses. This targeted
+                    approach can boost development while protecting existing communities from the pressures of gentrification.</p>
+                
+                <p>Mayor, it’s time to navigate these choices carefully to keep Central City growing inclusively!</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.A1">Promote Mixed-Use Development</div>
+                <div class="option" id="optionS.A2">Establish Economic Development Zones</div>
+            </div>
+        </div>
+        <div id="container-option-S.B" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Sustaining Growth, Mayor! 🌆⚖️</p>
+                    
+                    <p>Challenges remain to sustain the growth post-revitalization. You must decide how to keep the momentum going without
+                        causing gentrification that could drive original residents and businesses away.</p>
+                    
+                    <p><strong>New Choices After Consequence:</strong></p>
+                    
+                    <p><strong>Option S1: Promote Mixed-Use Development</strong></p>
+                    <p>Encourage developments that blend residential, commercial, and cultural spaces. This will help maintain diversity and
+                        affordability by ensuring a mix of income levels and businesses remain downtown.</p>
+                    
+                    <p><strong>Option S2: Establish Economic Development Zones</strong></p>
+                    <p>Designate specific areas for economic growth with tax incentives and support for local businesses. This targeted
+                        approach can boost development while protecting existing communities from the pressures of gentrification.</p>
+                    
+                    <p>Mayor, it’s time to navigate these choices carefully to keep Central City growing inclusively!</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.B1">Promote Mixed-Use Development</div>
+                <div class="option" id="optionS.B2">Establish Economic Development Zones</div>
+            </div>
+        </div>
+        <div id="container-option-S.C" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Sustaining Growth, Mayor! 🌆⚖️</p>
+                    
+                    <p>Challenges remain to sustain the growth post-revitalization. You must decide how to keep the momentum going without
+                        causing gentrification that could drive original residents and businesses away.</p>
+                    
+                    <p><strong>New Choices After Consequence:</strong></p>
+                    
+                    <p><strong>Option S1: Promote Mixed-Use Development</strong></p>
+                    <p>Encourage developments that blend residential, commercial, and cultural spaces. This will help maintain diversity and
+                        affordability by ensuring a mix of income levels and businesses remain downtown.</p>
+                    
+                    <p><strong>Option S2: Establish Economic Development Zones</strong></p>
+                    <p>Designate specific areas for economic growth with tax incentives and support for local businesses. This targeted
+                        approach can boost development while protecting existing communities from the pressures of gentrification.</p>
+                    
+                    <p>Mayor, it’s time to navigate these choices carefully to keep Central City growing inclusively!</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.C1">Promote Mixed-Use Development</div>
+                <div class="option" id="optionS.C2">Establish Economic Development Zones</div>
+            </div>
+        </div>
+        <div id="container-option-S.D" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Sustaining Growth, Mayor! 🌆⚖️</p>
+                    
+                    <p>Challenges remain to sustain the growth post-revitalization. You must decide how to keep the momentum going without
+                        causing gentrification that could drive original residents and businesses away.</p>
+                    
+                    <p><strong>New Choices After Consequence:</strong></p>
+                    
+                    <p><strong>Option S1: Promote Mixed-Use Development</strong></p>
+                    <p>Encourage developments that blend residential, commercial, and cultural spaces. This will help maintain diversity and
+                        affordability by ensuring a mix of income levels and businesses remain downtown.</p>
+                    
+                    <p><strong>Option S2: Establish Economic Development Zones</strong></p>
+                    <p>Designate specific areas for economic growth with tax incentives and support for local businesses. This targeted
+                        approach can boost development while protecting existing communities from the pressures of gentrification.</p>
+                    
+                    <p>Mayor, it’s time to navigate these choices carefully to keep Central City growing inclusively!</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.D1">Promote Mixed-Use Development</div>
+                <div class="option" id="optionS.D2">Establish Economic Development Zones</div>
+            </div>
+        </div>
+        <div id="container-option-S.E" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Sustaining Growth, Mayor! 🌆⚖️</p>
+                    
+                    <p>Challenges remain to sustain the growth post-revitalization. You must decide how to keep the momentum going without
+                        causing gentrification that could drive original residents and businesses away.</p>
+                    
+                    <p><strong>New Choices After Consequence:</strong></p>
+                    
+                    <p><strong>Option S1: Promote Mixed-Use Development</strong></p>
+                    <p>Encourage developments that blend residential, commercial, and cultural spaces. This will help maintain diversity and
+                        affordability by ensuring a mix of income levels and businesses remain downtown.</p>
+                    
+                    <p><strong>Option S2: Establish Economic Development Zones</strong></p>
+                    <p>Designate specific areas for economic growth with tax incentives and support for local businesses. This targeted
+                        approach can boost development while protecting existing communities from the pressures of gentrification.</p>
+                    
+                    <p>Mayor, it’s time to navigate these choices carefully to keep Central City growing inclusively!</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.E1">Promote Mixed-Use Development</div>
+                <div class="option" id="optionS.E2">Establish Economic Development Zones</div>
+            </div>
+        </div>
+        <div id="container-option-S.F" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Sustaining Growth, Mayor! 🌆⚖️</p>
+                    
+                    <p>Challenges remain to sustain the growth post-revitalization. You must decide how to keep the momentum going without
+                        causing gentrification that could drive original residents and businesses away.</p>
+                    
+                    <p><strong>New Choices After Consequence:</strong></p>
+                    
+                    <p><strong>Option S1: Promote Mixed-Use Development</strong></p>
+                    <p>Encourage developments that blend residential, commercial, and cultural spaces. This will help maintain diversity and
+                        affordability by ensuring a mix of income levels and businesses remain downtown.</p>
+                    
+                    <p><strong>Option S2: Establish Economic Development Zones</strong></p>
+                    <p>Designate specific areas for economic growth with tax incentives and support for local businesses. This targeted
+                        approach can boost development while protecting existing communities from the pressures of gentrification.</p>
+                    
+                    <p>Mayor, it’s time to navigate these choices carefully to keep Central City growing inclusively!</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.F1">Promote Mixed-Use Development</div>
+                <div class="option" id="optionS.F2">Establish Economic Development Zones</div>
+            </div>
+        </div>
+        <!-- if option S-ABCDEF selected it will lead to S1 AND S2 which S-ABCDEF(1,2)-->
+        <div id="container-option-S.1" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p>Mixed-Use Development in Motion, Mayor! 🏙️🏠</p>
+                
+                <p>With <strong>Promote Mixed-Use Development</strong> chosen, Mayor is now focused on maintaining diversity and
+                    affordability in the downtown area. Two paths lie ahead, but one holds more promise than the other.</p>
+                
+                <p><strong>Option S1.A: Leave Affordability to Market Forces</strong></p>
+                <p>Allow the market to naturally determine affordability within mixed-use developments. While this might simplify
+                    regulation, it risks driving up property values and rents, displacing original residents and local businesses, and
+                    ultimately failing to maintain downtown's inclusivity.</p>
+                
+                <p><strong>Option S1.B: Offer Incentives for Building Mixed-Use Properties</strong></p>
+                <p>Set a minimum percentage of affordable units in all new mixed-use developments. This approach ensures a balance of
+                    income levels, preventing gentrification and keeping downtown accessible to a wider population. This could
+                    successfully protect affordability while promoting growth.</p>
+                
+                <p>The next choice is critical—ensuring inclusivity or risking unchecked market pressures.</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.1A">Leave Affordability to Market Forces</div>
+                <div class="option" id="optionS.1B">Offer incentives for building mixed-use properties</div>
+            </div>
+        </div>
+
+
+        <div id="container-option-S.2" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p>Economic Development Zones in Progress, Mayor! 🏗️📊</p>
+                
+                <p>With <strong>Establish Economic Development Zones</strong> chosen, targeted areas are now set for growth, providing
+                    tax incentives and support for local businesses. Moving forward, Mayor faces two distinct paths to sustain this
+                    development:</p>
+                
+                <p><strong>Option S2.A: Prioritize Local Business Growth</strong></p>
+                <p>Provide additional support to small and local businesses within the zones, ensuring they can compete and thrive as
+                    the area grows. This could include grants, reduced fees, or easier access to capital, helping protect the unique
+                    character of downtown.</p>
+                
+                <p><strong>Option S2.B: Attract Large Corporations</strong></p>
+                <p>Offer incentives to attract major corporations to the development zones, hoping to spur large-scale economic
+                    activity. While this approach could bring rapid growth, it may shift the focus away from smaller local businesses.
+                </p>
+                
+                <p>Mayor, it’s time to choose how to shape Central City’s future development!</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.2A">Prioritize Local Business Growth</div>
+                <div class="option" id="optionS.2B">Attract Large Corporations</div>
+            </div>
+        </div>
+        <div id="container-option-S.1A" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p>Market Forces in Play, Mayor! 💼🏙️</p>
+                
+                <p>Mayor has chosen <strong>Option S1.A: Leave Affordability to Market Forces</strong>, allowing market dynamics to
+                    determine affordability within mixed-use developments. While this eases regulatory burdens, the risks of rising
+                    property values and displacement loom large. Now, Mayor faces two crucial choices:</p>
+                
+                <p><strong>Rely on Developer Promises Alone</strong></p>
+                <p>Trust that developers will include affordable units without additional incentives or oversight. This approach
+                    minimizes city intervention but leaves affordability entirely in the hands of the market, risking further
+                    displacement.</p>
+                
+                <p><strong>Encourage Public-Private Partnerships for Affordable Units</strong></p>
+                <p>Work with private developers to voluntarily include affordable units in exchange for city benefits such as zoning
+                    flexibility or infrastructure support. This partnership could ensure a balance between profit and affordability.</p>
+                
+                <p>Mayor, the future of Central City's inclusivity is in your hands!</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.1AA">Rely on Developer Promises Alone</div>
+                <div class="option" id="optionS.1AB">Encourage Public-Private Partnerships for Affordable Units</div>
+            </div>
+        </div>
+
+        <div id="container-option-S.1B" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p>Mixed-Use Incentives in Motion, Mayor! 🏙️🏢</p>
+                
+                <p>Mayor has chosen <strong>Option S1.B: Offer Incentives for Building Mixed-Use Properties</strong>, setting a minimum
+                    percentage of affordable units in all new developments. This will help balance income levels and prevent
+                    gentrification, keeping downtown accessible. Now, Mayor must decide between two paths:</p>
+                
+                <p><strong>Streamline the Permitting Process</strong></p>
+                <p>Simplify and expedite the approval process for developers who meet affordable housing requirements. This could
+                    accelerate development and attract more builders, ensuring that mixed-use projects progress without unnecessary
+                    delays.</p>
+                
+                <p><strong>Tax Breaks for Developers</strong></p>
+                <p>Provide tax incentives to developers who include affordable units in their mixed-use projects. This financial boost
+                    could encourage more participation from developers, but it could also reduce city revenues.</p>
+                
+                <p>Mayor, the next decision will determine how to shape the future of Central City’s mixed-use development!</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionS.1BA">Streamline the Permitting Process</div>
+                <div class="option" id="optionS.1BB">Tax Breaks for Developers</div>
+            </div>
+        </div>
+        <div id="container-option-S.2A" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p>Local Business Boost, But Conflicts Continue, Mayor! 🏘️📊</p>
+                
+                <p>Mayor chose to <strong>Prioritize Local Business Growth</strong>, offering grants, reduced fees, and access to
+                    capital to help small businesses thrive in the revitalized downtown. While this move supported local enterprises and
+                    preserved the character of downtown, a bigger challenge remains: <strong>Stakeholder Conflict in Downtown
+                        Revitalization</strong>. Property owners, local businesses, residents, and political factions are clashing over
+                    the area’s future. Each group has its own vision, causing tensions that are slowing progress.</p>
+                
+                <p>Mayor, to keep Central City's revitalization on track, you must find a way to unite these divided stakeholders and
+                    forge a shared path forward.</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionX.C">Navigate Stakeholder Conflicts to Find Common Ground</div>
+            </div>
+        </div>
+        <div id="container-option-S.2B" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p>Big Corporations, Big Consequences, Mayor! 🏢💸</p>
+                
+                <p>Mayor chose <strong>Option S2.B: Attract Large Corporations</strong> to spur rapid economic growth in development
+                    zones. Initially, it brought major businesses downtown, but the move quickly backfired. Small local businesses
+                    couldn’t compete with the corporate giants, leading to a mass exodus of small enterprises. The incentives offered to
+                    attract these corporations also drained city resources, leaving little support for struggling local businesses. As a
+                    result, Central City’s unique character was eroded, and the economic boost failed to trickle down to the broader
+                    community.</p>
+                
+                <p>Mayor, it's time to rethink the strategy and find a way to support both large and small businesses.</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="Play-againS.2B">Play-again S.2B</div>
+            </div>
+        </div>
+        <div id="container-option-S.1AA" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p>Developer Promises Fall Short, Mayor! 🏢❌</p>
+                
+                <p>Mayor chose to <strong>Rely on Developer Promises Alone</strong>, trusting the market to maintain affordability in
+                    new mixed-use developments without city oversight. Unfortunately, this approach failed. Without incentives or
+                    regulations, developers prioritized profit, leading to skyrocketing rents and property values. As a result, original
+                    residents and small businesses were pushed out, and the downtown area became unaffordable for many. The lack of
+                    affordable units exacerbated gentrification, leaving Central City struggling to maintain its inclusivity.</p>
+                
+                <p>Now, Mayor must regroup and find a new strategy to restore balance and protect the heart of the community.</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="Play-againS.1AA">Play-again</div>
+            </div>
+        </div>
+
+        <div id="container-option-S.1AB" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p>Stakeholder Conflict Looms, Mayor! 🏙️⚖️</p>
+                
+                <p>Mayor chose to <strong>Encourage Public-Private Partnerships for Affordable Units</strong>, striking a balance
+                    between profit and affordability. However, a new challenge emerges: <strong>Stakeholder Conflict in Downtown
+                        Revitalization</strong>. Property owners, local businesses, residents, and political factions all have differing
+                    visions for the future of downtown Central City. As each group pushes for its own agenda, the conflicting priorities
+                    are stalling progress on revitalization efforts.</p>
+                
+                <p>Mayor, it’s now essential to navigate these tensions carefully. You must find common ground among these diverse
+                    groups to move forward, ensuring that downtown development benefits everyone without derailing the momentum.</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionX.A">Navigate Stakeholder Conflicts to Find Common Ground</div>
+            </div>
+        </div>
+        <div id="container-option-S.1BA" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p>Permitting Streamlined, But Conflict Persists, Mayor! 🏗️⚖️</p>
+                
+                <p>Mayor chose to <strong>Streamline the Permitting Process</strong>, simplifying approvals to speed up mixed-use
+                    developments with affordable housing. While this helped attract more builders and accelerated progress, a deeper
+                    challenge remains: <strong>Stakeholder Conflict in Downtown Revitalization</strong>. Property owners, local
+                    businesses, residents, and political factions continue to clash over the future of downtown. Each group has its own
+                    vision and priorities, causing friction that’s stalling further progress.</p>
+                
+                <p>Mayor, the path forward requires careful negotiation and collaboration to align these diverse interests. Only by
+                    bringing these stakeholders together can downtown’s revitalization continue smoothly and inclusively.</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionX.B">Navigate Stakeholder Conflicts to Find Common Ground</div>
+            </div>
+        </div>
+        <div id="container-option-S.1BB" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Tax Breaks Backfire, Mayor! 💼📉</p>
+                    
+                    <p>Mayor opted for <strong>Tax Breaks for Developers</strong>, aiming to boost participation in affordable housing
+                        projects within mixed-use developments. While this initially attracted more developers, the unintended consequences
+                        quickly surfaced. The tax incentives drained city revenues, leaving Central City short on funds for essential public
+                        services like education, infrastructure, and healthcare. As city services declined, public dissatisfaction grew, and
+                        Mayor’s approval ratings took a hit. The strategy ultimately failed to balance affordability with the city's broader
+                        needs, leaving downtown struggling despite increased development.</p>
+                    
+                    <p>Mayor, it’s time to rethink the approach and restore balance to Central City’s recovery.</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="Play-againS1.BB">Play-again</div>
+            </div>
+        </div>
+        <div id="container-option-S.2B" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Big Corporations, Big Consequences, Mayor! 🏢💸</p>
+                    
+                    <p>Mayor chose <strong>Option S2.B: Attract Large Corporations</strong> to spur rapid economic growth in development
+                        zones. Initially, it brought major businesses downtown, but the move quickly backfired. Small local businesses
+                        couldn’t compete with the corporate giants, leading to a mass exodus of small enterprises. The incentives offered to
+                        attract these corporations also drained city resources, leaving little support for struggling local businesses. As a
+                        result, Central City’s unique character was eroded, and the economic boost failed to trickle down to the broader
+                        community.</p>
+                    
+                    <p>Mayor, it's time to rethink the strategy and find a way to support both large and small businesses.</p>
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="Play-again">Play Again</div>
+            </div>
+        </div>
+
+                <!-----------------------------------------------------------        S block END   ------------------------------------------------------------------------------>
+
+                <!-----------------------------------------------------------        X block START   ------------------------------------------------------------------------------>
+
+
+        <div id="container-option-X.A" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Stakeholder Conflict Escalates, Mayor! ⚖️🏙️</p>
+                    
+                    <p>Mayor is now facing a critical challenge in the <strong>Downtown Revitalization</strong> effort. Multiple stakeholder
+                        groups—property owners, local businesses, residents, and political factions—are clashing over the future direction
+                        of the downtown area. With differing priorities and visions, these conflicts are stalling progress and threatening
+                        the revitalization plan.</p>
+                    
+                    <p><strong>New Choices After Consequence:</strong></p>
+                    
+                    <p><strong>Option X1: Establish a Downtown Revitalization Advisory Board</strong></p>
+                    <p>Create a board that includes representatives from each stakeholder group to guide the development process, fostering
+                        collaboration and shared decision-making.</p>
+                    
+                    <p><strong>Option X2: Conduct Comprehensive Stakeholder Impact Assessments</strong></p>
+                    <p>Evaluate how revitalization efforts impact each stakeholder group, ensuring that future decisions take their needs
+                        and concerns into account.</p>
+                    
+                    <p>Mayor, it’s time to decide how to bridge these divides and move forward with Central City's downtown renewal!</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionX.A1">establish a Downtown Revitalization Advisory Board</div>
+                <div class="option" id="optionX.A2">Conduct Comprehensive Stakeholder Impact Assessments</div>
+            </div>
+        </div>
+
+
+        <div id="container-option-X.B" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Stakeholder Conflict Escalates, Mayor! ⚖️🏙️</p>
+                    
+                    <p>Mayor is now facing a critical challenge in the <strong>Downtown Revitalization</strong> effort. Multiple stakeholder
+                        groups—property owners, local businesses, residents, and political factions—are clashing over the future direction
+                        of the downtown area. With differing priorities and visions, these conflicts are stalling progress and threatening
+                        the revitalization plan.</p>
+                    
+                    <p><strong>New Choices After Consequence:</strong></p>
+                    
+                    <p><strong>Option X1: Establish a Downtown Revitalization Advisory Board</strong></p>
+                    <p>Create a board that includes representatives from each stakeholder group to guide the development process, fostering
+                        collaboration and shared decision-making.</p>
+                    
+                    <p><strong>Option X2: Conduct Comprehensive Stakeholder Impact Assessments</strong></p>
+                    <p>Evaluate how revitalization efforts impact each stakeholder group, ensuring that future decisions take their needs
+                        and concerns into account.</p>
+                    
+                    <p>Mayor, it’s time to decide how to bridge these divides and move forward with Central City's downtown renewal!</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionX.B1">establish a Downtown Revitalization Advisory Board</div>
+                <div class="option" id="optionX.B2">Conduct Comprehensive Stakeholder Impact Assessments</div>
+            </div>
+        </div>
+
+        <div id="container-option-X.C" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Stakeholder Conflict Escalates, Mayor! ⚖️🏙️</p>
+                    
+                    <p>Mayor is now facing a critical challenge in the <strong>Downtown Revitalization</strong> effort. Multiple stakeholder
+                        groups—property owners, local businesses, residents, and political factions—are clashing over the future direction
+                        of the downtown area. With differing priorities and visions, these conflicts are stalling progress and threatening
+                        the revitalization plan.</p>
+                    
+                    <p><strong>New Choices After Consequence:</strong></p>
+                    
+                    <p><strong>Option X1: Establish a Downtown Revitalization Advisory Board</strong></p>
+                    <p>Create a board that includes representatives from each stakeholder group to guide the development process, fostering
+                        collaboration and shared decision-making.</p>
+                    
+                    <p><strong>Option X2: Conduct Comprehensive Stakeholder Impact Assessments</strong></p>
+                    <p>Evaluate how revitalization efforts impact each stakeholder group, ensuring that future decisions take their needs
+                        and concerns into account.</p>
+                    
+                    <p>Mayor, it’s time to decide how to bridge these divides and move forward with Central City's downtown renewal!</p>
+
+                </div>
+            </div>
+            <div class="option-boxes">
+                <div class="option" id="optionX.C1">establish a Downtown Revitalization Advisory Board</div>
+                <div class="option" id="optionX.C2">Conduct Comprehensive Stakeholder Impact Assessments</div>
+            </div>
+        </div>
+        <div id="container-option-X.A1" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p>Congratulations, Mayor! 🎉🏙️</p>
+                
+                <p>Mayor, you’ve navigated through a series of complex decisions in the effort to revitalize Downtown Central City. From
+                    <strong>promoting mixed-use development</strong> to <strong>prioritizing local business growth</strong>, your
+                    leadership has kept the city on track toward a vibrant and inclusive future. By streamlining processes and
+                    encouraging collaboration with private partners, you’ve laid the groundwork for sustainable economic growth.</p>
+                
+                <p>Now, with the creation of the <strong>Downtown Revitalization Advisory Board</strong>, you’ve ensured that all
+                    stakeholders have a voice, fostering collaboration and shared decision-making. Your commitment to bringing everyone
+                    together marks a major step forward for Central City’s revitalization. Bravo, Mayor! 👏🌟</p>
+
+                </div>
+            </div>
+        </div>
+        <div id="container-option-X.B1" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Congratulations, Mayor! 🎉🏙️</p>
+                    
+                    <p>Mayor, you’ve navigated through a series of complex decisions in the effort to revitalize Downtown Central City. From
+                        <strong>promoting mixed-use development</strong> to <strong>prioritizing local business growth</strong>, your
+                        leadership has kept the city on track toward a vibrant and inclusive future. By streamlining processes and
+                        encouraging collaboration with private partners, you’ve laid the groundwork for sustainable economic growth.
+                    </p>
+                    
+                    <p>Now, with the creation of the <strong>Downtown Revitalization Advisory Board</strong>, you’ve ensured that all
+                        stakeholders have a voice, fostering collaboration and shared decision-making. Your commitment to bringing everyone
+                        together marks a major step forward for Central City’s revitalization. Bravo, Mayor! 👏🌟</p>
+                </div>
+            </div>
+        </div>
+        <div id="container-option-X.C1" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                    <p>Congratulations, Mayor! 🎉🏙️</p>
+                    
+                    <p>Mayor, you’ve navigated through a series of complex decisions in the effort to revitalize Downtown Central City. From
+                        <strong>promoting mixed-use development</strong> to <strong>prioritizing local business growth</strong>, your
+                        leadership has kept the city on track toward a vibrant and inclusive future. By streamlining processes and
+                        encouraging collaboration with private partners, you’ve laid the groundwork for sustainable economic growth.
+                    </p>
+                    
+                    <p>Now, with the creation of the <strong>Downtown Revitalization Advisory Board</strong>, you’ve ensured that all
+                        stakeholders have a voice, fostering collaboration and shared decision-making. Your commitment to bringing everyone
+                        together marks a major step forward for Central City’s revitalization. Bravo, Mayor! 👏🌟</p>
+                </div>
+            </div>
+        </div>
+        <div id="container-option-X.A2" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p>Well Done, Mayor! 🏙️📊</p>
+                
+                <p>Mayor, you’ve made steady progress in the revitalization of Downtown Central City, from incentivizing local
+                    businesses to promoting mixed-use development. Your efforts have set the stage for a stronger downtown. Now, by
+                    choosing to <strong>Conduct Comprehensive Stakeholder Impact Assessments</strong>, you’re taking a thoughtful
+                    approach to ensure that each group's needs are considered moving forward.</p>
+                
+                <p>Though this option may not bring immediate excitement, it shows your dedication to a balanced, inclusive process.
+                    While the road ahead remains challenging, this step ensures a more thoughtful and informed path for Central City’s
+                    future.</p>
+
+                </div>
+            </div>
+        </div>
+        <div id="container-option-X.B2" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p>Well Done, Mayor! 🏙️📊</p>
+                
+                <p>Mayor, you’ve made steady progress in the revitalization of Downtown Central City, from incentivizing local
+                    businesses to promoting mixed-use development. Your efforts have set the stage for a stronger downtown. Now, by
+                    choosing to <strong>Conduct Comprehensive Stakeholder Impact Assessments</strong>, you’re taking a thoughtful
+                    approach to ensure that each group's needs are considered moving forward.</p>
+                
+                <p>Though this option may not bring immediate excitement, it shows your dedication to a balanced, inclusive process.
+                    While the road ahead remains challenging, this step ensures a more thoughtful and informed path for Central City’s
+                    future.</p>
+
+                </div>
+            </div>
+        </div>
+        <div id="container-option-X.C2" class="container hidden">
+            <div class="decision-section">
+                <img src="https://picsum.photos/900/600" alt="Option 1 Image">
+                <div class="decision-text">
+                <p>Well Done, Mayor! 🏙️📊</p>
+                
+                <p>Mayor, you’ve made steady progress in the revitalization of Downtown Central City, from incentivizing local
+                    businesses to promoting mixed-use development. Your efforts have set the stage for a stronger downtown. Now, by
+                    choosing to <strong>Conduct Comprehensive Stakeholder Impact Assessments</strong>, you’re taking a thoughtful
+                    approach to ensure that each group's needs are considered moving forward.</p>
+                
+                <p>Though this option may not bring immediate excitement, it shows your dedication to a balanced, inclusive process.
+                    While the road ahead remains challenging, this step ensures a more thoughtful and informed path for Central City’s
+                    future.</p>
+
+                </div>
+            </div>
+        </div>
+
+
+
+<!-----------------------------------------------------------        X block END   ------------------------------------------------------------------------------>
+
+    <div id="container-play-again" class="container hidden">
+        <div class="option-boxes">
+            <div class="option" id="Play-agin">Play Again</div>
+        </div>
+    </div>
+
+
+
+
+
+    <script>
+        function showContainer(containerId) {
+                const container = document.getElementById(containerId);
+                container.classList.add('show'); // Add class to trigger animation
+                container.style.display = 'block'; // Ensure it's visible
+
+                setTimeout(() => { // Wait a bit to start the scroll after the element is visible
+                    container.scrollIntoView({ behavior: 'smooth' }); // Smooth scroll to the container
+                }, 100);
+            }
+
+            function resetGame() {
+                // Hide all containers
+                const containers = document.querySelectorAll('.container');
+                containers.forEach(container => {
+                    container.style.display = 'none';
+                    container.classList.remove('show'); // Remove any animation classes
+                });
+
+                // Reset the game to initial state (show the first container again)
+                showContainer('text-section');
+                window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll back to the top
+            }
+
+        // Set up event listeners for main options
+        document.getElementById('optionA').addEventListener('click', function () {
+        showContainer('container-option-A'); // Show container for Option 1
+        });
+
+        // Sub-option event listeners
+        document.getElementById('optionB').addEventListener('click', function () {
+        showContainer('container-option-B'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionA1').addEventListener('click', function () {
+        showContainer('container-option-A1'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionA2').addEventListener('click', function () {
+        showContainer('container-option-A2'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionB1').addEventListener('click', function () {
+        showContainer('container-option-B1'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionB2').addEventListener('click', function () {
+        showContainer('container-option-B2'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionA1.1').addEventListener('click', function () {
+        showContainer('container-option-A1.1'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionA1.2').addEventListener('click', function () {
+        showContainer('container-option-A1.2'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionA2.1').addEventListener('click', function () {
+        showContainer('container-option-A2.1'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionA2.2').addEventListener('click', function () {
+        showContainer('container-option-A2.2'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionB1.1').addEventListener('click', function () {
+        showContainer('container-option-B1.1'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionB1.2').addEventListener('click', function () {
+        showContainer('container-option-B1.2'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionB2.1').addEventListener('click', function () {
+        showContainer('container-option-B2.1'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionB2.2').addEventListener('click', function () {
+        showContainer('container-option-B2.2'); // This needs a corresponding container defined in HTML
+        });
+
+        // S block starts 
+
+        document.getElementById('optionS.A').addEventListener('click', function () {
+        showContainer('container-option-S.A'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionS.B').addEventListener('click', function () {
+        showContainer('container-option-S.B'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionS.C').addEventListener('click', function () {
+        showContainer('container-option-S.C'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionS.D').addEventListener('click', function () {
+        showContainer('container-option-S.D'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionS.E').addEventListener('click', function () {
+        showContainer('container-option-S.E'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionS.F').addEventListener('click', function () {
+        showContainer('container-option-S.F'); // This needs a corresponding container defined in HTML
+        });
+
+
+        // Group S1 (optionS.A1, optionS.B1, optionS.C1, optionS.D1, optionS.E1, optionS.F1)
+        document.getElementById('optionS.A1').addEventListener('click', function () {
+        showContainer('container-option-S.1');
+        });
+
+        document.getElementById('optionS.B1').addEventListener('click', function () {
+        showContainer('container-option-S.1');
+        });
+
+        document.getElementById('optionS.C1').addEventListener('click', function () {
+        showContainer('container-option-S.1');
+        });
+
+        document.getElementById('optionS.D1').addEventListener('click', function () {
+        showContainer('container-option-S.1');
+        });
+
+        document.getElementById('optionS.E1').addEventListener('click', function () {
+        showContainer('container-option-S.1');
+        });
+
+        document.getElementById('optionS.F1').addEventListener('click', function () {
+        showContainer('container-option-S.1');
+        });
+
+        // Group S2 (optionS.A2, optionS.B2, optionS.C2, optionS.D2, optionS.E2, optionS.F2)
+        document.getElementById('optionS.A2').addEventListener('click', function () {
+        showContainer('container-option-S.2');
+        });
+
+        document.getElementById('optionS.B2').addEventListener('click', function () {
+        showContainer('container-option-S.2');
+        });
+
+        document.getElementById('optionS.C2').addEventListener('click', function () {
+        showContainer('container-option-S.2');
+        });
+
+        document.getElementById('optionS.D2').addEventListener('click', function () {
+        showContainer('container-option-S.2');
+        });
+
+        document.getElementById('optionS.E2').addEventListener('click', function () {
+        showContainer('container-option-S.2');
+        });
+
+        document.getElementById('optionS.F2').addEventListener('click', function () {
+        showContainer('container-option-S.2');
+        });
+
+
+        document.getElementById('optionS.1A').addEventListener('click', function () {
+        showContainer('container-option-S.1A'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionS.1B').addEventListener('click', function () {
+        showContainer('container-option-S.1B'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionS.2A').addEventListener('click', function () {
+        showContainer('container-option-X.C'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionS.2B').addEventListener('click', function () {
+        showContainer('container-play-again'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionS.1AA').addEventListener('click', function () {
+        showContainer('container-option-S.1AA'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionS.1AB').addEventListener('click', function () {
+        showContainer('container-option-X.A'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionS.1BA').addEventListener('click', function () {
+        showContainer('container-option-X.B'); // This needs a corresponding container defined in HTML
+        });
+
+        document.getElementById('optionS.1BB').addEventListener('click', function () {
+        showContainer('container-option-S.1BB'); // This needs a corresponding container defined in HTML
+        });
+        // X block starts 
+        document.getElementById('optionX.A1').addEventListener('click', function () {
+        showContainer('container-option-X.A1'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionX.B1').addEventListener('click', function () {
+        showContainer('container-option-X.B1'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionX.C1').addEventListener('click', function () {
+        showContainer('container-option-X.C1'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionX.A2').addEventListener('click', function () {
+        showContainer('container-option-X.A2'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionX.B2').addEventListener('click', function () {
+        showContainer('container-option-X.B2'); // This needs a corresponding container defined in HTML
+        });
+
+
+        document.getElementById('optionX.C2').addEventListener('click', function () {
+        showContainer('container-option-X.C2'); // This needs a corresponding container defined in HTML
+        });
+
+        // Add event listener for the Play Again button
+        document.getElementById('Play-againA1.2').addEventListener('click', function () {
+        resetGame(); // Call the reset function when "Play Again" is clicked
+        });
+
+        document.getElementById('Play-againB1.2').addEventListener('click', function () {
+        resetGame(); // Call the reset function when "Play Again" is clicked
+        });
+
+        document.getElementById('Play-againS.2B').addEventListener('click', function () {
+        resetGame(); // Call the reset function when "Play Again" is clicked
+        });
+
+        document.getElementById('Play-againS.1AA').addEventListener('click', function () {
+        resetGame(); // Call the reset function when "Play Again" is clicked
+        });
+
+        document.getElementById('Play-againS1.BB').addEventListener('click', function () {
+        resetGame(); // Call the reset function when "Play Again" is clicked
+        });
+        document.getElementById('Play-agin').addEventListener('click', function () {
+        resetGame(); // Call the reset function when "Play Again" is clicked
+        });
+
+
+    </script>
+</body>
+
+</html>

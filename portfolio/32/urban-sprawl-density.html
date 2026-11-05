@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urban Simulation with Environmental Impact</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        #metricsDisplay {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="metricsDisplay">Metrics: Loading...</div>
+    <script type="module">
+        import { OrbitControls } from '../vendor/shared/lib-0809644caeac/dist/OrbitControls.js';
+        import * as THREE from '../vendor/shared/lib-86c7ea3356c4/dist/three.module.js';
+        import { GUI } from '../vendor/shared/lib-6ef06cdec5d6/dist/dat.gui.module.js';
+
+        let scene, camera, controls, renderer, gui;
+        let asphaltTexture, bldgTexture;
+        const textureLoader = new THREE.TextureLoader();
+        const guiData = {
+            rows: 10,
+            columns: 10,
+            maxHeight: 1,
+            density: 'sprawl',
+            population: 100000,
+            fogColor: 0xffffff,
+            fogNear: 9,
+            fogFar: 24,
+            a: 0.9,
+            b: 0.45,
+            c: 0.38,
+            d: 0.34,
+            e: 0.61,
+            f: 0.55,
+            g: 0.88,
+            h: 0.55,
+        };
+
+        function updateMetricsDisplay(W, E, WM, C) {
+            const metricsDiv = document.getElementById('metricsDisplay');
+            metricsDiv.innerHTML = `
+                <strong>Water Strain:</strong> ${W.toFixed(2)} <br>
+                <strong>Energy Usage:</strong> ${E.toFixed(2)} <br>
+                <strong>Waste Management:</strong> ${WM.toFixed(2)} <br>
+                <strong>Carbon Emissions:</strong> ${C.toFixed(2)}
+            `;
+        }
+
+        function calculateMetrics() {
+            const H = guiData.maxHeight;
+            const S = Math.sqrt(guiData.rows * guiData.columns);
+            const P = guiData.population;
+
+            const W = guiData.a * (H * P) + guiData.b * S;
+            const E = guiData.c * (H * P) + guiData.d * S ** 2;
+            const WM = guiData.e * (H * P) + guiData.f * S;
+            const C = guiData.g * (H * P) + guiData.h * S ** 2;
+
+            updateMetricsDisplay(W, E, WM, C);
+        }
+
+        async function init() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 2.5, 5);
+            camera.lookAt(0, 0, 0);
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setClearColor("#e5e5e5");
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            controls = new OrbitControls(camera, renderer.domElement);
+            controls.enablePan = true;
+            controls.panSpeed = 0.3;
+            controls.update();
+
+            gui = new GUI();
+            gui.add(guiData, 'population', 10000, 1000000).onChange(() => {
+                calculateMetrics();
+                rerender();
+            });
+            gui.add(guiData, 'density', ['sprawl', 'high density']).onChange(updateDensity);
+            gui.add(guiData, 'rows', 5, 50).step(1).onChange(rerender);
+            gui.add(guiData, 'columns', 5, 50).step(1).onChange(rerender);
+            gui.add(guiData, 'maxHeight', 0.1, 10).step(0.1).onChange(calculateMetrics);
+            // gui.addColor(guiData, 'fogColor').onChange(updateFog);
+            // gui.add(guiData, 'fogNear', 0.1, 100).step(0.1).onChange(updateFog);
+            // gui.add(guiData, 'fogFar', 0.1, 100).step(0.1).onChange(updateFog);
+
+            gui.add(guiData, 'a', 0, 2).name('Water Coeff (a)').onChange(calculateMetrics);
+            gui.add(guiData, 'b', 0, 2).name('Sprawl Coeff (b)').onChange(calculateMetrics);
+            gui.add(guiData, 'c', 0, 2).name('Energy Coeff (c)').onChange(calculateMetrics);
+            gui.add(guiData, 'd', 0, 2).name('Energy Sprawl Coeff (d)').onChange(calculateMetrics);
+            gui.add(guiData, 'e', 0, 2).name('Waste Coeff (e)').onChange(calculateMetrics);
+            gui.add(guiData, 'f', 0, 2).name('Waste Sprawl Coeff (f)').onChange(calculateMetrics);
+            gui.add(guiData, 'g', 0, 2).name('Carbon Coeff (g)').onChange(calculateMetrics);
+            gui.add(guiData, 'h', 0, 2).name('Carbon Sprawl Coeff (h)').onChange(calculateMetrics);
+
+            window.addEventListener('resize', onWindowResize, false);
+            await loadTextures();
+            setup();
+            calculateMetrics();  // Initial calculation
+            animate();
+        }
+
+        async function loadTextures() {
+            asphaltTexture = await new Promise(resolve => textureLoader.load('white.png', resolve));
+            bldgTexture = await new Promise(resolve => textureLoader.load('texture1.png', resolve));
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function setup() {
+            addLights();
+            addPlane();
+            addCubes();
+        }
+
+        function rerender() {
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(guiData.fogColor);
+            scene.fog = new THREE.Fog(guiData.fogColor, guiData.fogNear, guiData.fogFar);
+            setup();
+        }
+
+        function updateDensity() {
+            rerender();
+            calculateMetrics();
+        }
+
+        function updateFog() {
+            scene.fog.color.set(guiData.fogColor);
+            scene.fog.near = guiData.fogNear;
+            scene.fog.far = guiData.fogFar;
+            scene.background.set(guiData.fogColor);
+        }
+
+        function addLights() {
+            let light = new THREE.PointLight(0xffffff, 0.6);
+            light.position.set(40, 30, 20);
+            scene.add(light);
+            let secondLight = new THREE.PointLight(0xffffff, 0.4);
+            secondLight.position.set(-20, 10, -30);
+            scene.add(secondLight);
+        }
+
+        function addPlane() {
+            let geometry = new THREE.PlaneGeometry(guiData.columns + 1, guiData.rows + 1);
+            let material = new THREE.MeshBasicMaterial({ map: asphaltTexture, side: THREE.DoubleSide });
+            let plane = new THREE.Mesh(geometry, material);
+            plane.rotation.x = Math.PI / 2;
+            scene.add(plane);
+        }
+
+        function addCubes() {
+            for (let i = 0; i < guiData.columns; i++) {
+                for (let j = 0; j < guiData.rows; j++) {
+                    const boxHeight = Math.random() * guiData.maxHeight + 0.1;
+                    let geometry = new THREE.BoxGeometry(0.7, boxHeight, 0.7);
+                    let material = new THREE.MeshLambertMaterial({ map: bldgTexture, transparent: true, opacity: 0.8 });
+                    let cube = new THREE.Mesh(geometry, material);
+                    cube.position.set(i - (guiData.columns / 2 - 0.5), boxHeight / 2, j - (guiData.rows / 2 - 0.5));
+                    scene.add(cube);
+                }
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

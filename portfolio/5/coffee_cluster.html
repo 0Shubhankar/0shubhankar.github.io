@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta charset="utf-8" />
+    <title>Coffee Shops in the USA</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" href="../vendor/shared/lib-34b3c0e131eb/dist/leaflet.css" />
+    <link rel="stylesheet" href="../vendor/shared/lib-259531961979/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="../vendor/shared/lib-049fcce2eef5/dist/MarkerCluster.Default.css" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+        .custom-cluster-icon {
+            background: url('coffee_icon.png') no-repeat center center;
+            background-size: contain;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script src="../vendor/shared/lib-5d00f470f487/dist/leaflet.js"></script>
+    <script src="../shared/map-tiles.js"></script>
+    <script src="../vendor/shared/lib-a1d99ae3a283/dist/leaflet-omnivore.min.js"></script>
+    <script src="../vendor/shared/lib-51d788816744/dist/papaparse.min.js"></script>
+    <script src="../vendor/shared/lib-8dc2342cf95a/dist/leaflet.markercluster.js"></script>
+    <script>
+        // Initialize the map
+        var map = L.map('map').setView([37.0902, -95.7129], 5);  // Centered on USA
+
+        // Add the OpenStreetMap tile layer
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap contributors</a> | Data source: <a href="https://www.openstreetmap.org" target="_blank">OpenStreetMap</a>'
+        }).addTo(map);
+
+        // Create a custom marker cluster group with a custom coffee icon
+        var markers = L.markerClusterGroup({
+            iconCreateFunction: function(cluster) {
+                var count = cluster.getChildCount();
+                return L.divIcon({
+                    html: '<div class="custom-cluster-icon">' + count + '</div>',
+                    className: 'custom-cluster',
+                    iconSize: L.point(40, 40)
+                });
+            }
+        });
+
+        // Load the coffee shop data from the cleaned CSV file
+        Papa.parse('cleaned_usa_coffee_shops.csv', {
+            download: true,
+            header: true,
+            complete: function(results) {
+                var data = results.data;
+
+                data.forEach(function(d) {
+                    var lat = parseFloat(d.latitude);
+                    var lon = parseFloat(d.longitude);
+                    var name = d.name;
+
+                    // Create a marker and add it to the marker cluster group
+                    var marker = L.marker([lat, lon])
+                        .bindPopup('<b>' + name + '</b>');
+                    markers.addLayer(marker);
+                });
+
+                // Add the marker cluster group to the map
+                map.addLayer(markers);
+            }
+        });
+    </script>
+</body>
+</html>

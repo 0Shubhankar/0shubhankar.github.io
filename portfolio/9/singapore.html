@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Singapre ERP</title>
+    <style>
+
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            font-size: 1.2em;
+        }
+
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            min-height: 85px;
+            overflow: hidden;
+            border-bottom: 2px solid #ccc;
+            background: #000000;
+        }
+
+        .header-content {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            gap: 10px;
+        }
+
+        .iframe-container {
+            flex: 1;
+            overflow: hidden;
+            text-align: center;
+            position: relative;
+        }
+
+        .iframe-container h3 {
+            width: 100%;
+            margin-top: 10px;
+            margin-bottom: 0;
+        }
+
+        .iframe-container p {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            font-size: 0.8em;
+            color: white;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .fixed-header h1 {
+            color: #efefef;
+            font-size: 1.2em;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+
+        .page-content {
+            font-size: 1.0em;
+            font-weight: 100;
+            width: 40em;
+            margin: 0 auto;
+            padding-top: 5vh;
+            line-height: 1.8;
+        }
+
+        .attribution {
+            text-align: center;
+            padding: 10px 0;
+            background: #f0f0f0;
+            font-size: 0.9em;
+        }
+
+
+
+        h2 {
+            font-size: 1.1em;
+            margin-top: 1em;
+        }
+
+        h3 {
+            font-size: 1.0em;
+            margin-top: 0.5em;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="fixed-header">
+        <div class="header-content">
+            <div class="iframe-container">
+                <h3>Congestion Pricing Singapore</h3>
+                <iframe src="road-pricing-simulation.html"></iframe>
+            </div>
+        </div>
+    </div>
+    <div class="page-content">
+        
+        <div class="content">
+            <p>
+                Singapore's Electronic Road Pricing (ERP) system, introduced in 1998, was the world's first electronic toll
+                collection system designed to manage urban congestion through road pricing. The system leverages a network of
+                gantries equipped with sensors and cameras to monitor and charge vehicles entering congested zones during peak
+                hours.
+            </p>
+            <p>
+                The success of the ERP system lies in its ability to adapt charges based on real-time traffic conditions,
+                thereby encouraging motorists to alter their travel times or routes. Each vehicle is fitted with an In-Vehicle
+                Unit (IVU) that works in conjunction with a stored-value card, ensuring a seamless and efficient toll collection
+                process that minimizes delays and avoids the need for physical toll booths.
+            </p>
+            <p>
+                The effectiveness of Singapore's ERP system is evident from the reduction in traffic congestion and improvements
+                in air quality within the central areas. The system enjoys high levels of public acceptance, thanks in part to
+                the government's commitment to reinvesting toll revenues into public transportation and infrastructure
+                improvements.
+            </p>
+            <p>
+                In contrast, cities like New York have encountered significant challenges in implementing similar systems. New
+                York's recent attempts at congestion pricing met with delays and public opposition stemming from concerns over
+                privacy, economic impact on commuters, and perceived fairness. The strong car culture and the perceived
+                infringement on personal freedom play a substantial role in the public's resistance to such schemes.
+            </p>
+            <p>
+                The successful implementation of congestion pricing schemes in other cities depends on several critical factors.
+                These include comprehensive planning, effective public communication, significant investment in public
+                transportation alternatives, adaptive pricing models, and proactive addressing of privacy and security concerns.
+            </p>
+            <p>
+                As urban populations continue to grow, and traffic congestion emerges as a critical issue globally, the lessons
+                from Singapore's ERP system provide valuable insights for other cities facing similar challenges.
+            </p>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var header = document.querySelector('.fixed-header');
+            var headerHeight = header.offsetHeight;
+            document.body.style.paddingTop = headerHeight + 'px';
+
+            window.addEventListener('scroll', function () {
+                var scrollOffset = window.scrollY;
+
+                // This reduces the height of the header as you scroll
+                if (scrollOffset < headerHeight) {
+                    header.style.height = (headerHeight - scrollOffset > 0) ? `${headerHeight - scrollOffset}px` : '0px';
+                }
+
+                // Change '800' to the pixel height at which you want the header to disappear
+                if (scrollOffset > headerHeight) {
+                    header.style.display = 'none';  // This line makes the header disappear
+                } else {
+                    header.style.display = 'flex';  // This line will bring back the header when you scroll up
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

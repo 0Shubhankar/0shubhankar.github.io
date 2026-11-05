@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crime Heat Map NYC LA Chicago</title>
+    <style>
+
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            min-height: 85px;
+            overflow: hidden;
+        }
+
+        .header-content {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        .iframe-container {
+            flex: 1;
+            overflow: hidden;
+            text-align: center;
+            position: relative;
+        }
+
+        .iframe-container h3 {
+            width: 100%;
+            margin-top: 10px;
+            margin-bottom: 0;
+        }
+
+        .iframe-container p {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            font-size: 0.8em;
+            color: white;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .fixed-header h1 {
+            color: #efefef;
+            font-size: 3vw;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+
+        .page-content {
+            font-size: 18px;
+            font-weight: 100;
+            margin-left: 20%;
+            margin-right:20%;
+            padding-top: 0vh;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="fixed-header">
+        <div class="header-content">
+            <div class="iframe-container">
+                <h3>New York</h3>
+                <iframe src="crimeNYC.html"></iframe>
+            </div>
+            <div class="iframe-container">
+                <h3>Chicago</h3>
+                <iframe src="crime.chicago.html"></iframe>
+            </div>
+            <div class="iframe-container">
+                <h3>Los Angeles</h3>
+                <iframe src="la_crime.html"></iframe>
+            </div>
+        </div>
+    </div>
+    <div class="page-content">
+        <p class="heading">Interactive Heatmaps for Exploring Crime Density in Major Cities</p>
+        <p>Analyze the complexities of urban crime through detailed heatmaps heatmaps that draw on data from 2020 onwards, sourced from
+            public
+            records of cities including New York City, Los Angeles, and Chicago. These maps are designed to visually
+            illustrate
+            variations in crime density, facilitating an unbiased view across different neighborhoods.</p>
+    
+        <p class="heading">Interactive Features for Enhanced Exploration:</p>
+        <ul class="list">
+            <li><strong>Zoom Controls:</strong> Utilize zoom to closely examine or broadly survey areas, uncovering distinct
+                patterns of crime density.</li>
+            <li><strong>Color Gradation:</strong> A visual scale of colors indicates areas of varying crime intensities,
+                with darker colors marking higher densities.</li>
+        </ul>
+    
+        <p class="heading">Guidance on Using the Heatmaps:</p>
+        <ul class="list">
+            <li>Use the zoom feature to focus on areas of interest or to gain a broader perspective of crime distribution.
+            </li>
+            <li>The color scheme is a straightforward indicator of relative crime density, enabling comparisons without
+                additional commentary.</li>
+        </ul>
+    
+        <p>These heatmaps are intended as neutral tools for public exploration, providing a clear visual layout of crime
+            data. They
+            are presented without any embedded narratives or preconceived political commentary, ensuring that all
+            interpretations
+            remain solely in the hands of the viewer.</p>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+                var header = document.querySelector('.fixed-header');
+                var headerHeight = header.offsetHeight;
+                document.body.style.paddingTop = headerHeight + 'px';
+
+                window.addEventListener('scroll', function () {
+                    var scrollOffset = window.scrollY;
+
+                    // This reduces the height of the header as you scroll
+                    if (scrollOffset < headerHeight) {
+                        header.style.height = (headerHeight - scrollOffset > 0) ? `${headerHeight - scrollOffset}px` : '0px';
+                    }
+
+                    // Change '800' to the pixel height at which you want the header to disappear
+                    if (scrollOffset > headerHeight) {
+                        header.style.display = 'none';  // This line makes the header disappear
+                    } else {
+                        header.style.display = 'flex';  // This line will bring back the header when you scroll up
+                    }
+                });
+            });
+
+    </script>
+</body>
+
+</html>

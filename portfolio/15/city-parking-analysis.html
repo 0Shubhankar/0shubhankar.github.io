@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>City Parking Maps</title>
+    <link rel="stylesheet" href="../vendor/shared/lib-9eaeb463f1b3/dist/maplibre-gl.css">
+    <style>
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #map {
+            position: relative;
+            flex: 1;
+        }
+
+        #citySelector {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            background: #333;
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        #cityInfo {
+            padding: 20px;
+            background-color: #f8f8f8;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        #cityInfo h2 {
+            margin: 0 0 10px 0;
+        }
+
+        #cityInfo table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        #cityInfo table,
+        #cityInfo th,
+        #cityInfo td {
+            border: 1px solid #ddd;
+        }
+
+        #cityInfo th,
+        #cityInfo td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        #cityInfo th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="sidebar">
+        <select id="citySelector" onchange="loadCityData(this.value)">
+            <option value="">Choose a city...</option>
+            <!-- Options for cities -->
+            <!-- Add your city options here -->
+            <option value="Delhi, India">Delhi, India</option>
+            <option value="Mumbai, India">Mumbai, India</option>
+            <option value="Bengaluru, India">Bengaluru, India</option>
+            <option value="New York, USA">New York, USA</option>
+            <option value="Los Angeles, USA">Los Angeles, USA</option>
+            <option value="Chicago, USA">Chicago, USA</option>
+            <option value="Shanghai, China">Shanghai, China</option>
+            <option value="Beijing, China">Beijing, China</option>
+            <option value="Shenzhen, China">Shenzhen, China</option>
+            <option value="Istanbul, Turkey">Istanbul, Turkey</option>
+            <option value="Moscow, Russia">Moscow, Russia</option>
+            <option value="London, UK">London, UK</option>
+            <option value="Saint Petersburg, Russia">Saint Petersburg, Russia</option>
+            <option value="Berlin, Germany">Berlin, Germany</option>
+            <option value="Madrid, Spain">Madrid, Spain</option>
+            <option value="Kinshasa, DRC">Kinshasa, DRC</option>
+            <option value="Lagos, Nigeria">Lagos, Nigeria</option>
+            <option value="Cairo, Egypt">Cairo, Egypt</option>
+            <option value="Paris, France">Paris, France</option>
+            <option value="Tokyo, Japan">Tokyo, Japan</option>
+            <option value="Mexico City, Mexico">Mexico City, Mexico</option>
+            <option value="São Paulo, Brazil">São Paulo, Brazil</option>
+            <option value="Buenos Aires, Argentina">Buenos Aires, Argentina</option>
+            <option value="Rio de Janeiro, Brazil">Rio de Janeiro, Brazil</option>
+            <option value="Sydney, Australia">Sydney, Australia</option>
+            <option value="Melbourne, Australia">Melbourne, Australia</option>
+            <option value="Auckland, New Zealand">Auckland, New Zealand</option>
+        </select>
+    </div>
+    <div id="map"></div>
+    <div id="cityInfo">
+        <h2>City Parking Information</h2>
+        <table id="cityTable">
+            <thead>
+                <tr>
+                    <th>City</th>
+                    <th>Population</th>
+                    <th>Actual Cars</th>
+                    <th>Parking Area (km²)</th>
+                    <th>Cars per km²</th>
+                    <th>Parking Area per Capita (m²/person)</th>
+                    <th>Parking Space per Car (m²/Car)</th>
+                    <th>Summary</th>
+                    <th>Inference</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Table rows will be dynamically populated -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="../vendor/shared/lib-1c09437b70d7/dist/maplibre-gl.js"></script>
+    <script>
+        const cityData = {
+            "São Paulo, Brazil": {
+                "Population": 22807000,
+                "Actual Cars": 8900000,
+                "Parking Area (km²)": 11.51,
+                "Cars per km²": 773536,
+                "Parking Area per Capita (m²/person)": 0.5,
+                "Parking Space per Car (m²/Car)": 1.29,
+                "Summary": "São Paulo has a high car density in parking areas with moderate parking space per capita.",
+                "Inference": "The city needs to manage its parking infrastructure efficiently to avoid congestion."
+            },
+            "Delhi, India": {
+                "Population": 33807000,
+                "Actual Cars": 12000000,
+                "Parking Area (km²)": 1.74,
+                "Cars per km²": 6910000,
+                "Parking Area per Capita (m²/person)": 0.05,
+                "Parking Space per Car (m²/Car)": 0.14,
+                "Summary": "Delhi has extremely high car density in parking areas with very low parking space per capita.",
+                "Inference": "The parking infrastructure is severely strained, requiring significant improvements."
+            },
+            "Lagos, Nigeria": {
+                "Population": 16536000,
+                "Actual Cars": 1041768,
+                "Parking Area (km²)": 1.63,
+                "Cars per km²": 639749,
+                "Parking Area per Capita (m²/person)": 0.1,
+                "Parking Space per Car (m²/Car)": 1.56,
+                "Summary": "Lagos has a moderate car density in parking areas with low parking space per capita.",
+                "Inference": "The city may need to expand parking infrastructure to accommodate its growing population."
+            },
+            "Moscow, Russia": {
+                "Population": 12712000,
+                "Actual Cars": 4950000,
+                "Parking Area (km²)": 51.35,
+                "Cars per km²": 96404,
+                "Parking Area per Capita (m²/person)": 4.04,
+                "Parking Space per Car (m²/Car)": 10.37,
+                "Summary": "Moscow has a low car density with ample parking space per capita and per car.",
+                "Inference": "The city is well-equipped to handle its parking needs, with spacious parking areas available."
+            },
+            "Istanbul, Turkey": {
+                "Population": 16047000,
+                "Actual Cars": 4500000,
+                "Parking Area (km²)": 15.13,
+                "Cars per km²": 297381,
+                "Parking Area per Capita (m²/person)": 0.94,
+                "Parking Space per Car (m²/Car)": 3.36,
+                "Summary": "Istanbul has a moderate car density with sufficient parking space per car.",
+                "Inference": "Parking infrastructure appears to be adequate, though future growth should be monitored."
+            },
+            "Mumbai, India": {
+                "Population": 21673000,
+                "Actual Cars": 4600000,
+                "Parking Area (km²)": 0.49,
+                "Cars per km²": 9376274,
+                "Parking Area per Capita (m²/person)": 0.02,
+                "Parking Space per Car (m²/Car)": 0.11,
+                "Summary": "Mumbai has extremely high car density with very limited parking space per car.",
+                "Inference": "The city faces significant challenges with parking congestion and insufficient infrastructure."
+            },
+            "Shenzhen, China": {
+                "Population": 13312000,
+                "Actual Cars": 4263000,
+                "Parking Area (km²)": 4.32,
+                "Cars per km²": 986486,
+                "Parking Area per Capita (m²/person)": 0.32,
+                "Parking Space per Car (m²/Car)": 1.01,
+                "Summary": "Shenzhen has a moderate car density with limited parking space per car.",
+                "Inference": "The city may need to explore additional parking solutions as car ownership continues to rise."
+            },
+            "Beijing, China": {
+                "Population": 21707000,
+                "Actual Cars": 6256000,
+                "Parking Area (km²)": 35.74,
+                "Cars per km²": 175058,
+                "Parking Area per Capita (m²/person)": 1.65,
+                "Parking Space per Car (m²/Car)": 5.71,
+                "Summary": "Beijing has a low car density with ample parking space per car.",
+                "Inference": "The city’s parking infrastructure is sufficient, with room for further growth in car ownership."
+            },
+            "Shanghai, China": {
+                "Population": 29868000,
+                "Actual Cars": 3957200,
+                "Parking Area (km²)": 11.65,
+                "Cars per km²": 339529,
+                "Parking Area per Capita (m²/person)": 0.39,
+                "Parking Space per Car (m²/Car)": 2.95,
+                "Summary": "Shanghai has a low car density with adequate parking space per car.",
+                "Inference": "Parking infrastructure is currently sufficient but may need to expand with population growth."
+            },
+            "Melbourne, Australia": {
+                "Population": 5315600,
+                "Actual Cars": 3880388,
+                "Parking Area (km²)": 50.74,
+                "Cars per km²": 76472,
+                "Parking Area per Capita (m²/person)": 9.55,
+                "Parking Space per Car (m²/Car)": 13.08,
+                "Summary": "Melbourne has a very low car density with abundant parking space per capita and per car.",
+                "Inference": "The city has more than sufficient parking infrastructure, likely leading to low congestion."
+            },
+            "Mexico City, Mexico": {
+                "Population": 22505315,
+                "Actual Cars": 3000000,
+                "Parking Area (km²)": 7.1,
+                "Cars per km²": 422672,
+                "Parking Area per Capita (m²/person)": 0.32,
+                "Parking Space per Car (m²/Car)": 2.37,
+                "Summary": "Mexico City has a moderate car density with limited parking space per capita.",
+                "Inference": "Parking facilities are under pressure, and additional infrastructure may be needed."
+            },
+            "Tokyo, Japan": {
+                "Population": 37115000,
+                "Actual Cars": 3090000,
+                "Parking Area (km²)": 25.67,
+                "Cars per km²": 120372,
+                "Parking Area per Capita (m²/person)": 0.69,
+                "Parking Space per Car (m²/Car)": 8.31,
+                "Summary": "Tokyo has a low car density with sufficient parking space per car.",
+                "Inference": "The parking infrastructure appears to be well-planned and sufficient for current needs."
+            },
+            "Sydney, Australia": {
+                "Population": 5185000,
+                "Actual Cars": 3370250,
+                "Parking Area (km²)": 22.64,
+                "Cars per km²": 148852,
+                "Parking Area per Capita (m²/person)": 4.37,
+                "Parking Space per Car (m²/Car)": 6.72,
+                "Summary": "Sydney has a low car density with ample parking space per capita and per car.",
+                "Inference": "Parking infrastructure is more than adequate, allowing for future growth."
+            },
+            "Los Angeles, USA": {
+                "Population": 18422600,
+                "Actual Cars": 2499764,
+                "Parking Area (km²)": 24.6,
+                "Cars per km²": 101621,
+                "Parking Area per Capita (m²/person)": 1.34,
+                "Parking Space per Car (m²/Car)": 9.84,
+                "Summary": "Los Angeles has a low car density with sufficient parking space per car.",
+                "Inference": "The city’s parking infrastructure is adequate, though careful management is still required."
+            },
+            "London, UK": {
+                "Population": 9748000,
+                "Actual Cars": 2560000,
+                "Parking Area (km²)": 40.58,
+                "Cars per km²": 63081,
+                "Parking Area per Capita (m²/person)": 4.16,
+                "Parking Space per Car (m²/Car)": 15.85,
+                "Summary": "London has a very low car density with abundant parking space per car.",
+                "Inference": "The city has sufficient parking infrastructure, with potential for repurposing underutilized areas."
+            },
+            "New York, USA": {
+                "Population": 8097282,
+                "Actual Cars": 2000000,
+                "Parking Area (km²)": 23.84,
+                "Cars per km²": 83879,
+                "Parking Area per Capita (m²/person)": 2.94,
+                "Parking Space per Car (m²/Car)": 11.92,
+                "Summary": "New York has a low car density with sufficient parking space per car.",
+                "Inference": "The parking infrastructure is well-suited to current needs, though demand should be monitored."
+            },
+            "Saint Petersburg, Russia": {
+                "Population": 5582000,
+                "Actual Cars": 2498000,
+                "Parking Area (km²)": 52.94,
+                "Cars per km²": 47189,
+                "Parking Area per Capita (m²/person)": 9.48,
+                "Parking Space per Car (m²/Car)": 21.19,
+                "Summary": "Saint Petersburg has a very low car density with abundant parking space per car.",
+                "Inference": "The city’s parking infrastructure is more than adequate, with significant room for growth."
+            },
+            "Chicago, USA": {
+                "Population": 2746388,
+                "Actual Cars": 2059791,
+                "Parking Area (km²)": 31.27,
+                "Cars per km²": 65872,
+                "Parking Area per Capita (m²/person)": 11.39,
+                "Parking Space per Car (m²/Car)": 15.18,
+                "Summary": "Chicago has a low car density with ample parking space per car.",
+                "Inference": "The city has sufficient parking infrastructure, indicating well-planned urban layouts."
+            },
+            "Cairo, Egypt": {
+                "Population": 24500000,
+                "Actual Cars": 2300000,
+                "Parking Area (km²)": 2.87,
+                "Cars per km²": 801561,
+                "Parking Area per Capita (m²/person)": 0.12,
+                "Parking Space per Car (m²/Car)": 1.25,
+                "Summary": "Cairo has a moderate car density with limited parking space per car.",
+                "Inference": "The city’s parking infrastructure may need to be expanded to meet future demands."
+            },
+            "Bengaluru, India": {
+                "Population": 14008000,
+                "Actual Cars": 2300000,
+                "Parking Area (km²)": 1.55,
+                "Cars per km²": 1486749,
+                "Parking Area per Capita (m²/person)": 0.11,
+                "Parking Space per Car (m²/Car)": 0.67,
+                "Summary": "Bengaluru has extremely high car density with very limited parking space per car.",
+                "Inference": "The parking infrastructure is severely strained, necessitating urgent expansion or alternatives."
+            },
+            "Rio de Janeiro, Brazil": {
+                "Population": 13824000,
+                "Actual Cars": 10756000,
+                "Parking Area (km²)": 4.85,
+                "Cars per km²": 2219883,
+                "Parking Area per Capita (m²/person)": 0.35,
+                "Parking Space per Car (m²/Car)": 0.45,
+                "Summary": "Rio de Janeiro has high car density with limited parking space per car.",
+                "Inference": "Parking infrastructure is under significant pressure and may require expansion."
+            },
+            "Buenos Aires, Argentina": {
+                "Population": 15618000,
+                "Actual Cars": 1800000,
+                "Parking Area (km²)": 1.88,
+                "Cars per km²": 959028,
+                "Parking Area per Capita (m²/person)": 0.12,
+                "Parking Space per Car (m²/Car)": 1.04,
+                "Summary": "Buenos Aires has a moderate car density with limited parking space per car.",
+                "Inference": "The city may need to consider expanding parking infrastructure or managing demand effectively."
+            },
+            "Madrid, Spain": {
+                "Population": 6783000,
+                "Actual Cars": 1800000,
+                "Parking Area (km²)": 9.49,
+                "Cars per km²": 189687,
+                "Parking Area per Capita (m²/person)": 1.4,
+                "Parking Space per Car (m²/Car)": 5.27,
+                "Summary": "Madrid has a low car density with sufficient parking space per car.",
+                "Inference": "Parking infrastructure is adequate, with room for further car ownership growth."
+            },
+            "Berlin, Germany": {
+                "Population": 3577000,
+                "Actual Cars": 1244061,
+                "Parking Area (km²)": 33.07,
+                "Cars per km²": 37617,
+                "Parking Area per Capita (m²/person)": 9.25,
+                "Parking Space per Car (m²/Car)": 26.58,
+                "Summary": "Berlin has a very low car density with abundant parking space per car.",
+                "Inference": "The city has well-planned parking infrastructure, with potential for repurposing space."
+            },
+            "Auckland, New Zealand": {
+                "Population": 1693000,
+                "Actual Cars": 1205569,
+                "Parking Area (km²)": 16.9,
+                "Cars per km²": 71344,
+                "Parking Area per Capita (m²/person)": 9.98,
+                "Parking Space per Car (m²/Car)": 14.02,
+                "Summary": "Auckland has a low car density with ample parking space per car.",
+                "Inference": "Parking infrastructure is more than adequate, with potential for future development."
+            },
+            "Paris, France": {
+                "Population": 2116000,
+                "Actual Cars": 783920,
+                "Parking Area (km²)": 1.41,
+                "Cars per km²": 554987,
+                "Parking Area per Capita (m²/person)": 0.67,
+                "Parking Space per Car (m²/Car)": 1.8,
+                "Summary": "Paris has a moderate car density with limited parking space per car.",
+                "Inference": "The city’s parking infrastructure is under pressure, and future growth should be carefully managed."
+            },
+            "Kinshasa, DRC": {
+                "Population": 17032322,
+                "Actual Cars": 855000,
+                "Parking Area (km²)": 0.25,
+                "Cars per km²": 3414537,
+                "Parking Area per Capita (m²/person)": 0.01,
+                "Parking Space per Car (m²/Car)": 0.29,
+                "Summary": "Kinshasa has extremely high car density with very limited parking space per car.",
+                "Inference": "The parking infrastructure is inadequate, requiring significant improvements to meet demand."
+            }
+        };
+
+
+        const map = new maplibregl.Map({
+            container: 'map',
+            style: 'https://tiles.stadiamaps.com/styles/stamen_toner_lite.json',
+            center: [174.7633, -36.8485], // Default center on Auckland
+            zoom: 12
+        });
+
+        function loadCityData(city) {
+            if (!city) return; // Exit if no city is selected
+
+            const coordinates = {
+                "Delhi, India": [77.2167, 28.6315],
+                "Mumbai, India": [72.8246, 18.9250],
+                "Bengaluru, India": [77.6069, 12.9758],
+                "New York, USA": [-74.0113, 40.7074],
+                "Los Angeles, USA": [-118.2437, 34.0522],
+                "Chicago, USA": [-87.6298, 41.8781],
+                "Shanghai, China": [121.4737, 31.2304],
+                "Beijing, China": [116.4074, 39.9042],
+                "Shenzhen, China": [114.0579, 22.5431],
+                "Istanbul, Turkey": [28.9784, 41.0082],
+                "Moscow, Russia": [37.6173, 55.7558],
+                "London, UK": [-0.1276, 51.5074],
+                "Saint Petersburg, Russia": [30.3609, 59.9311],
+                "Berlin, Germany": [13.4050, 52.5200],
+                "Madrid, Spain": [-3.7038, 40.4168],
+                "Kinshasa, DRC": [15.2663, -4.4419],
+                "Lagos, Nigeria": [3.3792, 6.5244],
+                "Cairo, Egypt": [31.2357, 30.0444],
+                "Paris, France": [2.3522, 48.8566],
+                "Tokyo, Japan": [139.6917, 35.6895],
+                "Mexico City, Mexico": [-99.1332, 19.4326],
+                "São Paulo, Brazil": [-46.6333, -23.5505],
+                "Buenos Aires, Argentina": [-58.3816, -34.6037],
+                "Rio de Janeiro, Brazil": [-43.1729, -22.9068],
+                "Sydney, Australia": [151.2093, -33.8688],
+                "Melbourne, Australia": [144.9631, -37.8136],
+                "Auckland, New Zealand": [174.7633, -36.8485]
+            };
+
+            map.flyTo({
+                center: coordinates[city],
+                zoom: 12
+            });
+
+            // Populate the city data table
+            const cityInfo = cityData[city];
+            const tbody = document.querySelector("#cityTable tbody");
+            tbody.innerHTML = `
+                <tr>
+                    <td>${city}</td>
+                    <td>${cityInfo['Population']}</td>
+                    <td>${cityInfo['Actual Cars']}</td>
+                    <td>${cityInfo['Parking Area (km²)']}</td>
+                    <td>${cityInfo['Cars per km²']}</td>
+                    <td>${cityInfo['Parking Area per Capita (m²/person)']}</td>
+                    <td>${cityInfo['Parking Space per Car (m²/Car)']}</td>
+                    <td>${cityInfo['Summary']}</td>
+                    <td>${cityInfo['Inference']}</td>
+                </tr>
+            `;
+
+            // Load GeoJSON for parking (as before)
+            const fileName = `${city.replace(/, /g, '_').replace(/ /g, '_')}_parking.geojson`;
+
+            fetch(fileName)
+                .then(response => response.json())
+                .then(async data => {
+                    if (!map.isStyleLoaded()) {
+                        await new Promise(resolve => map.once('load', resolve));
+                    }
+
+                    for (const id of ['parking-layer', 'parking-points-layer']) {
+                        if (map.getLayer(id)) map.removeLayer(id);
+                    }
+                    for (const id of ['parking-data', 'parking-points']) {
+                        if (map.getSource(id)) map.removeSource(id);
+                    }
+
+                    map.addSource('parking-data', {
+                        type: 'geojson',
+                        data: data
+                    });
+
+                    map.addLayer({
+                        id: 'parking-layer',
+                        type: 'fill',
+                        source: 'parking-data',
+                        paint: {
+                            'fill-color': '#ff1c95',
+                            'fill-opacity': 0.5
+                        }
+                    });
+
+                    map.addSource('parking-points', {
+                        type: 'geojson',
+                        data: {
+                            type: 'FeatureCollection',
+                            features: data.features.filter(
+                                feature => feature.geometry?.type === "Point"
+                            )
+                        }
+                    });
+
+                    map.addLayer({
+                        id: 'parking-points-layer',
+                        type: 'circle',
+                        source: 'parking-points',
+                        paint: {
+                            'circle-radius': 5,
+                            'circle-color': '#0000ff',
+                            'circle-stroke-width': 1,
+                            'circle-stroke-color': '#ffffff'
+                        }
+                    });
+
+                })
+                .catch(err => console.error('Error loading the GeoJSON data:', err));
+        }
+
+        // Optionally, load default city on start
+        loadCityData('Auckland, New Zealand');
+    </script>
+</body>
+
+</html>

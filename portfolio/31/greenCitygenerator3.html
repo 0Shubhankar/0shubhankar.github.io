@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urban Simulation</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        #metricsDisplay {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 8px;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="metricsDisplay">Metrics: Loading...</div>
+    <script type="module">
+        import { OrbitControls } from '../vendor/shared/lib-0809644caeac/dist/OrbitControls.js';
+        import * as THREE from '../vendor/shared/lib-86c7ea3356c4/dist/three.module.js';
+        import { GUI } from '../vendor/shared/lib-6ef06cdec5d6/dist/dat.gui.module.js';
+
+        let scene, camera, controls, renderer, gui;
+        let asphaltTexture, bldgTexture, greenTexture;
+        const textureLoader = new THREE.TextureLoader();
+        const guiData = {
+            population: 100000,
+            greenSpacePercentage: 20,
+            maxHeight: 2,
+            fogColor: 0xffffff,
+            fogNear: 1,
+            fogFar: 8,
+        };
+
+        function getGridSize() {
+            return Math.ceil(Math.sqrt(guiData.population / 1000)); // Calculate grid size based on population
+        }
+
+        async function init() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 2.5, 5);
+            camera.lookAt(0, 0, 0);
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setClearColor("#e5e5e5");
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            controls = new OrbitControls(camera, renderer.domElement);
+            controls.enablePan = true;
+            controls.panSpeed = 0.3;
+            controls.update();
+
+            gui = new GUI();
+            gui.add(guiData, 'population', 10000, 500000).onChange(updateMetricsAndRerender);
+            gui.add(guiData, 'greenSpacePercentage', 0, 100).onChange(updateMetricsAndRerender);
+            gui.add(guiData, 'maxHeight', 0.1, 10).step(0.1).onChange(rerender);
+            gui.addColor(guiData, 'fogColor').onChange(updateFog);
+            gui.add(guiData, 'fogNear', 0.1, 100).step(0.1).onChange(updateFog);
+            gui.add(guiData, 'fogFar', 0.1, 100).step(0.1).onChange(updateFog);
+
+            window.addEventListener('resize', onWindowResize, false);
+
+            await loadTextures();
+            updateMetricsAndRerender();
+            animate();
+        }
+
+        async function loadTextures() {
+            asphaltTexture = await new Promise(resolve => textureLoader.load('road2.jpg', resolve));
+            bldgTexture = await new Promise(resolve => textureLoader.load('building_texture.jpg', resolve));
+            greenTexture = await new Promise(resolve => textureLoader.load('green.png', resolve));
+        }
+
+        function updateMetricsAndRerender() {
+            updateMetrics();
+            rerender();
+        }
+
+        function updateMetrics() {
+            const carbonOutput = guiData.population * guiData.carbonPerCapita;
+            const metricsDiv = document.getElementById('metricsDisplay');
+            const gridSize = getGridSize();
+            metricsDiv.innerHTML = `
+                <strong>Carbon Output:</strong> ${carbonOutput.toFixed(2)} kg/year<br>
+                <strong>Grid Size:</strong> ${gridSize} x ${gridSize}
+            `;
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function rerender() {
+            const gridSize = getGridSize();
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(guiData.fogColor);
+            scene.fog = new THREE.Fog(guiData.fogColor, guiData.fogNear, guiData.fogFar);
+            setup(gridSize);
+        }
+
+        function setup(gridSize) {
+            addLights();
+            addPlane(gridSize);
+            addCubes(gridSize);
+        }
+
+        function updateFog() {
+            scene.fog.color.set(guiData.fogColor);
+            scene.fog.near = guiData.fogNear;
+            scene.fog.far = guiData.fogFar;
+            scene.background.set(guiData.fogColor);
+        }
+
+        function addLights() {
+            let light = new THREE.PointLight(0xffffff, 0.6);
+            light.position.set(40, 30, 20);
+            scene.add(light);
+            let secondLight = new THREE.PointLight(0xffffff, 0.4);
+            secondLight.position.set(-20, 10, -30);
+            scene.add(secondLight);
+        }
+
+        function addPlane(gridSize) {
+            let geometry = new THREE.PlaneGeometry(gridSize + 1, gridSize + 1);
+            let material = new THREE.MeshBasicMaterial({ map: asphaltTexture, side: THREE.DoubleSide });
+            let plane = new THREE.Mesh(geometry, material);
+            plane.rotation.x = Math.PI / 2;
+            scene.add(plane);
+        }
+
+        function addCubes(gridSize) {
+            let threshold = guiData.greenSpacePercentage / 100;
+            for (let i = 0; i < gridSize; i++) {
+                for (let j = 0; j < gridSize; j++) {
+                    if (Math.random() < threshold) {
+                        let geometry = new THREE.PlaneGeometry(1, 1);
+                        let material = new THREE.MeshBasicMaterial({ map: greenTexture, side: THREE.DoubleSide });
+                        let greenSpace = new THREE.Mesh(geometry, material);
+                        greenSpace.rotation.x = -Math.PI / 2;
+                        greenSpace.position.set(i - (gridSize / 2 - 0.5), 0.01, j - (gridSize / 2 - 0.5));
+                        scene.add(greenSpace);
+                    } else {
+                        const boxHeight = Math.random() * guiData.maxHeight + 0.1;
+                        let geometry = new THREE.BoxGeometry(0.7, boxHeight, 0.7);
+                        let material = new THREE.MeshLambertMaterial({ map: bldgTexture, transparent: true, opacity: 0.8 });
+                        let cube = new THREE.Mesh(geometry, material);
+                        cube.position.set(i - (gridSize / 2 - 0.5), boxHeight / 2, j - (gridSize / 2 - 0.5));
+                        scene.add(cube);
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

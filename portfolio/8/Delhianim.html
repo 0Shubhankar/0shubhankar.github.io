@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Delhi Dead-End Roads Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../vendor/shared/lib-9eaeb463f1b3/dist/maplibre-gl.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        #map {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script src="../vendor/shared/lib-1c09437b70d7/dist/maplibre-gl.js"></script>
+    <script>
+        const map = new maplibregl.Map({
+            container: 'map',
+            style: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
+            center: [77.20825, 28.6129],
+            zoom: 13.8,
+            pitch: 60,
+            bearing: 17.6,
+            antialias: true
+        });
+
+        map.addControl(new maplibregl.NavigationControl(), 'top-right');
+
+        map.on('load', function () {
+            map.addSource('delhiDeadEnds', {
+                type: 'geojson',
+                data: './Delhi_dead_end_edges.geojson' // Ensure this path is correct
+            });
+
+            map.addLayer({
+                id: 'dead-ends',
+                type: 'line',
+                source: 'delhiDeadEnds',
+                layout: {},
+                paint: {
+                    'line-color': '#ff0000',
+                    'line-width': 4
+                }
+            });
+
+            let colorState = false; // toggle state
+
+            setInterval(() => {
+                const newColor = colorState ? '#ff0000' : '#ffffff';
+                map.setPaintProperty('dead-ends', 'line-color', newColor);
+                colorState = !colorState; // toggle the state
+            }, 1000); // Change color every second
+
+            let userInteracted = false;
+            let timeoutId;
+
+            const views = [
+                { center: [77.1025, 28.7041], zoom: 13, pitch: 60, bearing: 0, speed: 0.5 }, // Central view
+                { center: [77.2154, 28.7041], zoom: 13, pitch: 60, bearing: 90, speed: 0.6 }, // East view
+                { center: [76.9936, 28.7041], zoom: 13, pitch: 60, bearing: 180, speed: 0.5 }, // West view
+                { center: [77.1025, 28.8441], zoom: 13, pitch: 60, bearing: 270, speed: 0.6 }, // North view
+                { center: [77.1025, 28.5641], zoom: 13, pitch: 60, bearing: 360, speed: 0.5 }, // South view
+                { center: [77.1954, 28.8041], zoom: 13, pitch: 60, bearing: 45, speed: 0.6 }, // North-east view
+                { center: [77.0096, 28.6041], zoom: 13, pitch: 60, bearing: 135, speed: 0.7 }, // South-west view
+                { center: [77.1425, 28.8541], zoom: 13, pitch: 60, bearing: 225, speed: 0.5 }, // North-north view
+                { center: [77.1025, 28.8441], zoom: 13, pitch: 60, bearing: 270, speed: 0.6 }, // North view
+                { center: [77.2825, 28.7041], zoom: 13, pitch: 60, bearing: 90, speed: 0.5 }, // East-east view
+                { center: [77.1025, 28.6541], zoom: 13, pitch: 60, bearing: 180, speed: 0.7 }, // South-south view
+                { center: [77.1625, 28.8041], zoom: 13, pitch: 60, bearing: 270, speed: 0.6 }, // Central-north view
+                { center: [77.0425, 28.6041], zoom: 13, pitch: 60, bearing: 360, speed: 0.5 }, // Central-south view
+                { center: [77.1025, 28.7541], zoom: 13, pitch: 60, bearing: 45, speed: 0.6 }, // Central-west view
+                { center: [77.2025, 28.6541], zoom: 13, pitch: 60, bearing: 135, speed: 0.5 } // Central-east view
+            ];
+
+
+            let viewIndex = 0;
+
+            const changeView = () => {
+                if (userInteracted) {
+                    // Skip changing the view if the user has interacted
+                    timeoutId = setTimeout(changeView, 20000); // Resume after 20 seconds
+                    userInteracted = false; // Reset user interaction flag
+                    return;
+                }
+
+                if (viewIndex < views.length) {
+                    const { center, zoom, pitch, bearing, speed } = views[viewIndex];
+                    map.flyTo({
+                        center: center,
+                        zoom: zoom,
+                        pitch: pitch,
+                        bearing: bearing,
+                        speed: speed, // Speed of the transition
+                        curve: 1, // Animation curve
+                        easing: t => t // Linear easing
+                    });
+                    viewIndex++;
+                    timeoutId = setTimeout(changeView, 5000); // Change view every 5 seconds
+                } else {
+                    viewIndex = 0;
+                    timeoutId = setTimeout(changeView, 5000); // Restart the animation loop
+                }
+            };
+
+            const resetTimeout = () => {
+                clearTimeout(timeoutId);
+                userInteracted = true;
+                timeoutId = setTimeout(changeView, 2000); // Resume after 20 seconds
+            };
+
+            // Add event listeners to detect user map movement
+            map.on('movestart', resetTimeout);
+
+            changeView();
+        });
+    </script>
+</body>
+
+</html>
