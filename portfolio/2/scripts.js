@@ -16,8 +16,8 @@ function setupInteractiveMap(mapId, geojsonFile, center, zoomLevel) {
     var map = L.map(mapId).setView(center, zoomLevel);
 
     // Add dark mode tile layer
-    L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://stadiamaps.com/attribution/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>',
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
         subdomains: 'abcd',
         maxZoom: 19
     }).addTo(map);
@@ -53,8 +53,8 @@ function animateMap(map, lat, lon, zoom) {
 var mainMap = L.map('map').setView([40.7580, -73.9855], zoomLevel); // Default to Times Square with zoom level 16
 
 // Add dark mode tile layer to the main map
-L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://stadiamaps.com/attribution/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>',
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
     subdomains: 'abcd',
     maxZoom: 19
 }).addTo(mainMap);
