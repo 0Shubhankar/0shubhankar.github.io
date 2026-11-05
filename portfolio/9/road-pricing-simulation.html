@@ -70,7 +70,14 @@
             background-color: black;
             color: white;
         }
-    </style>
+    
+    /* Dark-blue main map, without WebGL */
+    #map > .leaflet-map-pane > .leaflet-tile-pane img.leaflet-tile {
+        filter: grayscale(1) invert(1) sepia(0.65)
+                saturate(1.5) hue-rotate(170deg)
+                brightness(0.78) contrast(1.15);
+    }
+</style>
 </head>
 
 <body>
@@ -186,12 +193,12 @@
 
         // Initialize the Leaflet map
         const map = L.map('map').setView([1.3521, 103.8198], 12); // Center map on Singapore
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         }).addTo(map);
 
         // Add mini map
-        const miniMapLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png');
+        const miniMapLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png');
         new L.Control.MiniMap(miniMapLayer, { toggleDisplay: true }).addTo(map);
 
         // Default settings
