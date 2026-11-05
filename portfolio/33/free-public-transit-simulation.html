@@ -63,7 +63,24 @@
 
 <body>
     <!-- Container for the simulation -->
-    <div id="container">
+    
+<div id="webgl-notice" style="
+    padding: 14px 20px;
+    background: #172638;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    text-align: center;
+">
+    <strong>3D Visualization — WebGL Required</strong>
+    <div>
+        This interactive simulation requires WebGL support.
+        If the visualization does not appear, enable hardware acceleration
+        in your browser or try another WebGL-compatible device.
+    </div>
+</div>
+<div id="container">
         <div id="results">
             <h3>Simulation Results</h3>
             <p><strong>Cooperators:</strong> <span id="cooperatorPayoff">0</span></p>
