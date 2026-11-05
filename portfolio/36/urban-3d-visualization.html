@@ -56,6 +56,32 @@
 
 
 <body>
+
+<div id="webgl-notice" style="
+    position: fixed;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000;
+    box-sizing: border-box;
+    width: min(90%, 660px);
+    padding: 14px 20px;
+    background: #172638;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    text-align: center;
+    border-radius: 6px;
+">
+    <strong>3D Visualization — WebGL Required</strong>
+    <div>
+        This interactive visualization requires WebGL support.
+        If the 3D scene does not appear, enable graphics acceleration
+        in your browser or try a WebGL-compatible device.
+    </div>
+</div>
+
     <!-- Three.js Library -->
     <script src="../vendor/shared/lib-25023b521d77/dist/three.min.js"></script>
     <!-- Correct CDN for OrbitControls -->
