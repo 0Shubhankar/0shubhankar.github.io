@@ -65,16 +65,122 @@
 }
 </style>
 
+<style id="portfolio-navigation-v2">
+.preview-nav-v2 {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  flex-wrap: wrap !important;
+  gap: clamp(14px, 2.5vw, 32px) !important;
+  padding: 20px 5% !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+}
+
+.preview-nav-v2 > a:not(.preview-linkedin) {
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  text-decoration: none !important;
+  opacity: .75 !important;
+}
+
+.preview-nav-v2 > a:hover,
+.preview-nav-v2 > a.is-current {
+  opacity: 1 !important;
+}
+
+.preview-nav-v2 .preview-back {
+  margin-right: auto !important;
+}
+
+.preview-nav-v2 .is-current {
+  text-decoration: underline !important;
+  text-underline-offset: 6px !important;
+}
+
+.preview-nav-v2 .preview-linkedin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1 !important;
+}
+
+.preview-nav-v2 .preview-linkedin img {
+  display: block;
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+}
+
+@media (max-width: 600px) {
+  .preview-nav-v2 {
+    gap: 12px 18px !important;
+    padding: 18px 4% !important;
+  }
+}
+</style>
+<style id="portfolio-navigation-final-preview">
+/* Keep every portfolio navigation label light, even when
+   earlier portfolio CSS specifies a bold font. */
+.portfolio-site-nav.preview-nav-v2 > a:not(.preview-linkedin) {
+  font-family: inherit !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+}
+
+/* Match the homepage's muted-to-colour LinkedIn interaction. */
+.portfolio-site-nav.preview-nav-v2 .preview-linkedin {
+  opacity: 1 !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.portfolio-site-nav.preview-nav-v2 .preview-linkedin img {
+  display: block;
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  filter: grayscale(1);
+  opacity: .65;
+  transition: filter .25s ease, opacity .25s ease;
+}
+
+.portfolio-site-nav.preview-nav-v2 .preview-linkedin:hover img,
+.portfolio-site-nav.preview-nav-v2 .preview-linkedin:focus-visible img {
+  filter: grayscale(0);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-site-nav.preview-nav-v2 .preview-linkedin img {
+    transition: none;
+  }
+}
+</style>
 </head>
 
 <body>
         
-<nav class="portfolio-site-nav" aria-label="Main navigation">
+<nav class="portfolio-site-nav preview-nav-v2" aria-label="Main navigation">
+  <a class="preview-back" href="../">← Back</a>
   <a href="../#focus">Focus</a>
   <a href="../#projects">Projects</a>
-  <a href="../portfolio/" class="is-current" aria-current="page">Portfolio</a>
+  <a href="/portfolio../"
+     class="is-current" aria-current="page">Portfolio</a>
   <a href="../#work">Work</a>
   <a href="../#contact">Contact</a>
+  <a aria-label="LinkedIn profile"
+     class="nav-linkedin preview-linkedin"
+     href="https://www.linkedin.com/in/shu6hankar/"
+     rel="noopener noreferrer"
+     target="_blank">
+    <img alt="" aria-hidden="true"
+         src="../linkedin-icon.webp"
+         width="26" height="26">
+  </a>
 </nav>
 
 
