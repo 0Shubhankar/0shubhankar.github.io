@@ -54,6 +54,20 @@
             color: white;
         }
     </style>
+
+<style id="sentiment-dark-map-fix">
+/* Dark navy geographic tiles; sentiment markers remain unchanged. */
+html, body, #map {
+    background: #091827 !important;
+}
+
+.leaflet-tile-pane img.leaflet-tile {
+    filter: grayscale(1) invert(1) sepia(1)
+            hue-rotate(170deg) saturate(1.8)
+            brightness(0.48) contrast(1.25);
+}
+</style>
+
 </head>
 
 <body>
@@ -66,7 +80,7 @@
         var map = L.map('map').setView([38.8928901311895, -77.020314939909], 13);
 
         // Add CartoDB Dark Matter tile layer
-        L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | Data source: <a href="https://opendata.dc.gov/datasets/3f28bc3ad77f49079efee0ac05d8464c_0/explore" target="_blank">Open Data DC</a>'
             }).addTo(map);
 
