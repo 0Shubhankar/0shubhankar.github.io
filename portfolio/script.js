@@ -210,6 +210,14 @@ const portfolioItems = [
       image: "images/previews/41.webp",
     },
     {
+      projectType: "Interactive Material Exhibit",
+      smallTitle: "The Secret Life of a Brick",
+      title: "The Secret Life of a Brick",
+      titleLink: "52/index.html",
+      tags: ["Urban Materials", "Interactive Visualization", "Embodied Carbon", "Circular Economy", "Material Lifecycle", "Architecture", "Sustainability", "Canvas"],
+      image: "images/previews/52.webp",
+    },
+    {
       projectType: "Urban Finance Strategy Game",
       smallTitle: "The Parallel Cities Experiment",
       title: "The Parallel Cities Experiment",

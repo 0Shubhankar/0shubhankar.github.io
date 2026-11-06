@@ -1,0 +1,52 @@
+{
+  "meta": {
+    "status": "illustrative_fictional",
+    "basis": "one square metre of a notional finished masonry wall",
+    "currency": "INR",
+    "notice": "All values are fictional demonstration assumptions, not sourced life-cycle inventory or construction specifications."
+  },
+  "materials": [
+    {
+      "id": "fired", "name": "Fired clay brickwork", "subtitle": "Earth, transformed by heat", "short": "FIRED CLAY",
+      "description": "A familiar masonry system with energy-intensive firing. Durable in many applications, but performance and impacts depend on kiln type, fuel, mortar, and wall design.",
+      "carbon": 72, "water": 220, "cost": 1900, "serviceLife": 75, "transportKm": 100, "unitsPerM2": 52,
+      "color": "#b75f43", "note": "Example kiln contributes the largest share of the illustrative carbon footprint.",
+      "stages": [8, 62, 14, 11, 5]
+    },
+    {
+      "id": "earth", "name": "Compressed earth block", "subtitle": "Earth, formed with less heat", "short": "EARTH BLOCK",
+      "description": "A conceptual stabilized-earth system that substitutes pressing and curing for high-temperature firing. Binder content and local climate constraints strongly influence real performance.",
+      "carbon": 39, "water": 330, "cost": 2250, "serviceLife": 55, "transportKm": 50, "unitsPerM2": 32,
+      "color": "#b99361", "note": "Lower modeled process energy, but a higher fictional water input in this example.",
+      "stages": [20, 25, 16, 30, 9]
+    },
+    {
+      "id": "concrete", "name": "Concrete block masonry", "subtitle": "Aggregates, cement, compression", "short": "CONCRETE",
+      "description": "A modular system built from cement-based units. Its embodied impacts are sensitive to cement composition, manufacturing, wall reinforcement, and local procurement.",
+      "carbon": 90, "water": 250, "cost": 1750, "serviceLife": 65, "transportKm": 90, "unitsPerM2": 12,
+      "color": "#a5a49a", "note": "The fictional cement-related manufacturing contribution dominates this example.",
+      "stages": [11, 57, 14, 12, 6]
+    },
+    {
+      "id": "reclaimed", "name": "Reclaimed brickwork", "subtitle": "Old material, another chapter", "short": "RECLAIMED",
+      "description": "Previously used bricks recovered for a new wall. Cleaning, selection, breakage, transport, and allocation rules determine whether reuse delivers a lower real footprint.",
+      "carbon": 25, "water": 140, "cost": 2400, "serviceLife": 60, "transportKm": 45, "unitsPerM2": 52,
+      "color": "#996b50", "note": "This fictional scenario allocates only recovery and reinstallation burdens to the reused material.",
+      "stages": [4, 12, 23, 44, 17]
+    }
+  ],
+  "stages": [
+    {"id":"earth","glyph":"◒","name":"The ground remembers.","short":"FROM EARTH","description":"Material begins in a landscape. Clay, sand, stone, and soil are extracted, separated, and prepared. The site itself has a history that does not travel with the finished block.","note":"Extraction can alter land, water and habitats; impacts require site-specific evidence."},
+    {"id":"fire","glyph":"✳","name":"Heat makes an object.","short":"FORM & FIRE","description":"Moulding, compression, curing, or kiln firing gives the unit its physical properties. Fuel and process efficiency can dominate the material's embodied emissions.","note":"The manufacturing method is material-specific; not every masonry unit is kiln fired."},
+    {"id":"journey","glyph":"⇢","name":"A journey with weight.","short":"IN TRANSIT","description":"Units travel from production to storage and finally to a site. Distance matters, but so do vehicle load, fuel, mode, breakage, and repeated handling.","note":"Transport kilometres are user-editable scenario inputs in a future data-driven version."},
+    {"id":"wall","glyph":"▧","name":"A wall is an assembly.","short":"PLACED BY HAND","description":"Mortar, labour, scaffolding, cutting, material losses and construction choices turn units into a building system. The wall's performance is more than the sum of its blocks.","note":"Demo metrics represent a notional wall, not an isolated brick."},
+    {"id":"afterlife","glyph":"↺","name":"A life after demolition.","short":"SECOND LIFE","description":"A building may be dismantled carefully or demolished rapidly. Some units can be reused, some downcycled, and some discarded. None of those outcomes is automatic.","note":"Recovery rates must be measured; avoid assuming every demolished unit can be reused."}
+  ],
+  "scales": [
+    {"name":"ONE UNIT","label":"01 / ONE UNIT","area":null,"tag":"A SINGLE UNIT"},
+    {"name":"ONE WALL","label":"02 / ONE WALL","area":12,"tag":"A WALL IN SECTION"},
+    {"name":"ONE HOME","label":"03 / ONE HOME","area":160,"tag":"A HOME'S MASONRY"},
+    {"name":"ONE BLOCK","label":"04 / ONE BLOCK","area":3000,"tag":"A CITY BLOCK"},
+    {"name":"ONE DISTRICT","label":"05 / ONE DISTRICT","area":20000,"tag":"A DISTRICT MODEL"}
+  ]
+}

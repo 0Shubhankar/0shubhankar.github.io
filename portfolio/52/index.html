@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#151b19" />
+  <meta name="description" content="An interactive material autopsy of an ordinary brick: from earth to city, and from manufacture to reuse." />
+  <title>The Secret Life of a Brick — A Material Autopsy</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <header class="sitehead">
+    <a class="brand" href="../" aria-label="Back to portfolio"><span class="brand-emblem" aria-hidden="true">◈</span><span>THE MATERIAL ARCHIVE</span></a>
+    <nav aria-label="On-page navigation"><a href="#anatomy">Dissect</a><a href="#journey">Journey</a><a href="#laboratory">Compare</a><a href="#scale">Multiply</a></nav>
+    <span class="head-right">AN INTERACTIVE FIELD EXHIBIT <span aria-hidden="true">↗</span></span>
+  </header>
+  <main>
+    <section class="hero" id="anatomy" aria-labelledby="hero-title">
+      <div class="hero-intro">
+        <div class="eyebrow"><span class="eyebrow-line"></span> SPECIMEN 001 / EVERYDAY MATTER</div>
+        <h1 id="hero-title">The secret life<br><em>of a brick.</em></h1>
+        <p class="hero-lead">Before it became a wall, it was a landscape. Before it sheltered anyone, it carried heat, water, labor, and miles. Turn one ordinary brick inside out.</p>
+        <a class="text-link" href="#journey">Follow its journey <span aria-hidden="true">↘</span></a>
+      </div>
+      <div class="specimen-wrap">
+        <div class="specimen-topline"><span><span class="small-dot"></span> MATERIAL STUDY / FIRED CLAY</span><span>OBJECT 01—05</span></div>
+        <div class="specimen-stage" id="stageBox">
+          <div class="stage-grid" aria-hidden="true"></div>
+          <div class="stage-vertical">A STUDY IN STORED ENERGY</div>
+          <canvas id="brickCanvas" role="img" aria-label="Three-dimensional rendered brick split into five analytical slices, with explosion controlled by the slider below"></canvas>
+          <div class="stage-pointer stage-pointer-a" aria-hidden="true"><span class="pointer-line"></span> CLAY / EARTH</div>
+          <div class="stage-pointer stage-pointer-b" aria-hidden="true">FORM / FIRE <span class="pointer-line"></span></div>
+          <div class="stage-folio">PLATE A&nbsp;&nbsp; ● &nbsp;&nbsp;MATERIAL AUTOPSY</div>
+        </div>
+        <div class="explode-bar">
+          <div class="range-titles"><label for="explodeRange">OPEN THE OBJECT</label><output id="explodeOutput" for="explodeRange">INTACT</output></div>
+          <input id="explodeRange" type="range" min="0" max="100" value="0" step="1" aria-label="Separate the brick into five analytical slices" />
+          <div class="range-edge"><span>ONE OBJECT</span><span>FIVE HIDDEN SYSTEMS</span></div>
+        </div>
+        <div class="specimen-caption">An interpretive cutaway: each slice represents a stage in the brick's life, not a literal physical layer.</div>
+      </div>
+    </section>
+
+    <section class="exhibit-stats" aria-label="At a glance">
+      <div class="stat"><span class="stat-symbol">01</span><div><strong>One small object.</strong><span>Many invisible processes.</span></div></div>
+      <div class="stat"><span class="stat-symbol">05</span><div><strong>Material systems.</strong><span>Earth, energy, movement, labor, afterlife.</span></div></div>
+      <div class="stat"><span class="stat-symbol">∞</span><div><strong>A second life?</strong><span>Waste is partly a design decision.</span></div></div>
+    </section>
+
+    <section class="journey-section section-shell" id="journey" aria-labelledby="journey-title">
+      <div class="section-heading"><div><div class="kicker">EXHIBIT I / TRACE THE MATERIAL</div><h2 id="journey-title">A life in <em>five acts.</em></h2></div><p>Pick a chapter. Watch which part of the process lights up, then inspect what it contributes. The numbers are only illustrative until you replace the sample inventory with verified material data.</p></div>
+      <div class="journey-grid">
+        <div class="acts" id="actButtons" role="group" aria-label="Material life stages"></div>
+        <article class="act-detail" aria-live="polite">
+          <div class="act-detail-num" id="actCount">01 / 05</div>
+          <div class="act-glyph" id="actGlyph" aria-hidden="true">◌</div>
+          <h3 id="actTitle">The ground remembers.</h3>
+          <p id="actDescription">The story begins below the surface.</p>
+          <div class="act-bottom"><span>SHARE OF ILLUSTRATIVE EMBODIED CARBON</span><strong id="actShare">—</strong></div>
+          <div class="contribution-track"><div id="actTrack" class="contribution-fill"></div></div>
+          <p class="method-small" id="actNote"></p>
+        </article>
+      </div>
+    </section>
+
+    <section class="interlude" aria-label="Exhibit statement"><div class="interlude-numeral">02</div><blockquote>“A brick is never <em>just</em> a brick.”</blockquote><div class="interlude-rule"></div><span>A SMALL OBJECT WITH A VERY LONG SHADOW</span></section>
+
+    <section class="lab-section section-shell" id="laboratory" aria-labelledby="lab-title">
+      <div class="section-heading"><div><div class="kicker">EXHIBIT II / SWAP THE SPECIMEN</div><h2 id="lab-title">Same wall.<br><em>Different histories.</em></h2></div><p>Choose a construction system and compare one square metre of finished wall. This keeps the functional basis consistent—even when individual blocks have different dimensions.</p></div>
+      <div class="lab-grid">
+        <div class="material-picker" id="materialButtons" role="group" aria-label="Select material system"></div>
+        <div class="material-sheet">
+          <div class="sheet-head"><div><span>MATERIAL PROFILE</span><h3 id="materialName">Fired clay brickwork</h3></div><div class="sheet-stamp">ILLUSTRATIVE DATA</div></div>
+          <p id="materialDescription">A familiar fired-clay masonry system.</p>
+          <div class="metrics" id="metrics"></div>
+          <div class="sheet-bottom"><span id="materialNote"></span><span id="materialTransport"></span></div>
+        </div>
+      </div>
+      <div class="data-disclaimer"><span class="asterisk">✳</span><p><strong>Demonstration values, not verified life-cycle assessments.</strong> Costs and impacts below are fictional example assumptions supplied solely to demonstrate interactions. They are not suitable for construction choices, procurement, or carbon reporting. The README explains how to replace them with sourced, region-specific data.</p></div>
+    </section>
+
+    <section class="scale-section" id="scale" aria-labelledby="scale-title">
+      <div class="scale-inner">
+        <div class="scale-intro"><div class="kicker">EXHIBIT III / MULTIPLY THE ORDINARY</div><h2 id="scale-title">From one<br><em>to a city.</em></h2><p>Individual materials seem insignificant. Multiply them into buildings and neighborhoods, and small differences in design choices become much larger.</p><div class="scale-action"><label for="scaleRange">CHOOSE YOUR SCALE</label><output id="scaleLabel" for="scaleRange">01 / ONE UNIT</output></div><input id="scaleRange" type="range" min="0" max="4" step="1" value="0" /><div class="scale-ticks"><span>UNIT</span><span>WALL</span><span>HOME</span><span>BLOCK</span><span>DISTRICT</span></div><p class="method-small scale-note">A schematic quantity illustration—not a forecast of a real city's building stock.</p></div>
+        <div class="scale-visual"><div class="scale-upper"><span>FIGURE / THE MULTIPLIER</span><span id="scaleArea">0.019 m²</span></div><canvas id="scaleCanvas" role="img" aria-label="Architectural visualization responding to the scale slider"></canvas><div class="scale-stamp" id="scaleStamp">SINGLE UNIT</div></div>
+      </div>
+      <div class="scale-results"><div><span>ESTIMATED UNITS</span><strong id="scaleUnits">1</strong></div><div><span>EMBODIED CARBON</span><strong id="scaleCarbon">—</strong></div><div><span>ILLUSTRATIVE COST</span><strong id="scaleCost">—</strong></div><div><span>WATER INPUT</span><strong id="scaleWater">—</strong></div></div>
+    </section>
+
+    <section class="afterlife section-shell" id="afterlife"><div class="section-heading"><div><div class="kicker">EPILOGUE / WHAT HAPPENS NEXT?</div><h2>Nothing disappears.<br><em>It only changes places.</em></h2></div><p>The afterlife of material isn't automatic. It depends on how the original building was assembled, how it is demolished, and whether useful material can be recovered.</p></div><div class="fate-choices" id="fateChoices" role="group" aria-label="Choose end of life pathway"></div><div class="fate-outcome" id="fateOutcome" aria-live="polite"></div></section>
+  </main>
+  <footer class="foot"><div><span class="brand-emblem">◈</span> THE MATERIAL ARCHIVE</div><p>Every city is built from ordinary objects with extraordinary hidden lives.</p><a href="../">BACK TO PORTFOLIO ↑</a></footer>
+  <dialog id="notesDialog" class="notes-dialog"><form method="dialog"><button class="close-notes" aria-label="Close methodology">✕</button></form><h2>Notes from the material archive</h2><p>This is an artistic interactive demonstration, not an environmental product declaration or engineering specification.</p><p>All comparative figures in <code>data/materials.json</code> are fictional example inputs per square metre of a notional finished wall. Service life is an assumed scenario, not a guarantee; transport distance is contextual, not an intrinsic material property. Carbon shares are illustrative lifecycle-stage allocations, not measured results.</p><p>A rigorous edition should fix wall thickness, structural and thermal performance, locality, time horizon and system boundaries; use EPDs or peer-reviewed LCAs; incorporate binders, mortars and construction waste; and report uncertainty.</p></dialog>
+  <button class="notes-trigger" id="openNotes" aria-haspopup="dialog" aria-controls="notesDialog" aria-label="Read methodology notes">ⓘ <span>METHOD NOTES</span></button>
+</body>
+</html>
