@@ -42,33 +42,205 @@ canvas {
 
       
     </style>
+
+<style id="urban-network-editorial">
+html, body {
+    height: auto !important;
+    min-height: 100% !important;
+    display: block !important;
+    background: #080809 !important;
+    color: #e5e5e5;
+}
+* { box-sizing: border-box; }
+
+.network-intro,
+#description {
+    width: min(900px, calc(100% - 40px));
+    margin: 0 auto !important;
+    text-align: left !important;
+    background: transparent !important;
+}
+.network-intro {
+    padding: 44px 0 16px;
+}
+.network-intro h1 {
+    font: 500 clamp(30px, 4vw, 46px)/1.2 Arial, sans-serif;
+    letter-spacing: -1px;
+    margin: 0 0 18px;
+}
+.network-intro p,
+#description p {
+    font: 15px/1.85 Arial, sans-serif;
+    color: #bcbcbc;
+    max-width: 850px;
+}
+#visualization {
+    width: 100% !important;
+    height: 480px !important;
+    padding: 0 !important;
+    margin: 12px 0 0 !important;
+    overflow: hidden;
+    position: relative;
+    background: #000;
+}
+#visualization canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+}
+#description {
+    padding: 25px 0 75px !important;
+    border-top: 1px solid #28282c;
+}
+@media(max-width:700px) {
+    .network-intro { padding-top: 26px; }
+    #visualization { height: 340px !important; }
+    #description { padding-bottom: 45px !important; }
+}
+</style>
+
+
+<style id="urban-network-story">
+.network-intro {
+    padding-top: 42px !important;
+    padding-bottom: 12px !important;
+}
+
+.network-eyebrow {
+    font-size: 11px !important;
+    letter-spacing: 2px;
+    color: #999 !important;
+    margin-bottom: 14px;
+}
+
+.network-intro h1 {
+    max-width: 800px;
+    font-size: clamp(30px, 4vw, 44px);
+    line-height: 1.18;
+    font-weight: 500;
+}
+
+.network-intro .network-lead {
+    max-width: 740px;
+    font-size: 16px;
+    color: #c7c7c7;
+    line-height: 1.85;
+}
+
+.network-guide {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px 30px;
+    margin-top: 30px;
+    padding: 17px 0;
+    border-top: 1px solid #303035;
+    border-bottom: 1px solid #303035;
+    font: 12px/1.6 Arial, sans-serif;
+    color: #a8a8a8;
+}
+
+.network-guide span {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.network-guide strong {
+    color: #f0f0f0;
+    font-weight: 500;
+}
+
+.guide-node,
+.guide-highlight {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #e5e5e5;
+}
+
+.guide-highlight {
+    background: #ff5555;
+}
+
+.guide-line {
+    display: inline-block;
+    width: 18px;
+    height: 2px;
+    background: #aaa;
+}
+
+#description {
+    padding-top: 27px !important;
+}
+
+#description p {
+    max-width: 800px;
+    line-height: 1.85;
+    margin: 0 0 19px;
+}
+
+@media (max-width: 700px) {
+    .network-intro {
+        padding-top: 25px !important;
+    }
+    .network-guide {
+        gap: 12px 18px;
+    }
+}
+</style>
+
 </head>
 
+
 <body>
+<header class="network-intro">
+    <p class="network-eyebrow">URBAN SYSTEMS / NETWORK VISUALIZATION</p>
 
-    <div id="visualization"></div> <!-- This div will contain the 3D visualization -->
-    <div id="description">
-        <div id="description">
-            <p>This interactive 3D visualization helps you explore how different parts of a city are connected based on their
-                similarities. Imagine that each point on the globe represents a different part of the city—such as
-                neighborhoods, landmarks, or important facilities.</p>
-            <p>What you're seeing includes labeled points where each point on the globe corresponds to a city element. These
-                could be different locations or key parts of the city. The labels help identify them. The connecting lines
-                between points represent relationships or similarities between these city elements. The closer or more connected
-                two points are, the stronger the relationship, which is shown through thicker or brighter lines.</p>
-            <p>Exploring connections is simple: Move your mouse over any point on the globe, and you'll see the lines connecting
-                it to other points get highlighted. This shows which elements are more closely related to each other. You can
-                use your mouse to zoom in and out or rotate the globe to explore different areas. This makes it easy to focus on
-                specific regions or connections within the city.</p>
-            <p>Customization options are available through the control panel on the side. You can adjust the size of the globe,
-                the font size of the labels, and even change the colors of the lines and text to match your preferences. The
-                visualization is drawing relationships between city elements based on similarity data. The stronger the
-                similarity between two points, the more prominent the line between them. By interacting with the globe, you can
-                see how different areas of the city are connected, revealing clusters or patterns you might not expect.</p>
-        </div>
+    <h1>Urban Networks: Understanding the Connections That Shape Cities</h1>
 
+    <p class="network-lead">
+        Cities are more than collections of buildings and places.
+        They are systems of relationships. This interactive 3D network
+        explores similarities between urban elements, revealing how
+        individual components can form interconnected groups and patterns.
+    </p>
+
+    <div class="network-guide">
+        <span><i class="guide-node"></i>
+        <strong>Nodes</strong> represent urban elements</span>
+
+        <span><i class="guide-line"></i>
+        <strong>Lines</strong> show recorded similarities</span>
+
+        <span><i class="guide-highlight"></i>
+        <strong>Hover</strong> to reveal connections</span>
     </div>
-    <script src="../vendor/shared/lib-51d788816744/dist/papaparse.min.js"></script>
+</header>
+
+<div id="visualization"></div>
+
+<section id="description">
+    <p>
+        The visualization represents urban elements as labeled points
+        distributed across a three-dimensional sphere. Connecting
+        lines illustrate relationships derived from the underlying
+        similarity dataset. Hovering over an element highlights its
+        recorded connections, making it easier to explore how individual
+        parts relate to the wider system.
+    </p>
+
+    <p>
+        This network-based perspective offers a different way to
+        investigate the structure of cities. Rather than examining
+        elements independently, it encourages exploration of
+        relationships, connected groups and potential patterns.
+        The sphere is an abstract arrangement, not a geographical
+        representation of actual locations or distances.
+    </p>
+</section>
+
+<script src="../vendor/shared/lib-51d788816744/dist/papaparse.min.js"></script>
     <script src="../vendor/shared/lib-4659aba89717/dist/dat.gui.min.js"></script>
     <script type="module">
         import * as THREE from '../vendor/shared/lib-a64c14149358/dist/three.module.js';
@@ -91,14 +263,30 @@ canvas {
 
         function init() {
             scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera = new THREE.PerspectiveCamera(75, document.getElementById('visualization').clientWidth / document.getElementById('visualization').clientHeight, 0.1, 1000);
             camera.position.z = 100;
 
             renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(
+                document.getElementById('visualization').clientWidth,
+                document.getElementById('visualization').clientHeight
+            );
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
             renderer.setClearColor(0x000000);
             document.getElementById('visualization').appendChild(renderer.domElement);
+
+                // Match the renderer and camera to the actual network container.
+                function resizeNetwork() {
+                    const container = document.getElementById('visualization');
+                    const width = container.clientWidth;
+                    const height = container.clientHeight;
+                    if (!width || !height) return;
+                    camera.aspect = width / height;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(width, height);
+                }
+                window.addEventListener('resize', resizeNetwork);
+
 
             controls = new OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
@@ -195,8 +383,9 @@ canvas {
 
         function onMouseMove(event) {
             event.preventDefault();
-            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            const rect = renderer.domElement.getBoundingClientRect();
+                mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
             raycaster.setFromCamera(mouse, camera);
             const intersects = raycaster.intersectObjects(Array.from(pointMap.values()));
