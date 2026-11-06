@@ -73,50 +73,137 @@
 
         
     </style>
+
+<style id="energy-dark-map-fix">
+/* Dark navy styling for both map backgrounds */
+#map-production,
+#map-consumption {
+    background: #091827;
+}
+
+/* Apply styling only to geographic tiles, not energy data */
+#map-production .leaflet-tile-pane img.leaflet-tile,
+#map-consumption .leaflet-tile-pane img.leaflet-tile {
+    filter: grayscale(1) invert(1) sepia(1)
+            hue-rotate(170deg) saturate(1.8)
+            brightness(0.48) contrast(1.25);
+}
+</style>
+
+
+<style id="energy-atlas-polish">
+html, body {
+    background: #080809 !important;
+    color: #e5e5e7;
+}
+
+#map-production,
+#map-consumption {
+    height: 380px !important;
+    min-height: 0 !important;
+    max-height: 380px !important;
+    background: #080809 !important;
+}
+
+/* Darken geographic tiles without altering energy polygons. */
+#map-production .leaflet-tile-pane img.leaflet-tile,
+#map-consumption .leaflet-tile-pane img.leaflet-tile {
+    filter: grayscale(1) invert(1)
+            brightness(0.32) contrast(1.4) !important;
+}
+
+#energy-research-report {
+    background: #080809 !important;
+    color: #e5e5e7 !important;
+}
+
+#energy-research-report .er-stat,
+#energy-research-report .er-panel {
+    background: #141416 !important;
+    border-color: #303035 !important;
+}
+
+#energy-research-report .er-note {
+    background: #171719 !important;
+}
+
+#energy-research-report th {
+    background: #222226 !important;
+}
+
+#energy-research-report td,
+#energy-research-report th {
+    border-color: #34343a !important;
+}
+
+#energy-research-report .er-bar-track {
+    background: #303035 !important;
+}
+
+/* Decorative energy beacons */
+.energy-light-icon {
+    background: transparent;
+    border: 0;
+    pointer-events: none;
+}
+
+.energy-beacon {
+    display: block;
+    position: relative;
+    width: var(--beacon-size);
+    height: var(--beacon-size);
+    border-radius: 50%;
+    background: var(--beacon-color);
+    box-shadow:
+        0 0 7px var(--beacon-color),
+        0 0 16px var(--beacon-color);
+    animation: energy-glow var(--beacon-speed) ease-in-out infinite;
+    animation-delay: var(--beacon-delay);
+}
+
+.energy-beacon::after {
+    content: "";
+    position: absolute;
+    inset: -5px;
+    border: 1px solid var(--beacon-color);
+    border-radius: 50%;
+    opacity: 0;
+    animation: energy-ring var(--beacon-speed) ease-out infinite;
+    animation-delay: var(--beacon-delay);
+}
+
+@keyframes energy-glow {
+    0%, 100% { opacity: .48; transform: scale(.8); }
+    50% { opacity: 1; transform: scale(1.15); }
+}
+
+@keyframes energy-ring {
+    0% { opacity: .6; transform: scale(.5); }
+    100% { opacity: 0; transform: scale(2.3); }
+}
+
+@media (max-width: 700px) {
+    #map-production,
+    #map-consumption {
+        height: 290px !important;
+        max-height: 290px !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .energy-beacon,
+    .energy-beacon::after {
+        animation: none !important;
+    }
+}
+</style>
+
 </head>
 
 <body>
     <div id="map-production"></div>
     <div id="map-consumption"></div>
-   <div id="explaination">
-   <br>    
-   <h1>
-    Global Energy Dynamics: Production and Consumption Patterns
-   </h1>
-    <p>
-        The global energy landscape is characterized by striking disparities in production and consumption, shaped by economic, political, and geographical factors. This comprehensive analysis delves into these dynamics, offering a detailed look at how countries generate and use energy, and the implications for future energy strategies and policy development.
-    </p>
-    <p>
-        Recent data highlight the stark differences in energy production and consumption across countries, with superpowers like the United States, China, and Russia leading in both domains. These nations not only boast substantial natural resources but also possess advanced infrastructures that enable them to exploit these resources efficiently.
-    </p>
-    <p>
-        <strong>Energy Production:</strong><br>
-        <strong>China</strong> is the world's leading energy producer, its extensive investment in both renewable and non-renewable resources underscore its global dominance.<br>
-        <strong>The United States</strong> ranks second, leveraging its diverse energy sources including natural gas, coal, nuclear, and a burgeoning renewable sector.<br>
-        <strong>Russia</strong> maintains a strong position thanks to its significant oil and natural gas outputs.
-    </p>
-    <p>
-        <strong>Energy Consumption:</strong><br>
-        <strong>China</strong> also leads in consumption, illustrating the challenges of high industrial demand combined with the need for sustainable practices.<br>
-        <strong>The United States</strong> shows a slightly lower consumption relative to production, reflecting high energy efficiency and advanced technology deployment.<br>
-        <strong>India's</strong> consumption levels, driven by its rapid economic and population growth, indicate potential areas for increased domestic energy production and infrastructure development.
-    </p>
-    <p>
-        Countries such as Japan and Germany, which consume more energy than they produce, highlight the global dependency on energy imports and the importance of energy efficiency and renewable investments.
-    </p>
-    <p>
-        The energy maps, with their color-coded representations, visually illustrate these production and consumption levels. Darker shades indicate higher energy activities, showcasing how industrialized countries and regions with significant oil reserves, like the Middle East and parts of Western Europe, are key nodes in the energy network. In contrast, many African regions show much lighter shades, indicating untapped potential and highlighting disparities in energy access and economic development.
-    </p>
-    <p>
-        The analysis of these data points has several key implications:<br>
-         <strong>Energy Security and Policy:</strong> The data underscores the importance of robust energy policies that promote stability and sustainability, especially for top producers and consumers.<br>
-         <strong>Economic Development:</strong> There is a clear correlation between energy access and economic advancement. Nations with lower energy outputs often experience slower economic growth, suggesting a critical area for international development and investment.<br>
-        <strong>Environmental Considerations:</strong> High levels of production and consumption are associated with significant environmental impacts. This necessitates the adoption of strategies that not only enhance energy efficiency but also focus on expanding renewable energy sources to mitigate adverse environmental effects.
-    </p>
-    <p>
-        This analysis reveals crucial insights into global energy dynamics, emphasizing the role of economic development, resource availability, and technological progress in shaping energy policies. As countries grapple with the dual challenges of meeting energy demand and environmental sustainability, the insights provided here are vital for informing strategies that promote energy security, economic stability, and environmental conservation. The ongoing shifts in the energy landscape call for a proactive approach to energy management, international cooperation, and investment in innovative energy solutions to ensure a balanced and sustainable future.
-    </p>
-</div>
+   
 
     <script src="../vendor/shared/lib-5d00f470f487/dist/leaflet.js"></script>
     <script>
@@ -173,7 +260,7 @@
         }
 
         // Add a tile layer for both maps
-    var tileLayerURL = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+    var tileLayerURL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
         var attributionText = 'Energy data from <a href="https://www.eia.gov/international/overview/world">U.S. Energy Information Administration</a>; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 
         L.tileLayer(tileLayerURL, { attribution: attributionText }).addTo(mapProduction);
@@ -183,6 +270,73 @@
         fetch('combined_geojson.json')
             .then(response => response.json())
             .then(data => {
+
+            // Decorative, dataset-based energy activity beacons.
+            // These are NOT real-time energy measurements.
+            function addEnergyBeacons(map, field, color) {
+                if (!data || !Array.isArray(data.features)) return;
+
+                const ranked = data.features
+                    .filter(feature => {
+                        const value = Number(feature.properties?.[field]);
+                        return Number.isFinite(value) && value > 0 &&
+                               feature.geometry;
+                    })
+                    .sort((a, b) =>
+                        Number(b.properties[field]) -
+                        Number(a.properties[field])
+                    )
+                    .slice(0, 14);
+
+                const maximum = Math.max(
+                    ...ranked.map(f => Number(f.properties[field])),
+                    1
+                );
+
+                ranked.forEach((feature, index) => {
+                    try {
+                        const bounds = L.geoJSON(feature).getBounds();
+                        if (!bounds.isValid()) return;
+
+                        const center = bounds.getCenter();
+                        const value = Number(feature.properties[field]);
+                        const size = 6 + 6 * Math.sqrt(value / maximum);
+                        const speed = 2.8 + (index % 4) * 0.5;
+                        const delay = -(index % 7) * 0.43;
+
+                        const marker = L.marker(center, {
+                            interactive: false,
+                            keyboard: false,
+                            zIndexOffset: 300,
+                            icon: L.divIcon({
+                                className: 'energy-light-icon',
+                                iconSize: [size, size],
+                                iconAnchor: [size / 2, size / 2],
+                                html:
+                                    '<span class="energy-beacon" style="' +
+                                    '--beacon-size:' + size + 'px;' +
+                                    '--beacon-color:' + color + ';' +
+                                    '--beacon-speed:' + speed + 's;' +
+                                    '--beacon-delay:' + delay + 's;' +
+                                    '"></span>'
+                            })
+                        });
+
+                        marker.addTo(map);
+                    } catch (error) {
+                        // Skip geometries without usable bounds.
+                    }
+                });
+            }
+
+            addEnergyBeacons(
+                mapProduction, 'energyProduction', '#56ffc0'
+            );
+            addEnergyBeacons(
+                mapConsumption, 'energyConsumption', '#7fbdff'
+            );
+
+
                 L.geoJson(data, {
                     style: productionStyle,
                     onEachFeature: function (feature, layer) {
@@ -234,6 +388,687 @@
         legendProduction.addTo(mapProduction);
         legendConsumption.addTo(mapConsumption);
     </script>
+
+<style id="energy-research-style">
+#energy-research-report {
+    background: #0b1726;
+    color: #dbe5f0;
+    font-family: Arial, sans-serif;
+    padding: 64px 24px 85px;
+    line-height: 1.8;
+}
+#energy-research-report .er-inner {
+    max-width: 1100px;
+    margin: auto;
+}
+#energy-research-report .er-kicker {
+    color: #80bcf2;
+    letter-spacing: 2px;
+    font-size: 12px;
+    font-weight: 700;
+}
+#energy-research-report h1 {
+    font-size: clamp(27px, 4vw, 43px);
+    line-height: 1.2;
+    color: white;
+    margin: 14px 0 20px;
+}
+#energy-research-report h2 {
+    color: #ffffff;
+    font-size: 24px;
+    line-height: 1.35;
+    margin: 52px 0 16px;
+}
+#energy-research-report h3 {
+    color: #bddbfa;
+    font-size: 17px;
+    margin: 22px 0 8px;
+}
+#energy-research-report p {
+    color: #cedae7;
+    max-width: 920px;
+    margin: 12px 0;
+    font-size: 15px;
+}
+#energy-research-report a {
+    color: #85ccff;
+}
+#energy-research-report .er-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 32px 0;
+}
+#energy-research-report .er-stat,
+#energy-research-report .er-panel {
+    background: #14263b;
+    border: 1px solid #2b455e;
+    border-radius: 12px;
+    padding: 22px;
+}
+#energy-research-report .er-stat strong {
+    display: block;
+    font-size: 29px;
+    color: #ffffff;
+    line-height: 1.3;
+}
+#energy-research-report .er-stat span {
+    display: block;
+    font-size: 12px;
+    color: #a5bdd2;
+}
+#energy-research-report .er-table-scroll {
+    overflow-x: auto;
+}
+#energy-research-report table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 580px;
+    font-size: 13px;
+}
+#energy-research-report th {
+    background: #203a54;
+    color: white;
+    text-align: left;
+}
+#energy-research-report td,
+#energy-research-report th {
+    padding: 10px 12px;
+    border-bottom: 1px solid #334b62;
+}
+#energy-research-report .er-bar-row {
+    display: grid;
+    grid-template-columns: 155px minmax(0, 1fr) 65px;
+    gap: 12px;
+    align-items: center;
+    margin: 14px 0;
+    font-size: 13px;
+}
+#energy-research-report .er-bar-track {
+    height: 14px;
+    background: #263a50;
+    border-radius: 4px;
+    overflow: hidden;
+}
+#energy-research-report .er-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+}
+#energy-research-report .surplus { background: #48c4b5; }
+#energy-research-report .deficit { background: #f28aa8; }
+#energy-research-report .er-note {
+    border-left: 3px solid #80bcf2;
+    background: #142438;
+    padding: 15px 20px;
+    margin: 24px 0;
+    font-size: 13px;
+    color: #bdcfe1;
+}
+#energy-research-report .er-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+#energy-research-report .er-grid p {
+    font-size: 14px;
+}
+#energy-research-report .er-source {
+    margin: 12px 0;
+    font-size: 14px;
+}
+@media(max-width:700px) {
+    #energy-research-report { padding: 40px 16px; }
+    #energy-research-report .er-stats,
+    #energy-research-report .er-grid {
+        grid-template-columns: 1fr;
+    }
+    #energy-research-report .er-bar-row {
+        grid-template-columns: 95px minmax(0,1fr) 58px;
+        gap: 7px;
+        font-size: 11px;
+    }
+}
+</style>
+
+<article id="energy-research-report">
+<div class="er-inner">
+    <div class="er-kicker">GLOBAL ENERGY / SPATIAL RESEARCH</div>
+
+    <h1>Global Energy Production and Consumption:
+    Spatial Inequality, Energy Security and Urban Futures</h1>
+
+    <p>
+      This analysis examines the geographical distribution of energy
+      production and consumption and explores how differences between
+      national supply and demand influence economic resilience,
+      infrastructure systems, international dependence and urban sustainability.
+      The country comparisons are calculated directly from the accompanying
+      interactive energy maps.
+    </p>
+
+    <div class="er-note">
+      <strong>Data interpretation:</strong> The map dataset does not record
+      a reference year or explicitly define its units. The numerical values
+      below are reported in original dataset units. They must not be
+      interpreted as current-year statistics or assigned physical units
+      without checking the original source metadata.
+    </div>
+
+    <div class="er-stats">
+      <div class="er-stat">
+        <strong>175</strong>
+        <span>Geographic features with nonzero energy data</span>
+      </div>
+      <div class="er-stat">
+        <strong>598.61</strong>
+        <span>Summed production in dataset units</span>
+      </div>
+      <div class="er-stat">
+        <strong>599.88</strong>
+        <span>Summed consumption in dataset units</span>
+      </div>
+    </div>
+
+    <h2>The geography of global energy</h2>
+    <p>
+      Global energy systems exhibit a fundamental spatial mismatch.
+      Energy resources and production infrastructure are concentrated
+      in particular regions, while demand is shaped by population,
+      industrial production, transportation networks, and the intensity
+      of economic activity.
+    </p>
+    <p>
+      China is the largest producer and consumer in this dataset,
+      with production of 137.83 and consumption of 173.96.
+      The United States is the second-largest in both categories,
+      recording 98.53 in production and 94.79 in consumption.
+      These absolute comparisons show the scale of energy activity,
+      but they do not measure efficiency or environmental performance.
+    </p>
+
+    <h2>Leading energy producers</h2>
+    <p>
+      Production rankings reveal both large diversified economies and
+      resource-rich exporters. Russia, Saudi Arabia, Canada and Australia
+      have particularly notable production positions relative to
+      their domestic consumption.
+    </p>
+    <div class="er-panel er-table-scroll">
+      <table>
+        <thead><tr>
+          <th>#</th><th>Country</th><th>Production</th>
+          <th>Consumption</th><th>Difference</th>
+        </tr></thead>
+        <tbody><tr><td>1</td><td>China</td><td>137.83</td><td>173.96</td><td>-36.14</td></tr>
+<tr><td>2</td><td>United States</td><td>98.53</td><td>94.79</td><td>+3.73</td></tr>
+<tr><td>3</td><td>Russia</td><td>59.94</td><td>32.54</td><td>+27.40</td></tr>
+<tr><td>4</td><td>Saudi Arabia</td><td>29.65</td><td>11.43</td><td>+18.22</td></tr>
+<tr><td>5</td><td>India</td><td>21.89</td><td>35.26</td><td>-13.37</td></tr>
+<tr><td>6</td><td>Canada</td><td>21.55</td><td>12.27</td><td>+9.28</td></tr>
+<tr><td>7</td><td>Australia</td><td>17.82</td><td>6.17</td><td>+11.65</td></tr>
+<tr><td>8</td><td>Iran</td><td>17.64</td><td>13.50</td><td>+4.13</td></tr>
+<tr><td>9</td><td>Indonesia</td><td>16.50</td><td>9.10</td><td>+7.40</td></tr>
+<tr><td>10</td><td>United Arab Emirates</td><td>10.88</td><td>4.69</td><td>+6.20</td></tr></tbody>
+      </table>
+    </div>
+
+    <h2>Leading energy consumers</h2>
+    <p>
+      Consumption is strongly concentrated in major industrial economies.
+      China, the United States and India lead the ranking,
+      followed by Russia and Japan. Large total demand reflects
+      economic scale as well as energy intensity and should not be
+      confused with per-capita use.
+    </p>
+    <div class="er-panel er-table-scroll">
+      <table>
+        <thead><tr>
+          <th>#</th><th>Country</th><th>Production</th>
+          <th>Consumption</th><th>Difference</th>
+        </tr></thead>
+        <tbody><tr><td>1</td><td>China</td><td>137.83</td><td>173.96</td><td>-36.14</td></tr>
+<tr><td>2</td><td>United States</td><td>98.53</td><td>94.79</td><td>+3.73</td></tr>
+<tr><td>3</td><td>India</td><td>21.89</td><td>35.26</td><td>-13.37</td></tr>
+<tr><td>4</td><td>Russia</td><td>59.94</td><td>32.54</td><td>+27.40</td></tr>
+<tr><td>5</td><td>Japan</td><td>1.74</td><td>16.89</td><td>-15.16</td></tr>
+<tr><td>6</td><td>Iran</td><td>17.64</td><td>13.50</td><td>+4.13</td></tr>
+<tr><td>7</td><td>Canada</td><td>21.55</td><td>12.27</td><td>+9.28</td></tr>
+<tr><td>8</td><td>South Korea</td><td>1.86</td><td>12.20</td><td>-10.34</td></tr>
+<tr><td>9</td><td>Saudi Arabia</td><td>29.65</td><td>11.43</td><td>+18.22</td></tr>
+<tr><td>10</td><td>Germany</td><td>3.01</td><td>11.09</td><td>-8.08</td></tr></tbody>
+      </table>
+    </div>
+
+    <h2>Production–consumption imbalances</h2>
+    <p>
+      A positive difference indicates production greater than
+      consumption in this dataset; a negative difference indicates
+      the opposite. Russia has the largest positive difference
+      (+27.40), followed by Saudi Arabia (+18.22).
+      China has the largest negative difference (-36.14),
+      followed by Japan (-15.16) and India (-13.37).
+    </p>
+
+    <div class="er-panel">
+      <h3>Largest selected surpluses and deficits</h3>
+      
+        <div class="er-bar-row">
+          <span>Russia</span>
+          <div class="er-bar-track">
+            <div class="er-bar-fill surplus"
+                 style="width:75.81%"></div>
+          </div>
+          <strong>+27.40</strong>
+        </div>
+
+        <div class="er-bar-row">
+          <span>Saudi Arabia</span>
+          <div class="er-bar-track">
+            <div class="er-bar-fill surplus"
+                 style="width:50.43%"></div>
+          </div>
+          <strong>+18.22</strong>
+        </div>
+
+        <div class="er-bar-row">
+          <span>Australia</span>
+          <div class="er-bar-track">
+            <div class="er-bar-fill surplus"
+                 style="width:32.24%"></div>
+          </div>
+          <strong>+11.65</strong>
+        </div>
+
+        <div class="er-bar-row">
+          <span>Canada</span>
+          <div class="er-bar-track">
+            <div class="er-bar-fill surplus"
+                 style="width:25.69%"></div>
+          </div>
+          <strong>+9.28</strong>
+        </div>
+
+        <div class="er-bar-row">
+          <span>Norway</span>
+          <div class="er-bar-track">
+            <div class="er-bar-fill surplus"
+                 style="width:21.61%"></div>
+          </div>
+          <strong>+7.81</strong>
+        </div>
+
+        <div class="er-bar-row">
+          <span>China</span>
+          <div class="er-bar-track">
+            <div class="er-bar-fill deficit"
+                 style="width:100.00%"></div>
+          </div>
+          <strong>-36.14</strong>
+        </div>
+
+        <div class="er-bar-row">
+          <span>Japan</span>
+          <div class="er-bar-track">
+            <div class="er-bar-fill deficit"
+                 style="width:41.94%"></div>
+          </div>
+          <strong>-15.16</strong>
+        </div>
+
+        <div class="er-bar-row">
+          <span>India</span>
+          <div class="er-bar-track">
+            <div class="er-bar-fill deficit"
+                 style="width:36.99%"></div>
+          </div>
+          <strong>-13.37</strong>
+        </div>
+
+        <div class="er-bar-row">
+          <span>South Korea</span>
+          <div class="er-bar-track">
+            <div class="er-bar-fill deficit"
+                 style="width:28.61%"></div>
+          </div>
+          <strong>-10.34</strong>
+        </div>
+
+        <div class="er-bar-row">
+          <span>Germany</span>
+          <div class="er-bar-track">
+            <div class="er-bar-fill deficit"
+                 style="width:22.36%"></div>
+          </div>
+          <strong>-8.08</strong>
+        </div>
+      <p style="font-size:12px">
+        Teal: production exceeds consumption.
+        Pink: consumption exceeds production.
+      </p>
+    </div>
+
+    <div class="er-note">
+      Production minus consumption is an accounting comparison,
+      not a direct measure of net imports, energy self-sufficiency,
+      economic dependence or grid reliability. Energy trade,
+      inventories, fuel composition and accounting conventions
+      can affect the relationship.
+    </div>
+
+    <h2>Regional interpretation</h2>
+    <div class="er-grid">
+      <div class="er-panel">
+        <h3>East and South Asia</h3>
+        <p>
+          China's large negative balance and the deficits of
+          India, Japan and South Korea highlight the importance
+          of international energy connections, import diversification,
+          storage capacity and the reliability of supply networks.
+          Their different energy systems require different policy responses.
+        </p>
+      </div>
+      <div class="er-panel">
+        <h3>Resource-producing economies</h3>
+        <p>
+          Russia, Saudi Arabia, Qatar, Australia and Canada demonstrate
+          how domestic production can exceed national consumption.
+          This creates opportunities for energy exports but can also
+          expose producing economies to global commodity cycles
+          and transition-related changes in demand.
+        </p>
+      </div>
+      <div class="er-panel">
+        <h3>Europe</h3>
+        <p>
+          Germany, Italy, France and Spain record production deficits
+          in the dataset, illustrating the importance of regional
+          interconnections, import strategies and demand-side efficiency.
+          The magnitude of a deficit alone does not determine an
+          individual country's energy security.
+        </p>
+      </div>
+      <div class="er-panel">
+        <h3>North America</h3>
+        <p>
+          The United States and Canada both record positive aggregate
+          differences. However, energy systems operate through
+          fuel-specific trade flows, shared grids and infrastructure,
+          so national totals alone cannot explain local shortages
+          or regional electricity prices.
+        </p>
+      </div>
+    </div>
+
+    <h2>Contemporary energy transition</h2>
+    <p>
+      The historical or undated dataset provides a spatial baseline,
+      while newer international evidence helps explain why these
+      relationships are changing. The International Energy Agency's
+      Global Energy Review 2026 reports that world energy demand
+      grew 1.3% in 2025, while electricity demand grew around 3%.
+      The faster growth of electricity places increasing pressure
+      on grids, system flexibility and investment in generation.
+    </p>
+    <p>
+      The IEA also reports that renewable electricity generation
+      rose strongly in 2025, with solar PV contributing approximately
+      600 terawatt-hours of additional generation. Such developments
+      may gradually alter energy import needs and the geography of
+      production, although this map does not independently measure
+      renewable shares or changes over time.
+    </p>
+
+    <h2>Implications for cities and infrastructure</h2>
+    <div class="er-grid">
+      <div class="er-panel">
+        <h3>Grid resilience</h3>
+        <p>
+          Urban energy security depends on transmission and
+          distribution networks, not simply national production.
+          Grid reinforcement, redundancy and storage can help
+          cities manage outages and peak demand.
+        </p>
+      </div>
+      <div class="er-panel">
+        <h3>Built environment</h3>
+        <p>
+          Building efficiency, district energy systems, cooling
+          needs and electrification strategies can reduce
+          exposure to energy price volatility and infrastructure stress.
+        </p>
+      </div>
+      <div class="er-panel">
+        <h3>Transport electrification</h3>
+        <p>
+          Charging infrastructure and public transport electrification
+          require coordination between land-use planning,
+          electricity networks and mobility investment.
+        </p>
+      </div>
+      <div class="er-panel">
+        <h3>Investment priorities</h3>
+        <p>
+          Differences between energy supply and demand can inform
+          renewable generation, transmission corridors, storage
+          investments and local efficiency programs, but project-level
+          appraisal requires additional cost, technical and demand data.
+        </p>
+      </div>
+    </div>
+
+    <h2>Methodology and limitations</h2>
+    <p>
+      Country-level production and consumption values were extracted
+      from the GeoJSON used by the interactive maps. The geographical
+      gap is calculated as production minus consumption.
+      The analysis includes 175 features with at least one
+      positive recorded energy value, from 257
+      geographic features in the file.
+    </p>
+    <p>
+      This is a descriptive cross-sectional analysis. It does not
+      control for population, GDP, energy mix or conversion losses.
+      Zero values may represent missing observations rather than
+      actual zero energy activity. The dataset lacks explicit
+      year and unit metadata, and its coverage and country definitions
+      have not been independently audited. External 2025 findings
+      are provided for context and are not pooled into the map dataset.
+    </p>
+
+    <h2>Conclusion</h2>
+    <p>
+      The spatial distribution of global energy activity highlights
+      a central challenge of economic development: production
+      capacity, consumption demand and infrastructure needs
+      are not evenly distributed across geography.
+    </p>
+    <p>
+      Understanding these imbalances is useful for identifying
+      questions of energy security, infrastructure investment and
+      urban resilience. More detailed assessments require
+      fuel-specific statistics, time-series analysis, trade flows,
+      emissions intensity and local infrastructure information.
+    </p>
+
+    <h2>References and data sources</h2>
+    <div class="er-source">
+      <a href="https://www.eia.gov/international/"
+         target="_blank" rel="noopener noreferrer">
+         U.S. Energy Information Administration — International Energy Statistics
+      </a>
+    </div>
+    <div class="er-source">
+      <a href="https://www.iea.org/reports/global-energy-review-2026"
+         target="_blank" rel="noopener noreferrer">
+         International Energy Agency — Global Energy Review 2026
+      </a>
+    </div>
+    <div class="er-source">
+      <a href="https://www.iea.org/reports/global-energy-review-2026/electricity-demand"
+         target="_blank" rel="noopener noreferrer">
+         IEA — Electricity Demand, 2025
+      </a>
+    </div>
+    <div class="er-source">
+      <a href="https://www.iea.org/reports/global-energy-review-2026/electricity-supply"
+         target="_blank" rel="noopener noreferrer">
+         IEA — Electricity Supply, 2025
+      </a>
+    </div>
+    <div class="er-source">
+      <a href="https://unstats.un.org/unsd/energystats/"
+         target="_blank" rel="noopener noreferrer">
+         United Nations Statistics Division — Energy Statistics
+      </a>
+    </div>
+    <p style="font-size:12px;color:#91a9be">
+      Map calculations: local combined_geojson.json.
+      International context: IEA Global Energy Review 2026.
+      Source links are research references, not evidence that the
+      local file uses the same reference year or statistical revision.
+    </p>
+</div>
+</article>
+
+
+<style id="energy-editorial-layout">
+/* Minimal editorial layout — no dashboard cards */
+
+#energy-research-report {
+    background: #080809 !important;
+    padding: 45px 28px 90px !important;
+}
+
+#energy-research-report .er-inner {
+    max-width: 920px;
+}
+
+#energy-research-report .er-kicker {
+    display: none;
+}
+
+#energy-research-report h1 {
+    font-size: clamp(29px, 4vw, 42px);
+    font-weight: 500;
+    letter-spacing: -.8px;
+    line-height: 1.25;
+    margin-bottom: 28px;
+}
+
+#energy-research-report h2 {
+    font-size: 23px;
+    font-weight: 500;
+    letter-spacing: -.3px;
+    margin: 52px 0 18px;
+}
+
+#energy-research-report h3 {
+    font-size: 17px;
+    font-weight: 500;
+    color: #e6e6e6;
+    margin: 28px 0 10px;
+}
+
+#energy-research-report p {
+    font-size: 15px;
+    line-height: 1.9;
+    color: #bcbcbc;
+    max-width: 850px;
+}
+
+#energy-research-report .er-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px;
+    border-top: 1px solid #303034;
+    border-bottom: 1px solid #303034;
+    padding: 24px 0;
+    margin: 35px 0 45px;
+}
+
+#energy-research-report .er-stat {
+    flex: 1 1 170px;
+    min-width: 0;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+}
+
+#energy-research-report .er-stat strong {
+    font-size: 25px;
+    font-weight: 500;
+}
+
+#energy-research-report .er-stat span {
+    font-size: 12px;
+    line-height: 1.6;
+    color: #969696;
+}
+
+#energy-research-report .er-panel {
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 12px 0 20px !important;
+    margin: 0;
+    box-shadow: none !important;
+}
+
+#energy-research-report .er-grid {
+    display: block !important;
+}
+
+#energy-research-report .er-grid .er-panel {
+    padding: 8px 0 12px !important;
+}
+
+#energy-research-report .er-note {
+    background: transparent !important;
+    border: none !important;
+    border-left: 2px solid #555 !important;
+    border-radius: 0 !important;
+    padding: 4px 0 4px 18px !important;
+    color: #aaa;
+    margin: 26px 0;
+}
+
+#energy-research-report table {
+    font-size: 13px;
+}
+
+#energy-research-report th {
+    background: transparent !important;
+    font-weight: 500;
+    color: #ddd;
+}
+
+#energy-research-report td,
+#energy-research-report th {
+    border-bottom: 1px solid #29292d !important;
+    padding: 12px 10px;
+}
+
+#energy-research-report .er-bar-track {
+    background: #242427 !important;
+}
+
+#energy-research-report .er-source {
+    border-bottom: 1px solid #252529;
+    padding: 8px 0;
+    margin: 0;
+}
+
+@media (max-width: 700px) {
+    #energy-research-report {
+        padding: 35px 18px 65px !important;
+    }
+    #energy-research-report .er-stats {
+        gap: 20px;
+    }
+}
+</style>
+
 </body>
 
 </html>
