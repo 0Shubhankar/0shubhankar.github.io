@@ -210,6 +210,14 @@ const portfolioItems = [
       image: "images/previews/41.webp",
     },
     {
+      projectType: "Transit Strategy Simulation",
+      smallTitle: "Move the City",
+      title: "Move the City — Metro, Money & Opportunity",
+      titleLink: "48/index.html",
+      tags: ["Urban Transit", "Metro Simulation", "Municipal Bonds", "Land Value Capture", "Accessibility", "Infrastructure Finance", "Urban Economics", "Strategy Game"],
+      image: "images/previews/48.webp",
+    },
+    {
       projectType: "Financial Detective Game",
       smallTitle: "Follow the Money!",
       title: "Follow the Money! — A Civic Finance Mystery",

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f1efe9">
+<title>MOVE THE CITY — A Metro & Money Game</title>
+<meta name="description" content="Draw a transit line. Finance it. Move opportunity across a city. An interactive metro-planning and public-finance game.">
+<link rel="stylesheet" href="styles.css">
+<script defer src="game.js"></script>
+</head>
+<body>
+<a class="skip" href="#workbench">Skip to simulation</a>
+<div class="page">
+<header class="masthead">
+  <a class="brand" href="../" aria-label="Back to portfolio"><span class="brand-icon">M<span class="brand-slash">/</span></span><span>URBAN CAPITAL<br><b>PLAYGROUND</b></span></a>
+  <div class="masthead-center"><span class="tiny-light"></span> METROPOLITAN TRANSIT LAB</div>
+  <a class="exit-link" href="../">← ALL PROJECTS</a>
+</header>
+<section class="hero" id="top">
+ <div class="hero-copy">
+  <div class="eyebrow"><span class="eyebrow-dot"></span> YOUR CITY. YOUR LINE. YOUR CONSEQUENCES.</div>
+  <h1>MOVE<br><em>THE</em> CITY<span class="period">.</span></h1>
+  <p class="hero-lede">A train can move people. A station can move money. A badly financed metro can move a city toward disaster.</p>
+  <div class="hero-actions"><button type="button" id="startBtn" class="primary-btn">START PLANNING <span>↗</span></button><button type="button" class="outline-btn" id="howBtn">HOW TO PLAY <span>↗</span></button></div>
+  <div class="hero-micro"><span><b>06</b> DISTRICTS</span><span><b>06</b> CANDIDATE STOPS</span><span><b>15</b> YEARS TO PROVE IT</span></div>
+ </div>
+ <div class="hero-sign" aria-hidden="true">
+  <div class="hero-board-label"><span>LINE M</span><span>PROJECTED SERVICE / FICTIONAL CITY</span></div>
+  <svg viewBox="0 0 530 405" class="hero-illustration">
+   <defs><pattern id="heroGrid" width="26" height="26" patternUnits="userSpaceOnUse"><path d="M26 0H0V26" fill="none" stroke="#56615e" stroke-opacity=".28" stroke-width=".8"/></pattern></defs>
+   <rect width="530" height="405" fill="url(#heroGrid)"/>
+   <path d="M55 295 C120 295 110 225 175 225 S235 100 305 100 S375 300 470 205" fill="none" stroke="#fbc849" stroke-width="13" stroke-linecap="round"/>
+   <path d="M55 295 C120 295 110 225 175 225 S235 100 305 100 S375 300 470 205" fill="none" stroke="#272b29" stroke-width="2.5" stroke-dasharray="7 9"/>
+   <g fill="#f1efe9" stroke="#262b29" stroke-width="5"><circle cx="55" cy="295" r="15"/><circle cx="175" cy="225" r="15"/><circle cx="305" cy="100" r="15"/><circle cx="470" cy="205" r="15"/></g>
+   <g fill="#fb4a9f" stroke="#262b29" stroke-width="4"><rect x="90" y="92" width="84" height="46" rx="23"/><circle cx="132" cy="115" r="8" fill="#282b2a"/><rect x="333" y="315" width="130" height="50" rx="25"/><circle cx="365" cy="340" r="9" fill="#262b29"/></g>
+   <text x="42" y="336" class="hero-svg-text">WEST</text><text x="153" y="268" class="hero-svg-text">MARKET</text><text x="286" y="63" class="hero-svg-text">CIVIC</text><text x="433" y="244" class="hero-svg-text">EAST</text>
+   <text x="360" y="63" class="hero-svg-small">NEXT TRAIN</text><text x="360" y="86" class="hero-svg-head">00:03</text>
+   <g transform="translate(370 150)"><rect width="70" height="38" rx="15" fill="#fbc849"/><rect x="10" y="7" width="20" height="17" rx="4" fill="#272b29"/><rect x="38" y="7" width="20" height="17" rx="4" fill="#272b29"/><circle cx="18" cy="34" r="3" fill="#272b29"/><circle cx="52" cy="34" r="3" fill="#272b29"/></g>
+  </svg>
+  <div class="hero-board-footer"><span>YOU MAKE THE STOPS</span><span>THE CITY MAKES THE REST →</span></div>
+ </div>
+</section>
+<section class="how-strip" id="instructions" aria-labelledby="howTitle">
+ <div class="how-intro"><span class="kicker">RIDERS' GUIDE</span><h2 id="howTitle">Four moves.<br><i>One city.</i></h2></div>
+ <div class="how-step"><span class="how-num">01</span><strong>PICK THE STOPS</strong><p>Click circles on the map to add or remove stations. Shift a stop 500 m to see what changes.</p></div>
+ <div class="how-step"><span class="how-num">02</span><strong>MAKE IT PAY</strong><p>Set fares, debt, grants and land-value capture. Don't confuse higher land prices with city cash.</p></div>
+ <div class="how-step"><span class="how-num">03</span><strong>CHANGE THE FUTURE</strong><p>Negotiate a developer offer. Stress-test population, rates and construction costs.</p></div>
+ <div class="how-step"><span class="how-num">04</span><strong>RUN THE CITY</strong><p>Simulate fifteen years, then compare finance, access, displacement and climate impacts.</p></div>
+</section>
+<main id="workbench" tabindex="-1">
+ <section class="work-intro"><div><span class="kicker">THE NETWORK ROOM / SANDBOX</span><h2>DRAW THE LINE<span>.</span></h2><p>Six possible stations. Two existing terminals. Choose which neighborhoods get connected—then finance the consequences.</p></div><div class="fiction-notice">◉ FICTIONAL CITY<br><small>All money, population and travel data are illustrative. Numbers follow the published game assumptions.</small></div></section>
+ <div class="game-steps" role="group" aria-label="Planning stages"><button class="step-chip active" data-step="build"><span class="chip-circle pink">1</span>DRAW</button><button class="step-chip" data-step="fund"><span class="chip-circle yellow">2</span>PAY</button><button class="step-chip" data-step="stress"><span class="chip-circle mint">3</span>PRESSURE</button><button class="step-chip" data-step="results"><span class="chip-circle lilac">4</span>RESULTS</button></div>
+ <div class="game-grid">
+  <section class="map-panel" aria-labelledby="mapTitle">
+   <div class="map-top"><div><span class="kicker on-dark">INTERACTIVE NETWORK / LINE M</span><h3 id="mapTitle">THE CITY IS YOUR BOARD.</h3></div><button type="button" class="map-reset" id="resetBtn">↺ RESET</button></div>
+   <div class="map-caption"><span><i class="legend-dot existing"></i> EXISTING</span><span><i class="legend-dot proposed"></i> PROPOSED</span><span><i class="legend-dot candidate"></i> AVAILABLE</span></div>
+   <div class="metro-map-wrap"><svg id="metroMap" viewBox="0 0 840 540" role="img" aria-label="Interactive six-district metro map with station selection"></svg><div class="train-status"><span class="train-icon">▰▰</span> <span id="trainLabel">EXPRESS / TWO TERMINALS</span></div></div>
+   <div class="map-stats"><div><span>PROPOSED STOPS</span><strong id="stopCount">0 / 6</strong></div><div><span>ROUTE LENGTH</span><strong id="routeLength">—</strong></div><div><span>PEOPLE WITH NEW ACCESS</span><strong id="newAccess">—</strong></div></div>
+   <div class="station-detail" id="stationDetail" aria-live="polite"></div>
+  </section>
+  <aside class="control-panel" aria-label="Metro planning controls">
+   <div class="panel-tab-row"><button class="panel-tab selected" data-tab="plan">PLANNING</button><button class="panel-tab" data-tab="money">MONEY</button><button class="panel-tab" data-tab="risk">FUTURE</button></div>
+   <div id="controlContent"></div>
+   <div class="panel-foot"><span>LIVE MODEL</span><span class="blink"></span><span id="liveModelState">READY TO EXPERIMENT</span></div>
+  </aside>
+ </div>
+ <section class="system-section" aria-labelledby="systemTitle">
+  <div class="section-heading"><div><span class="kicker">THE 5 CONCEPT LINES</span><h2 id="systemTitle">EVERY STOP TEACHES SOMETHING.</h2></div><p>Select a concept station to see what actually changed in your network.</p></div>
+  <div class="concept-line" id="conceptLine"><button data-concept="access" class="concept-stop active"><span class="mini-rail access"></span><span class="concept-disc">A</span><b>ACCESS</b></button><button data-concept="value" class="concept-stop"><span class="mini-rail value"></span><span class="concept-disc">V</span><b>VALUE</b></button><button data-concept="finance" class="concept-stop"><span class="mini-rail finance"></span><span class="concept-disc">F</span><b>FINANCE</b></button><button data-concept="equity" class="concept-stop"><span class="mini-rail equity"></span><span class="concept-disc">E</span><b>EQUITY</b></button><button data-concept="resilience" class="concept-stop"><span class="mini-rail resilience"></span><span class="concept-disc">R</span><b>RESILIENCE</b></button></div>
+  <div class="concept-detail" id="conceptDetail" aria-live="polite"></div>
+ </section>
+ <section class="output-section" aria-labelledby="scoreTitle">
+  <div class="section-heading score-head"><div><span class="kicker">THE ROUTE REPORT / LIVE ESTIMATES</span><h2 id="scoreTitle">WHO WINS WHEN THE LINE MOVES?</h2></div><button class="secondary-action" type="button" id="goResultsBtn">VIEW 15-YEAR RESULTS ↗</button></div>
+  <div class="score-strip" id="scoreStrip"></div>
+  <div class="output-grid"><div class="flow-card"><div class="card-heading"><span>WHERE THE CAPITAL COMES FROM</span><span>ILLUSTRATIVE · $M</span></div><div id="fundingBars"></div></div><div class="flow-card"><div class="card-heading"><span>THIS NETWORK'S TRADE-OFFS</span><span>HOW THE MODEL REACTS</span></div><div id="tradeOffs"></div></div></div>
+ </section>
+ <section class="final-section" id="resultsSection" aria-labelledby="resultsTitle"><div class="final-heading"><div><span class="kicker on-dark">CITY HALL / 15-YEAR FORECAST</span><h2 id="resultsTitle">WHAT THE CITY<br>BECAME<span>.</span></h2></div><div class="ending-tag" id="endingTag">AWAITING YOUR SIMULATION</div></div><div class="result-placeholder" id="resultContent"><p>Design your route, choose a financing package, and press <strong>RUN 15 YEARS</strong> to reveal the outcome.</p><button type="button" class="light-btn" id="resultStartBtn">GO TO THE CONTROL ROOM ↗</button></div></section>
+ <section class="method-section"><div><span class="kicker">OPEN MODEL / NOT A BLACK BOX</span><h2>HOW THE NUMBERS WORK.</h2><p>No real-world project is represented. All amounts and scores are hypothetical. The model separates one-off land-value capture from recurring taxes, public benefits from agency cash flows, and a bond's principal from its interest.</p></div><details><summary>EXPAND THE FINANCIAL AND CITY FORMULAS <span>+</span></summary><div class="method-body"><p><b>Ridership.</b> For each selected stop, the model estimates district catchment using walking distance, local population and jobs. Adjacent stations overlap; projected riders increase with access and city jobs but decrease when fares rise. Scenarios modify demand, with a staged ridership ramp.</p><p><b>Construction and funding.</b> Capital cost combines station cost, route length and elevated/underground factors. Grant funding is a percentage of project cost. Land-value capture is a one-off contribution based on a chosen percentage of estimated land uplift, with a collection cap. Bond principal is the elected share of remaining capital cost; the unfinanced portion is a city capital contribution.</p><p><b>Debt and operations.</b> Bonds have level annual payments over 30 years; the coupon equals the assumed base rate plus scenario spread. Each year, agency operating cash is fare revenue plus dedicated annual tax uplift minus operating costs. Debt service is principal plus interest. The annual municipal subsidy is the shortfall between agency operating cash and debt service. Negative cash isn't hidden: it shows as a fiscal funding gap.</p><p><b>Economic value.</b> Reported social benefit/cost is an illustrative 30-year present-value comparison of travel-time and external benefits against construction and operations. Property uplift is tracked separately to avoid counting the same accessibility benefit twice.</p><p><b>Equity.</b> New walking access is calculated separately for lower-income districts. A modeled displacement-pressure score responds to speculative land uplift and the affordable-housing agreement; it is an indicator, not an observed relocation count.</p><p><b>Uncertainty.</b> Scenario outcomes are deterministic stress assumptions, not probability forecasts or real municipal credit ratings. See README for variable definitions and known limitations.</p></div></details></section>
+</main>
+<footer class="foot"><div class="footer-route"><span class="footer-dot pink"></span><span class="footer-dot yellow"></span><span class="footer-dot mint"></span><span class="footer-dot lilac"></span><span class="footer-dot violet"></span></div><span>MOVE THE CITY / AN URBAN CAPITAL PLAYGROUND EXPERIMENT</span><a href="#top">BACK TO FIRST STOP ↑</a></footer>
+</div>
+</body>
+</html>
