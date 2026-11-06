@@ -210,6 +210,14 @@ const portfolioItems = [
       image: "images/previews/41.webp",
     },
     {
+      projectType: "Real Estate Finance Game",
+      smallTitle: "The Property Machine",
+      title: "The Property Machine",
+      titleLink: "46/index.html",
+      tags: ["Real Estate", "Asset Valuation", "Mortgage Finance", "Capital Structure", "Private Equity", "Securitization", "Portfolio Risk", "Financial Simulation"],
+      image: "images/previews/46.webp",
+    },
+    {
       projectType: "Disaster Finance Strategy Game",
       smallTitle: "One Storm Away from Default",
       title: "One Storm Away from Default",
