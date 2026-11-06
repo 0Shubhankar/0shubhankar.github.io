@@ -210,6 +210,14 @@ const portfolioItems = [
       image: "images/previews/41.webp",
     },
     {
+      projectType: "Real Estate Strategy Game",
+      smallTitle: "The Developer's Dilemma",
+      title: "The Developer's Dilemma",
+      titleLink: "44/index.html",
+      tags: ["Real Estate Development", "Investment Game", "Project Finance", "Asset Valuation", "Construction Loans", "Financial Modeling", "Urban Development", "Strategy"],
+      image: "images/previews/44.webp",
+    },
+    {
       projectType: "Interactive Finance Game",
       smallTitle: "Buy a Piece of the City",
       title: "Buy a Piece of the City",

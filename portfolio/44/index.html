@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#d6c5f1" />
+<meta name="description" content="A playful real estate development strategy game. Buy land, finance buildings, survive credit shocks, and build a property empire." />
+<title>The Developer's Dilemma — An Urban Real Estate Strategy Game</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="shell">
+<header class="masthead">
+ <a href="../" class="backlink">← BACK TO THE PORTFOLIO</a>
+ <span class="mast-center">THE CITY IS YOUR BOARD</span>
+ <span class="mast-right">REAL ESTATE / STRATEGY GAME <span aria-hidden="true">✳</span></span>
+</header>
+<section class="cover">
+ <div class="cover-left"><div class="eyebrow"><span class="ink-dot"></span> AN INTERACTIVE DEVELOPMENT EXPERIMENT</div>
+ <h1>THE <em>DEVELOPER'S</em><br>DILEMMA<span class="orange-dot">.</span></h1>
+ <p>Buy land. Build the impossible. Convince the bank. Survive the market. <strong>Looking rich and being solvent are two very different things.</strong></p>
+ </div>
+ <div class="cover-sticker" aria-label="Game objective"><span>YOUR MISSION</span><b>BUILD AN<br>EMPIRE.</b><i>DON'T GO BUST.</i><span class="sticker-arrow">↗</span></div>
+</section>
+<section class="setup-strip" aria-label="Game settings">
+ <div><span class="field-label">THE CHALLENGE</span><div class="mode-controls" id="modeControls"><button data-mode="rookie" class="mode active">ROOKIE</button><button data-mode="mogul" class="mode">MOGUL</button><button data-mode="crash">CRASH MODE</button></div></div>
+ <div class="setup-explain" id="modeDescription">A forgiving opening. Learn the game before the bank learns your name.</div>
+ <button id="newGameBtn" class="reset-btn">↻ NEW GAME</button>
+</section>
+<section class="ticker" aria-label="Company performance">
+ <div><span>YEAR</span><strong id="statYear">1 / 10</strong></div>
+ <div><span>CASH YOU CAN SPEND</span><strong id="statCash">$24.0M</strong></div>
+ <div><span>PROPERTY VALUE</span><strong id="statAssets">$0.0M</strong></div>
+ <div><span>DEBT OUTSTANDING</span><strong id="statDebt">$0.0M</strong></div>
+ <div><span>YOUR EQUITY VALUE</span><strong id="statNav">$24.0M</strong></div>
+ <div><span>AVAILABLE CREDIT</span><strong id="statCredit">—</strong></div>
+</section>
+<main class="main-grid">
+ <section class="board-panel" aria-label="Interactive real estate city board">
+  <div class="panel-head"><div><span class="section-number">01 / YOUR CITY</span><h2>Location, location,<br><i>consequences.</i></h2></div><div class="board-key"><span><i class="key vacant"></i> FOR SALE</span><span><i class="key owned"></i> OWNED</span><span><i class="key building"></i> BUILDING</span><span><i class="key complete"></i> OPEN</span></div></div>
+  <div class="city-wrap"><svg id="citySvg" viewBox="0 0 920 520" role="img" aria-label="A stylized interactive city map with six clickable real estate sites"></svg><div class="map-stamp">CITY OF <b>PERPETUAL<br>OPPORTUNITY</b><small>ALL NUMBERS FICTIONAL</small></div><div class="map-compass">N<br>↑</div></div>
+  <div class="board-footer"><span>SELECT A PLOT TO INSPECT / ACQUIRE / DEVELOP</span><span id="boardStatus">6 SITES · NO DEALS YET</span></div>
+ </section>
+ <aside class="deal-panel" aria-label="Site and deal controls">
+  <div class="panel-head compact"><div><span class="section-number">02 / DEAL ROOM</span><h2>Make your move<span class="orange-dot">.</span></h2></div><span class="corner-sign">↗</span></div>
+  <div class="site-details" id="siteDetails" aria-live="polite"></div>
+  <div class="deal-controls" id="dealControls"></div>
+  <div class="deal-feedback" id="dealFeedback" role="status" aria-live="polite">Choose a parcel. Every skyline begins with a land deal.</div>
+ </aside>
+</main>
+<section class="lower-grid">
+ <div class="memo-panel">
+  <div class="panel-head compact"><div><span class="section-number">03 / THE STREET TALKS</span><h2>Market gossip<span class="orange-dot">.</span></h2></div><div class="news-tag">LIVE SIMULATION</div></div>
+  <div class="news-content"><div class="headline-mark">“</div><div><h3 id="eventTitle">The credit market is open. For now.</h3><p id="eventDetail">The banks are smiling. Nobody has read the fine print.</p></div></div>
+  <div class="forecast-row"><div><span>BASE INTEREST RATE</span><strong id="statRate">6.5%</strong></div><div><span>DEMAND INDEX</span><strong id="statDemand">100</strong></div><div><span>MARKET PRESSURE</span><strong id="statPressure">NORMAL</strong></div></div>
+  <div class="turn-actions"><button id="nextYearBtn" class="next-btn">ADVANCE ONE YEAR <b>→</b></button><span id="turnHelp">Construction, rents, loan payments and surprises happen here.</span></div>
+ </div>
+ <div class="books-panel">
+  <div class="panel-head compact"><div><span class="section-number">04 / SHOW ME THE MONEY</span><h2>The real numbers<span class="orange-dot">.</span></h2></div><button class="xray-button" id="xrayToggle" aria-expanded="false">⊕ FINANCIAL X-RAY</button></div>
+  <div class="books-tabs" role="tablist"><button class="tab active" data-tab="portfolio">PORTFOLIO</button><button class="tab" data-tab="cashflow">CASH FLOW</button><button class="tab" data-tab="debt">DEBT DESK</button></div>
+  <div id="booksContent" class="books-content"></div>
+  <div class="xray-content" id="xrayContent" hidden></div>
+ </div>
+</section>
+<section class="footnotes"><div><span class="asterisk">✳</span><b>IT'S A GAME. THE MATH ISN'T PRETEND.</b><p>Fictional parcels, fictional markets, and simplified but consistent cash-flow and debt logic. Estimated property values are not cash. Construction loans must be repaid. A positive NPV does not prevent a liquidity crisis.</p></div><div><b>HOW TO PLAY</b><p>Buy a parcel → choose a building → choose leverage → fund construction → collect rent, sell, or refinance. Advance the year to see the consequences. The game ends after year 10, or earlier if you decide to start over.</p></div><div><b>THE HOUSE RULES</b><p>All amounts are in fictional US$ millions. Loans are simplified, fixed-rate structures; there are no taxes, legal fees, transaction-level waterfall, or real-world lending offers. This is an educational simulation, not financial advice.</p></div></section>
+<div id="endOverlay" class="end-overlay" hidden><div class="end-card"><span>THE FINAL BOARD MEETING</span><h2 id="endTitle"></h2><p id="endSummary"></p><div id="endMetrics"></div><button id="restartFromEnd">PLAY ANOTHER CITY ↻</button><button id="closeEnd" class="end-close">REVIEW MY CITY</button></div></div>
+<footer><span>THE DEVELOPER'S DILEMMA</span><span>DESIGN BIG / BORROW CAREFULLY / STAY LIQUID</span></footer>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
