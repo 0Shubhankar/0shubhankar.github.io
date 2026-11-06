@@ -210,6 +210,14 @@ const portfolioItems = [
       image: "images/previews/41.webp",
     },
     {
+      projectType: "Financial Science Game",
+      smallTitle: "The Interest Rate Roller Coaster",
+      title: "The Interest Rate Roller Coaster",
+      titleLink: "49/index.html",
+      tags: ["Fixed Income", "Yield Curve", "Bond Valuation", "Duration", "Convexity", "Municipal Bonds", "Interest Rate Derivatives", "Real Estate Finance", "Financial Simulation"],
+      image: "images/previews/49.webp",
+    },
+    {
       projectType: "Transit Strategy Simulation",
       smallTitle: "Move the City",
       title: "Move the City — Metro, Money & Opportunity",
