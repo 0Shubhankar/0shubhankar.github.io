@@ -57,30 +57,20 @@
 
 <body>
 
-<div id="webgl-notice" style="
-    position: fixed;
-    top: 12px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10000;
-    box-sizing: border-box;
-    width: min(90%, 660px);
-    padding: 14px 20px;
-    background: #172638;
-    color: #ffffff;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    line-height: 1.6;
-    text-align: center;
-    border-radius: 6px;
-">
-    <strong>3D Visualization — WebGL Required</strong>
-    <div>
-        This interactive visualization requires WebGL support.
-        If the 3D scene does not appear, enable graphics acceleration
-        in your browser or try a WebGL-compatible device.
+
+<div id="webgl-notice" style="position:fixed;bottom:16px;right:16px;z-index:10000;font-family:Arial,sans-serif;max-width:calc(100vw - 32px);">
+  <div id="webgl-notice-panel" style="background:rgba(23,38,56,.95);color:white;padding:14px;border-radius:10px;width:290px;max-width:calc(100vw - 60px);box-sizing:border-box;box-shadow:0 5px 20px #0005;font-size:13px;line-height:1.5;">
+    <div style="display:flex;justify-content:space-between;gap:12px;">
+      <div>
+        <strong>WebGL Visualization</strong>
+        <p style="margin:6px 0 0;">This 3D visualization requires WebGL. If it does not load, enable graphics acceleration or try another compatible browser.</p>
+      </div>
+      <button id="webgl-notice-close" type="button" aria-label="Minimize WebGL notice" style="background:none;border:0;color:white;font-size:22px;cursor:pointer;align-self:flex-start;padding:0 3px;">×</button>
     </div>
+  </div>
+  <button id="webgl-notice-toggle" type="button" aria-label="Show WebGL information" title="WebGL information" style="display:none;width:36px;height:36px;border-radius:50%;border:1px solid #ffffff55;background:#172638;color:white;font-size:19px;font-weight:bold;cursor:pointer;box-shadow:0 4px 14px #0005;">ⓘ</button>
 </div>
+
 
     <!-- Three.js Library -->
     <script src="../vendor/shared/lib-25023b521d77/dist/three.min.js"></script>
@@ -669,7 +659,27 @@
                 dynamics.</p>
         </div>
 
-    </body>
+    
+<script id="webgl-notice-controls">
+document.addEventListener('DOMContentLoaded', function () {
+    const panel = document.getElementById('webgl-notice-panel');
+    const close = document.getElementById('webgl-notice-close');
+    const toggle = document.getElementById('webgl-notice-toggle');
+    if (!panel || !close || !toggle) return;
+
+    close.addEventListener('click', function () {
+        panel.style.display = 'none';
+        toggle.style.display = 'block';
+    });
+
+    toggle.addEventListener('click', function () {
+        toggle.style.display = 'none';
+        panel.style.display = 'block';
+    });
+});
+</script>
+
+</body>
 </body>
 
 </html>
