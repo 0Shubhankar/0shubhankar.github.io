@@ -76,24 +76,42 @@
       const textEl = heading.querySelector(".editorial-heading-text");
       const cursor = heading.querySelector(".editorial-heading-cursor");
       const fullText = heading.dataset.fullText || "";
-      let i = 0;
+
+      // Respect accessibility settings.
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        textEl.textContent = fullText;
+        if (cursor) cursor.style.display = "none";
+        return;
+      }
+
+      const millisecondsPerCharacter = 42;
+      let startTime = null;
+      let lastCount = -1;
 
       textEl.textContent = "";
 
-      function step() {
-        textEl.textContent = fullText.slice(0, i);
-        i += 1;
+      function animate(timestamp) {
+        if (startTime === null) startTime = timestamp;
 
-        if (i <= fullText.length) {
-          setTimeout(step, 34);
+        const elapsed = timestamp - startTime;
+        const count = Math.min(
+          fullText.length,
+          Math.floor(elapsed / millisecondsPerCharacter)
+        );
+
+        if (count !== lastCount) {
+          textEl.textContent = fullText.slice(0, count);
+          lastCount = count;
+        }
+
+        if (count < fullText.length) {
+          requestAnimationFrame(animate);
         } else if (cursor) {
-          setTimeout(() => {
-            cursor.style.display = "none";
-          }, 500);
+          cursor.style.display = "none";
         }
       }
 
-      step();
+      requestAnimationFrame(animate);
     }
 
     function setupTypewriter() {
