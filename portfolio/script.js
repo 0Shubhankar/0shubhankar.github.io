@@ -210,6 +210,14 @@ const portfolioItems = [
       image: "images/previews/41.webp",
     },
     {
+      projectType: "Interactive Finance Game",
+      smallTitle: "Buy a Piece of the City",
+      title: "Buy a Piece of the City",
+      titleLink: "43/index.html",
+      tags: ["Municipal Bonds", "Blockchain", "Tokenization", "Bond Valuation", "Duration", "Fixed Income", "Financial Markets", "Interactive Game"],
+      image: "images/previews/43.webp",
+    },
+    {
       projectType: "Investment Simulation",
       smallTitle: "The $100 Million Mistake!",
       title: "The $100 Million Mistake!",
