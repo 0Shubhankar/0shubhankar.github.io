@@ -204,9 +204,9 @@ const portfolioItems = [
     {
         projectType: "Geospatial Analysis", //  
         smallTitle: "World Temperature", //  
-        title: "World Temperature",
+        title: "A Warming Planet: Visualizing Global Temperature Change",
         titleLink: "26/global-temperature-visualization.html",
-        tags: ["osmnx", "D3.js", "Pandas", "Overpass API", "Maplibre", "Three.js", "Leaflet", "OpenStreetMap"],
+        tags: ["Global Warming", "Climate Change", "Temperature Anomalies", "Interactive Globe", "Climate Research", "Urban Heat", "Three.js", "WebGL", "Data Visualization", "Environmental Science"],
         image: "images/previews/26.webp",
     },
     {
