@@ -210,12 +210,28 @@ const portfolioItems = [
       image: "images/previews/41.webp",
     },
     {
+      projectType: "Interactive Research Essay",
+      smallTitle: "Planning, Psychology and the Human City",
+      title: "The Human City",
+      titleLink: "53/index.html",
+      tags: ["Urban Planning", "Human Psychology", "Environmental Psychology", "Delhi", "Research", "Visual Storytelling", "Human Needs", "Public Space"],
+      image: "images/previews/53.webp",
+    },
+    {
       projectType: "Interactive Material Exhibit",
       smallTitle: "The Secret Life of a Brick",
       title: "The Secret Life of a Brick",
       titleLink: "52/index.html",
       tags: ["Urban Materials", "Interactive Visualization", "Embodied Carbon", "Circular Economy", "Material Lifecycle", "Architecture", "Sustainability", "Canvas"],
       image: "images/previews/52.webp",
+    },
+    {
+      projectType: "Interactive Sound Installation",
+      smallTitle: "The City Is an Instrument",
+      title: "The City Is an Instrument",
+      titleLink: "51/index.html",
+      tags: ["Urban Design", "Soundscapes", "Generative Audio", "Web Audio", "Interactive Art", "Creative Coding", "Data Visualization", "Canvas"],
+      image: "images/previews/51.webp",
     },
     {
       projectType: "Urban Finance Strategy Game",

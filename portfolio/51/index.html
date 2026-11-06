@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a1520">
+  <meta name="description" content="An interactive audiovisual city: compose and redesign the sound of an imagined urban world.">
+  <title>The City Is an Instrument — An Urban Sound Studio</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#studio">Skip to the sound studio</a>
+  <div class="site-shell">
+    <header class="topbar wrap">
+      <a class="brand" href="#top" aria-label="The City Is an Instrument — home"><span class="brand-glyph" aria-hidden="true">◉</span><span class="brand-name">SONIC <b>CITY</b> LAB</span></a>
+      <div class="edition">AN INTERACTIVE URBAN SOUND INSTALLATION <span class="edition-spark">✳</span> NO MICROPHONE REQUIRED</div>
+      <a class="top-link" href="#about">THE FIELD NOTES <span aria-hidden="true">↗</span></a>
+    </header>
+
+    <main id="top">
+      <section class="intro wrap" aria-labelledby="mainTitle">
+        <div class="eyebrow"><span class="eyebrow-line"></span> THE SOUND OF AN IMAGINED CITY / LISTENING EXPERIMENT</div>
+        <div class="intro-grid">
+          <div>
+            <h1 id="mainTitle">THE CITY IS<br><em>AN</em> <span>INSTRUMENT<span class="dot">.</span></span></h1>
+          </div>
+          <div class="intro-aside">
+            <span class="asterisk" aria-hidden="true">✳</span>
+            <p>What if you could <strong>hear</strong> how a city is designed?</p>
+            <p class="intro-small">Turn up the birds. Turn down the traffic. Move from a market at dawn to the last train at midnight. Then redesign the soundtrack.</p>
+            <a href="#studio" class="text-link">ENTER THE SOUND STUDIO <span aria-hidden="true">↘</span></a>
+          </div>
+        </div>
+        <div class="sub-banner"><span>STREET SOUNDS</span><span class="cross">✳</span><span>URBAN DESIGN</span><span class="cross">✳</span><span>YOUR MIX</span><span class="banner-right">USE HEADPHONES FOR THE FULL EXPERIENCE <span aria-hidden="true">◖◗</span></span></div>
+      </section>
+
+      <section id="studio" class="studio wrap" aria-label="Interactive city sound studio">
+        <div class="studio-heading">
+          <div class="label-stack"><span class="mono-kicker">THE LISTENING ROOM</span><h2>Make some <i>city</i> noise.</h2></div>
+          <div class="playbox"><div class="playing-meta"><span id="audioIndicator" class="status-dot"></span><span id="audioStatus" aria-live="polite">AUDIO ENGINE STANDBY</span></div><button id="playButton" class="play-button" type="button"><span class="play-icon" id="playIcon">▶</span><span id="playLabel">LISTEN TO THE CITY</span></button></div>
+        </div>
+
+        <div class="stage" id="stage" data-scene="street" data-time="morning">
+          <canvas id="cityCanvas" aria-label="Animated illustration of a fictional city responding to the chosen soundscape" role="img"></canvas>
+          <div class="stage-grain" aria-hidden="true"></div>
+          <div class="stage-top"><div class="stage-coordinates"><span class="reception-light">●</span> CITY SIGNAL / GENERATIVE AUDIO<br><span class="stage-small">LAT 00.0000 · LONG 00.0000 · FICTIONAL</span></div><span id="stageClock" class="stage-clock">06:30 <b>AM</b></span></div>
+          <div class="stage-bottom">
+            <div class="stage-caption"><span class="stage-kicker" id="stageKicker">SONIC SCENE / 001</span><h3 id="stageTitle">THE CROSSROADS</h3><p id="stageDescription">A street slowly waking up. Wheels, footsteps, a distant bell.</p></div>
+            <div class="stage-meter"><span class="meter-tag">LIVE SONIC FINGERPRINT</span><canvas id="waveCanvas" aria-hidden="true"></canvas><span class="meter-footer">LOW <span>◀ FREQUENCY ▶</span> HIGH</span></div>
+          </div>
+          <div class="beacons" aria-label="Isolate a sound layer">
+            <button class="beacon b-traffic" data-solo="traffic" aria-pressed="false" title="Solo traffic"><span class="beacon-circle">◉</span><span class="beacon-name">WHEELS</span></button>
+            <button class="beacon b-birds" data-solo="birds" aria-pressed="false" title="Solo birds"><span class="beacon-circle">◉</span><span class="beacon-name">BIRDSONG</span></button>
+            <button class="beacon b-people" data-solo="people" aria-pressed="false" title="Solo footsteps"><span class="beacon-circle">◉</span><span class="beacon-name">FOOTSTEPS</span></button>
+            <button class="beacon b-transit" data-solo="transit" aria-pressed="false" title="Solo transit"><span class="beacon-circle">◉</span><span class="beacon-name">TRANSIT</span></button>
+            <button class="beacon b-water" data-solo="water" aria-pressed="false" title="Solo water"><span class="beacon-circle">◉</span><span class="beacon-name">WATER</span></button>
+          </div>
+          <div class="stage-pause-overlay" id="audioPrompt">PRESS LISTEN TO HEAR THIS CITY <span>↑</span></div>
+        </div>
+
+        <div class="control-deck">
+          <div class="deck-panel scene-panel"><div class="deck-heading"><span class="mono-kicker">CHOOSE A PLACE</span><span class="small-label">05 SOUND WORLDS</span></div><div class="scene-list" id="sceneList" role="group" aria-label="Neighborhood soundscapes">
+            <button class="scene-button selected" data-scene="street" aria-pressed="true"><span class="scene-illustration">▥</span><span class="scene-name">CROSSROADS</span><span class="scene-number">01</span></button>
+            <button class="scene-button" data-scene="park" aria-pressed="false"><span class="scene-illustration">✳</span><span class="scene-name">POCKET PARK</span><span class="scene-number">02</span></button>
+            <button class="scene-button" data-scene="market" aria-pressed="false"><span class="scene-illustration">◈</span><span class="scene-name">NIGHT MARKET</span><span class="scene-number">03</span></button>
+            <button class="scene-button" data-scene="waterfront" aria-pressed="false"><span class="scene-illustration">≈</span><span class="scene-name">CANAL WALK</span><span class="scene-number">04</span></button>
+            <button class="scene-button" data-scene="station" aria-pressed="false"><span class="scene-illustration">⇄</span><span class="scene-name">RAIL JUNCTION</span><span class="scene-number">05</span></button>
+          </div></div>
+          <div class="deck-panel time-panel"><div class="deck-heading"><span class="mono-kicker">TURN THE CLOCK</span><span class="small-label">ONE CITY · FOUR MOODS</span></div><div class="time-dial"><div class="time-buttons" role="group" aria-label="Time of day"><button data-time="morning" class="time-button selected" aria-pressed="true"><span>◔</span>DAWN</button><button data-time="day" class="time-button" aria-pressed="false"><span>☼</span>DAY</button><button data-time="evening" class="time-button" aria-pressed="false"><span>◕</span>DUSK</button><button data-time="night" class="time-button" aria-pressed="false"><span>☾</span>NIGHT</button></div><div class="time-line"><span>06:30</span><span>12:00</span><span>18:30</span><span>00:30</span></div><div class="dial-note"><span class="dial-note-icon">✳</span><p id="timeDescription">The first buses rumble by. Birds have the early shift.</p></div></div></div>
+        </div>
+      </section>
+
+      <section class="mix-section wrap" aria-labelledby="mixTitle"><div class="section-heading"><div><span class="mono-kicker">SIX CHANNELS · INFINITE COMBINATIONS</span><h2 id="mixTitle">Your city. <em>Your sound.</em></h2><p>Each fader sculpts a different part of the soundscape. Solo a sound using the glowing circles above.</p></div><div class="mix-decoration" aria-hidden="true">╱╲╱╲╱╲</div></div>
+        <div class="mixer" id="mixer">
+          <div class="channel" data-channel="traffic"><div class="channel-top"><span class="channel-icon">↗</span><span class="channel-num">CH 01</span></div><div class="channel-visual"><span class="channel-visual-bar"></span></div><label for="mixTraffic">TRAFFIC</label><span class="channel-description">engines / rubber / road</span><input id="mixTraffic" data-layer="traffic" type="range" min="0" max="100" step="1" value="75" aria-label="Traffic sound level"><output for="mixTraffic">75%</output></div>
+          <div class="channel" data-channel="people"><div class="channel-top"><span class="channel-icon">∴</span><span class="channel-num">CH 02</span></div><div class="channel-visual"><span class="channel-visual-bar"></span></div><label for="mixPeople">FOOTSTEPS</label><span class="channel-description">movement / street life</span><input id="mixPeople" data-layer="people" type="range" min="0" max="100" step="1" value="75" aria-label="Footsteps sound level"><output for="mixPeople">75%</output></div>
+          <div class="channel" data-channel="birds"><div class="channel-top"><span class="channel-icon">✧</span><span class="channel-num">CH 03</span></div><div class="channel-visual"><span class="channel-visual-bar"></span></div><label for="mixBirds">BIRDSONG</label><span class="channel-description">chirps / canopy / dawn</span><input id="mixBirds" data-layer="birds" type="range" min="0" max="100" step="1" value="80" aria-label="Birdsong sound level"><output for="mixBirds">80%</output></div>
+          <div class="channel" data-channel="market"><div class="channel-top"><span class="channel-icon">∞</span><span class="channel-num">CH 04</span></div><div class="channel-visual"><span class="channel-visual-bar"></span></div><label for="mixMarket">MARKET</label><span class="channel-description">voices / stalls / murmur</span><input id="mixMarket" data-layer="market" type="range" min="0" max="100" step="1" value="70" aria-label="Market ambience level"><output for="mixMarket">70%</output></div>
+          <div class="channel" data-channel="water"><div class="channel-top"><span class="channel-icon">≈</span><span class="channel-num">CH 05</span></div><div class="channel-visual"><span class="channel-visual-bar"></span></div><label for="mixWater">WATER</label><span class="channel-description">ripples / rain / flow</span><input id="mixWater" data-layer="water" type="range" min="0" max="100" step="1" value="75" aria-label="Water sound level"><output for="mixWater">75%</output></div>
+          <div class="channel" data-channel="transit"><div class="channel-top"><span class="channel-icon">⇆</span><span class="channel-num">CH 06</span></div><div class="channel-visual"><span class="channel-visual-bar"></span></div><label for="mixTransit">TRANSIT</label><span class="channel-description">rail / bell / arrival</span><input id="mixTransit" data-layer="transit" type="range" min="0" max="100" step="1" value="75" aria-label="Transit sound level"><output for="mixTransit">75%</output></div>
+        </div><div class="mixer-foot"><div class="master-control"><label for="masterVolume">MASTER OUTPUT <span id="volumeValue">65%</span></label><input id="masterVolume" type="range" min="0" max="100" step="1" value="65" aria-label="Master output volume"></div><div class="mixer-actions"><button id="resetMix" class="button-outline" type="button">↺ RESET THE MIX</button><button id="randomMix" class="button-outline" type="button">✳ SURPRISE ME</button></div></div>
+      </section>
+
+      <section class="intervention-section wrap" aria-labelledby="interventionTitle"><div class="section-heading"><div><span class="mono-kicker">REWRITE THE STREET</span><h2 id="interventionTitle">Design is <em>audible.</em></h2><p>Try four speculative urban interventions and hear a creative interpretation of how the city's character might change.</p></div><div class="intervention-motif" aria-hidden="true">↘<br>↖</div></div>
+        <div class="intervention-grid" id="interventions">
+          <button type="button" class="intervention-card" data-intervention="walk" aria-pressed="false"><span class="intervention-index">RECLAIM THE ROAD</span><span class="intervention-symbol">↟</span><strong>Make it walkable.</strong><span>Less motor traffic, more footsteps and street life.</span><span class="intervention-toggle">OFF <i>○</i></span></button>
+          <button type="button" class="intervention-card" data-intervention="trees" aria-pressed="false"><span class="intervention-index">ADD AN URBAN CANOPY</span><span class="intervention-symbol">✳</span><strong>Plant a little wild.</strong><span>Birdsong and foliage become more prominent.</span><span class="intervention-toggle">OFF <i>○</i></span></button>
+          <button type="button" class="intervention-card" data-intervention="tram" aria-pressed="false"><span class="intervention-index">SHIFT THE JOURNEY</span><span class="intervention-symbol">⇄</span><strong>Let the tram through.</strong><span>A tram bell and rhythmic rail sounds join the mix.</span><span class="intervention-toggle">OFF <i>○</i></span></button>
+          <button type="button" class="intervention-card" data-intervention="stream" aria-pressed="false"><span class="intervention-index">DAYLIGHT THE WATER</span><span class="intervention-symbol">≈</span><strong>Uncover the stream.</strong><span>Flowing water becomes part of the streetscape.</span><span class="intervention-toggle">OFF <i>○</i></span></button>
+        </div><p class="micro-note">These changes are artistic sound-mix interventions, not calibrated predictions of decibels, noise exposure or environmental health benefits.</p>
+      </section>
+
+      <section id="about" class="fieldnotes wrap"><div class="fieldnotes-title"><span class="mono-kicker">FIELD NOTES</span><h2>Listen a little <i>closer.</i></h2></div><div class="notes-grid"><div><span class="note-index">001</span><h3>Why sound?</h3><p>Cities are heard as well as seen. Street design, mobility and nature contribute to our sense of place. This installation invites you to play with those ingredients rather than rank neighborhoods by a single score.</p></div><div><span class="note-index">002</span><h3>What am I hearing?</h3><p>Original procedural audio made with the browser's Web Audio API: filtered noise, synthesized bells, footsteps and bird-like tones. These are expressive abstractions, not authentic location recordings or acoustic simulations.</p></div><div><span class="note-index">003</span><h3>What does it measure?</h3><p>The frequency bars and waveform respond to the generated output. The interactive faders are relative mix controls, not decibel measurements. No microphone, sensor, recording of the surrounding world, or external data service is used.</p></div></div></section>
+    </main>
+    <footer class="footer wrap"><div class="footer-logo">THE CITY IS AN INSTRUMENT<span>✳</span></div><div>BUILT FOR LISTENING. BUILT FOR PLAY.</div><a href="#top">BACK TO THE TOP ↑</a></footer>
+  </div>
+</body>
+</html>
