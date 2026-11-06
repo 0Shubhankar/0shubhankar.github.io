@@ -210,6 +210,14 @@ const portfolioItems = [
       image: "images/previews/41.webp",
     },
     {
+      projectType: "Urban Finance Strategy Game",
+      smallTitle: "The Parallel Cities Experiment",
+      title: "The Parallel Cities Experiment",
+      titleLink: "50/index.html",
+      tags: ["Municipal Finance", "Blockchain", "Digital Bonds", "Capital Budgeting", "Urban Economics", "Housing Affordability", "Financial Modeling", "Scenario Analysis", "Strategy Game"],
+      image: "images/previews/50.webp",
+    },
+    {
       projectType: "Financial Science Game",
       smallTitle: "The Interest Rate Roller Coaster",
       title: "The Interest Rate Roller Coaster",
