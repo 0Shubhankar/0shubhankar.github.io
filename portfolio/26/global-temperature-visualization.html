@@ -1,86 +1,340 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Globe with Countries</title>
-    <style>
-        body {
-            margin: 0;
-        }
-
-        canvas {
-            display: block;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Warming Planet | Global Temperature Visualization</title>
+<style id="climate-editorial">
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: #080809;
+  color: #e5e5e5;
+  font: 16px/1.85 Arial, Helvetica, sans-serif;
+}
+.hero {
+  min-height: 650px;
+  position: relative;
+  background: #050506;
+  overflow: hidden;
+}
+#globe-stage {
+  height: 540px;
+  width: 100%;
+  position: relative;
+}
+#globe-stage canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.hero-copy {
+  position: absolute;
+  top: 38px;
+  left: max(24px, calc((100vw - 1040px)/2));
+  right: 24px;
+  z-index: 2;
+  pointer-events: none;
+}
+.eyebrow {
+  color: #f09d85;
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+.hero h1 {
+  font-size: clamp(35px, 5vw, 66px);
+  font-weight: 500;
+  letter-spacing: -.04em;
+  line-height: 1.08;
+  margin: 13px 0;
+}
+.hero-copy p {
+  max-width: 395px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #bdbdbd;
+}
+.globe-caption {
+  text-align: center;
+  color: #999;
+  padding: 0 20px 25px;
+  font-size: 12px;
+}
+.article {
+  max-width: 900px;
+  margin: auto;
+  padding: 65px 26px 110px;
+}
+.article h2 {
+  font-size: clamp(24px, 3vw, 32px);
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: -.025em;
+  margin: 55px 0 17px;
+  color: #f4f4f4;
+}
+.article p {
+  color: #bcbcbc;
+  margin: 15px 0;
+}
+.article strong { color: #f0f0f0; font-weight: 600; }
+.article a { color: #f1a98e; }
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 35px;
+  border-top: 1px solid #303034;
+  border-bottom: 1px solid #303034;
+  padding: 26px 0;
+  margin: 33px 0;
+}
+.fact { flex: 1 1 190px; }
+.fact b {
+  display: block;
+  font-size: 33px;
+  line-height: 1.2;
+  font-weight: 500;
+  color: #f0a48a;
+}
+.fact span { display: block; color: #999; font-size: 12px; }
+.note {
+  border-left: 2px solid #a96954;
+  padding-left: 19px;
+  color: #a9a9a9;
+  font-size: 13px;
+  margin: 30px 0;
+}
+.references {
+  padding-top: 15px;
+  border-top: 1px solid #303034;
+}
+.references p { font-size: 14px; }
+@media(max-width:700px) {
+  .hero { min-height: 590px; }
+  #globe-stage { height: 480px; }
+  .hero-copy { top: 24px; }
+  .hero h1 { font-size: 40px; }
+  .hero-copy p { max-width: 300px; font-size: 12px; }
+  .article { padding: 40px 20px 70px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  html { scroll-behavior: auto; }
+}
+</style>
 </head>
-
 <body>
-    <script src="../vendor/shared/lib-25023b521d77/dist/three.min.js"></script>
-    <script src="../vendor/shared/lib-1b307bf3cbda/dist/OrbitControls.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Set up scene, camera, and renderer
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            document.body.appendChild(renderer.domElement);
-
-            // Add orbit controls
-            const controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
-            controls.dampingFactor = 0.25;
-            controls.enableZoom = true;
-
-            // Add lights
-            const ambientLight = new THREE.AmbientLight(0xcccccc);
-            scene.add(ambientLight);
-
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
-            directionalLight.position.set(1, 1, 1).normalize();
-            scene.add(directionalLight);
-
-            // Load textures
-            const textureLoader = new THREE.TextureLoader();
-            const globeTexture = textureLoader.load('//unpkg.com/three-globe/example/img/earth-dark.jpg');
-            const temperatureTexture = textureLoader.load('temp.jpeg'); // Replace with the path to your temperature texture
-
-            // Create the globe
-            const globeGeometry = new THREE.SphereGeometry(50, 64, 64);
-            const globeMaterial = new THREE.MeshBasicMaterial({ map: globeTexture });
-            const globe = new THREE.Mesh(globeGeometry, globeMaterial);
-            scene.add(globe);
-
-            const temperatureMaterial = new THREE.MeshBasicMaterial({
-                map: temperatureTexture,
-                transparent: true,  // Enable transparency to see the base globe texture beneath
-                opacity: 0.6        // Adjust opacity as needed to blend the textures
-            });
-            const temperatureOverlay = new THREE.Mesh(globeGeometry, temperatureMaterial);
-            scene.add(temperatureOverlay);
+<header class="hero">
+  <div class="hero-copy">
+    <div class="eyebrow">Global Climate / Temperature</div>
+    <h1>A Warming<br>Planet.</h1>
+    <p>Earth is accumulating heat. The consequences are
+    increasingly visible across oceans, ecosystems and cities.</p>
+  </div>
+  <div id="globe-stage" aria-label="Interactive temperature-textured globe"></div></header>
 
 
-            // Position the camera
-            camera.position.z = 200;
+<main class="article">
+  <h2>The planet is warming. The consequences are already here.</h2>
 
-            // Render loop
-            const animate = function () {
-                requestAnimationFrame(animate);
-                controls.update();
-                renderer.render(scene, camera);
-            };
-            animate();
+  <p>
+    The Earth's climate is changing at a pace that presents profound
+    challenges for ecosystems, economies and human settlements.
+    The accumulation of greenhouse gases has driven a sustained
+    increase in global surface temperatures, with consequences
+    extending far beyond the temperature records themselves.
+    Rising heat is reshaping the conditions under which cities
+    function, infrastructure operates and communities live.
+  </p>
 
-            // Handle window resize
-            window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-            });
-        });
-    </script>
+  <div class="facts">
+    <div class="fact">
+      <b>1.55°C</b>
+      <span>2024 warming above the 1850–1900 average · WMO</span>
+    </div>
+    <div class="fact">
+      <b>1.43°C</b>
+      <span>2025 warming above the 1850–1900 average · WMO</span>
+    </div>
+    <div class="fact">
+      <b>11 years</b>
+      <span>2015–2025: the 11 warmest years on record · WMO</span>
+    </div>
+  </div>
+
+  <p>
+    According to the World Meteorological Organization, 2024 was
+    the warmest year recorded, approximately 1.55°C above the
+    1850–1900 average. The exceptionally high temperatures recorded
+    in 2025 further reinforce the long-term warming trend.
+    Although temperatures naturally fluctuate from year to year,
+    the direction of the underlying change is unmistakable.
+    A single year above 1.5°C does not, however, establish that
+    the Paris Agreement's long-term temperature threshold has
+    been crossed.
+  </p>
+
+  <p>
+    Warming is not distributed evenly across the planet. Land
+    generally warms faster than the oceans, while high northern
+    latitudes have experienced particularly pronounced increases.
+    Regional variations in geography, atmospheric circulation,
+    vegetation and land use influence how rising temperatures
+    are experienced locally. These differences are especially
+    important because global averages cannot capture the full
+    extent of environmental risks faced by individual communities.
+  </p>
+
+  <p>
+    For cities, extreme heat is becoming an increasingly urgent
+    planning and public health concern. Dense development,
+    paved surfaces, limited vegetation and heat-retaining
+    buildings can intensify local temperatures through the
+    urban heat-island effect. Higher temperatures increase
+    electricity demand for cooling, strain infrastructure,
+    reduce outdoor labour productivity and expose vulnerable
+    populations to greater health risks. The burden is often
+    unevenly distributed, with lower-income communities facing
+    greater exposure and fewer resources for adaptation.
+  </p>
+
+  <p>
+    Responding to rising temperatures requires both reducing
+    greenhouse gas emissions and adapting the built environment.
+    Urban tree cover, shaded streets, reflective surfaces,
+    efficient buildings, reliable electricity networks and
+    accessible cooling facilities can help mitigate heat risks.
+    Long-term planning must also incorporate climate resilience
+    into land-use decisions, housing policy, infrastructure
+    investment and public health systems.
+  </p>
+
+  <p>
+    The warning is not that every place will experience identical
+    consequences, but that continued warming increases the
+    likelihood and severity of climate-related risks. The
+    choices made today about energy, transportation, urban
+    development and environmental policy will influence how
+    much warming occurs and how successfully communities can
+    respond. Climate change is no longer a distant scenario;
+    it is an ongoing transformation of the conditions that
+    support human life and economic activity.
+  </p>
+
+  <h2>Methodology and limitations</h2>
+
+  <p>
+    The interactive globe uses a locally stored temperature-themed
+    image displayed through Three.js. Its original reference
+    year, geographic calibration and colour scale have not
+    been established. It is therefore an illustrative
+    visualization rather than a calibrated temperature map.
+    The quantitative climate findings in this article are drawn
+    from the scientific sources below, not calculated from
+    the globe texture. NASA's GISTEMP analysis uses a 1951–1980
+    reference period, whereas the WMO warming estimates cited
+    here use 1850–1900.
+  </p>
+
+  <h2>References</h2>
+  <div class="references">
+    <p><a href="https://wmo.int/publication-series/state-of-global-climate/state-of-global-climate-2025"
+       target="_blank" rel="noopener noreferrer">
+       World Meteorological Organization — State of the Global Climate 2025
+    </a></p>
+
+    <p><a href="https://wmo.int/news/media-centre/wmo-confirms-2024-warmest-year-record-about-155degc-above-pre-industrial-level"
+       target="_blank" rel="noopener noreferrer">
+       WMO — 2024 Global Temperature Record
+    </a></p>
+
+    <p><a href="https://science.nasa.gov/earth/explore/earth-indicators/global-temperature/"
+       target="_blank" rel="noopener noreferrer">
+       NASA — Global Temperature Indicator
+    </a></p>
+
+    <p><a href="https://www.ipcc.ch/report/ar6/syr/"
+       target="_blank" rel="noopener noreferrer">
+       IPCC — Sixth Assessment Synthesis Report
+    </a></p>
+  </div>
+</main>
+
+
+<script src="../vendor/shared/lib-25023b521d77/dist/three.min.js"></script>
+<script src="../vendor/shared/lib-1b307bf3cbda/dist/OrbitControls.js"></script>
+<script>
+(function () {
+  const stage = document.getElementById('globe-stage');
+  let renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  } catch (e) {
+    stage.textContent = 'Interactive globe requires WebGL support.';
+    return;
+  }
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
+  camera.position.z = 175;
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  stage.appendChild(renderer.domElement);
+
+  const controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.08;
+  controls.enableZoom = true;
+  controls.minDistance = 85;
+  controls.maxDistance = 320;
+  controls.autoRotate = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  controls.autoRotateSpeed = 0.4;
+
+  const geometry = new THREE.SphereGeometry(50, 96, 64);
+  const loader = new THREE.TextureLoader();
+  const earth = new THREE.Mesh(
+    geometry,
+    new THREE.MeshBasicMaterial({ color: 0x283542 })
+  );
+  scene.add(earth);
+
+  loader.load(
+    '//unpkg.com/three-globe/example/img/earth-dark.jpg',
+    texture => { earth.material.map = texture; earth.material.needsUpdate = true; },
+    undefined,
+    () => console.warn('Earth basemap unavailable; using fallback surface.')
+  );
+
+  loader.load('temp.jpeg', texture => {
+    const overlay = new THREE.Mesh(
+      new THREE.SphereGeometry(50.12, 96, 64),
+      new THREE.MeshBasicMaterial({
+        map: texture,
+        transparent: true,
+        opacity: 0.65,
+        depthWrite: false
+      })
+    );
+    scene.add(overlay);
+  });
+
+  function resize() {
+    const w = stage.clientWidth;
+    const h = stage.clientHeight;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+  }
+  animate();
+})();
+</script>
 </body>
-
 </html>
