@@ -209,14 +209,7 @@ const portfolioItems = [
       tags: ["Municipal Finance", "City Simulation", "Municipal Bonds", "Urban Economics", "Fiscal Policy", "Debt Management", "Interactive Game", "JavaScript"],
       image: "images/previews/41.webp",
     },
-    {
-      projectType: "Interactive Research Essay",
-      smallTitle: "Planning, Psychology and the Human City",
-      title: "The Human City",
-      titleLink: "53/index.html",
-      tags: ["Urban Planning", "Human Psychology", "Environmental Psychology", "Delhi", "Research", "Visual Storytelling", "Human Needs", "Public Space"],
-      image: "images/previews/53.webp",
-    },
+
     {
       projectType: "Interactive Material Exhibit",
       smallTitle: "The Secret Life of a Brick",
@@ -427,7 +420,7 @@ const portfolioItems = [
     },
 ];
 
-    
+
 
     portfolioItems.forEach((item, index) => {
     const portfolioItem = document.createElement('div');
