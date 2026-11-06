@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Globe with Multiple Fading Arcs and Moving Particles</title>
+    <title>Indian Migration | Global Diaspora</title>
     <style>
         body {
             margin: 0;
@@ -46,64 +46,235 @@
         }
 
     </style>
+
+<style id="migration-editorial-2026">
+* { box-sizing:border-box; }
+html,body {
+    margin:0;
+    background:#080809!important;
+    color:#e6e6e6;
+}
+.migration-intro,.migration-article {
+    width:min(880px,calc(100% - 44px));
+    margin:auto;
+    font-family:Arial,Helvetica,sans-serif;
+}
+.migration-intro { padding:42px 0 18px; }
+.migration-intro h1 {
+    font-size:clamp(32px,4vw,48px);
+    font-weight:500;
+    line-height:1.2;
+    letter-spacing:-1px;
+    margin:0 0 20px;
+}
+.migration-intro p,.migration-article p {
+    color:#bcbcbc;
+    font-size:15px;
+    line-height:1.9;
+    margin:0 0 20px;
+}
+#visualization {
+    height:510px!important;
+    width:100%!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden;
+    position:relative;
+    background:#000!important;
+}
+#visualization canvas {
+    display:block;
+    width:100%!important;
+    height:100%!important;
+}
+#tooltip {
+    position:fixed!important;
+    z-index:1500;
+    background:#18181b!important;
+    border:1px solid #444;
+    font-family:Arial,sans-serif;
+    pointer-events:none;
+}
+.migration-article { padding:35px 0 95px; }
+.migration-article h2 {
+    margin:40px 0 18px;
+    font-size:23px;
+    font-weight:500;
+}
+.migration-article strong { color:#f0f0f0; }
+.migration-stats {
+    display:flex;
+    flex-wrap:wrap;
+    gap:24px;
+    border-top:1px solid #333;
+    border-bottom:1px solid #333;
+    padding:22px 0;
+    margin:30px 0;
+}
+.migration-stats div { flex:1 1 180px; }
+.migration-stats b {
+    display:block;
+    font-size:28px;
+    font-weight:500;
+    color:#e5ad89;
+}
+.migration-stats span {
+    font-size:12px;
+    color:#aaa;
+    line-height:1.6;
+}
+#migration-info-toggle {
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    z-index:2100;
+    width:40px;
+    height:40px;
+    border:1px solid #666;
+    border-radius:50%;
+    background:#18181b;
+    color:white;
+    font-size:20px;
+    cursor:pointer;
+}
+#migration-info-panel {
+    position:fixed;
+    right:20px;
+    bottom:70px;
+    z-index:2099;
+    width:min(390px,calc(100vw - 36px));
+    max-height:70vh;
+    overflow:auto;
+    padding:23px;
+    background:#171719;
+    color:#ccc;
+    border:1px solid #444;
+    border-radius:8px;
+    font:13px/1.7 Arial,sans-serif;
+}
+#migration-info-panel[hidden] { display:none!important; }
+#migration-info-panel h2 { color:white; font-size:19px; }
+#migration-info-panel a { color:#f0b18e; }
+@media(max-width:700px) {
+    .migration-intro { padding-top:26px; }
+    #visualization { height:360px!important; }
+    .migration-article { padding-bottom:65px; }
+}
+</style>
+
 </head>
 
 <body>
-        <div id="visualization"></div> <!-- This div will contain the 3D visualization -->
-        <div id="description">
-            <p>India's diaspora, the largest globally, significantly influences the socio-economic landscapes of their host
-                countries and India. While the migration provides critical remittances and fosters cultural exchange, it also
-                highlights underlying issues such as the lack of opportunities at home.</p>
         
-            <p>Indian migration is driven by the pursuit of better employment and living conditions, reflecting broader issues
-                such as job scarcity and economic constraints within India itself. Countries like the United States, UAE, UK,
-                and Canada are preferred destinations because of their robust economies and inclusive societies. However, this
-                movement is not just a tale of seeking prosperity but often a necessity due to limited local opportunities.</p>
+<header class="migration-intro">
+<h1>Indian Migration: A Global Network of People and Opportunity</h1>
+<p>
+India's diaspora spans continents, connecting families, labour markets,
+businesses and communities. This interactive globe traces connections
+from India to selected countries with significant overseas Indian
+populations.
+</p>
+</header>
+
+<div id="visualization"></div>
+
+<main class="migration-article">
+<p>
+Migration is one of India's most important connections to the global
+economy. Across generations, Indians have moved abroad for employment,
+education, trade, family reunification and professional opportunities.
+Some settle permanently, while others work overseas temporarily before
+returning home. These different forms of mobility have created a global
+network whose influence extends well beyond national borders.
+</p>
+
+<div class="migration-stats">
+<div><b>35.4 million</b><span>Approximate overseas Indian diaspora,
+including persons of Indian origin · MEA</span></div>
+<div><b>18.5 million</b><span>India-origin international migrant
+stock, 2024 · UN DESA</span></div>
+<div><b>$137.67 billion</b><span>Remittances received by India
+in 2024 · NITI Aayog</span></div>
+</div>
+
+<p>
+These figures describe different things. The overseas Indian diaspora
+includes people of Indian ancestry who may have been born abroad.
+The international migrant stock refers to a narrower population,
+while remittances measure cross-border financial transfers.
+The arcs on the globe represent the geographical reach of diaspora
+populations, not the number of people migrating in any particular year.
+</p>
+
+<h2>Migration and economic opportunity</h2>
+<p>
+The Indian diaspora contributes to both home and destination economies.
+Workers abroad send money to families, supporting household expenditure,
+education, healthcare, housing and small businesses. Remittances also
+provide foreign-exchange inflows to India. Their economic importance
+is especially visible in communities where overseas employment has
+become an established source of household income.
+</p>
+
+<p>
+Economic contributions go beyond money transfers. Migrants participate
+in technology, healthcare, construction, education, finance, research
+and entrepreneurship. Cross-border professional networks facilitate
+investment, business formation, trade, knowledge exchange and
+collaboration between institutions. Returning professionals can bring
+skills and experience back to India, while those who remain abroad
+may maintain productive ties with their places of origin.
+</p>
+
+<p>
+The benefits to destination economies are also substantial. Migrants
+contribute labour, entrepreneurial activity, consumption and taxes.
+They help meet workforce needs and participate in the cultural and
+social life of cities. Migration's contribution varies by country,
+occupation and legal status, and depends partly on workers' ability
+to access fair employment and public services.
+</p>
+
+<h2>The wider social impact</h2>
+<p>
+Migration reshapes urban life at both ends of the journey.
+Destination cities respond to new demands for housing, transport,
+schools and community services. In Indian towns and cities,
+overseas earnings can support housing investment, local businesses
+and educational opportunities. Migration therefore influences
+urban development through household decisions as well as large-scale
+economic relationships.
+</p>
+
+<p>
+Yet migration involves real difficulties. Recruitment costs,
+precarious employment, discrimination, family separation and
+restricted legal protections may create significant hardship.
+The departure of skilled professionals can put pressure on
+particular institutions or local labour markets, even as
+international experience generates new skills and networks.
+The effects are complex rather than uniformly positive or negative.
+</p>
+
+<p>
+Public policy can strengthen the benefits of migration by improving
+recruitment transparency, protecting workers, facilitating affordable
+remittances, recognising qualifications and supporting returnees.
+At home, investment in employment, education and infrastructure can
+make international mobility a choice rather than an economic necessity.
+</p>
+
+<p>
+India's global diaspora illustrates how mobility connects economies
+and communities. Behind the lines on this globe are individual
+decisions, personal aspirations, families, institutions and
+relationships that continue across borders. Understanding migration
+means recognising both the opportunities it creates and the
+vulnerabilities that accompany it.
+</p>
+</main>
+ <!-- This div will contain the 3D visualization -->
         
-            <p>Significant Indian populations in these countries include:
-            <ul>
-                <li><strong>United States</strong>: 5,409,062 Indians</li>
-                <li><strong>UAE</strong>: 3,568,848 Indians</li>
-                <li><strong>Canada</strong>: 2,875,954 Indians</li>
-                <li><strong>Saudi Arabia</strong>: 2,463,509 Indians</li>
-            </ul>
-            These countries offer not only better job prospects but also better living conditions compared to what many migrants
-            might experience in India.</p>
-        
-            <p>The remittances sent home by the Indian diaspora are vital to India's economy, enhancing its foreign exchange
-                reserves and supporting millions of families. The major remittance contributors included:
-            <ul>
-                <li><strong>United States</strong>: 23.4% of total remittances</li>
-                <li><strong>United Arab Emirates</strong>: 18.0%</li>
-                <li><strong>United Kingdom</strong>: 6.8%</li>
-                <li><strong>Singapore</strong>: 5.7%</li>
-                <li><strong>Saudi Arabia</strong>: 5.1%</li>
-            </ul>
-            </p>
-        
-            <p>While these remittances are crucial, they also underscore a reliance on external economic factors to sustain
-                families and communities in India. This dependency highlights the need for more robust economic development
-                within India to prevent brain drain and economic disparity.</p>
-        
-            <p>Remittances indeed bolster India's foreign reserves and help stabilize the national currency. However, this
-                economic benefit comes with its own set of challenges:
-            <ol>
-                <li><strong>Economic Dependency</strong>: Heavy reliance on remittances can make the economy vulnerable to
-                    global financial shifts and policies in host countries.</li>
-                <li><strong>Social Impact</strong>: Families often face social and emotional challenges due to prolonged
-                    separations, and migrants frequently endure difficult living conditions abroad.</li>
-                <li><strong>Skewed Development</strong>: While remittances contribute to household incomes, they can also lead
-                    to unequal development in different regions of India, often exacerbating urban-rural divides.</li>
-            </ol>
-            </p>
-        
-            <p>The migration of Indians globally is a double-edged sword. It offers individuals the chance to improve their
-                living standards and supports the Indian economy through remittances. However, it also highlights significant
-                socio-economic challenges within India that drive such migration. Sustainable development within the country,
-                aimed at creating job opportunities and enhancing living conditions, is essential to mitigate the economic and
-                social costs of this extensive migration. This balanced approach will ensure that migration is a choice rather
-                than a necessity, contributing to a more equitable global landscape.</p>
-        </div>
 
     <div id="tooltip"></div>
     <script src="../vendor/shared/lib-25023b521d77/dist/three.min.js"></script>
@@ -112,10 +283,10 @@
         document.addEventListener('DOMContentLoaded', () => {
             // Set up scene, camera, and renderer
             const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const camera = new THREE.PerspectiveCamera(75, document.getElementById('visualization').clientWidth / document.getElementById('visualization').clientHeight, 0.1, 1000);
             const renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            document.body.appendChild(renderer.domElement);
+            renderer.setSize(document.getElementById('visualization').clientWidth, document.getElementById('visualization').clientHeight);
+            
             document.getElementById('visualization').appendChild(renderer.domElement);
 
             // Add orbit controls
@@ -188,8 +359,17 @@
             // Add event listener for mouse movement to detect hover
             window.addEventListener('mousemove', (event) => {
                 // Convert mouse position to normalized device coordinates (-1 to +1)
-                mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-                mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+                const rect = renderer.domElement.getBoundingClientRect();
+                    if (event.clientX < rect.left ||
+                        event.clientX > rect.right ||
+                        event.clientY < rect.top ||
+                        event.clientY > rect.bottom) {
+                        hideTooltip();
+                        return;
+                    }
+                    mouse.x = ((event.clientX - rect.left) /
+                               rect.width) * 2 - 1;
+                mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
                 // Update the raycaster with camera and mouse position
                 raycaster.setFromCamera(mouse, camera);
@@ -366,12 +546,58 @@
 
             // Handle window resize
             window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.aspect = document.getElementById('visualization').clientWidth / document.getElementById('visualization').clientHeight;
                 camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setSize(document.getElementById('visualization').clientWidth, document.getElementById('visualization').clientHeight);
             });
         });
     </script>
+
+<button id="migration-info-toggle" type="button"
+aria-label="Open sources and methodology"
+aria-expanded="false" aria-controls="migration-info-panel">ⓘ</button>
+
+<aside id="migration-info-panel" hidden>
+<h2>Sources and methodology</h2>
+<p>
+The globe displays selected overseas Indian population figures
+and schematic arcs connecting Delhi to country-level coordinates.
+The animated particles are illustrative, not observations of
+real-time movement or annual migration flows.
+</p>
+<p>
+Overseas Indian population, international migrant stock and
+remittance figures have different definitions and reference dates.
+The globe's arc counts are visual representations, not exact
+measures of migration frequency.
+</p>
+<p><a href="https://www.mea.gov.in/population-of-overseas-indians.htm"
+target="_blank" rel="noopener noreferrer">
+Ministry of External Affairs — Overseas Indian Population</a></p>
+<p><a href="https://www.un.org/development/desa/pd/content/international-migrant-stock"
+target="_blank" rel="noopener noreferrer">
+UN DESA — International Migrant Stock</a></p>
+<p><a href="https://www.niti.gov.in/"
+target="_blank" rel="noopener noreferrer">
+NITI Aayog — Migration and remittance research</a></p>
+</aside>
+
+<script id="migration-info-interaction">
+(function () {
+    const button = document.getElementById('migration-info-toggle');
+    const panel = document.getElementById('migration-info-panel');
+    function toggle(open) {
+        panel.hidden = !open;
+        button.textContent = open ? '×' : 'ⓘ';
+        button.setAttribute('aria-expanded', String(open));
+    }
+    button.addEventListener('click', () => toggle(panel.hidden));
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') toggle(false);
+    });
+})();
+</script>
+
 </body>
 
 </html>
