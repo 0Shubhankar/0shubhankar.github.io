@@ -128,7 +128,32 @@
         const map = new maplibregl.Map({
             container: 'map',
             style:
-                'https://tiles.stadiamaps.com/styles/alidade_smooth.json',
+                {
+    version: 8,
+    sources: {
+        'osm': {
+            type: 'raster',
+            tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+            tileSize: 256,
+            attribution: '&copy; OpenStreetMap contributors',
+            maxzoom: 19
+        }
+    },
+    layers: [
+        {
+            id: 'osm-background',
+            type: 'raster',
+            source: 'osm',
+            paint: {
+                'raster-brightness-min': 0,
+                'raster-brightness-max': 0.38,
+                'raster-saturation': -0.75,
+                'raster-contrast': 0.18,
+                'raster-hue-rotate': 200
+            }
+        }
+    ]
+},
             center: [-77.0175583548, 38.9034761291],
             zoom: 17.5,
             bearing: 27,

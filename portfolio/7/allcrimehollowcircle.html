@@ -34,7 +34,32 @@
     <script>
         const map = new maplibregl.Map({
             container: 'map',
-            style: 'https://tiles.stadiamaps.com/styles/alidade_smooth.json',
+            style: {
+    version: 8,
+    sources: {
+        'osm': {
+            type: 'raster',
+            tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+            tileSize: 256,
+            attribution: '&copy; OpenStreetMap contributors',
+            maxzoom: 19
+        }
+    },
+    layers: [
+        {
+            id: 'osm-background',
+            type: 'raster',
+            source: 'osm',
+            paint: {
+                'raster-brightness-min': 0,
+                'raster-brightness-max': 0.38,
+                'raster-saturation': -0.75,
+                'raster-contrast': 0.18,
+                'raster-hue-rotate': 200
+            }
+        }
+    ]
+},
             center: [-76.9931501206, 38.9222116506], // Washington, D.C. coordinates
             zoom: 17,
             pitch: 70, // Tilt the map for 3D effect

@@ -123,14 +123,100 @@
         
 
     </style>
+
+<style id="dc-map-navigation-fix">
+.dc-flyto-frame {
+    height: 68vh;
+    min-height: 380px;
+}
+.dc-continue-reading {
+    display: inline-block;
+    margin: 12px auto 6px;
+    padding: 10px 18px;
+    background: #172638;
+    color: #ffffff;
+    border-radius: 8px;
+    text-decoration: none;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+.dc-continue-reading:hover {
+    background: #284764;
+}
+#dc-after-flyto {
+    scroll-margin-top: 20px;
+}
+</style>
+
+
+<style id="dc-global-dark-theme">
+    html, body {
+        background: #0b1726 !important;
+        color: #dbe5f0 !important;
+    }
+
+    .content-container {
+        background: transparent;
+        color: #dbe5f0;
+    }
+
+    .content-container h1,
+    .content-container h2,
+    .content-container h3,
+    .content-container h4,
+    .content-container h5,
+    .content-container h6 {
+        color: #ffffff !important;
+    }
+
+    .content-container p,
+    .content-container li,
+    .content-container span {
+        color: #d0dbe8 !important;
+    }
+
+    .content-container .small-text,
+    .content-container p.small-text {
+        color: #94a9bd !important;
+    }
+
+    .content-container a:not(.dc-continue-reading) {
+        color: #7fc8ff;
+    }
+
+    .content-container iframe {
+        background: #101f30;
+        border: 0;
+        border-radius: 8px;
+    }
+
+    .content-container img {
+        border-radius: 8px;
+    }
+
+    .dc-continue-reading {
+        background: #284764;
+        color: #ffffff !important;
+    }
+
+    .dc-continue-reading:hover {
+        background: #365c80;
+    }
+
+    body {
+        color-scheme: dark;
+    }
+</style>
+
 </head>
 
 <body>
  
 
     <div class="content-container">
-        <iframe src="DCcrimeshow.html" class="full-screen-iframe"></iframe>
-        <p class="small-text">High-Crime Hotspots in Washington D.C.: A Detailed 3D Mapping Analysis
+        <iframe src="DCcrimeshow.html" class="full-screen-iframe dc-flyto-frame" title="Washington DC animated crime map"></iframe>
+        <a class="dc-continue-reading" href="#dc-after-flyto">Continue reading ↓</a>
+        <p id="dc-after-flyto" class="small-text">High-Crime Hotspots in Washington D.C.: A Detailed 3D Mapping Analysis
         </p>
     </div>
 
