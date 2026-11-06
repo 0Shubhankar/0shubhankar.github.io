@@ -210,6 +210,14 @@ const portfolioItems = [
       image: "images/previews/41.webp",
     },
     {
+      projectType: "Investment Simulation",
+      smallTitle: "The $100 Million Mistake!",
+      title: "The $100 Million Mistake!",
+      titleLink: "42/index.html",
+      tags: ["Investment Game", "Asset Valuation", "Project Finance", "DCF", "Portfolio Risk", "Municipal Bonds", "Financial Modeling", "JavaScript"],
+      image: "images/previews/42.webp",
+    },
+    {
         projectType: "Geospatial Analysis", //  
         smallTitle: "World Temperature", //  
         title: "A Warming Planet: Visualizing Global Temperature Change",
