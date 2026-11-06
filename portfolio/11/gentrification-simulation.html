@@ -38,10 +38,363 @@ canvas {
     margin-right: 20%;
     line-height: 1.6;
 }
+    
+        body {
+            background: #0b0610 !important;
+            color: #f3dbe8 !important;
+        }
+
+        #visualization {
+            width: 100%;
+            height: 72vh;
+            min-height: 520px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            background: radial-gradient(circle at center, #2a1022 0%, #120812 65%, #09040a 100%);
+        }
+
+        .sim-explainer,
+        .model-panel {
+            max-width: 960px;
+            margin: 24px auto;
+            padding: 22px 24px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 105, 180, 0.18);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            box-sizing: border-box;
+        }
+
+        .sim-explainer h2,
+        .model-panel h2 {
+            color: #ff77bb !important;
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 1.6rem;
+        }
+
+        .sim-explainer p,
+        .model-panel p,
+        .model-panel li {
+            color: #f4d9e7 !important;
+            line-height: 1.75;
+            font-size: 1rem;
+        }
+
+        .equation-box {
+            margin: 18px 0 14px;
+            padding: 18px 20px;
+            border-radius: 12px;
+            background: rgba(255, 77, 166, 0.08);
+            border: 1px solid rgba(255, 77, 166, 0.28);
+            overflow-x: auto;
+        }
+
+        .equation-main {
+            font-size: 1.25rem;
+            line-height: 1.8;
+            color: #ffd6ea;
+            font-family: "Times New Roman", Georgia, serif;
+            text-align: center;
+        }
+
+        .equation-sub {
+            font-size: 0.95rem;
+            color: #f1c6db;
+            margin-top: 10px;
+        }
+
+        .sim-note {
+            margin-top: 12px;
+            padding: 12px 14px;
+            border-left: 3px solid #ff77bb;
+            background: rgba(255,255,255,0.04);
+            color: #f7dce8;
+        }
+    
     </style>
+
+<style id="gentrification-presentation">
+    html, body {
+        background: #0b1726 !important;
+        color: #dbe5f0 !important;
+    }
+
+    #gentrification-intro {
+        box-sizing: border-box;
+        width: 100%;
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 34px 24px 22px;
+        font-family: Arial, sans-serif;
+        color: #dbe5f0;
+    }
+
+    #gentrification-intro .intro-kicker {
+        color: #8bb5da;
+        font-size: 12px;
+        font-weight: bold;
+        letter-spacing: 2px;
+        margin-bottom: 12px;
+    }
+
+    #gentrification-intro h1 {
+        color: #ffffff;
+        font-size: clamp(25px, 3.5vw, 40px);
+        margin: 0 0 14px;
+    }
+
+    #gentrification-intro > p {
+        max-width: 850px;
+        color: #cbd5e1;
+        font-size: 15px;
+        line-height: 1.7;
+    }
+
+    .simulation-guide {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 24px;
+    }
+
+    .simulation-guide > div {
+        background: #172a40;
+        border: 1px solid #30455c;
+        border-radius: 12px;
+        padding: 17px;
+    }
+
+    .simulation-guide strong {
+        color: #ffffff;
+        font-size: 14px;
+    }
+
+    .simulation-guide p {
+        color: #cbd5e1;
+        font-size: 13px;
+        line-height: 1.6;
+        margin: 9px 0 0;
+    }
+
+    .legend-dot {
+        display: inline-block;
+        width: 11px;
+        height: 11px;
+        border-radius: 3px;
+        margin-right: 7px;
+    }
+
+    .legend-dot.white { background: #ffffff; }
+    .legend-dot.yellow { background: #ffff00; }
+
+    #gentrification-intro .model-note {
+        color: #9db2c8;
+        font-size: 12px;
+        margin-top: 17px;
+    }
+
+    #visualization {
+        box-sizing: border-box;
+        background: #142438;
+    }
+
+    #description {
+        background: #0b1726 !important;
+        color: #dbe5f0 !important;
+    }
+
+    #description p {
+        color: #dbe5f0;
+    }
+
+    @media (max-width: 760px) {
+        .simulation-guide {
+            grid-template-columns: 1fr;
+        }
+
+        #gentrification-intro {
+            padding: 24px 16px;
+        }
+    }
+</style>
+
+
+<style id="gentrification-info-style">
+    /* Hide the long description until visitors request it */
+    #description {
+        display: none !important;
+    }
+
+    body.gentrification-info-open #description {
+        display: block !important;
+        position: fixed !important;
+        top: 50% !important;
+        left: 50% !important;
+        right: auto !important;
+        bottom: auto !important;
+        transform: translate(-50%, -50%) !important;
+        box-sizing: border-box !important;
+        width: min(760px, 90vw) !important;
+        max-width: 90vw !important;
+        height: auto !important;
+        max-height: 78vh !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        margin: 0 !important;
+        padding: 28px !important;
+        background: #251021 !important;
+        color: #f8dfed !important;
+        border: 1px solid #f062a6 !important;
+        border-radius: 16px !important;
+        box-shadow: 0 20px 70px rgba(0,0,0,.65) !important;
+        z-index: 2147483001 !important;
+        text-align: left !important;
+    }
+
+    body.gentrification-info-open #description p {
+        font-size: 15px !important;
+        line-height: 1.7 !important;
+        color: #f8dfed !important;
+        margin: 0 0 16px !important;
+        max-width: none !important;
+        text-align: left !important;
+    }
+
+    #gentrification-info-button,
+    #gentrification-info-close {
+        position: fixed;
+        z-index: 2147483002;
+        border: 1px solid #ff86c0;
+        background: #451a38;
+        color: white;
+        cursor: pointer;
+        font-family: Arial, sans-serif;
+    }
+
+    #gentrification-info-button {
+        right: 20px;
+        bottom: 20px;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        font-size: 23px;
+        box-shadow: 0 5px 20px #0008;
+    }
+
+    #gentrification-info-close {
+        display: none;
+        top: max(12px, 7vh);
+        right: max(12px, calc((100vw - 760px)/2));
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        font-size: 22px;
+    }
+
+    body.gentrification-info-open #gentrification-info-close {
+        display: block;
+    }
+
+    body.gentrification-info-open #gentrification-info-button {
+        display: none;
+    }
+
+    #gentrification-info-backdrop {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,.7);
+        z-index: 2147483000;
+    }
+
+    body.gentrification-info-open #gentrification-info-backdrop {
+        display: block;
+    }
+</style>
+
 </head>
 
 <body>
+
+    
+<section id="gentrification-intro" aria-label="Simulation introduction">
+    <div class="intro-kicker">/ URBAN SIMULATION</div>
+    <h1>Understanding Urban Gentrification</h1>
+    <p>
+        Explore how housing prices, rental costs, income, transportation
+        accessibility and neighborhood characteristics influence a
+        simplified model of gentrification pressure.
+    </p>
+
+    <div class="simulation-guide">
+        <div>
+            <strong>What you're seeing</strong>
+            <p>A hypothetical 3D urban grid. This is an illustrative
+            simulation, not a forecast of a real neighborhood.</p>
+        </div>
+        <div>
+            <strong>Color legend</strong>
+            <p><span class="legend-dot white"></span>
+               White: buildings not highlighted by the model</p>
+            <p><span class="legend-dot yellow"></span>
+               Yellow: buildings selected by the model's
+               gentrification-pressure score</p>
+        </div>
+        <div>
+            <strong>How to explore</strong>
+            <p>Use the parameter controls to change the scenario.
+            Drag to rotate the 3D neighborhood and scroll over the
+            visualization to zoom.</p>
+        </div>
+    </div>
+
+    <p class="model-note">
+        Model note: the highlighted proportion is based on simplified
+        threshold rules. Building heights are randomized and should
+        not be interpreted as measured neighborhood density.
+    </p>
+</section>
+
+
+    <div class="sim-explainer">
+        <h2>Interactive Gentrification Simulation</h2>
+        <p>
+            This visualization is a stylized urban-change simulation. Use the control panel to adjust
+            housing prices, rent, income, walkability, transit access, and household characteristics.
+            The 3D building field responds to those inputs as a visual proxy for neighborhood change.
+        </p>
+        <p>
+            Brighter and more animated buildings indicate stronger simulated gentrification pressure.
+            The purpose is not to predict real outcomes exactly, but to demonstrate how economic,
+            demographic, infrastructure, and environmental variables can interact spatially.
+        </p>
+        <div class="sim-note">
+            Tip: rotate, zoom, and pan the 3D view. Then modify the controls to see how the
+            spatial pattern of neighborhood pressure changes.
+        </div>
+    </div>
+
+    <div class="model-panel" id="gentrification-model-panel">
+        <h2>Urban Gentrification Pressure Model</h2>
+        <div class="equation-box">
+            <div class="equation-main">
+                𝒢(𝐱) = 100 · min{ 1,
+                Σ<sub>i=1</sub><sup>n</sup> ω<sub>i</sub> 𝕀(x<sub>i</sub> &gt; τ<sub>i</sub>)
+                −
+                Σ<sub>j=1</sub><sup>m</sup> λ<sub>j</sub> 𝕀(z<sub>j</sub> ∈ ℛ<sub>j</sub>) }
+            </div>
+            <div class="equation-sub">
+                where 𝒢 = simulated gentrification pressure, 𝕀(·) = indicator function,
+                ω = positive drivers, λ = dampening factors, τ = thresholds, and ℛ = risk conditions.
+            </div>
+        </div>
+        <p>
+            In this simulation, higher home values, higher rents, stronger walkability, stronger
+            transit access, higher income, and certain housing-demographic profiles increase the
+            composite score, while environmental risks reduce it.
+        </p>
+    </div>
 
     <div id="visualization"></div> <!-- This div will contain the 3D visualization -->
 
@@ -111,7 +464,7 @@ canvas {
             walkScore: 50,
             transitScore: 50,
             incomeLevel: 50000,
-            fogColor: '#FF4DA6',
+            fogColor: '#142438',
             fogNear: 11,
             fogFar: 28,
             educationAttainment: 'High School',
@@ -128,13 +481,13 @@ canvas {
         function init() {
             scene = new THREE.Scene();
             camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.set(0, 2.5, 5);
+            camera.position.set(15, 19, 24);
             camera.lookAt(0, 0, 0);
 
             renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(window.devicePixelRatio);
-            renderer.setClearColor(0x000000);
+            renderer.setClearColor(0x14070f);
             document.getElementById('visualization').appendChild(renderer.domElement);
 
             controls = new OrbitControls(camera, renderer.domElement);
@@ -146,7 +499,7 @@ canvas {
             addGuiControls();
 
             scene.background = new THREE.Color(guiData.fogColor);
-            scene.fog = new THREE.Fog(guiData.fogColor, guiData.fogNear, guiData.fogFar);
+            scene.fog = null;
         }
 
         function addGuiControls() {
@@ -178,7 +531,7 @@ canvas {
             // Reset the scene and update the elements based on the new GUI values
             scene = new THREE.Scene();
             scene.background = new THREE.Color(guiData.fogColor);
-            scene.fog = new THREE.Fog(guiData.fogColor, guiData.fogNear, guiData.fogFar);
+            scene.fog = null;
             setup(); // Re-setup lights and objects
         }
 
@@ -226,7 +579,11 @@ canvas {
                         const cube = new THREE.Mesh(geometry, material);
                         cube.name = 'cube';  // Ensure this name matches the filter criteria in updateBuildingColors
                         cube.position.set(i - (guiData.columns / 2 - 0.5), boxHeight / 2, j - (guiData.rows / 2 - 0.5));
-                        scene.add(cube);
+                        cube.userData.baseHeight = cube.scale.y;
+                if (cube.material && cube.material.emissive) {
+                    cube.material.emissive.setHex(0x12000b);
+                }
+                scene.add(cube);
                     }
                 }
             }
@@ -308,6 +665,51 @@ canvas {
         init();
         animate();
     </script>
+
+<div id="gentrification-info-backdrop"></div>
+
+<button id="gentrification-info-button"
+        type="button"
+        title="About this simulation"
+        aria-label="Open simulation explanation"
+        aria-controls="description"
+        aria-expanded="false">ⓘ</button>
+
+<button id="gentrification-info-close"
+        type="button"
+        aria-label="Close simulation explanation">×</button>
+
+<script id="gentrification-info-script">
+document.addEventListener('DOMContentLoaded', function () {
+    const open = document.getElementById('gentrification-info-button');
+    const close = document.getElementById('gentrification-info-close');
+    const backdrop = document.getElementById('gentrification-info-backdrop');
+
+    function showInfo() {
+        document.body.classList.add('gentrification-info-open');
+        open.setAttribute('aria-expanded', 'true');
+        close.focus();
+    }
+
+    function hideInfo() {
+        document.body.classList.remove('gentrification-info-open');
+        open.setAttribute('aria-expanded', 'false');
+        open.focus();
+    }
+
+    open.addEventListener('click', showInfo);
+    close.addEventListener('click', hideInfo);
+    backdrop.addEventListener('click', hideInfo);
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' &&
+            document.body.classList.contains('gentrification-info-open')) {
+            hideInfo();
+        }
+    });
+});
+</script>
+
 </body>
 
 </html>
