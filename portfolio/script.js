@@ -210,6 +210,14 @@ const portfolioItems = [
       image: "images/previews/41.webp",
     },
     {
+      projectType: "Disaster Finance Strategy Game",
+      smallTitle: "One Storm Away from Default",
+      title: "One Storm Away from Default",
+      titleLink: "45/index.html",
+      tags: ["Municipal Finance", "Climate Risk", "Disaster Simulation", "Municipal Bonds", "Insurance", "Debt Management", "Resilience", "Strategy Game"],
+      image: "images/previews/45.webp",
+    },
+    {
       projectType: "Real Estate Strategy Game",
       smallTitle: "The Developer's Dilemma",
       title: "The Developer's Dilemma",
