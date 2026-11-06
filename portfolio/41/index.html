@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#080b10">
+  <meta name="description" content="The Mayor Is Broke! An interactive city-finance simulation about public choices, budgets and bonds.">
+  <title>The Mayor Is Broke! — Urban Capital Playground</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="game.js"></script>
+</head>
+<body>
+  <div class="site-shell">
+    <header class="masthead">
+      <a class="brand" href="../" title="Back to portfolio">↗ <span>URBAN CAPITAL <span class="brand-dim">/ PLAYGROUND</span></span></a>
+      <div class="head-right"><span class="prototype-pill"><span class="dot"></span> TREASURY EDITION · V0.2</span><span class="head-rule"></span><span>THE MAYOR IS BROKE!</span></div>
+    </header>
+
+    <main>
+      <section class="intro">
+        <div class="eyebrow"><span class="eyebrow-line"></span> AN EXPERIMENT IN PUBLIC MONEY</div>
+        <div class="intro-flex">
+          <div><h1>THE MAYOR<br><em>IS BROKE!</em></h1><p class="dek">Everyone wants a better city. Nobody wants to pay for it.</p></div>
+          <div class="intro-aside"><span class="as-label">YOUR MISSION</span><p>Four years. One struggling city. A crumbling bridge. Make the calls, watch the city change, and try not to leave your successor a financial disaster.</p><button class="outline-btn intro-button" id="how-btn" type="button">HOW TO PLAY <span>↗</span></button></div>
+        </div>
+      </section>
+
+      <section class="game-shell" aria-label="City finance game">
+        <div class="game-topline"><div class="topline-left"><span class="live-dot"></span><span id="term-label">MAYORAL TERM / YEAR 01 OF 04</span></div><div class="topline-right"><span id="city-name">PORT MERIDIAN</span><span class="slash">/</span><span>FICTIONAL CITY</span></div></div>
+        <div class="game-content">
+          <section class="city-pane" aria-label="Animated city visualization">
+            <div class="scene-overlay top"><div class="scene-kicker">LIVE CITY MODEL</div><div class="scene-title" id="scene-title">A city on the edge.</div></div>
+            <svg id="city-svg" viewBox="0 0 1100 640" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Interactive illustrated city with buildings, roads, river and bridge"></svg>
+            <div class="scene-overlay bottom"><div class="scene-caption"><span class="scene-caption-icon">◈</span> <span id="scene-note">Tap a district to learn about it.</span></div><div class="scene-time">THE CITY REMEMBERS EVERY DECISION</div></div>
+          </section>
+          <aside class="finance-pane" aria-label="City finances and public indicators">
+            <div class="side-header"><span>CITY HALL</span><span id="risk-flag" class="risk-flag">UNDER PRESSURE</span></div>
+            <div class="finance-lead"><div class="mini-label">AVAILABLE CASH</div><div class="money" id="cash-value">$8.0<span>M</span></div><div class="money-detail" id="cash-detail">Money the city can spend today.</div></div>
+            <div class="metrics-grid">
+              <div class="metric"><span class="metric-label">OUTSTANDING DEBT</span><strong id="debt-value">$40.0M</strong><span class="metric-note">You owe this back.</span></div>
+              <div class="metric"><span class="metric-label">ANNUAL REVENUE</span><strong id="revenue-value">$18.0M</strong><span class="metric-note">Taxes + other income</span></div>
+              <div class="metric"><span class="metric-label">APPROVAL</span><strong id="approval-value">52%</strong><div class="progress"><span id="approval-bar"></span></div></div>
+              <div class="metric"><span class="metric-label">CITY SERVICES</span><strong id="services-value">55/100</strong><div class="progress"><span id="services-bar"></span></div></div>
+            </div>
+            <div class="status-list"><div><span>BRIDGE CONDITION</span><span id="bridge-label">CRITICAL</span></div><div class="track"><span id="bridge-bar"></span></div><div><span>CLIMATE READINESS</span><span id="resilience-label">35 / 100</span></div><div class="track"><span id="resilience-bar"></span></div></div>
+            <div class="finance-foot"><span>FINANCIAL HEALTH</span><span id="fiscal-comment">One bad decision away from trouble.</span></div>
+          </aside>
+        </div>
+        <div class="play-bar"><div class="play-main"><div class="chapter"><span id="chapter-number">01 / THE FIRST PROBLEM</span><span class="chapter-icon">✳</span></div><h2 id="decision-title">The bridge is falling apart.</h2><p id="decision-description">Engineers say the only road linking the harbor and downtown needs a $25 million replacement. You have just $8 million in cash. The next election is four years away.</p><div class="policy-desk" id="policy-desk"><div class="policy-intro"><span>THE BUDGET IS YOURS, MAYOR</span><p>Every year, make one political decision <em>and</em> set the fiscal policy. Cheap promises have consequences.</p></div><div class="policy-cols"><div class="policy-control"><label>PROPERTY TAX POLICY</label><div class="policy-buttons" id="tax-policy"><button type="button" aria-pressed="false">CUT TAXES</button><button type="button" aria-pressed="true" class="active">HOLD</button><button type="button" aria-pressed="false">RAISE TAXES</button></div><small>Each step changes recurring annual revenue by $1.5M. Tax increases cost voter approval.</small></div><div class="policy-control"><label>ANNUAL SERVICE BUDGET</label><div class="policy-buttons" id="services-policy"><button type="button" aria-pressed="false">AUSTERITY</button><button type="button" aria-pressed="true" class="active">HOLD</button><button type="button" aria-pressed="false">INVEST MORE</button></div><small>Each step changes annual operating costs by $1.5M and service quality.</small></div></div><div id="policy-preview" class="policy-preview" aria-live="polite"></div></div><div class="choices" id="choices"></div><div class="outcome" id="outcome" hidden aria-live="polite"></div></div><div class="play-aside"><div class="turn-rail"><span>YOUR FOUR-YEAR TERM</span><div class="year-dots" id="year-dots"><i class="on">01</i><i>02</i><i>03</i><i>04</i></div></div><div class="ledger-title">THE MAYOR'S NOTEBOOK</div><div id="ledger" class="ledger"><p>Every choice has a cost. Sometimes the real bill comes later.</p></div><button class="primary-btn" id="advance-btn" type="button" disabled>MAKE YOUR FIRST DECISION <span>↗</span></button><button class="reset-btn" id="reset-btn" type="button">↻ START A NEW TERM</button></div></div>
+      </section>
+      <section class="treasury-section" id="treasury"><div class="treasury-head"><div><span>OPEN THE BOOKS / CITY HALL</span><h2>The Treasury Desk.</h2><p>Every bridge has a price. Every bond has a coupon. Your city has to pay the bills.</p></div><div class="treasury-flag" id="treasury-status">WATCH / LIMITED CUSHION</div></div><div id="treasury-metrics" class="treasury-metrics"></div><div class="treasury-columns"><div class="treasury-card"><div class="t-head">ANNUAL OPERATING BUDGET <small>ILLUSTRATIVE · $ MILLIONS</small></div><div id="treasury-budget"></div></div><div class="treasury-card"><div class="t-head">WHO DOES THE CITY OWE?</div><div id="treasury-debts"></div><div class="treasury-note">New capital bonds are assumed to be 10-year bullet bonds. Their coupon depends on a simple fiscal-risk spread at issuance; it is fixed thereafter. Legacy principal amortizes $1M yearly. Emergency notes are interest-only in this four-year game. Debt-service coverage uses operating revenue minus service costs divided by annual interest and scheduled principal.</div></div></div><div id="treasury-reconcile" class="treasury-reconcile"></div><p class="treasury-disclaimer">All figures are fictional and deterministic; no official credit rating, yield quote, public accounting standard or financing recommendation is implied. Transfers and fees are simplified. This model excludes restricted funds, capital asset accounting, pensions, bond covenants, debt issuance approvals and variable macroeconomic conditions.</p></section>
+      <section class="below"><div class="below-label">THE EXPERIMENT</div><div class="below-body"><h2>It's not a spreadsheet.<br>It's a city with consequences.</h2><p>The Treasury Edition adds annual tax and service policy, an operating budget, debt-service coverage and simulated borrowing costs to the four-year story. Bonds raise cash now but create future interest payments and issuance costs. Development can expand the tax base—but infrastructure costs money. Disasters force difficult choices. At the end, you don't get one score; you see the city you left behind.</p><p><strong>Everything here is fictional.</strong> The city, events, costs, public reactions and simplified financial rules are illustrative game mechanics, not forecasts, real credit ratings, investment advice, or a complete municipal budget. The accounting for borrowing, capital spending and debt service is intentionally explicit so future versions can add more realism without losing the fun.</p><div class="underneath"><span>WHAT'S UNDER THE HOOD</span><div>Municipal bonds <b>↗</b> Tax policy <b>↗</b> Cash flow <b>↗</b> Debt service coverage <b>↗</b> Development economics <b>↗</b> Climate shocks <b>↗</b> Trade-offs</div></div></div></section>
+    </main>
+    <footer><span>THE MAYOR IS BROKE! <span class="muted">/ URBAN CAPITAL PLAYGROUND</span></span><span>AN INDEPENDENT INTERACTIVE EXPERIMENT · V0.2</span></footer>
+  </div>
+  <dialog id="how-dialog"><div class="dialog-inner"><button class="close-btn" id="close-dialog" type="button" aria-label="Close instructions">✕</button><div class="eyebrow">BEFORE YOU TAKE OFFICE</div><h2>You can't fix everything.</h2><p>Make one story decision and choose annual tax and service policies each year. Watch cash, debt, public approval, city services and the miniature city respond. Each year, routine income pays for operating services and scheduled debt payments; projects, borrowing and emergencies affect the rest.</p><p>Choose carefully. The game is designed to make you trade off short-term popularity, financial resilience and long-term public benefits.</p><p><strong>Tip:</strong> You can click on buildings, the bridge and the park to inspect the city. You can replay the term as many times as you like.</p><button class="primary-btn" id="dialog-play" type="button">I'M READY TO GOVERN <span>↗</span></button></div></dialog>
+</body>
+</html>

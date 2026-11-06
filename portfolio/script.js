@@ -202,6 +202,14 @@ const portfolioItems = [
         image: "images/previews/25.webp",
     },
     {
+      projectType: "Interactive Simulation",
+      smallTitle: "The Mayor Is Broke!",
+      title: "The Mayor Is Broke! — A City-Finance Game",
+      titleLink: "41/index.html",
+      tags: ["Municipal Finance", "City Simulation", "Municipal Bonds", "Urban Economics", "Fiscal Policy", "Debt Management", "Interactive Game", "JavaScript"],
+      image: "images/previews/41.webp",
+    },
+    {
         projectType: "Geospatial Analysis", //  
         smallTitle: "World Temperature", //  
         title: "A Warming Planet: Visualizing Global Temperature Change",
