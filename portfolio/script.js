@@ -210,6 +210,14 @@ const portfolioItems = [
       image: "images/previews/41.webp",
     },
     {
+      projectType: "Financial Detective Game",
+      smallTitle: "Follow the Money!",
+      title: "Follow the Money! — A Civic Finance Mystery",
+      titleLink: "47/index.html",
+      tags: ["Municipal Finance", "Financial Investigation", "Blockchain", "Fixed Income", "Forensic Accounting", "Smart Contracts", "Financial Storytelling", "Interactive Game"],
+      image: "images/previews/47.webp",
+    },
+    {
       projectType: "Real Estate Finance Game",
       smallTitle: "The Property Machine",
       title: "The Property Machine",

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#17201d">
+  <meta name="description" content="Follow the Money — an interactive municipal-finance detective game. Reconcile a city's accounts, investigate a digital ledger, and build an evidence-based verdict.">
+  <title>Follow the Money! — A Civic Financial Mystery</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="data.js"></script>
+  <script defer src="game.js"></script>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <header class="masthead">
+    <a class="brand" href="../" aria-label="Return to portfolio"><span class="brand-emblem">◎</span><span>CIVIC<br>FORENSICS</span></a>
+    <div class="masthead-middle"><span class="signal"></span> PUBLIC MONEY / PRIVATE QUESTIONS</div>
+    <button class="quiet-button help-trigger" type="button" id="helpButton">HOW TO INVESTIGATE <span aria-hidden="true">↗</span></button>
+  </header>
+
+  <section class="opening" id="opening" aria-labelledby="gameTitle">
+    <div class="opening-grid">
+      <div class="opening-copy">
+        <div class="kicker">AN INTERACTIVE FINANCIAL DETECTIVE STORY <span class="kicker-dot">✳</span></div>
+        <h1 id="gameTitle">FOLLOW<br><em>THE</em> MONEY<span class="punct">!</span></h1>
+        <p class="deck">A bridge. A bond issue. A missing $12 million.<br>Somebody is hiding something. <strong>Or are they?</strong></p>
+        <p class="lede">You are the independent investigator hired to untangle Port Meridian's public accounts. Trace transactions, challenge the blockchain, and never accuse anyone without proof.</p>
+        <div class="opening-cta"><button class="action action-primary" id="startButton" type="button">OPEN THE CASE FILE <span>↗</span></button><span class="cta-hint">7 connected cases · No timer · Fictional investigation</span></div>
+      </div>
+      <div class="opening-art" aria-label="Illustrated evidence board with a bridge photograph, municipal documents, and red string connections">
+        <div class="tape tape-top"></div>
+        <div class="art-stamp">CONFIDENTIAL<br><span>PUBLIC RECORD</span></div>
+        <div class="string string-one"></div><div class="string string-two"></div><div class="string string-three"></div>
+        <div class="art-note note-one"><span>RECEIVED</span><b>$100,000,000</b><small>Municipal bond proceeds</small></div>
+        <div class="art-photo"><svg viewBox="0 0 380 225" role="img" aria-label="Graphic novel illustration of a river bridge under construction"><rect width="380" height="225" fill="#bcd9cc"/><path d="M0 151Q90 124 190 151T380 151V225H0Z" fill="#86aeb3"/><path d="M0 198Q90 188 190 201T380 195" stroke="#d8f5e8" stroke-width="4" fill="none"/><g fill="#233c3c"><rect x="26" y="65" width="45" height="77"/><rect x="77" y="43" width="32" height="100"/><rect x="296" y="71" width="55" height="79"/><rect x="267" y="98" width="26" height="47"/></g><g fill="#e8bd69"><rect x="39" y="81" width="5" height="7"/><rect x="51" y="81" width="5" height="7"/><rect x="86" y="61" width="5" height="7"/><rect x="300" y="88" width="8" height="8"/></g><path d="M58 156H323" stroke="#e66b4e" stroke-width="14"/><path d="M106 156V70M278 156V70" stroke="#233c3c" stroke-width="12"/><path d="M106 70L58 156M106 70L153 156M278 70L235 156M278 70L323 156" stroke="#f3dba3" stroke-width="3"/><path d="M187 147V18L252 42" stroke="#233c3c" stroke-width="5" fill="none"/><path d="M187 41H222" stroke="#233c3c" stroke-width="3"/></svg><span>EXHIBIT A — RIVERGATE BRIDGE</span></div>
+        <div class="art-note note-two"><span>SPENT</span><b>$88,000,000</b><small>Where is the rest?</small></div>
+        <div class="art-circle">$12M<br><small>?</small></div>
+        <span class="pin pin-a"></span><span class="pin pin-b"></span><span class="pin pin-c"></span>
+      </div>
+    </div>
+    <div class="opening-bottom"><span>TRACK THE CASH</span><span>CHECK THE RECORD</span><span>PROVE THE CLAIM</span></div>
+  </section>
+
+  <main class="investigation hidden" id="investigation" tabindex="-1">
+    <div class="case-ribbon">
+      <div><span class="micro">CURRENT INVESTIGATION</span><h2 id="caseHeadline">The Vanishing $12 Million</h2><p id="caseSubtitle"></p></div>
+      <div class="case-index"><span id="caseCounter">CASE 01 / 07</span><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div><span id="caseProgressLabel">0 cases resolved</span></div>
+    </div>
+    <nav class="case-strip" id="caseStrip" aria-label="Investigation chapters"></nav>
+    <div class="workspace">
+      <section class="evidence-side" aria-labelledby="wallHeading">
+        <div class="panel-eyebrow"><span>01 / INVESTIGATE</span><span class="handdrawn">LOOK CLOSER ↘</span></div>
+        <div class="section-heading"><h3 id="wallHeading">Evidence wall</h3><span id="evidenceCount" class="number-tag">0 pinned</span></div>
+        <p class="small-desc">Open the records. Pin what you believe supports your case. Earlier evidence stays available as the story unfolds.</p>
+        <div class="evidence-board" id="evidenceBoard"></div>
+        <div class="evidence-controls"><button type="button" class="link-button" id="viewPinned">VIEW PINNED EVIDENCE ↗</button><span>Click a card to inspect it</span></div>
+      </section>
+      <div class="right-stack">
+        <section class="mission-panel" aria-labelledby="missionHeading">
+          <div class="panel-eyebrow"><span>02 / RECONSTRUCT</span><span id="caseTopic" class="case-topic">CASH TRACING</span></div>
+          <div class="mission-inner"><div class="evidence-label">YOUR ASSIGNMENT</div><h3 id="missionHeading">Follow the missing money</h3><p id="missionText"></p><div class="calculator-sheet" id="calculatorSheet"></div><div class="mission-form" id="missionForm"></div><div id="missionFeedback" aria-live="polite"></div></div>
+        </section>
+        <section class="tools-panel" aria-labelledby="toolsHeading">
+          <div class="tools-header"><div><div class="panel-eyebrow">03 / EXPLORE THE SYSTEM</div><h3 id="toolsHeading">Investigator's tools</h3></div><span class="tools-mark">⌁</span></div>
+          <div class="tool-tabs" role="tablist" aria-label="Investigation tools"><button id="tab-money" type="button" role="tab" aria-selected="true" data-tool="money">MONEY TRAIL</button><button id="tab-ledger" type="button" role="tab" aria-selected="false" data-tool="ledger">TRANSACTIONS</button><button id="tab-chain" type="button" role="tab" aria-selected="false" data-tool="chain">CIVIC CHAIN</button><button id="tab-notebook" type="button" role="tab" aria-selected="false" data-tool="notebook">NOTEBOOK</button></div>
+          <div id="toolContent" class="tool-content" role="tabpanel" aria-live="polite"></div>
+        </section>
+      </div>
+    </div>
+    <div class="bottom-tape"><span>PROOF OVER PRESUMPTION</span><span>ALL RECORDS AND ORGANIZATIONS IN THIS GAME ARE FICTIONAL</span></div>
+  </main>
+
+  <dialog class="paper-dialog" id="documentDialog" aria-labelledby="dialogTitle"><div class="doc-topline"><span>OFFICIAL RECORD / CASE MATERIAL</span><button id="closeDocument" type="button" aria-label="Close document">×</button></div><div id="documentContent"></div></dialog>
+  <dialog class="help-dialog" id="helpDialog" aria-labelledby="helpTitle"><div class="doc-topline"><span>INVESTIGATOR'S HANDBOOK</span><button id="closeHelp" type="button" aria-label="Close help">×</button></div><h2 id="helpTitle">Here's how to crack the case.</h2><ol><li><strong>Read the assignment.</strong> Each chapter asks one real financial question.</li><li><strong>Inspect the documents.</strong> Click evidence, compare dates and numbers, pin useful records.</li><li><strong>Use the tools.</strong> Trace the cash, check transaction status and eventually verify a simulated blockchain.</li><li><strong>Submit a supported finding.</strong> Calculations and pinned evidence matter. Wrong answers can be retried.</li><li><strong>Follow the threads.</strong> Earlier clues become important in later cases.</li></ol><p>The city and its records are fictional. The finance concepts are real, but this is not an audit opinion, real security, actual blockchain, or allegation about a real person.</p><button class="action action-primary" id="helpDone" type="button">BACK TO THE CASE ↗</button></dialog>
+  <footer class="footer"><span>FOLLOW THE MONEY! / A CIVIC FINANCE MYSTERY</span><span>AN INTERACTIVE WORK OF FICTION</span><button id="resetButton" type="button">RESET INVESTIGATION</button></footer>
+</body>
+</html>
