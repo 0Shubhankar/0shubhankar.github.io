@@ -9,13 +9,74 @@
     <title>Visualization Portfolio | Shubhankar Sharma</title>
     <link rel="stylesheet" href="editorial-gallery.css">
     <script defer src="editorial-gallery.js"></script>
+
+<style>
+/* Portfolio navigation — homepage-inspired typography */
+.portfolio-site-nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: clamp(15px, 2.5vw, 34px);
+  padding: 20px 5%;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.portfolio-site-nav a {
+  color: inherit;
+  text-decoration: none;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 700;
+  line-height: inherit;
+  letter-spacing: .01em;
+  opacity: .85;
+  transition: opacity .2s ease;
+}
+
+.portfolio-site-nav a:hover,
+.portfolio-site-nav a:focus-visible,
+.portfolio-site-nav a.is-current {
+  opacity: 1;
+}
+
+.portfolio-site-nav a.is-current {
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  text-decoration-thickness: 2px;
+}
+
+@media (max-width: 600px) {
+  .portfolio-site-nav {
+    justify-content: center;
+    gap: 12px 19px;
+    padding: 18px 4%;
+    font-size: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-site-nav a {
+    transition: none;
+  }
+}
+</style>
+
 </head>
 
 <body>
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:20px;padding:20px 5%;flex-wrap:wrap;">
         
-        <a href="../" style="color:inherit;text-decoration:none;">← Back</a>
-    </div>
+<nav class="portfolio-site-nav" aria-label="Main navigation">
+  <a href="../#focus">Focus</a>
+  <a href="../#projects">Projects</a>
+  <a href="../portfolio/" class="is-current" aria-current="page">Portfolio</a>
+  <a href="../#work">Work</a>
+  <a href="../#contact">Contact</a>
+</nav>
+
 
     <!-- Portfolio Grid -->
     <section id="portfolio-grid" class="portfolio grid--container"></section>
