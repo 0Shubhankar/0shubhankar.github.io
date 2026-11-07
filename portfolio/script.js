@@ -376,7 +376,7 @@ const portfolioItems = [
         title: "Echo Chambers and Polarization",
         titleLink: "35/echo-chamber-polarization.html",
         tags: ["Social Dynamics", "Echo Chambers", "Polarization", "Agent-Based Simulation", "Social Connections", "Behavioral Patterns", "Political Affiliation", "Interactive Visualization", "Network Analysis", "Community Formation", "Personal Traits", "Dynamic Clustering"],
-        image: "images/previews/35.webp",
+        image: "images/previews/project35gallaryimage.png",
     },
     {
         projectType: "Civic Data Innovation", //  
