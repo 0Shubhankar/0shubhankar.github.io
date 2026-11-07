@@ -1,663 +1,285 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stickman Emitting Letters with 29 Variables</title>
-    <style>
-        body,
-        html {
-            width: 100%;
-            height: 100%;
-            margin: 0px;
-            display: flex;
-            background-color: black;
-            font-family: Georgia, 'Times New Roman', Times, serif;
-            -webkit-font-smoothing: antialiased;
-
-        }
-
-        #canvas {
-            margin: 0px;
-            display: block;
-            background-color: black;
-            flex: 3;
-        }
-
-        #info {
-        padding: 20px;
-        color: white;
-        position: absolute; /* You can use absolute positioning if you want to place it specifically */
-        top: 20px; /* Adjust this to control vertical position */
-        left: 20px; /* Adjust this to control horizontal position */
-        }
-
-
-        #explanation {
-        position: absolute;
-        bottom: 0px;
-        top:100%;
-        /* Adjust as needed */
-        left: 20%;
-        right:20%;
-        /* Adjust as needed */
-        background-color: 000;
-        /* Semi-transparent background */
-        padding: 10px;
-        border-radius: 10px;
-        /* width: 900px; */
-        /* Fixed width */
-        font-size: 16px;
-        /* Adjurgb(255, 255, 255) */
-        color: rgb(255, 255, 255);
-        z-index: 2;
-        line-height: 1.6;
-
-        /* Ensure it appears above other elements */
-    }
-
-        h2 {
-            color: white;
-        }
-
-        h3 {
-            color:white;
-        }
-
-        ul {
-            padding-left: 20px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th,
-        td {
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
-
-        th {
-            background-color: #333;
-            color: white;
-        }
-
-        td {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-    </style>
-</head>
-
-<body>
-    <!-- Info section (for dynamic data) -->
-    <div id="info">
-        <h2>Dynamic Stats</h2>
-        <p id="populationData">Population: </p>
-        <p id="feedbackData">Feedback: </p> <!-- New section for dynamically calculated feedback loops -->
-    </div>
-
-    <!-- Canvas where stickmen are displayed -->
-    <canvas id="canvas"></canvas>
-
-    <!-- Explanation Section -->
-    <div id="explanation">
-        <h2>Overview of the Simulation</h2>
-        <p>This simulation models an insurgency scenario where different groups of individuals (represented by stick
-            figures) interact and transition between categories based on socio-political factors. The population
-            consists of four main groups:</p>
-        <ul>
-            <li><strong>Supporters (Green)</strong>: People who support the current regime.</li>
-            <li><strong>Dissidents (Orange)</strong>: People who oppose the regime but are not yet involved in violence.
-            </li>
-            <li><strong>Insurgents (Red)</strong>: People who are actively rebelling or involved in violence against the
-                regime.</li>
-            <li><strong>Removed Insurgents (Gray)</strong>: Insurgents who have been neutralized or removed by the
-                regime.</li>
-        </ul>
-        <p>The goal of this simulation is to visualize the dynamic interactions between these groups over time, and
-            allow the user to adjust key parameters that influence how people move from one group to another.</p>
-
-        <h2>Components of the Simulation</h2>
-
-        <h3>Canvas</h3>
-        <p><strong>What you see</strong>: Stick figures on the canvas, each represented by a color based on their group
-            (Supporters, Dissidents, Insurgents, or Removed Insurgents). These stick figures emit random particles
-            (letters) to give the visual impression of action.</p>
-        <p><strong>Behavior</strong>: Over time, these stick figures will change color as they transition between groups
-            based on the parameters controlled by the user through the interface.</p>
-
-        <h3>Data Display on the Left</h3>
-        <p>This section shows the <strong>real-time population</strong> of each group and provides feedback on how the
-            population is evolving:</p>
-        <ul>
-            <li><strong>Supporters</strong>: The current number of people supporting the regime.</li>
-            <li><strong>Dissidents</strong>: The current number of people opposing the regime.</li>
-            <li><strong>Insurgents</strong>: The current number of people actively rebelling.</li>
-            <li><strong>Removed Insurgents</strong>: The current number of insurgents neutralized by the regime.</li>
-        </ul>
-        <p><strong>Feedback</strong> includes:</p>
-        <ul>
-            <li><strong>Total Opposition</strong>: Sum of the Dissidents and Insurgents (i.e., total number of people
-                opposing the regime).</li>
-            <li><strong>Insurgent Fraction</strong>: The percentage of the total population that are insurgents.</li>
-            <li><strong>Dissident Fraction</strong>: The percentage of the total population that are dissidents.</li>
-        </ul>
-
-        <h2>Interaction with the Simulation (dat.GUI Controls)</h2>
-        <p>You can control how the simulation evolves using a panel on the right-hand side with sliders that adjust 
-            different variables. These variables are grouped into several categories:</p>
-
-        <h3>Group Population Sliders</h3>
-        <p>These sliders control the <strong>initial population</strong> of each group. Moving these sliders will
-            instantly change the number of people in each group at the start of the simulation:</p>
-        <ul>
-            <li><strong>Supporters</strong>: Controls how many people start out as supporters (Green).</li>
-            <li><strong>Dissidents</strong>: Controls how many people start out as dissidents (Orange).</li>
-            <li><strong>Insurgents</strong>: Controls how many people start out as insurgents (Red).</li>
-            <li><strong>Removed Insurgents</strong>: Controls how many people start out as removed insurgents (Gray).
-            </li>
-        </ul>
-        <p>Adjusting these sliders will <strong>reinitialize</strong> the stick figures on the canvas to reflect the new
-            distribution.</p>
-
-        <h3>Flow Rate Sliders</h3>
-        <p>These sliders control how fast people transition between the groups based on various factors:</p>
-        <ul>
-            <li><strong>Recruitment Rate</strong>: The rate at which Dissidents are recruited into Insurgents. A higher
-                value means more Dissidents will become Insurgents faster.</li>
-            <li><strong>Becoming Dissident Rate</strong>: The rate at which Supporters become Dissidents. A higher value
-                indicates a faster transition from Supporters to Dissidents.</li>
-            <li><strong>Removing Insurgents Rate</strong>: The rate at which Insurgents are neutralized and become
-                Removed Insurgents.</li>
-        </ul>
-
-        <h3>Parameters Influencing Flow Rates</h3>
-        <p>These parameters affect the transition rates mentioned above:</p>
-        <ul>
-            <li><strong>Propensity to be Recruited</strong>: Affects the Recruitment Rate. A higher value means
-                Dissidents are more likely to become Insurgents.</li>
-            <li><strong>Regime Efforts</strong>: Affects the Removing Insurgents Rate. A higher value indicates the
-                regime is more effective at neutralizing insurgents.</li>
-            <li><strong>Protest Intensity</strong>: Affects the Becoming Dissident Rate. A higher value indicates more
-                intense protests, leading to more Supporters becoming Dissidents.</li>
-            <li><strong>Appeasement Rate</strong>: The rate at which Dissidents are turned back into Supporters by the
-                regime’s appeasement efforts.</li>
-        </ul>
-
-        <h3>Messaging & Incident Factors</h3>
-        <p>These factors influence how fast people move between groups based on external messaging and incidents:</p>
-        <ul>
-            <li><strong>Anti-Regime Message Intensity</strong>: Affects both the Becoming Dissident Rate and the
-                Recruitment Rate. A higher value means more powerful anti-regime messages, causing more Supporters to
-                become Dissidents and more Dissidents to become Insurgents.</li>
-            <li><strong>Effect of Messages on Recruitment</strong>: Affects the Recruitment Rate. A higher value means
-                anti-regime messages are more effective at recruiting Dissidents into Insurgents.</li>
-            <li><strong>Frequency of Anti-Regime Messages</strong>: Affects both the Becoming Dissident Rate and the
-                Recruitment Rate. A higher value means more frequent messages, leading to more transitions from
-                Supporters to Dissidents and from Dissidents to Insurgents.</li>
-            <li><strong>Violent Incident Intensity</strong>: Affects the Removing Insurgents Rate. A higher value means
-                more intense violent incidents, allowing the regime to neutralize Insurgents faster.</li>
-            <li><strong>Strength of Violent Incidents</strong>: Affects both the Becoming Dissident Rate and the
-                Recruitment Rate. A higher value means violent incidents are more effective at increasing the number of
-                Dissidents and Insurgents.</li>
-        </ul>
-
-        <h3>Other Variables</h3>
-        <ul>
-            <li><strong>People Birth Rate</strong>: This variable adds new people to the Supporter group over time.</li>
-            <li><strong>People Reaction Delay</strong>: This variable controls how long it takes for people to react to
-                anti-regime messages and incidents. A higher value delays their reaction, slowing the transitions
-                between groups.</li>
-        </ul>
-
-        <h2>How the Simulation Works</h2>
-
-        <h3>How Transitions Happen</h3>
-        <p>The transitions between groups happen based on the flow rates you set using the sliders. For example:</p>
-        <ul>
-            <li>If the <strong>Recruitment Rate</strong> is high, you will see more Dissidents (Orange) turn into
-                Insurgents (Red) over time.</li>
-            <li>If the <strong>Removing Insurgents Rate</strong> is high, you will see more Insurgents (Red) turning
-                into Removed Insurgents (Gray).</li>
-            <li>If the <strong>Protest Intensity</strong> is high, more Supporters (Green) will become Dissidents
-                (Orange) faster.</li>
-        </ul>
-
-        <h3>Dynamic Feedback</h3>
-        <p>As you adjust the sliders, the simulation updates in real-time:</p>
-        <ul>
-            <li><strong>Stickman Colors Change</strong>: Stick figures on the canvas will change colors to reflect the
-                changes in group transitions.</li>
-            <li><strong>Population Data Updates</strong>: The left-side panel will update to reflect the changes in
-                population counts and percentages as people transition between groups.</li>
-        </ul>
-
-        <h3>Visual Elements</h3>
-        <p>The stick figures represent the people, and their color changes as they move from one group to another. They
-            also emit random particles (letters), adding a sense of action and dynamism to the simulation.</p>
-
-        <h2>How to Use the Simulation</h2>
-        <p>Follow these steps to use the simulation effectively:</p>
-        <ol>
-            <li><strong>Set Initial Populations</strong>: Use the <strong>Supporters</strong>,
-                <strong>Dissidents</strong>, <strong>Insurgents</strong>, and <strong>Removed Insurgents</strong>
-                sliders to set the initial population of each group.</li>
-            <li><strong>Control Flow Rates</strong>: Use the <strong>Recruitment Rate</strong>, <strong>Becoming
-                    Dissident Rate</strong>, and <strong>Removing Insurgents Rate</strong> to control how fast people
-                move between groups.</li>
-            <li><strong>Adjust Socio-Political Factors</strong>: Modify the <strong>Messaging</strong>, <strong>Incident
-                    Factors</strong>, and <strong>Other Variables</strong> (e.g., <strong>Propensity to be
-                    Recruited</strong>, <strong>Protest Intensity</strong>, <strong>Anti-Regime Message
-                    Intensity</strong>) to influence how messaging and violence impact the population dynamics.</li>
-            <li><strong>Observe Real-Time Changes</strong>: Watch the <strong>stickmen</strong> change colors and the
-                <strong>data panel</strong> update in real time as you adjust the sliders.</li>
-            <li><strong>Experiment</strong>: Play with different settings to explore how different regimes of messaging,
-                violence, and appeasement affect the dynamics between Supporters, Dissidents, Insurgents, and Removed
-                Insurgents.</li>
-        </ol>
-
-        <h2>Summary of Key Controls and Their Effects</h2>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Control</th>
-                    <th>Effect</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>Supporters</strong></td>
-                    <td>Sets the initial number of regime supporters (green stickmen).</td>
-                </tr>
-                <tr>
-                    <td><strong>Dissidents</strong></td>
-                    <td>Sets the initial number of dissidents (orange stickmen).</td>
-                </tr>
-                <tr>
-                    <td><strong>Insurgents</strong></td>
-                    <td>Sets the initial number of insurgents (red stickmen).</td>
-                </tr>
-                <tr>
-                    <td><strong>Removed Insurgents</strong></td>
-                    <td>Sets the initial number of neutralized insurgents (gray stickmen).</td>
-                </tr>
-                <tr>
-                    <td><strong>Recruitment Rate</strong></td>
-                    <td>Controls how fast dissidents become insurgents.</td>
-                </tr>
-                <tr>
-                    <td><strong>Becoming Dissident Rate</strong></td>
-                    <td>Controls how fast supporters become dissidents.</td>
-                </tr>
-                <tr>
-                    <td><strong>Removing Insurgents Rate</strong></td>
-                    <td>Controls how fast insurgents are neutralized.</td>
-                </tr>
-                <tr>
-                    <td><strong>Propensity to be Recruited</strong></td>
-                    <td>Increases the likelihood that dissidents become insurgents.</td>
-                </tr>
-                <tr>
-                    <td><strong>Regime Efforts</strong></td>
-                    <td>Increases the regime's effectiveness in neutralizing insurgents.</td>
-                </tr>
-                <tr>
-                    <td><strong>Protest Intensity</strong></td>
-                    <td>Increases the likelihood that supporters become dissidents.</td>
-                </tr>
-                <tr>
-                    <td><strong>Appeasement Rate</strong></td>
-                    <td>Increases the rate at which dissidents return to being supporters.</td>
-                </tr>
-                <tr>
-                    <td><strong>Anti-Regime Message Intensity</strong></td>
-                    <td>Increases the effectiveness of anti-regime messages in creating dissidents.</td>
-                </tr>
-                <tr>
-                    <td><strong>Effect of Messages on Recruitment</strong></td>
-                    <td>Increases the effectiveness of messages in recruiting insurgents.</td>
-                </tr>
-                <tr>
-                    <td><strong>Frequency of Anti-Regime Messages</strong></td>
-                    <td>Increases the frequency of anti-regime messaging.</td>
-                </tr>
-                <tr>
-                    <td><strong>Violent Incident Intensity</strong></td>
-                    <td>Increases the regime's ability to neutralize insurgents.</td>
-                </tr>
-                <tr>
-                    <td><strong>Strength of Violent Incidents</strong></td>
-                    <td>Increases the effectiveness of violence in increasing insurgents/dissidents.</td>
-                </tr>
-                <tr>
-                    <td><strong>People Birth Rate</strong></td>
-                    <td>Adds new people to the Supporters group over time.</td>
-                </tr>
-                <tr>
-                    <td><strong>People Reaction Delay</strong></td>
-                    <td>Controls how long it takes people to react to messaging and incidents.</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <h2>Conclusion</h2>
-            <p>This simulation allows you to explore how different socio-political factors affect population dynamics in a regime
-                facing opposition and insurgency. By adjusting the various parameters, you can simulate different scenarios and
-                observe how populations evolve in response to messaging, protests, and regime actions.</p>
-
-            </div>
-    </body>
-
-    <script src="../vendor/shared/lib-9092ba184a7e/dist/dat.gui.min.js"></script>
-    <script>
-        // Canvas setup
-        var canvas = document.getElementById("canvas");
-        canvas.width = document.body.clientWidth || document.documentElement.clientWidth;
-        canvas.height = document.body.clientHeight || document.documentElement.clientHeight;
-        var ctx = canvas.getContext("2d");
-
-        var charSize = 10;
-        var particleText = 'fufufjufjndakbafbibfodbfiebfweICBIBCDWOCH';
-        var colors = ['#00FF00', '#FF9900', '#FF0000', '#AAAAAA']; // Green, Orange, Red, Gray
-
-        // Create initial groups - make adjustable in GUI
-        var groupCounts = {
-            supporters: 60, // Green
-            dissidents: 20, // Orangea
-            insurgents: 15, // Red
-            removedInsurgents: 5  // Gray
-        };
-
-        var characters = [];
-
-        // Reinitialize characters based on group counts
-        function initializeCharacters() {
-            characters = []; // Clear characters array
-            let totalCharacters = groupCounts.supporters + groupCounts.dissidents + groupCounts.insurgents + groupCounts.removedInsurgents;
-            if (totalCharacters > 100) totalCharacters = 100; // Ensure maximum number of characters doesn't exceed 100
-
-            for (let i = 0; i < totalCharacters; i++) {
-                let group;
-                if (i < groupCounts.supporters) group = 0; // Green
-                else if (i < groupCounts.supporters + groupCounts.dissidents) group = 1; // Orange
-                else if (i < groupCounts.supporters + groupCounts.dissidents + groupCounts.insurgents) group = 2; // Red
-                else group = 3; // Gray
-
-                characters.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    group: group,
-                    particles: [] // Empty array to hold emitted particles
-                });
-            }
-        }
-
-        initializeCharacters();
-
-        // Function to emit particles (letters)
-        function emitParticle(char) {
-            var randomChar = particleText[Math.floor(Math.random() * particleText.length)];
-            var particle = {
-                text: randomChar,
-                x: char.x,
-                y: char.y - charSize,
-                size: 10,
-                speedX: (Math.random() - 0.5) * 2,
-                speedY: (Math.random() - 0.5) * 2,
-                life: 100
-            };
-            char.particles.push(particle);
-        }
-
-        // Function to update stickmen and particles
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            characters.forEach(char => {
-                // Set color based on the group
-                ctx.strokeStyle = colors[char.group];
-                ctx.fillStyle = colors[char.group];
-
-                // Draw stickman head (hollow circle)
-                ctx.beginPath();
-                ctx.arc(char.x, char.y, charSize, 0, 2 * Math.PI);
-                ctx.closePath();
-                ctx.stroke();
-
-                // Draw stickman body
-                ctx.beginPath();
-                ctx.moveTo(char.x, char.y + charSize);
-                ctx.lineTo(char.x, char.y + 3 * charSize);
-                ctx.closePath();
-                ctx.stroke();
-
-                // Left and right arms
-                ctx.beginPath();
-                ctx.moveTo(char.x, char.y + charSize);
-                ctx.lineTo(char.x - charSize, char.y + 2 * charSize);
-                ctx.moveTo(char.x, char.y + charSize);
-                ctx.lineTo(char.x + charSize, char.y + 2 * charSize);
-                ctx.closePath();
-                ctx.stroke();
-
-                // Left and right legs
-                ctx.beginPath();
-                ctx.moveTo(char.x, char.y + 3 * charSize);
-                ctx.lineTo(char.x - charSize, char.y + 4 * charSize);
-                ctx.moveTo(char.x, char.y + 3 * charSize);
-                ctx.lineTo(char.x + charSize, char.y + 4 * charSize);
-                ctx.closePath();
-                ctx.stroke();
-
-                // Emit particles randomly
-                if (Math.random() < 0.05) {
-                    emitParticle(char);
-                }
-
-                // Draw particles
-                char.particles.forEach((particle, i) => {
-                    particle.x += particle.speedX;
-                    particle.y += particle.speedY;
-                    particle.life--;
-
-                    ctx.fillText(particle.text, particle.x, particle.y);
-                    if (particle.life <= 0) {
-                        char.particles.splice(i, 1); // Remove particle if its life is over
-                    }
-                });
-            });
-
-            requestAnimationFrame(draw);
-        }
-
-        // Initialize GUI with variables (including adjustable group counts)
-
-                var gui = new dat.GUI({ width: 350 });
-
-        var guiData = {
-            // Group populations (adjustable by user)
-            'Supporters': groupCounts.supporters,
-            'Dissidents': groupCounts.dissidents,
-            'Insurgents': groupCounts.insurgents,
-            'Removed Insurgents': groupCounts.removedInsurgents,
-
-            // Flow Rates
-            'Recruitment Rate': 10, // Dissidents → Insurgents
-            'Becoming Dissident Rate': 5, // Supporters → Dissidents
-            'Removing Insurgents Rate': 8, // Insurgents → Removed
-
-            // Parameters Influencing Flow Rates
-            'Propensity to be Recruited': 10,
-            'Regime Efforts': 50,
-            'Protest Intensity': 20,
-            'Appeasement Rate': 10,
-
-            // Messaging & Incident Factors
-            'Anti-Regime Message Intensity': 25,
-            'Effect of Messages on Recruitment': 30,
-            'Frequency of Anti-Regime Messages': 20,
-            'Violent Incident Intensity': 50,
-            'Strength of Violent Incidents': 50,
-
-            // Other Variables
-            'People Birth Rate': 2,
-            'People Reaction Delay': 2
-        };
-
-        // Add sliders for the group counts and update simulation and display when they change
-        gui.add(guiData, 'Supporters', 0, 100).onChange(value => {
-            groupCounts.supporters = value;
-            initializeCharacters(); // Reinitialize with new counts
-            updateSimulation(); // Ensure the simulation is updated
-            updateDataDisplay(); // Ensure the data display is updated
-        });
-
-        gui.add(guiData, 'Dissidents', 0, 100).onChange(value => {
-            groupCounts.dissidents = value;
-            initializeCharacters();
-            updateSimulation();
-            updateDataDisplay();
-        });
-
-        gui.add(guiData, 'Insurgents', 0, 100).onChange(value => {
-            groupCounts.insurgents = value;
-            initializeCharacters();
-            updateSimulation();
-            updateDataDisplay();
-        });
-
-        gui.add(guiData, 'Removed Insurgents', 0, 100).onChange(value => {
-            groupCounts.removedInsurgents = value;
-            initializeCharacters();
-            updateSimulation();
-            updateDataDisplay();
-        });
-
-        // Add sliders for flow rates and other variables
-        for (const key in guiData) {
-            if (key !== 'Supporters' && key !== 'Dissidents' && key !== 'Insurgents' && key !== 'Removed Insurgents') {
-                gui.add(guiData, key, 0, 100).onChange(() => {
-                    updateSimulation(); // Update simulation when any other slider changes
-                    updateDataDisplay(); // Update the data display as well
-                });
-            }
-        }
-
-        // Function to calculate flow rates dynamically based on GUI inputs
-        function calculateFlowRates() {
-            // Recruitment: Dissidents -> Insurgents
-            var recruitmentRate = guiData['Recruitment Rate']
-                * guiData['Propensity to be Recruited']
-                * guiData['Effect of Messages on Recruitment']
-                * guiData['Frequency of Anti-Regime Messages']
-                * guiData['Strength of Violent Incidents']
-                * (1 - guiData['People Reaction Delay'] / 100)
-                / 100000;
-
-            // Becoming Dissident: Supporters -> Dissidents
-            var becomingDissidentRate = guiData['Becoming Dissident Rate']
-                * guiData['Protest Intensity']
-                * guiData['Anti-Regime Message Intensity']
-                * guiData['Frequency of Anti-Regime Messages']
-                * guiData['Strength of Violent Incidents']
-                * (1 - guiData['People Reaction Delay'] / 100)
-                / 100000;
-
-            // Removing Insurgents: Insurgents -> Removed Insurgents
-            var removingInsurgentsRate = guiData['Removing Insurgents Rate']
-                * guiData['Regime Efforts']
-                * guiData['Violent Incident Intensity']
-                / 10000;
-
-            // Appeasement Rate: Dissidents -> Supporters
-            var appeasementRate = guiData['Appeasement Rate']
-                * guiData['Regime Efforts']
-                / 100;
-
-            return { recruitmentRate, becomingDissidentRate, removingInsurgentsRate, appeasementRate };
-        }
-
-        // Function to update the simulation based on flow rates
-        function updateSimulation() {
-            var flowRates = calculateFlowRates();
-
-            // Transition logic based on flow rates
-            var newInsurgents = Math.floor(flowRates.recruitmentRate * groupCounts.dissidents / 100);
-            var newDissidents = Math.floor(flowRates.becomingDissidentRate * groupCounts.supporters / 100);
-            var removedInsurgents = Math.floor(flowRates.removingInsurgentsRate * groupCounts.insurgents / 100);
-            var appeasedSupporters = Math.floor(flowRates.appeasementRate * groupCounts.dissidents / 100);
-
-            // Update group counts based on flow rates
-            groupCounts.dissidents -= newInsurgents;
-            groupCounts.insurgents += newInsurgents;
-
-            groupCounts.supporters -= newDissidents;
-            groupCounts.dissidents += newDissidents;
-
-            groupCounts.insurgents -= removedInsurgents;
-            groupCounts.removedInsurgents += removedInsurgents;
-
-            // Update appeasement (Dissidents -> Supporters)
-            groupCounts.dissidents -= appeasedSupporters;
-            groupCounts.supporters += appeasedSupporters;
-
-            // Continuously update the stickman colors without reinitializing
-            characters.forEach(char => {
-                if (char.group === 0 && newDissidents > 0) {
-                    char.group = 1; // Supporters (Green) to Dissidents (Orange)
-                    newDissidents--;
-                } else if (char.group === 1 && newInsurgents > 0) {
-                    char.group = 2; // Dissidents (Orange) to Insurgents (Red)
-                    newInsurgents--;
-                } else if (char.group === 2 && removedInsurgents > 0) {
-                    char.group = 3; // Insurgents (Red) to Removed Insurgents (Gray)
-                    removedInsurgents--;
-                } else if (char.group === 1 && appeasedSupporters > 0) {
-                    char.group = 0; // Dissidents (Orange) to Supporters (Green)
-                    appeasedSupporters--;
-                }
-            });
-
-            // Update data display on the left
-            updateDataDisplay();
-        }
-
-        // Function to dynamically calculate feedback loops (e.g., total opposition, population fractions)
-        function calculateFeedback() {
-            var totalPopulation = groupCounts.supporters + groupCounts.dissidents + groupCounts.insurgents + groupCounts.removedInsurgents;
-            var totalOpposition = groupCounts.dissidents + groupCounts.insurgents;
-            var insurgentFraction = (groupCounts.insurgents / totalPopulation * 100).toFixed(2);
-            var dissidentFraction = (groupCounts.dissidents / totalPopulation * 100).toFixed(2);
-
-            return {
-                totalOpposition,
-                insurgentFraction,
-                dissidentFraction
-            };
-        }
-
-        // Update real-time data display
-        function updateDataDisplay() {
-            document.getElementById("populationData").innerText =
-                `Supporters: ${groupCounts.supporters}, Dissidents: ${groupCounts.dissidents}, 
-                    Insurgents: ${groupCounts.insurgents}, Removed Insurgents: ${groupCounts.removedInsurgents}`;
-
-            // Dynamically update feedback loop values
-            var feedback = calculateFeedback();
-            document.getElementById("feedbackData").innerText =
-                `Total Opposition: ${feedback.totalOpposition}, 
-                    Insurgent Fraction: ${feedback.insurgentFraction}%, 
-                    Dissident Fraction: ${feedback.dissidentFraction}%`;
-        }
-
-        // Start rendering and updating
-        draw();
-        updateDataDisplay();
-    </script>
-    
-    </html>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dissent in Motion — Systems of a Living City</title>
+<style>
+:root{color-scheme:dark;--bg:#080c11;--paper:#e9e6e0;--muted:#a4adb5;--bronze:#bd9971;--line:#253139}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--paper);font-family:'EB Garamond',Garamond,'Baskerville',Georgia,serif}button,input{font:inherit}button{cursor:pointer}
+#stage{position:relative;height:min(850px,100svh);min-height:620px;overflow:hidden;background:radial-gradient(ellipse at 55% 34%,#15202b 0%,#080c11 65%)}
+#scene{position:absolute;inset:0}#stage canvas{display:block;width:100%;height:100%;touch-action:none}
+.topline{position:absolute;top:24px;left:28px;pointer-events:none;max-width:510px;z-index:2}.eyebrow{font:11px/1.5 system-ui,sans-serif;color:var(--bronze);letter-spacing:.2em;text-transform:uppercase}.topline h1{font-size:clamp(35px,4.5vw,62px);font-weight:400;letter-spacing:-.035em;line-height:1.04;margin:12px 0 12px}.topline p{max-width:430px;font-size:17px;line-height:1.35;color:#c1cbd1;margin:0}
+.legend{display:flex;gap:14px;flex-wrap:wrap;position:absolute;bottom:26px;left:28px;right:330px;z-index:2;pointer-events:none;font:11px system-ui,sans-serif;color:#d3d8db}.legend span{white-space:nowrap}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:1px}.legend .hint{color:#8b989f;flex-basis:100%;font-size:10px}
+.controls{position:absolute;right:22px;top:22px;bottom:22px;width:294px;overflow:auto;background:#101820e8;border:1px solid #314048;border-radius:3px;padding:18px 19px;z-index:3;backdrop-filter:blur(12px);scrollbar-width:thin}.controls h2{font:500 12px system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;margin:0 0 13px;color:var(--bronze)}.statgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px 8px;padding:10px 0 15px;border-bottom:1px solid var(--line)}.statgrid strong{display:block;font:400 29px Garamond,Georgia,serif}.statgrid small{font:10px system-ui,sans-serif;color:var(--muted)}.controlhead{margin:22px 0 13px;font:11px system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#bbc8cc}.control{margin:0 0 14px}.control .labels{display:flex;justify-content:space-between;gap:8px;font:11px system-ui,sans-serif;color:#d6dcdf;margin-bottom:7px}.control output{color:var(--bronze);font-variant-numeric:tabular-nums}.control input{width:100%;accent-color:#bca17e}.actions{display:flex;gap:7px;flex-wrap:wrap}.actions button{border:1px solid #53636a;background:transparent;color:#f1f1ec;padding:9px 12px;font:11px system-ui,sans-serif;letter-spacing:.04em}.actions button:hover,.actions button:focus-visible{background:#29353c}.subtext{font:11px/1.55 system-ui,sans-serif;color:#9ba7ad;margin:12px 0 0}.inspect{border-top:1px solid var(--line);padding-top:15px;margin-top:17px;font:12px/1.6 system-ui,sans-serif;color:#cbd5d8;min-height:79px}.inspect b{color:#f4e2ca;font-weight:500}.inspect p{margin:7px 0}.reading{max-width:780px;padding:85px 28px 110px;margin:auto;font-size:20px;line-height:1.62;color:#d8d6d1}.reading .eyebrow{font-size:11px}.reading h2{font-size:clamp(32px,4vw,47px);font-weight:400;line-height:1.14;margin:13px 0 26px;color:#f5f1eb}.reading h3{font-size:29px;font-weight:400;margin:40px 0 12px;color:#f2ede7}.reading p{margin:0 0 17px}.reading .equation{font-size:26px;text-align:center;line-height:1.5;overflow-x:auto;padding:12px 0;color:#f3dfc9}.reading .small{font-size:17px;color:#aeb6b9}.bottomline{border-top:1px solid #253039;max-width:780px;margin:0 auto;padding:18px 28px 50px;font:11px system-ui,sans-serif;color:#8a989f}
+@media(max-width:850px){#stage{min-height:930px;height:auto;display:flex;flex-direction:column}#scene{position:relative;inset:auto;width:100%;height:590px;flex:none}.topline{top:18px;left:18px;right:18px}.topline h1{font-size:38px}.topline p{font-size:14px;max-width:350px}.controls{position:relative;right:auto;top:auto;bottom:auto;width:auto;margin:0 14px 20px;max-height:none}.legend{top:550px;bottom:auto;left:18px;right:16px;gap:10px}.legend .hint{display:none}.reading{padding:64px 21px 80px;font-size:18px}}
+</style>
+<style>
+/* Consistent editorial typography, no dashboard-like sans labels. */
+body,button,input,output,.eyebrow,.legend,.legend .hint,.controls h2,.statgrid strong,.statgrid small,.controlhead,.control .labels,.actions button,.subtext,.inspect,.reading .eyebrow,.bottomline{font-family:'EB Garamond',Garamond,Baskerville,Georgia,serif!important}
+.eyebrow,.controlhead,.controls h2{letter-spacing:.095em}
+.topline p{font-size:19px;line-height:1.45}
+.legend{font-size:14px}.legend .hint{font-size:13px}
+.statgrid small,.control .labels,.subtext,.inspect{font-size:14px}
+.controls h2,.controlhead,.actions button{font-size:13px}
+</style>
+<style id="original-control-style">
+/* Original dat.GUI controls, font unified with the published editorial look. */
+.dg, .dg.main, .dg li, .dg .property-name, .dg input, .dg .c, .dg .close-button {font-family:Garamond,'Baskerville',Georgia,serif!important}
+.dg.main {z-index:20!important; font-size:14px!important}
+.dg .property-name {font-size:14px!important}
+.dg .c input[type=text]{font-size:13px!important}
+.dg .close-button{font-size:14px!important}
+.topline{right:395px;max-width:480px}
+.legend{right:395px}
+.original-hud{position:absolute;bottom:95px;left:28px;z-index:3;width:255px;max-width:calc(100vw - 56px);background:rgba(8,12,17,.76);border-left:1px solid #52616a;padding:11px 16px;font-size:16px;backdrop-filter:blur(6px)}
+.hud-row{display:flex;align-items:center;justify-content:space-between;line-height:1.45;color:#d3d4cf}
+.hud-row strong{font-weight:400;color:#f6eadb;font-size:21px}
+#status{font-size:13px;color:#a7b2bb;margin:6px 0 12px}
+.hud-actions{display:flex;gap:6px;flex-wrap:wrap}
+.hud-actions button{border:1px solid #59646e;background:transparent;color:#e9e6e0;padding:5px 8px;font-size:14px}
+#inspect{border-top:1px solid #314048;margin-top:9px;padding-top:8px;color:#b4c2c7;font-size:13px;line-height:1.4}
+#inspect p{margin:4px 0}#inspect b{font-weight:600}
+@media(max-width:850px){.topline{right:18px}.legend{right:16px}.original-hud{left:18px;bottom:18px;position:absolute;max-width:255px;padding:8px 12px}.dg.ac{position:relative!important;z-index:30!important}.dg.main{width:min(350px,100vw)!important}.dg.main .close-button{width:100%!important}#stage{min-height:800px}}
+</style></head><body>
+<section id="stage" aria-label="Interactive 3D civic field">
+<div id="scene"></div>
+<div class="topline"><div class="eyebrow">Systems of a Living City</div><h1>Dissent<br>in Motion</h1><p>A simulation of how political support, dissent, and resistance evolve within a population. Observe how individuals change their positions and express dissent as social and political conditions shift.</p></div>
+<div class="legend"><span><i class="dot" style="background:#65c6a2"></i>Supporters</span><span><i class="dot" style="background:#e1ad64"></i>Dissidents</span><span><i class="dot" style="background:#d47778"></i>Insurgents</span><span><i class="dot" style="background:#75818e"></i>Removed</span><span class="hint">Drag to orbit · Scroll to zoom · Click a person to inspect</span></div>
+<div class="original-hud" aria-label="Population statistics">
+  <div class="hud-row"><span>Supporters</span><strong id="n-support">60</strong></div>
+  <div class="hud-row"><span>Dissidents</span><strong id="n-dissent">20</strong></div>
+  <div class="hud-row"><span>Insurgents</span><strong id="n-insurgent">15</strong></div>
+  <div class="hud-row"><span>Removed</span><strong id="n-removed">5</strong></div>
+  <p id="status" aria-live="polite">Step 0 · 100 people · Running</p>
+  <div class="hud-actions"><button id="pause">Pause</button><button id="step">Step once</button><button id="reset">Reset</button></div>
+  <div id="inspect" aria-live="polite">Click a person to inspect their state.</div>
+</div></section>
+<main class="reading"><div class="eyebrow">Reading the simulation</div><h2>How political states change</h2>
+<p>This experiment represents a small, hypothetical population. Each coloured 3D stick figure stands for one person. Green represents supporters, amber represents dissidents, red represents insurgents, and grey represents people who have left the active population through removal.</p>
+<h3>How to read the people and their messages</h3>
+<p>Each figure represents an individual within the population. Green represents support, amber dissent, red insurgency and grey removal. The figures stay in place so a change in colour is easy to follow.</p>
+<p>Amber and red figures release visible words from their mouths, which drift forward and upward before fading. Red speech is brighter and more frequent. These marks are a visual metaphor for expression; they do not spread between people or change anyone's probability of switching state.</p>
+<h3>What makes the colours change?</h3>
+<p>At each time step, each person has a chance of changing state. Supporters may become dissidents; dissidents may return to support or become insurgents; and insurgents may be removed from the active population. Removed people stay in the grey state. The model does not permit other transitions.</p>
+<div class="equation">p<sub>a→b</sub> = min(0.35, λ<sub>a→b</sub> · m<sub>a→b</sub>)</div>
+<p>The probability <em>p<sub>a→b</sub></em> describes a transition from state <em>a</em> to state <em>b</em> during one step. The base rate is <em>λ<sub>a→b</sub></em>, while <em>m<sub>a→b</sub></em> adjusts that rate using the conditions selected in the panel. Each transition probability is capped at 35% per step. The birth rate is capped at 12% per step, and available positions limit the number of new people. For dissidents, the return-to-support and recruitment probabilities are evaluated together, allowing no more than one transition in a step.</p>
+<h3>How to experiment</h3>
+<p>Use the original right-hand toolbar to adjust the population counts, flow rates, messaging, incidents and regime responses. Reset and compare different settings. The factors adjust probabilities rather than causing deterministic outcomes. Rotate the scene to look at people from different angles; click a figure to inspect its current state. Pause or advance one step to see a single round of transitions.</p>
+<h3>What this model cannot tell us</h3>
+<p>All eighteen controls retain their original labels. Population sliders reset the population; the remaining sliders modify bounded transition probabilities or the visual expression of speech. The rate factors are illustrative, not fitted to real political data. The figures are arranged for legibility, not according to observed geographic locations or social networks. Speech is an illustration of expression, not a mechanism of persuasion or observed messages. People change state according to fixed transition rates, not through contact with their neighbours. This is not a prediction of real political violence.</p>
+<p class="small">The 3D display requires WebGL and a connection to load Three.js; the original dat.GUI panel is loaded from the local project vendor library. Nothing is sent to a server; the population simulation runs in the browser.</p>
+</main><footer class="bottomline">Systems of a Living City · Interactive conceptual simulation</footer>
+<script src="../vendor/shared/lib-9092ba184a7e/dist/dat.gui.min.js"></script>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js';
+
+const palette=[0x56da8d,0xffb458,0xff5252,0x929ba1];
+const maxPopulation=400;
+const defaults={supporters:60,dissidents:20,insurgents:15,removed:5};
+// Original control labels and initial values; the 3D scene remains the rendering layer.
+const guiData={
+ 'Supporters':60,'Dissidents':20,'Insurgents':15,'Removed Insurgents':5,
+ 'Recruitment Rate':10,'Becoming Dissident Rate':5,'Removing Insurgents Rate':8,
+ 'Propensity to be Recruited':10,'Regime Efforts':50,'Protest Intensity':20,'Appeasement Rate':10,
+ 'Anti-Regime Message Intensity':25,'Effect of Messages on Recruitment':30,
+ 'Frequency of Anti-Regime Messages':20,'Violent Incident Intensity':50,
+ 'Strength of Violent Incidents':50,'People Birth Rate':2,'People Reaction Delay':2
+};
+function paramsFromToolbar(){return {
+ becoming:guiData['Becoming Dissident Rate'],recruitment:guiData['Recruitment Rate'],
+ removal:guiData['Removing Insurgents Rate'],appeasement:guiData['Appeasement Rate'],
+ protest:guiData['Protest Intensity'],messaging:guiData['Anti-Regime Message Intensity'],
+ propensity:guiData['Propensity to be Recruited'],regime:guiData['Regime Efforts'],
+ effect:guiData['Effect of Messages on Recruitment'],frequency:guiData['Frequency of Anti-Regime Messages'],
+ violent:guiData['Violent Incident Intensity'],strength:guiData['Strength of Violent Incidents'],
+ delay:guiData['People Reaction Delay'],birth:guiData['People Birth Rate']
+};}
+// All 18 original sliders retained in their original single-panel ordering.
+if(!window.dat||!window.dat.GUI)throw new Error('Original dat.GUI library could not load.');
+const gui=new dat.GUI({width:350});
+for(const key of Object.keys(guiData)){
+ const populationKey={'Supporters':'supporters','Dissidents':'dissidents','Insurgents':'insurgents','Removed Insurgents':'removed'}[key];
+ const controller=gui.add(guiData,key,0,100);
+ if(populationKey){controller.step(1).onFinishChange(value=>{
+   defaults[populationKey]=Math.round(value);resetPopulation();
+ });}
+ else controller.onChange(()=>{updateStats();});
+}
+function rates(p){
+ // Illustrative, bounded per-step hazards, not empirical causal estimates.
+ const delay=clamp(1-.8*p.delay/100,.2,1);
+ const messages=.5+p.messaging/100;
+ const frequency=.5+p.frequency/100;
+ const protest=.5+p.protest/100;
+ const incidents=.5+p.violent/100;
+ const strength=.5+p.strength/100;
+ const recruitmentMessaging=.5+p.effect/100;
+ const propensity=.5+p.propensity/100;
+ return {
+  sd:clamp(.16*p.becoming/100*protest*messages*frequency*incidents*strength*delay,0,.35),
+  di:clamp(.18*p.recruitment/100*propensity*recruitmentMessaging*frequency*protest*incidents*strength*delay,0,.35),
+  ds:clamp(.35*p.appeasement/100*(.5+p.regime/100),0,.35),
+  ir:clamp(.35*p.removal/100*(.5+p.regime/100)*incidents,0,.35),
+  birth:clamp(.12*p.birth/100,0,.12)
+ };}
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+let people=[];let stepCount=0;let running=true;let selected=-1;
+const seed=92837;let rngState=seed;
+function random(){rngState=(1664525*rngState+1013904223)>>>0;return rngState/4294967296;}
+
+function lattice(){const n=20;const points=[];for(let j=0;j<n;j++)for(let i=0;i<n;i++){
+ const x=(i-(n-1)/2)*1.06; const z=(j-(n-1)/2)*1.06;points.push({x,z,phase:random()*Math.PI*2});
+}return points.sort(()=>random()-.5);}
+let sites=lattice();
+function resetPopulation(){rngState=seed;for(const s of speech){scene.remove(s.sprite,s.halo);s.sprite.material.dispose();s.halo.material.dispose();}speech.length=0;people=[];const list=[defaults.supporters,defaults.dissidents,defaults.insurgents,defaults.removed];
+ for(let state=0;state<4;state++)for(let i=0;i<list[state];i++)people.push({state,site:people.length,changed:0});
+ stepCount=0;selected=-1;updateScene();updateStats();}
+function transition(){const p=rates(paramsFromToolbar());const before=people.length;for(const person of people){const u=random(),old=person.state;
+ if(old===0&&u<p.sd)person.state=1;
+ else if(old===1){if(u<p.ds)person.state=0;else if(u<p.ds+p.di)person.state=2;}
+ else if(old===2&&u<p.ir)person.state=3;
+ person.changed=person.state!==old?1:Math.max(0,person.changed-.28);
+ }
+ const available=Math.min(maxPopulation,sites.length)-before;const expected=before*p.birth;let arrivals=Math.floor(expected)+(random()<expected%1?1:0);
+ for(let i=0;i<Math.min(available,arrivals);i++)people.push({state:0,site:people.length,changed:1});
+ stepCount++;updateScene();updateStats();}
+function counts(){const c=[0,0,0,0];for(const p of people)c[p.state]++;return c;}
+function localOpposition(index){const me=people[index];if(!me)return 0;const site=sites[me.site];
+ const near=people.map((p,idx)=>({idx,d:(sites[p.site].x-site.x)**2+(sites[p.site].z-site.z)**2})).sort((a,b)=>a.d-b.d).slice(0,12);
+ let active=0,opp=0;for(const n of near){const state=people[n.idx].state;if(state!==3){active++;if(state===1||state===2)opp++;}}
+ return active?opp/active:0;
+}
+const mount=document.querySelector('#scene');
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x080c11);scene.fog=new THREE.FogExp2(0x080c11,.015);
+const camera=new THREE.PerspectiveCamera(42,1,.1,180);let theta=.35,phi=1.1,radius=34;const look=new THREE.Vector3(0,2,0);
+function setCamera(){const v=new THREE.Vector3(radius*Math.sin(phi)*Math.sin(theta),radius*Math.cos(phi),radius*Math.sin(phi)*Math.cos(theta));camera.position.copy(look).add(v);camera.lookAt(look);}
+setCamera();
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));renderer.outputColorSpace=THREE.SRGBColorSpace;mount.appendChild(renderer.domElement);
+scene.add(new THREE.HemisphereLight(0xc5e1e9,0x202c36,2.1));const light=new THREE.DirectionalLight(0xffffff,2.3);light.position.set(-12,22,10);scene.add(light);
+const floor=new THREE.Mesh(new THREE.PlaneGeometry(36,36),new THREE.MeshStandardMaterial({color:0x101820,metalness:.28,roughness:.88}));floor.rotation.x=-Math.PI/2;floor.position.y=-.075;scene.add(floor);
+const grid=new THREE.GridHelper(36,36,0x38505c,0x243542);grid.position.y=-.06;grid.material.transparent=true;grid.material.opacity=.28;scene.add(grid);
+// One simple articulated 3D stick figure for each person. Parts are instanced for performance.
+const bodyMat=new THREE.MeshStandardMaterial({roughness:.56,metalness:.03});
+const headGeo=new THREE.SphereGeometry(.225,12,9);
+const segmentGeo=new THREE.CylinderGeometry(.065,.065,1,7);
+const headMesh=new THREE.InstancedMesh(headGeo,bodyMat,maxPopulation);
+const segmentMeshes=Array.from({length:5},()=>new THREE.InstancedMesh(segmentGeo,bodyMat,maxPopulation));
+const hitGeo=new THREE.SphereGeometry(.42,8,6);
+const hitMesh=new THREE.InstancedMesh(hitGeo,new THREE.MeshBasicMaterial({visible:false}),maxPopulation);
+for(const mesh of [headMesh,...segmentMeshes,hitMesh]){
+ mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);scene.add(mesh);
+}
+const pose=new THREE.Object3D(),baseColor=new THREE.Color(),up=new THREE.Vector3(0,1,0);
+const a=new THREE.Vector3(),b=new THREE.Vector3(),center=new THREE.Vector3(),direction=new THREE.Vector3();
+function setSegment(mesh,i,from,to,thickness=1){
+ a.set(...from);b.set(...to);direction.subVectors(b,a);pose.position.copy(a).add(b).multiplyScalar(.5);
+ pose.quaternion.setFromUnitVectors(up,direction.clone().normalize());
+ pose.scale.set(thickness,direction.length(),thickness);pose.updateMatrix();mesh.setMatrixAt(i,pose.matrix);
+}
+function setPersonGeometry(i,now){
+ const p=people[i],pt=sites[p.site],x=pt.x,z=pt.z;
+ const sway=(p.state===3?0:.055)*Math.sin(now*.0017+i*.61);
+ pose.position.set(x,1.76+sway,z);pose.scale.setScalar(1);pose.quaternion.identity();pose.updateMatrix();headMesh.setMatrixAt(i,pose.matrix);
+ const shoulder=[x,1.38+sway,z],hip=[x,.73+sway,z];
+ setSegment(segmentMeshes[0],i,shoulder,hip,1.15);
+ setSegment(segmentMeshes[1],i,[x-.09,1.31+sway,z],[x-.41,.93+sway,z+.07]);
+ setSegment(segmentMeshes[2],i,[x+.09,1.31+sway,z],[x+.41,.93+sway,z+.07]);
+ setSegment(segmentMeshes[3],i,hip,[x-.27,.13,z]);
+ setSegment(segmentMeshes[4],i,hip,[x+.27,.13,z]);
+ pose.position.set(x,1.1+sway,z);pose.scale.set(1,2.6,1);pose.quaternion.identity();pose.updateMatrix();hitMesh.setMatrixAt(i,pose.matrix);
+}
+// Letters float outward from each speaker's mouth, as in the original 2D animation.
+// A few simple translucent strokes build the glyphs; their colour is driven by state.
+const words=['NO!','NO','!','?','SPEAK','VOX'];
+const speech=[];const speechMaterial=new THREE.MeshBasicMaterial({color:0xe86859,side:THREE.DoubleSide,transparent:true,opacity:.95,depthWrite:false});
+function makeSpeechTexture(){
+ const canvas=document.createElement('canvas');canvas.width=128;canvas.height=128;
+ const ctx=canvas.getContext('2d');ctx.clearRect(0,0,128,128);
+ ctx.font='bold 68px Georgia,serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='#ffffff';ctx.fillText('!',64,64);
+ const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;return texture;
+}
+const speechTextures=words.map(word=>{
+ const cv=document.createElement('canvas');cv.width=256;cv.height=128;
+ const ctx=cv.getContext('2d');ctx.clearRect(0,0,256,128);
+ const size=word.length>4?49:word.length>2?64:85;
+ ctx.font=`bold ${size}px Garamond, Georgia, serif`;
+ ctx.textAlign='center';ctx.textBaseline='middle';
+ ctx.shadowColor='white';ctx.shadowBlur=15;ctx.fillStyle='white';
+ ctx.fillText(word,128,65);
+ ctx.shadowBlur=0;ctx.lineWidth=1.6;ctx.strokeStyle='rgba(255,255,255,.85)';ctx.strokeText(word,128,65);
+ const tex=new THREE.CanvasTexture(cv);tex.colorSpace=THREE.SRGBColorSpace;return tex;
+});
+const speechLimit=135;
+function emitSpeech(i){
+ if(speech.length>=speechLimit)return;
+ const p=people[i];if(!p||(p.state!==1&&p.state!==2))return;
+ const pt=sites[p.site],red=p.state===2,which=Math.floor(random()*words.length);
+ const material=new THREE.SpriteMaterial({map:speechTextures[which],color:red?0xff514a:0xffbf70,transparent:true,opacity:0,depthWrite:false,depthTest:true});
+ const sprite=new THREE.Sprite(material);
+ // Text starts precisely in front of the head, rather than appearing in the air.
+ const mouthX=pt.x, mouthY=1.65, mouthZ=pt.z+.235;
+ const fullSize=(red?1.05:.76)*(.70+guiData['Anti-Regime Message Intensity']/140);
+ sprite.scale.set(fullSize*.45,fullSize*.225,1);
+ sprite.position.set(mouthX,mouthY,mouthZ);scene.add(sprite);
+ // A subtle halo is emitted at the same mouth point, then dissipates.
+ const haloMaterial=new THREE.SpriteMaterial({map:speechTextures[2],color:red?0xff3939:0xe9a55b,transparent:true,opacity:0,depthWrite:false});
+ const halo=new THREE.Sprite(haloMaterial);halo.position.set(mouthX,mouthY,mouthZ+.015);halo.scale.set(.09,.09,1);scene.add(halo);
+ const life=red?2.25:1.8;
+ speech.push({sprite,halo,age:0,maxAge:life,fullSize,
+  originX:mouthX,originY:mouthY,originZ:mouthZ,
+  vx:(random()-.5)*.38,vy:.35+random()*.28,vz:.72+random()*.35,
+  curve:(random()-.5)*.22});
+}
+function updateSpeech(dt){
+ for(let j=speech.length-1;j>=0;j--){
+  const s=speech[j];s.age+=dt;const q=Math.min(1,s.age/s.maxAge);
+  const envelope=Math.min(1,q/.16)*Math.min(1,(1-q)/.30);
+  s.sprite.position.set(s.originX+s.vx*s.age+s.curve*q*q,
+   s.originY+s.vy*s.age+.26*Math.sin(q*Math.PI),s.originZ+s.vz*s.age);
+  const scale=s.fullSize*(.55+.72*q);
+  s.sprite.scale.set(scale*1.85,scale*.93,1);
+  s.sprite.material.opacity=Math.max(0,.98*envelope);
+  s.halo.position.set(s.originX,s.originY,s.originZ+.012);
+  s.halo.scale.setScalar(.10+.30*Math.min(1,q*4));
+  s.halo.material.opacity=.45*Math.max(0,1-q*5);
+  if(q>=1){
+   scene.remove(s.sprite);scene.remove(s.halo);
+   s.sprite.material.dispose();s.halo.material.dispose();speech.splice(j,1);
+  }
+ }
+}
+let lastSpeech=0;
+function updateScene(){
+ for(const mesh of [headMesh,...segmentMeshes,hitMesh])mesh.count=people.length;
+ for(let i=0;i<people.length;i++){
+  const p=people[i];baseColor.setHex(palette[p.state]);
+  headMesh.setColorAt(i,baseColor);
+  for(const mesh of segmentMeshes)mesh.setColorAt(i,baseColor);
+ }
+ for(const mesh of [headMesh,...segmentMeshes])if(mesh.instanceColor)mesh.instanceColor.needsUpdate=true;
+ refreshInspect();
+}
+function drawPeople(now){
+ for(let i=0;i<people.length;i++)setPersonGeometry(i,now);
+ for(const mesh of [headMesh,...segmentMeshes,hitMesh])mesh.instanceMatrix.needsUpdate=true;
+}
+function updateStats(){const c=counts();['support','dissent','insurgent','removed'].forEach((name,i)=>document.querySelector('#n-'+name).textContent=c[i]);
+ const active=c[0]+c[1]+c[2];const share=active?Math.round(100*(c[1]+c[2])/active):0;
+ document.querySelector('#status').textContent=`Step ${stepCount} · ${people.length} people · ${share}% active opposition · ${running?'Running':'Paused'}`;
+ refreshInspect();}
+function refreshInspect(){const el=document.querySelector('#inspect');if(selected<0||!people[selected]){el.textContent='Click a person to inspect their state.';return;}
+ const labels=['Supporter','Dissident','Insurgent','Removed'];const person=people[selected];
+ el.innerHTML=`<b>Person ${selected+1}</b> · ${labels[person.state]}<p>Figures are individuals, not buildings. Red and amber letters are symbolic speech.</p>`;}
+const raycaster=new THREE.Raycaster(),mouse=new THREE.Vector2();let dragging=false,moved=false,lastX=0,lastY=0;
+renderer.domElement.addEventListener('pointerdown',e=>{dragging=true;moved=false;lastX=e.clientX;lastY=e.clientY;renderer.domElement.setPointerCapture(e.pointerId);});
+renderer.domElement.addEventListener('pointermove',e=>{if(!dragging)return;const dx=e.clientX-lastX,dy=e.clientY-lastY;if(Math.abs(dx)+Math.abs(dy)>2)moved=true;theta-=dx*.005;phi=clamp(phi+dy*.005,.2,1.53);setCamera();lastX=e.clientX;lastY=e.clientY;});
+renderer.domElement.addEventListener('pointerup',e=>{dragging=false;if(moved)return;const box=renderer.domElement.getBoundingClientRect();mouse.set((e.clientX-box.left)/box.width*2-1,-(e.clientY-box.top)/box.height*2+1);raycaster.setFromCamera(mouse,camera);const hits=raycaster.intersectObject(hitMesh);selected=hits.length?hits[0].instanceId:-1;refreshInspect();});
+renderer.domElement.addEventListener('wheel',e=>{e.preventDefault();radius=clamp(radius*(1+Math.sign(e.deltaY)*.07),14,65);setCamera();},{passive:false});
+function resize(){const w=mount.clientWidth,h=mount.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}new ResizeObserver(resize).observe(mount);resize();
+document.querySelector('#pause').addEventListener('click',()=>{running=!running;document.querySelector('#pause').textContent=running?'Pause':'Resume';updateStats();});
+document.querySelector('#step').addEventListener('click',()=>{running=false;document.querySelector('#pause').textContent='Resume';transition();});
+document.querySelector('#reset').addEventListener('click',()=>{resetPopulation();});
+resetPopulation();let last=performance.now(),acc=0;function animate(now){const dt=Math.min(.1,(now-last)/1000);last=now;
+ if(running){acc+=dt;while(acc>=.75){transition();acc-=.75;}}
+ drawPeople(now);
+ if(running){for(let i=0;i<people.length;i++)if((people[i].state===1||people[i].state===2)&&Math.random()<(people[i].state===2?.95:.40)*(.35+guiData['Frequency of Anti-Regime Messages']/65)*dt)emitSpeech(i);}
+ updateSpeech(dt);renderer.render(scene,camera);requestAnimationFrame(animate);}requestAnimationFrame(animate);
+</script></body></html>

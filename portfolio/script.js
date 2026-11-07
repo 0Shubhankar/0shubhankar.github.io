@@ -408,7 +408,7 @@ const portfolioItems = [
         title: "Insurgency Dynamics Simulator",
         titleLink: "39/dissent-simulation.html",
         tags: ["Insurgency Simulation", "Agent-Based Modeling", "Socio-Political Dynamics", "Population Dynamics", "Visual Simulation", "User Interaction", "Real-Time Data", "Dynamic Feedback", "Messaging Impact", "Group Transition", "Socio-Economic Factors", "Stickman Visualization"],
-        image: "images/previews/39.webp",
+        image: "images/previews/39-3d.jpg",
     },
     {
         projectType: "Data-Driven Insights", //  
