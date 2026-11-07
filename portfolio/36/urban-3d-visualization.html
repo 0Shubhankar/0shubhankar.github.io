@@ -2,9 +2,10 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Scene with Textured Cubes</title>
+    <title>Affordability & Migration | An Interactive Urban Experiment</title>
     <style>
         body {
             margin: 0;
@@ -50,8 +51,105 @@
             margin-left: 20%;
             margin-right:20%;
         }
-        
+
     </style>
+
+<style id="p36-editorial-polish">
+/* Only the explanatory content is restyled. Existing 3D scene is unchanged. */
+.p36-editorial {
+  box-sizing: border-box;
+  width: min(840px, calc(100% - 40px));
+  margin: 44px auto 68px;
+  color: #1e2a31;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: left;
+}
+.p36-editorial * { box-sizing: border-box; }
+.p36-editorial .p36-overline {
+  margin: 0 0 14px;
+  text-transform: uppercase;
+  letter-spacing: .17em;
+  font-size: 11px;
+  font-weight: 700;
+  color: #8e6844;
+}
+.p36-editorial h1 {
+  margin: 0 0 18px;
+  color: #172638;
+  font: normal clamp(32px, 5vw, 56px)/1.1 Georgia, 'Times New Roman', serif;
+  letter-spacing: -.035em;
+}
+.p36-editorial .p36-lead {
+  margin: 0;
+  font: normal clamp(17px, 2vw, 20px)/1.65 Georgia, 'Times New Roman', serif;
+  color: #384955;
+}
+.p36-editorial .p36-meta {
+  margin-top: 18px;
+  padding: 10px 0;
+  border-top: 1px solid #d4dce0;
+  border-bottom: 1px solid #d4dce0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #536672;
+}
+.p36-editorial h2 {
+  margin: 34px 0 10px;
+  font: normal 26px/1.25 Georgia, 'Times New Roman', serif;
+  color: #172638;
+}
+.p36-editorial p, .p36-editorial li {
+  font-size: 15px;
+  line-height: 1.75;
+  color: #354650;
+}
+.p36-editorial p { margin: 0 0 16px; }
+.p36-editorial ul { margin: 12px 0 0; padding-left: 22px; }
+.p36-editorial li { margin-bottom: 10px; }
+.p36-editorial .p36-formula {
+  margin: 20px 0;
+  padding: 16px 20px;
+  background: #f3f6f7;
+  border-left: 3px solid #b18b65;
+  color: #172638;
+  font: 600 clamp(15px, 2.5vw, 18px)/1.6 Georgia, 'Times New Roman', serif;
+}
+.p36-editorial .p36-note {
+  margin-top: 30px;
+  padding: 18px 20px;
+  background: #f6f3ee;
+  border: 1px solid #e9e0d2;
+  border-radius: 4px;
+}
+.p36-editorial .p36-note p { margin-bottom: 0; }
+@media(max-width:700px) {
+  .p36-editorial { width: calc(100% - 32px); margin: 30px auto 44px; }
+  .p36-editorial h2 { font-size: 23px; }
+}
+</style>
+<style id="p36-academic-model-style">
+/* Research-note styling: no boxed explanations, no decorative model cards. */
+.p36-clean { max-width: 790px; }
+.p36-clean .p36-lead { margin-bottom: 22px; }
+.p36-clean h2 { margin: 39px 0 11px; font-size: clamp(23px,3vw,28px); }
+.p36-clean p { margin-bottom: 16px; line-height: 1.78; }
+.p36-clean .p36-equation-line {
+  margin: 23px 0 13px; padding: 9px 0 12px; border-bottom: 1px solid #d7dee1;
+  background: none; color: #203748; font: 400 clamp(17px,2.6vw,24px)/1.8 Georgia,serif;
+  letter-spacing: 0; overflow-wrap:anywhere; text-align:left;
+}
+.p36-clean .p36-symbols { color:#52636d; font-size:14px; }
+.p36-clean .p36-probability-panel { margin: 20px 0 30px; padding: 0; background:none; border:0; box-shadow:none; }
+.p36-clean .p36-probability-panel label { display:block; margin:0 0 9px; font:600 13px/1.5 Arial,sans-serif; color:#354650; }
+.p36-clean .p36-probability-panel select { width:min(360px,100%); padding:10px; border:1px solid #c4ced4; background:transparent; color:#203748; font:14px Arial,sans-serif; }
+.p36-clean .p36-choice-table { width:100%; margin:20px 0 10px; border-collapse:collapse; font:14px/1.6 Arial,sans-serif; }
+.p36-clean .p36-choice-table th,.p36-clean .p36-choice-table td { padding:10px 4px; border-bottom:1px solid #d8e0e4; text-align:left; }
+.p36-clean .p36-choice-table th:last-child,.p36-clean .p36-choice-table td:last-child { text-align:right; }
+.p36-clean .p36-choice-table th { font-weight:600; }
+.p36-clean .p36-probability { font-variant-numeric:tabular-nums; color:#315f65; font-weight:600; }
+.p36-clean #p36-choice-summary { color:#687981; font-size:12px; }
+@media(max-width:600px){.p36-clean .p36-equation-line{font-size:16px;}.p36-clean .p36-choice-table{font-size:12px;}}
+</style>
 </head>
 
 
@@ -208,8 +306,9 @@
 
             // Apply global modifiers and update labels when the user changes the GUI controls
             function applyGlobalModifiersAndUpdateLabels() {
-                applyGlobalModifiers(); // Apply global modifiers to update district data
-                updateLabels(); // Update labels to reflect the new data
+                applyGlobalModifiers();
+                updateLabels();
+                refreshMigrationConnections();
             }
 
 
@@ -338,61 +437,115 @@
         }
 
         // Apply Global Modifiers to Districts
+        // Scenario modifiers are always applied to initial conditions, not compounded.
+        const districtBaseline = districts.map(d => ({
+          populationDensity: d.populationDensity,
+          realEstatePrices: d.realEstatePrices,
+          incomeDistribution: d.incomeDistribution,
+          vacancyRate: d.vacancyRate
+        }));
+        function clampNumber(x, lo, hi){ return Math.max(lo, Math.min(hi, x)); }
         function applyGlobalModifiers() {
-                districts.forEach(district => {
-                    // Adjust population density with district-specific bounds
-                    district.populationDensity = district.populationDensity +
-                        (globalModifiers.populationDensityModifier * (district.maxPopulationDensity - district.populationDensity)) / district.maxPopulationDensity;
-                    district.populationDensity = Math.min(Math.max(district.populationDensity, district.minPopulationDensity), district.maxPopulationDensity);
-
-                    // Adjust real estate prices within district-specific bounds
-                    district.realEstatePrices = Math.min(Math.max(
-                        district.realEstatePrices * globalModifiers.realEstatePriceModifier,
-                        district.minRealEstatePrice),
-                        district.maxRealEstatePrice
-                    );
-
-                    // Adjust income distribution within district-specific bounds
-                    district.incomeDistribution = Math.min(Math.max(
-                        district.incomeDistribution * globalModifiers.incomeModifier,
-                        district.minIncome),
-                        district.maxIncome
-                    );
-
-                    // Adjust vacancy rate within district-specific bounds
-                    let vacancyRateChange = (globalModifiers.vacancyRateModifier - 1) * 0.1;
-                    district.vacancyRate += vacancyRateChange;
-                    district.vacancyRate = Math.min(Math.max(district.vacancyRate, district.minVacancyRate), district.maxVacancyRate);
-
-                    // Update the affordability index after applying changes to real estate prices and income distribution
-                    district.affordabilityIndex = district.realEstatePrices / district.incomeDistribution;
-
-                    // Clamp the affordability index to a realistic range (e.g., between 1 and 10)
-                    district.affordabilityIndex = Math.min(Math.max(district.affordabilityIndex, 1), 10);
-                });
-            }
-
-
-
+          districts.forEach((d, i) => {
+            const b = districtBaseline[i];
+            d.populationDensity = clampNumber(b.populationDensity * globalModifiers.populationDensityModifier, d.minPopulationDensity, d.maxPopulationDensity);
+            d.realEstatePrices = clampNumber(b.realEstatePrices * globalModifiers.realEstatePriceModifier, d.minRealEstatePrice, d.maxRealEstatePrice);
+            d.incomeDistribution = clampNumber(b.incomeDistribution * globalModifiers.incomeModifier, d.minIncome, d.maxIncome);
+            d.vacancyRate = clampNumber(b.vacancyRate * globalModifiers.vacancyRateModifier, d.minVacancyRate, d.maxVacancyRate);
+          });
+        }
 
         // Update Labels to Show District Data
         function updateLabels() {
-                districts.forEach((district, index) => {
-                    // Get the cube for this district (based on index)
-                    let cube = scene.children.find(child => child.position.equals(clusterCenters[index]));
+          // Label objects were created at cluster centres, not at cube positions.
+          const labels = scene.children.filter(child => child instanceof THREE.CSS2DObject);
+          districts.forEach((d, i) => {
+            if (!labels[i]) return;
+            labels[i].element.innerHTML =
+              `<strong>${d.name}</strong><br>` +
+              `Density: ${d.populationDensity.toLocaleString('en-US')} residents/km²<br>` +
+              `Property price: $${Math.round(d.realEstatePrices).toLocaleString('en-US')}<br>` +
+              `Annual income: $${Math.round(d.incomeDistribution).toLocaleString('en-US')}<br>` +
+              `Vacancy: ${(100*d.vacancyRate).toFixed(1)}%<br>` +
+              `Price/income: ${d.affordabilityIndex.toFixed(2)}×`;
+          });
+        }
 
-                    // Get updated data for the district with <br> tags for line breaks
-                    let labelText = `${district.name}<br>Population Density: ${district.populationDensity.toFixed(2)}<br>Real Estate Prices: $${district.realEstatePrices.toFixed(2)}<br>Income: $${district.incomeDistribution.toFixed(2)}<br>Vacancy Rate: ${(district.vacancyRate * 100).toFixed(2)}%<br>Affordability Index: ${district.affordabilityIndex.toFixed(2)}`;
-
-                    // Find the associated label object and update it
-                    let label = scene.children.find(child => child instanceof THREE.CSS2DObject && child.position.equals(cube.position));
-                    if (label) {
-                        label.element.innerHTML = labelText; // Update label content using innerHTML
-                    }
-                });
-            }
-
-
+        // EXPERIMENTAL conditional destination choice model (not empirically calibrated).
+        // U_ij = -alpha*(P_j/Y_i) + beta*(v_j/0.20)
+        //        + gamma*max(0,1-rho_j/rho_max,j) - delta*|ln(Y_j/Y_i)|
+        // p_ij = exp(U_ij-maxU)/sum_{k!=i} exp(U_ik-maxU).
+        // The six 3D cluster positions are schematic; distance is not a travel-cost proxy.
+        const p36Coefficients = Object.freeze({alpha:0.45,beta:0.60,gamma:0.80,delta:0.30});
+        let p36TransitionMatrix=[];
+        function p36Utility(i,j){
+          const o=districts[i],d=districts[j],c=p36Coefficients;
+          const priceIncome=d.realEstatePrices/Math.max(1,o.incomeDistribution);
+          const headroom=clampNumber(1-d.populationDensity/d.maxPopulationDensity,0,1);
+          const socioEconomicDistance=Math.abs(Math.log(Math.max(1,d.incomeDistribution)/Math.max(1,o.incomeDistribution)));
+          return -c.alpha*priceIncome+c.beta*(d.vacancyRate/0.20)+c.gamma*headroom-c.delta*socioEconomicDistance;
+        }
+        function p36DestinationProbabilities(i){
+          const ids=districts.map((_,j)=>j).filter(j=>j!==i);
+          const utilities=ids.map(j=>p36Utility(i,j));
+          const maxUtility=Math.max(...utilities);
+          const weights=utilities.map(u=>Math.exp(u-maxUtility));
+          const sum=weights.reduce((a,b)=>a+b,0);
+          const result=Array(districts.length).fill(0);
+          ids.forEach((j,k)=>result[j]=weights[k]/sum);
+          return result;
+        }
+        function p36ChooseQuantile(probs,quantile,origin){
+          let cumulative=0;
+          for(let j=0;j<probs.length;j++){
+            if(j===origin)continue;
+            cumulative+=probs[j];
+            if(quantile<cumulative+1e-12)return j;
+          }
+          return probs.findIndex(p=>p===Math.max(...probs));
+        }
+        function p36UpdateResults(){
+          const select=document.getElementById('p36-origin-select');
+          const table=document.getElementById('p36-choice-rows');
+          const meta=document.getElementById('p36-choice-summary');
+          if(!select||!table||!meta)return;
+          const i=clampNumber(Number(select.value)||0,0,districts.length-1);
+          const row=p36TransitionMatrix[i];
+          table.textContent='';
+          row.forEach((p,j)=>{
+            if(j===i)return;
+            const tr=document.createElement('tr');
+            const label=document.createElement('td');
+            label.textContent=districts[j].name;
+            const cell=document.createElement('td');
+            cell.textContent=(100*p).toFixed(1)+'%';
+            cell.className='p36-probability';
+            tr.append(label,cell);
+            table.appendChild(tr);
+          });
+          const entropy=-row.reduce((acc,p)=>acc+(p>0?p*Math.log(p):0),0);
+          meta.textContent='Conditional probabilities sum to '+(100*row.reduce((a,b)=>a+b,0)).toFixed(1)+'% · Choice entropy: '+entropy.toFixed(2)+' nats (max '+Math.log(districts.length-1).toFixed(2)+').';
+        }
+        function refreshMigrationConnections(){
+          p36TransitionMatrix=districts.map((_,i)=>p36DestinationProbabilities(i));
+          const counts=Array(districts.length).fill(0);
+          connections.forEach((_,index)=>counts[index%districts.length]++);
+          const used=Array(districts.length).fill(0);
+          connections.forEach((connection,index)=>{
+            const i=index%districts.length;
+            const q=(used[i]++ + 0.5)/counts[i]; // deterministic stratified visual sampling
+            const j=p36ChooseQuantile(p36TransitionMatrix[i],q,i);
+            connection.p0=clusterCenters[i];
+            connection.p1=clusterCenters[j];
+            if(connection.routeLine)connection.routeLine.geometry.setFromPoints([connection.p0,connection.p1]);
+            connection.lerp=q; // movement phase, not a number of migrants
+            connection.speed=0.007; // identical speed, independent of preference strength
+            connection.sphere.material.color.set(districts[j].affordabilityIndex<=4 ? 0x1fa65a : districts[j].affordabilityIndex<=7 ? 0xd1a02e : 0xb94a48);
+          });
+          p36UpdateResults();
+          const note=document.getElementById('p36-model-note');
+          if(note)note.textContent='Scenario recalculated · Model probabilities describe conditional destination choice, not observed migration or migration volumes.';
+        }
 
         // Update Particle Movements Based on Affordability
         function updateParticleMovement() {
@@ -520,13 +673,11 @@
                 connection.sphere.position.set(connection.dataPos.x, connection.dataPos.y, connection.dataPos.z);
 
                 connection.lerp += connection.speed;
-                if (connection.lerp > 1 || connection.lerp < 0) {
-                    connection.speed = -connection.speed;
-                }
+                if (connection.lerp > 1) connection.lerp = 0; // one-way schematic origin-to-destination path
             });
         }
 
-        
+
 
         // Setup Connections Between Districts
         function setupConnections() {
@@ -545,8 +696,8 @@
 
                     connections.push(outgoingConnection, incomingConnection);
 
-                    createLine(positions[index0], positions[index1]); // Line for outgoing
-                    createLine(positions[index1], positions[index0]); // Line for incoming
+                    outgoingConnection.routeLine = createLine(positions[index0], positions[index1]); // Line for outgoing
+                    incomingConnection.routeLine = createLine(positions[index1], positions[index0]); // Line for incoming
                 }
             }
 
@@ -580,6 +731,7 @@
             let lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
             let line = new THREE.Line(lineGeometry, lineMaterial);
             scene.add(line);
+            return line;
         }
 
         // Helper Functions for Randomization
@@ -607,7 +759,9 @@
                 setupClusterLabels();
                 setupLights();
                 setupControls();
-                setupGUI(); // Initialize the GUI for global modifier controls
+                setupGUI(); // Initialize existing scenario controls
+                updateLabels();
+                refreshMigrationConnections();
                 setupEventListeners();
                 animate();
             }
@@ -615,51 +769,64 @@
 
         // Initialize the simulation
         setup();
+        document.addEventListener('DOMContentLoaded', () => {
+          document.getElementById('p36-origin-select')?.addEventListener('change',p36UpdateResults);
+          p36UpdateResults();
+        });
 
 
-        
 
-        
+
+
     </script>
     <body>
-    
-        <div class="small-italic">
-            <p>By modifying the global parameters, the socio-economic data for each district will be updated, including the
-                affordability index. This influences how particles (representing individuals) move between districts, with more
-                affordable districts attracting higher movement. Explore these dynamics yourself by adjusting the parameters
-                through the GUI and observing the real-time changes.</p>
-        </div>
 
-        
-        <div id="description">
-            <p>This simulation represents a 3D city model where different districts are categorized based on socio-economic data
-                such as population density, real estate prices, income distribution, and vacancy rates. The districts are
-                depicted using textured cubes in a 3D space, each corresponding to a different socio-economic class, such as
-                Lower-Income District, Working-Class District, and Upper-Middle-Class District. Each district has a calculated
-                <strong>affordability index</strong>, which is the ratio of real estate prices to income, and this index impacts
-                how particles (representing people) move between districts.
-            </p>
+        <div id="p36-model-note" role="status" style="font:13px/1.5 Arial,sans-serif;color:#425363;text-align:center;margin:10px 8% 0;">Origin-specific destination-choice model · The controls recalculate conditional probabilities, not observed migration flows.</div>
+        <style>
+          @media(max-width:700px){#description,.small-italic{margin-left:5%;margin-right:5%;} .dg.ac{max-width:95vw;}}
+        </style>
+<section class="p36-editorial p36-clean" aria-labelledby="p36-project-title">
+  <p class="p36-overline">Urban systems / an interactive study</p>
+  <h1 id="p36-project-title">Affordability &amp; Migration</h1>
+  <p class="p36-lead">Where might households choose to move as housing prices, incomes, vacancy and neighbourhood density change?</p>
+  <p>This experiment explores that question across six hypothetical districts. It uses a simple location-choice model to show how changing economic conditions can shift the relative appeal of different places.</p>
 
-            <p>This visualization allows users to interact with the city model by adjusting various <strong>global
-                    modifiers</strong> through a control panel created using <strong>dat.GUI</strong>. These modifiers include:
-            </p>
-            <ul>
-                <li><strong>Population Density Modifier:</strong> Globally adjusts the population density in all districts.</li>
-                <li><strong>Real Estate Price Modifier:</strong> Changes the real estate prices in the districts.</li>
-                <li><strong>Income Modifier:</strong> Alters the income distribution across all districts.</li>
-                <li><strong>Vacancy Rate Modifier:</strong> Modifies the vacancy rates in each district.</li>
-            </ul>
-            <p>As users modify these global parameters, the socio-economic data for each district is updated, including the
-                affordability index. This influences how particles (representing individuals) move between districts. Particles
-                move based on affordability and population density: districts with better affordability indices enable faster
-                movement, drawing more particles to them. Particles change color based on the affordability of the district they
-                move into: green for affordable, yellow for moderately affordable, and red for less affordable.</p>
-            <p>In summary, this simulation demonstrates how socio-economic factors like affordability and population density
-                influence migration patterns within an urban environment, with real-time changes reflecting shifts in these
-                dynamics.</p>
-        </div>
+  <h2>Exploring the city</h2>
+  <p>Adjust the four controls and compare how the routes and district measures respond. A value of 1.0 represents the starting scenario. Returning all controls to 1.0 restores it. The 3D positions are schematic and do not represent geographical distances.</p>
+  <p>Property prices and annual income affect the relative cost of housing; vacancy indicates available housing; and population density provides a simplified measure of remaining capacity. These are deliberately limited representations of a much more complex housing market.</p>
 
-    
+  <h2>The model</h2>
+  <p>For each origin district <em>i</em>, the model assigns a utility to every other district <em>j</em>. The first term penalizes expensive housing relative to origin income. Vacancy and capacity increase utility, while large differences in district income reduce it.</p>
+
+  <p class="p36-equation-line" role="math" aria-label="Utility of destination j for origin i">U<sub>ij</sub> = −α(P<sub>j</sub>/Y<sub>i</sub>) + β(v<sub>j</sub>/0.20) + γh<sub>j</sub> − δ|ln(Y<sub>j</sub>/Y<sub>i</sub>)|</p>
+  <p class="p36-symbols"><em>P<sub>j</sub></em> is the property price at the destination; <em>Y<sub>i</sub></em> and <em>Y<sub>j</sub></em> are origin and destination annual incomes; <em>v<sub>j</sub></em> is the destination vacancy fraction; and <em>h<sub>j</sub></em> = max(0, 1 − ρ<sub>j</sub>/ρ<sub>j,max</sub>) is normalized density headroom.</p>
+
+  <p>Destination utilities are converted into conditional probabilities using a multinomial logit model:</p>
+  <p class="p36-equation-line" role="math" aria-label="Conditional destination choice probability">p<sub>ij</sub> = exp(U<sub>ij</sub>) / ∑<sub>k≠i</sub> exp(U<sub>ik</sub>)</p>
+  <p>The five alternative destinations sum to 100% for each origin. This is the probability of choosing a destination <em>given that a move occurs</em>; the model does not estimate whether someone moves in the first place.</p>
+  <p>The illustrative coefficient values are α = 0.45, β = 0.60, γ = 0.80 and δ = 0.30. They are not estimated from observed household decisions.</p>
+
+  <h2>Comparing destinations</h2>
+  <p>Choose an origin to examine how the model distributes its relative preference across other districts. The probabilities update when the economic conditions change.</p>
+  <div class="p36-probability-panel">
+    <label for="p36-origin-select">Origin district</label>
+    <select id="p36-origin-select" aria-label="Origin district">
+      <option value="0">Lower-Income District</option>
+      <option value="1">Working-Class District</option>
+      <option value="2">Lower-Middle-Class District</option>
+      <option value="3">Middle-Class District</option>
+      <option value="4">Upper-Middle-Class District</option>
+      <option value="5">Wealthy District</option>
+    </select>
+    <table class="p36-choice-table"><thead><tr><th>Destination</th><th>Probability</th></tr></thead><tbody id="p36-choice-rows"></tbody></table>
+    <p id="p36-choice-summary" aria-live="polite">Loading destination probabilities…</p>
+  </div>
+
+  <h2>Interpreting the results</h2>
+  <p>The moving spheres illustrate the distribution of destination choices; they do not measure migration volumes or travel time. Green, amber and red indicate broad categories of destination price-to-income ratios, not overall neighbourhood quality.</p>
+  <p>This is a stylized experiment, not a forecast. It excludes the option to stay, rents, household differences, credit conditions and commuting costs. The model also makes the usual multinomial logit independence assumption. Testing real migration patterns would require observed origin–destination data and estimated parameters.</p>
+</section>
+
 <script id="webgl-notice-controls">
 document.addEventListener('DOMContentLoaded', function () {
     const panel = document.getElementById('webgl-notice-panel');
