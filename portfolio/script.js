@@ -336,7 +336,7 @@ const portfolioItems = [
         title: "Workplace Proximity Impact on Housing",
         titleLink: "30/workplace-housing-impact.html",
         tags: ["Leaflet", "Map Visualization", "Urban Economics", "Housing Prices", "Transportation Planning", "Workplace Proximity AN", "Congestion Factor", "Public Transport", "Interactive Map", "Neighborhood Classification", "Elasticity", "Workplace Proximity", "Urban Simulation"],
-        image: "images/previews/30.webp",
+        image: "images/previews/project30gallaryimage.png",
     },
     {
         projectType: "Dynamic Information Visualization", //  
