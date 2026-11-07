@@ -416,7 +416,7 @@ const portfolioItems = [
         title: "Belonging Dynamics",
         titleLink: "40/belonging-simulation.html",
         tags: ["Belonging Simulation", "Social Dynamics", "Agent-Based Modeling", "Group Behavior", "Real-Time Visualization", "User Interaction", "Socio-Economic Factors", "Diversity and Inclusion", "Community Engagement", "Dynamic Movement", "Stickman Visualization", "Data-Driven Insights"],
-        image: "images/previews/40.webp",
+        image: "images/previews/project40gallery.png",
     },
 ];
 
