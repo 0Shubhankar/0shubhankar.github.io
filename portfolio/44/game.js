@@ -69,7 +69,17 @@ function marketValue(l){
 function debt(){return state.lots.reduce((a,l)=>a+l.loan,0)+state.emergency;}
 function assets(){return state.lots.reduce((a,l)=>a+marketValue(l),0);}
 function nav(){return state.cash+assets()-debt();}
-function availableCredit(){let value=0;for(const l of state.lots){if(l.stage==='operating')value+=Math.max(0,marketValue(l)*.65-l.loan);}return value;}
+// Only positive net refinance proceeds count as available liquidity.
+// Uses the same collateral, NOI/DSCR, fee, and minimum-advance rules as Deal Room.
+function availableCredit(){
+ let value=0;
+ for(const l of state.lots){
+  if(l.stage!=='operating')continue;
+  const x=refiTerms(l);
+  if(x.gross>.5&&x.net>0)value+=x.net;
+ }
+ return value;
+}
 function report(msg,bad=false){const e=$('dealFeedback');e.textContent=msg;e.style.background=bad?'#ffd5cc':'var(--yellow)';}
 function record(type,description,amount){state.dealRecords.push({year:state.year,type,description,amount});}
 function acquire(){let l=lot();if(l.stage!=='vacant')return report('This plot is not for sale.',true);if(state.cash<l.land)return report('Not enough liquid cash to buy this land. You cannot buy it with paper gains.',true);state.cash-=l.land;l.landCost=l.land;l.stage='owned';state.cumulativeLand+=l.land;record('LAND',`Bought ${l.name} outright`, -l.land);report(`Congratulations. You own ${l.name}. The neighbors are already concerned.`);render();}
@@ -78,7 +88,34 @@ function startBuild(){let l=lot();if(l.stage!=='owned')return report('You need t
  l.stage='building';l.type=buildType;l.loanTier=leverage;l.loanRate=u.rate;l.buildCost=0;l.originalBuildCost=u.cost;l.constructionYears=types[l.type].years;l.buildYear=0;l.officeShock=1;l.completedYear=null;record('DEVELOPMENT',`Approved ${types[l.type].label} at ${l.name}`,0);report(`Construction approved. Your equity must fund the share lenders do not cover—year by year. Watch liquidity.`);render();}
 function sell(){let l=lot();if(l.stage==='vacant')return report('You do not own this site.',true);let market=marketValue(l);let sale=market*(l.stage==='building'?.80:.97);let loan=l.loan;let proceeds=sale-loan;state.cash+=proceeds;l.stage='sold';record('EXIT',`Sold ${l.name}, debt repaid`,proceeds);state.cumulativeSales+=sale;state.lots[selected]=newLot({...lotsData[selected],stage:'vacant'});
  report(proceeds>=0?`Sold for ${fmt(sale)}. After retiring ${fmt(loan)} of debt, ${fmt(proceeds)} hit cash.`:`Distressed sale for ${fmt(sale)}. After retiring the loan, the shortfall of ${fmt(-proceeds)} was paid from corporate cash.`,proceeds<0);if(state.cash<0){state.emergency+=-state.cash;state.cash=0;report('The exit loss exceeded cash. An expensive rescue note financed the shortfall.',true);}render();}
-function refinance(){let l=lot();if(l.stage!=='operating')return report('Only operating properties can be refinanced.',true);let target=marketValue(l)*.65;let extra=target-l.loan;if(extra<=.5)return report('Your property has no significant capacity for an additional loan.',true);let fee=target*.018;state.cash+=extra-fee;l.loan=target;l.loanRate=state.rate+.038;l.loanYearsLeft=8;state.cumulativeFees+=fee;record('REFINANCE',`${l.name}: net cash raised after financing fee`,extra-fee);report(`Refinanced at ${pct(l.loanRate)}. You received ${fmt(extra-fee)} of liquidity, but your debt increased. No operating profit was created.`);render();}
+// Refinance terms use both collateral and income underwriting. The game uses
+// simple annual interest plus straight-line scheduled principal, not annuities.
+function refiTerms(l){
+ const rate=state.rate+.038;
+ const collateralLimit=marketValue(l)*.65;
+ const incomeLimit=Math.max(0,projectNoi(l))/(1.15*(rate+1/8));
+ const target=Math.max(0,Math.min(collateralLimit,incomeLimit));
+ const fee=target*.018;
+ const gross=target-l.loan;
+ const net=gross-fee;
+ const service=target*(rate+1/8);
+ const dscr=service>0?projectNoi(l)/service:null;
+ return {rate,collateralLimit,incomeLimit,target,fee,gross,net,dscr};
+}
+function refinance(){
+ let l=lot();
+ if(l.stage!=='operating')return report('Only operating properties can be refinanced.',true);
+ const x=refiTerms(l);
+ if(x.gross<=.5||x.net<=0)return report('Refinancing is unavailable: collateral or income coverage does not support meaningful net cash proceeds after the fee.',true);
+ state.cash+=x.net;
+ l.loan=x.target;
+ l.loanRate=x.rate;
+ l.loanYearsLeft=8;
+ state.cumulativeFees+=x.fee;
+ record('REFINANCE',`${l.name}: net cash raised after financing fee`,x.net);
+ report(`Refinanced at ${pct(x.rate)}. Net cash released: ${fmt(x.net)} after a ${fmt(x.fee)} financing fee; projected DSCR ${x.dscr.toFixed(2)}×. Borrowing is not operating profit.`);
+ render();
+}
 function repayEmergency(){if(state.emergency<=0)return report('No emergency borrowing to repay. For once, the bank is disappointed.');const amount=Math.min(state.cash,state.emergency);if(amount<=0)return report('You have no cash to repay the rescue note.',true);state.emergency-=amount;state.cash-=amount;record('DEBT',`Repaid emergency note`, -amount);report(`Repaid ${fmt(amount)} of emergency debt.`);render();}
 function currentStress(){const d=debt(),total=assets(),capital=state.cash+total;return d/Math.max(capital,.01);}
 function nextYear(){if(state.closed)return;const y=state.year;let scheduled=events[y-1];const crash=currentMode==='crash'&&[3,6,8].includes(y)?{...scheduled,rate:scheduled.rate+.016,demand:scheduled.demand-.075,cost:scheduled.cost*1.10,title:'A credit-market panic grips the city.',detail:'Banks pull back, rents soften and contractors demand more money. This is why reserves exist.'}:scheduled;
@@ -164,16 +201,19 @@ function renderDeal(){let l=lot();$('siteDetails').innerHTML=`<div class="site-s
  const u=underwriting(l);
  el.innerHTML=`<label class="choice-label" for="buildType">WHAT DO YOU WANT TO BUILD?</label><select id="buildType" class="choice-select">${Object.entries(types).map(([id,t])=>`<option value="${id}" ${id===buildType?'selected':''}>${t.label} · ${fmt(t.cost)} CONSTRUCTION</option>`).join('')}</select><label class="choice-label" for="leverage">HOW MUCH WILL THE BANK FINANCE?</label><select id="leverage" class="choice-select">${Object.entries(levs).map(([id,l])=>`<option value="${id}" ${id===leverage?'selected':''}>${l.name} · ${Math.round(l.ratio*100)}% OF CONSTRUCTION</option>`).join('')}</select><div class="proforma" id="proforma"></div><button class="primary-action" id="buildBtn" ${state.closed?'disabled':''}>BREAK GROUND ↗</button><div class="button-row"><button class="alt-action danger-action" id="sellBtn">SELL THE LAND</button></div>`;
  $('buildType').addEventListener('change',e=>{buildType=e.target.value;renderDeal();});$('leverage').addEventListener('change',e=>{leverage=e.target.value;renderDeal();});$('buildBtn').addEventListener('click',startBuild);$('sellBtn').addEventListener('click',sell);
- const cap=underwriting(l);$('proforma').innerHTML=`<div><span>CONSTRUCTION BUDGET</span><b>${fmt(cap.cost)}</b></div><div><span>PLANNED BANK LOAN</span><b>${fmt(cap.loan)}</b></div><div><span>YOUR SHARE / OVER BUILD</span><b>${fmt(cap.equity)}</b></div><div><span>FIRST STAGE EQUITY (EST.)</span><b>${fmt(cap.equity/types[buildType].years)}</b></div><div><span>NEW LOAN RATE (FIXED)</span><b>${pct(cap.rate)}</b></div><div><span>STABILIZED NOI / YEAR (EST.)</span><b>${fmt(cap.expectedNoi)}</b></div><div><span>ILLUSTRATIVE STABILIZED VALUE</span><b>${fmt(cap.value)}</b></div><p class="fine-note">Construction costs fluctuate. Property value is a scenario estimate, not guaranteed sale proceeds. Annual debt service is not included in NOI.</p>`;
+ const cap=underwriting(l);$('proforma').innerHTML=`<div><span>CONSTRUCTION BUDGET</span><b>${fmt(cap.cost)}</b></div><div><span>PLANNED BANK LOAN</span><b>${fmt(cap.loan)}</b></div><div><span>YOUR SHARE / OVER BUILD</span><b>${fmt(cap.equity)}</b></div><div><span>FIRST STAGE EQUITY (EST.)</span><b>${fmt(cap.equity/types[buildType].years)}</b></div><div><span>FIRST STAGE CASH HEADROOM (EST.)</span><b class="${state.cash>=cap.equity/types[buildType].years?'deal-healthy':'deal-risk'}">${fmt(state.cash-cap.equity/types[buildType].years)}</b></div><div><span>NEW LOAN RATE (FIXED)</span><b>${pct(cap.rate)}</b></div><div><span>STABILIZED NOI / YEAR (EST.)</span><b>${fmt(cap.expectedNoi)}</b></div><div><span>ILLUSTRATIVE STABILIZED VALUE</span><b>${fmt(cap.value)}</b></div><div><span>VALUE LESS LAND + BASE BUILD COST (EST.)</span><b class="${cap.value-l.landCost-cap.cost>=0?'deal-healthy':'deal-risk'}">${fmt(cap.value-l.landCost-cap.cost)}</b></div><p class="fine-note">First-stage cash headroom = cash today less estimated required equity; future cash flows and price shocks may change it. Value less land and base construction budget is an illustrative development spread, NOT realized profit: financing, carrying costs, overruns, and selling costs are excluded. Annual debt service is not included in NOI.</p>`;
  }
  else if(l.stage==='building'){
  let t=types[l.type],upcoming=l.originalBuildCost/l.constructionYears*state.cost,share=upcoming*(1-levs[l.loanTier].ratio);
- el.innerHTML=`<div class="proforma"><div><span>WORK COMPLETED</span><b>${l.buildYear} / ${l.constructionYears} YEARS</b></div><div><span>CAPITAL SPENT ON BUILD</span><b>${fmt(l.buildCost)}</b></div><div><span>OUTSTANDING LOAN</span><b>${fmt(l.loan)}</b></div><div><span>NEXT EQUITY REQUIREMENT (EST.)</span><b>${fmt(share)}</b></div><div><span>BANK INTEREST RATE</span><b>${pct(l.loanRate)}</b></div></div><p class="fine-note">Your construction schedule advances with each year. If you cannot provide your share of the next stage, work pauses. Interest on new drawings begins the following year.</p><button class="primary-action danger-action" id="sellBtn">SELL UNFINISHED SITE ↗</button>`;
+ el.innerHTML=`<div class="proforma"><div><span>WORK COMPLETED</span><b>${l.buildYear} / ${l.constructionYears} YEARS</b></div><div><span>CAPITAL SPENT ON BUILD</span><b>${fmt(l.buildCost)}</b></div><div><span>OUTSTANDING LOAN</span><b>${fmt(l.loan)}</b></div><div><span>NEXT EQUITY REQUIREMENT (EST.)</span><b>${fmt(share)}</b></div><div><span>CASH LESS NEXT STAGE EQUITY (EST.)</span><b class="${state.cash>=share?'deal-healthy':'deal-risk'}">${fmt(state.cash-share)}</b></div><div><span>BANK INTEREST RATE</span><b>${pct(l.loanRate)}</b></div></div><p class="fine-note">Cash less next stage equity uses today’s cash only; the actual year-end funding test also includes property NOI, interest, principal and other construction commitments. Work pauses if the required equity is unavailable. Interest on new loan drawings begins the following year.</p><button class="primary-action danger-action" id="sellBtn">SELL UNFINISHED SITE ↗</button>`;
  $('sellBtn').addEventListener('click',sell);
  }
  else{
- let noi=projectNoi(l),v=marketValue(l),ds=l.loan*l.loanRate + (l.loan>0?l.loan/Math.max(1,l.loanYearsLeft):0);
- el.innerHTML=`<div class="proforma"><div><span>NET OPERATING INCOME</span><b>${fmt(noi)} / YEAR</b></div><div><span>EST. MARKET VALUE</span><b>${fmt(v)}</b></div><div><span>DEBT OUTSTANDING</span><b>${fmt(l.loan)}</b></div><div><span>LOAN COUPON</span><b>${pct(l.loanRate)}</b></div><div><span>DEBT SERVICE COVERAGE (EST.)</span><b>${ds>0?(noi/ds).toFixed(2)+'×':'NO DEBT'}</b></div></div><div class="button-row"><button class="alt-action" id="refiBtn">REFINANCE</button><button class="alt-action danger-action" id="sellBtn">SELL BUILDING</button></div><p class="fine-note">Selling nets 97% of estimated market value before debt payoff. Refinancing is capped at 65% of estimated value and has an issuance fee.</p>`;
+ let noi=projectNoi(l),v=marketValue(l),ds=l.loan*l.loanRate+(l.loan>0?l.loan/Math.max(1,l.loanYearsLeft):0);
+ const x=refiTerms(l),canRefi=x.gross>.5&&x.net>0;
+ el.innerHTML=`<div class="proforma"><div><span>NET OPERATING INCOME</span><b>${fmt(noi)} / YEAR</b></div><div><span>EST. MARKET VALUE</span><b>${fmt(v)}</b></div><div><span>DEBT OUTSTANDING</span><b>${fmt(l.loan)}</b></div><div><span>LOAN COUPON</span><b>${pct(l.loanRate)}</b></div><div><span>DEBT SERVICE COVERAGE (EST.)</span><b>${ds>0?(noi/ds).toFixed(2)+'×':'NO DEBT'}</b></div></div>
+ <div class="proforma" aria-label="Refinancing preview"><div><span>REFINANCE: NEW LOAN (EST.)</span><b>${fmt(x.target)}</b></div><div><span>NEW FIXED RATE</span><b>${pct(x.rate)}</b></div><div><span>FINANCING FEE</span><b>${fmt(x.fee)}</b></div><div><span>NET CASH RELEASED (EST.)</span><b>${canRefi?fmt(x.net):'NOT AVAILABLE'}</b></div><div><span>NEW DSCR (EST.)</span><b>${x.dscr===null?'N/A':x.dscr.toFixed(2)+'×'}</b></div></div>
+ <div class="button-row"><button class="alt-action" id="refiBtn" ${canRefi?'':'disabled'}>REFINANCE</button><button class="alt-action danger-action" id="sellBtn">SELL BUILDING</button></div><p class="fine-note">Refinancing is constrained by 65% loan-to-value and minimum 1.15× projected debt-service coverage. Estimates use the current year’s NOI, an 8-year repayment term, and a 1.8% issuance fee. Market outcomes may change next year.</p>`;
  $('refiBtn').addEventListener('click',refinance);$('sellBtn').addEventListener('click',sell);
  }
 }

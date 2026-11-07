@@ -6,7 +6,16 @@
 <meta name="theme-color" content="#d6c5f1" />
 <meta name="description" content="A playful real estate development strategy game. Buy land, finance buildings, survive credit shocks, and build a property empire." />
 <title>The Developer's Dilemma — An Urban Real Estate Strategy Game</title>
+
 <link rel="stylesheet" href="styles.css" />
+<style id="developer-finance-clarity-preview">
+.deal-controls .deal-healthy { color: #246447; }
+.deal-controls .deal-risk { color: #a33b2c; }
+@media (prefers-contrast: more) {
+ .deal-controls .deal-healthy { text-decoration: underline; text-decoration-style: solid; }
+ .deal-controls .deal-risk { text-decoration: underline; text-decoration-style: double; }
+}
+</style>
 </head>
 <body>
 <div class="shell">
@@ -33,7 +42,7 @@
  <div><span>PROPERTY VALUE</span><strong id="statAssets">$0.0M</strong></div>
  <div><span>DEBT OUTSTANDING</span><strong id="statDebt">$0.0M</strong></div>
  <div><span>YOUR EQUITY VALUE</span><strong id="statNav">$24.0M</strong></div>
- <div><span>AVAILABLE CREDIT</span><strong id="statCredit">—</strong></div>
+ <div><span>NET REFI CASH (EST.)</span><strong id="statCredit">—</strong></div>
 </section>
 <main class="main-grid">
  <section class="board-panel" aria-label="Interactive real estate city board">
