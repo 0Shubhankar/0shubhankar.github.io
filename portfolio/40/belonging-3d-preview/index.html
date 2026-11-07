@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Belonging in Motion — Systems of a Living City</title>
+<style>
+:root{color-scheme:dark;--bg:#080c11;--paper:#ede8dd;--muted:#b0bac1;--bronze:#c6a57c;--line:#28343c}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--paper);font-family:Garamond,'EB Garamond',Baskerville,Georgia,serif}button,input,summary{font:inherit}button{cursor:pointer}
+#stage{position:relative;height:min(870px,100svh);min-height:670px;overflow:hidden;background:radial-gradient(ellipse at 48% 40%,#18232e,#080c11 72%)}#scene{position:absolute;inset:0}#scene canvas{width:100%;height:100%;display:block;touch-action:none}
+.heading{position:absolute;top:29px;left:33px;max-width:475px;pointer-events:none;z-index:2}.eyebrow{font:11px/1.5 system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--bronze)}h1{font-size:clamp(38px,4.5vw,66px);font-weight:400;line-height:1.04;letter-spacing:-.035em;margin:10px 0 12px}.heading p{font-size:18px;line-height:1.4;color:#c5ced1;margin:0;max-width:420px}
+.legend{position:absolute;left:28px;bottom:22px;right:28px;display:flex;flex-wrap:wrap;gap:7px 17px;z-index:2;pointer-events:none;font:11px system-ui,sans-serif;color:#d2d9db}.dot{display:inline-block;width:8px;height:8px;margin-right:6px;border-radius:50%}.hint{flex-basis:100%;font-size:10px;color:#a0adb5}
+.controls{position:absolute;z-index:5;top:12px;right:14px;width:min(560px,calc(100% - 28px));font-family:Georgia,serif}.toolbar{display:flex;justify-content:flex-end;align-items:center;gap:4px}.toolbar button{background:#121212e8;border:1px solid #444;color:#eee;font:17px Georgia,serif;padding:8px 13px;cursor:pointer}.toolbar button:hover{background:#242424}.toolbar .settings{color:#e7e7e7}.toolbar .status{font:13px Georgia,serif;color:#b4bfc7;margin-right:auto;padding:0 8px;text-shadow:0 1px 3px #000}.panel{margin-top:5px;background:#191919f5;border-left:5px solid #2c9fd0;box-shadow:0 9px 28px #0008}.panel[hidden]{display:none}.panel-scroll{max-height:min(73vh,720px);overflow:auto;scrollbar-width:thin;scrollbar-color:#444 #181818}.controls h2{font:normal 22px Georgia,serif;color:#e8e8e8;margin:9px 12px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:9px 12px;border-bottom:1px solid #3a3a3a}.stats strong{font:27px Georgia,serif;color:#31a7d7;display:block}.stats small{font:12px Georgia,serif;color:#ddd}.smallstats{font:13px Georgia,serif;color:#ddd;padding:8px 12px}.smallstats b{color:#31a7d7}.section{font:19px Georgia,serif;color:#fff;padding:10px 12px 5px;border-top:1px solid #393939}.control{display:grid;grid-template-columns:minmax(140px,1fr) minmax(90px,1.1fr) 72px;align-items:stretch;gap:10px;padding:5px 9px;border-top:1px solid #343434;min-height:47px}.control span{font:19px/1.15 Georgia,serif;color:#f5f5f5;align-self:center;overflow-wrap:anywhere}.control output{font:24px Georgia,serif;color:#2fa8dc;background:#303030;padding:7px 5px;align-self:stretch;display:flex;align-items:center;justify-content:flex-start}.control input[type=range]{appearance:none;-webkit-appearance:none;width:100%;height:32px;margin:auto 0;background:linear-gradient(to right,#319fd0 0%,#319fd0 var(--fill,50%),#333 var(--fill,50%),#333 100%);border:0;outline:none;cursor:pointer}.control input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:3px;height:32px;background:#319fd0;border:0}.control input[type=range]::-moz-range-thumb{width:3px;height:32px;border:0;border-radius:0;background:#319fd0}.details-personal{border-top:1px solid #383838}.details-personal summary{font:19px Georgia,serif;color:#fff;padding:10px 12px;cursor:pointer}.help{font:13px Georgia,serif;color:#bbb;padding:0 12px}.inspect{font:15px/1.4 Georgia,serif;color:#ddd;padding:9px 12px 15px;min-height:42px}.inspect b{color:#31a7d7}.close-controls{width:100%;display:block;background:#030303;border:0;color:#fff;font:24px Georgia,serif;padding:6px;cursor:pointer}.close-controls:hover{background:#151515}
+
+.reading{max-width:800px;margin:auto;padding:80px 28px 90px;font-size:21px;line-height:1.6;color:#d9d7d1}.reading h2{font-size:clamp(34px,4vw,51px);line-height:1.15;margin:12px 0 22px;font-weight:400;color:#f3eee5}.reading h3{font-size:29px;font-weight:400;color:#f3eee5;margin:35px 0 13px}.reading p{margin:0 0 18px}.reading .equation{text-align:center;font-size:25px;line-height:1.5;padding:14px 0;overflow-x:auto;color:#f4ddbd}.reading .note{color:#aeb7bb;font-size:18px}.footer{border-top:1px solid #2a3740;max-width:800px;margin:auto;padding:20px 28px 55px;font:11px system-ui,sans-serif;color:#8e9ba3}
+@media(max-width:850px){#stage{height:690px;min-height:690px}.heading{left:18px;top:17px;right:18px;max-width:310px}.heading h1{font-size:39px}.heading p{font-size:14px;max-width:275px}.controls{right:8px;top:8px;bottom:auto;width:min(560px,calc(100% - 16px))}.legend{bottom:13px;left:15px;right:15px;gap:5px 10px;font-size:9px}.hint{display:none}.panel-scroll{max-height:55vh}.control{grid-template-columns:minmax(105px,1fr) minmax(90px,1.1fr) 54px;gap:5px;padding:4px}.control span{font-size:14px}.control output{font-size:17px}.toolbar button{font-size:13px;padding:7px}.toolbar .status{font-size:11px}.reading{font-size:17px;padding:54px 22px}.reading h2{font-size:36px}.reading h3{font-size:25px}.reading .equation{font-size:17px}}
+@media(max-width:480px){.heading p{max-width:210px}.heading h1{font-size:33px}.heading{top:16px}.controls{bottom:100px}.legend{bottom:15px}}
+</style></head><body>
+<section id="stage" aria-label="Interactive simulation of social belonging">
+<div id="scene"></div>
+<div class="heading"><div class="eyebrow">Systems of a Living City</div><h1>Belonging<br>in Motion</h1><p>Explore how people move toward, between, and away from different communities as their circumstances and sense of acceptance change.</p></div>
+<div class="legend" id="legend"></div>
+<aside class="controls" aria-label="Simulation controls">
+<div class="toolbar"><span class="status" id="toolbar-status">120 people · Live</span><button id="pause" type="button">Pause</button><button id="step" type="button">Step</button><button id="reset" type="button">Reset</button><button id="toggle-controls" class="settings" type="button" aria-expanded="false" aria-controls="controls-panel">Show Controls</button></div>
+<div class="panel" id="controls-panel" hidden><div class="panel-scroll"><h2>Live population</h2>
+<div class="stats"><div><strong id="integrated">0</strong><small>Integrated</small></div><div><strong id="peripheral">0</strong><small>Peripheral</small></div><div><strong id="bridge">0</strong><small>Bridging</small></div><div><strong id="excluded">0</strong><small>Excluded</small></div><div><strong id="isolated">0</strong><small>Isolated</small></div><div><strong id="moving">0</strong><small>Moving</small></div></div>
+<div class="smallstats" id="summary">120 people · Six communities</div>
+<div class="section">Social conditions</div><div id="global-sliders"></div>
+<details class="details-personal"><summary>Personal factors (16)</summary><p class="help">Each slider changes the shared factor setting; people retain their own baseline differences.</p><div id="personal-sliders"></div></details>
+<div class="section">Selected person</div><div class="inspect" id="inspect">Click a figure to inspect its community, score, and state.</div></div><button id="close-controls" type="button" class="close-controls">Close Controls</button></div></aside>
+</section>
+<main class="reading"><div class="eyebrow">The model</div><h2>How belonging becomes movement</h2>
+<p>This is a small agent-based experiment, not a prediction of real people. Each of the 120 figures has sixteen individual characteristics and can be drawn toward six kinds of community: family, friends, work, neighbourhood, nation, and religion or spirituality.</p>
+<h3>1. Community attachment</h3>
+<p>For each person, the model calculates an attachment score for every community using three relevant personal factors. Each factor blends the person's baseline (70%) with its shared slider setting (30%).</p>
+<div class="equation">x<sub>ik</sub> = 0.70 b<sub>ik</sub> + 0.30 s<sub>k</sub></div>
+<div class="equation">A<sub>ig</sub> = (x<sub>ig1</sub> + x<sub>ig2</sub> + x<sub>ig3</sub>) / 3</div>
+<p><em>b</em> is a person's baseline characteristic, <em>s</em> is the slider value, and <em>A</em> is attachment. All are scaled from 0 to 1. The group with the largest attachment score becomes the person's primary affiliation.</p>
+<h3>2. Belonging score</h3>
+<p>Attachment is combined with five social conditions. The score increases with acceptance, trust, economic security and diversity exposure; social friction lowers it.</p>
+<div class="equation">B<sub>i</sub> = clip(0.28A<sub>i</sub> + 0.24a + 0.18t + 0.14e + 0.12d − 0.22f + 0.07 + ε<sub>i</sub> + q<sub>i</sub>, 0, 1)</div>
+<p><em>B</em> is belonging, <em>A</em> the strongest attachment, <em>a</em> acceptance, <em>t</em> trust, <em>e</em> economic security, <em>d</em> diversity exposure and <em>f</em> friction. <em>ε</em> represents a fixed individual difference; <em>q</em> is a small time-varying fluctuation. <em>clip</em> keeps the result between 0 and 1.</p>
+<h3>3. From score to position</h3>
+<p>The model assigns an illustrative state: integrated at 0.70 or above, peripheral from 0.52, excluded from 0.30, and isolated below 0.30. A person can instead become a bridge when their two strongest attachments differ by less than 0.10, diversity exposure is at least 47, segregation pressure is below 85, and their belonging score is at least 0.42.</p>
+<p>Integrated people stay near their community centre; peripheral, excluded and isolated people are placed progressively farther away. Bridges move between two communities. Segregation pressure spreads the six community centres apart. Each figure gradually travels toward its calculated destination.</p>
+<h3>4. Run an experiment</h3>
+<p>Open <em>Controls</em> and increase acceptance or trust, then watch the counts and positions change. Raise friction to test the opposite effect. Change diversity exposure to see when bridge positions emerge. Select a figure to inspect its score. Drag to orbit the camera and scroll to zoom.</p>
+<h3>What this model does not claim</h3>
+<p>The equations, weights, cutoffs and 120 people are hypothetical. They do not come from survey estimates, and spatial distance is only a visual metaphor for belonging. The experiment shows how assumptions produce patterns, not how any actual community behaves.</p>
+</main><footer class="footer">Systems of a Living City · An interactive conceptual study</footer>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js';
+const GROUPS=[
+ {id:'family',name:'Family connections',color:0xe88683,angle:-Math.PI/2,keys:['closenessToFamily','health','income']},
+ {id:'friends',name:'Friendship & social circles',color:0x7cb9f7,angle:-Math.PI/6,keys:['socialConnections','workLifeBalance','opennessToDiversity']},
+ {id:'workplace',name:'Workplace belonging',color:0x69cead,angle:Math.PI/6,keys:['jobSatisfaction','income','workplaceInclusivity']},
+ {id:'local',name:'Local community',color:0xf1ce76,angle:Math.PI/2,keys:['diversityInLocal','civicEngagement','localTrust']},
+ {id:'nation',name:'National identity',color:0xb49ce4,angle:5*Math.PI/6,keys:['nationalPride','politicalStability','income']},
+ {id:'religion',name:'Religious & spiritual community',color:0xeeb07b,angle:7*Math.PI/6,keys:['religiousParticipation','spiritualNeeds','culturalSupportForReligion']}
+];
+const FACTORS=['closenessToFamily','health','income','socialConnections','workLifeBalance','opennessToDiversity','jobSatisfaction','workplaceInclusivity','diversityInLocal','civicEngagement','localTrust','nationalPride','politicalStability','religiousParticipation','spiritualNeeds','culturalSupportForReligion'];
+const defaults={acceptance:60,trust:57,economic:55,diversity:54,friction:27,segregation:43};
+const descriptors=[['acceptance','Acceptance'],['trust','Trust'],['economic','Economic security'],['diversity','Diversity exposure'],['friction','Social friction'],['segregation','Segregation pressure']];
+const params={...defaults};const personal=Object.fromEntries(FACTORS.map(k=>[k,5]));
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+let rng=20261107;function random(){rng=(1664525*rng+1013904223)>>>0;return rng/4294967296;}
+const agents=[];const COUNT=120;let time=0,playing=true,selected=-1;
+function initialize(){rng=20261107;agents.length=0;for(let i=0;i<COUNT;i++){
+ const baseline=FACTORS.map(()=>clamp(.12+.76*random())); const primary=i%6;
+ baseline[FACTORS.indexOf(GROUPS[primary].keys[0])]=.73+.23*random();
+ const jitter=(random()-.5)*.22;
+ const p={id:i,baseline,epsilon:(random()-.5)*.60,jitter,phase:random()*6.283,group:primary,runner:primary,score:0,state:'peripheral',x:(random()-.5)*20,z:(random()-.5)*14,tx:0,tz:0,transition:0};
+ agents.push(p);
+}updateAll(true);}
+function affinity(p,g){const terms=g.keys.map(k=>{
+ const j=FACTORS.indexOf(k);return clamp(.70*p.baseline[j]+.30*personal[k]/10);
+});return terms.reduce((a,b)=>a+b,0)/terms.length;}
+function decide(p){const ordered=GROUPS.map((g,index)=>({index,score:affinity(p,g)})).sort((a,b)=>b.score-a.score);
+ const a=ordered[0],b=ordered[1];const score=clamp(.28*a.score+.24*params.acceptance/100+.18*params.trust/100+.14*params.economic/100+.12*params.diversity/100-.22*params.friction/100+.07+p.epsilon+.028*Math.sin(time*.30+p.phase));
+ const bridge=(a.score-b.score<.10)&&(params.diversity>=47)&&(score>=.42)&&(params.segregation<85);
+ let state=score>=.70?'integrated':score>=.52?'peripheral':score>=.30?'excluded':'isolated';if(bridge)state='bridge';
+ return {group:a.index,second:b.index,score,state,affinity:a.score,runnerScore:b.score};}
+function destination(p){const g=GROUPS[p.group],second=GROUPS[p.runner];const spacing=5.4+params.segregation/100*5.1;const ax=Math.cos(g.angle),az=Math.sin(g.angle);
+ let x=ax*spacing,z=az*spacing;
+ if(p.state==='integrated'){x+=Math.sin(p.id*2.4)*.70;z+=Math.cos(p.id*1.9)*.70;}
+ else if(p.state==='peripheral'){x+=ax*(1.6+p.id%5*.11)+Math.sin(p.id*2)*1.25;z+=az*(1.6+p.id%5*.11)+Math.cos(p.id*2.2)*1.25;}
+ else if(p.state==='bridge'){const bx=Math.cos(second.angle)*spacing,bz=Math.sin(second.angle)*spacing;x=.52*x+.48*bx+Math.sin(p.id*2)*.6;z=.52*z+.48*bz+Math.cos(p.id*2)*.6;}
+ else if(p.state==='excluded'){x+=ax*(3.0+p.id%6*.25)+Math.sin(p.id*2.3)*1.15;z+=az*(3.0+p.id%6*.25)+Math.cos(p.id*1.7)*1.15;}
+ else {x+=ax*(5+p.id%9*.44)+Math.sin(p.id*2.1)*1.7;z+=az*(5+p.id%9*.44)+Math.cos(p.id*2.5)*1.7;}
+ return {x,z};}
+function updateAll(instant=false){for(const p of agents){const next=decide(p);p.group=next.group;p.runner=next.second;p.score=next.score;p.state=next.state;p.affinity=next.affinity;p.runnerScore=next.runnerScore;const dest=destination(p);p.tx=dest.x;p.tz=dest.z;if(instant){p.x=p.tx+(random()-.5)*.8;p.z=p.tz+(random()-.5)*.8;}}
+ updateStats();refreshInspect();}
+function counts(){const values={integrated:0,peripheral:0,bridge:0,excluded:0,isolated:0};for(const p of agents)values[p.state]++;return values;}
+function updateStats(){const c=counts();for(const [key,value] of Object.entries(c))document.getElementById(key).textContent=value;
+ const mean=agents.reduce((acc,p)=>acc+p.score,0)/agents.length;const moving=agents.filter(p=>Math.hypot(p.tx-p.x,p.tz-p.z)>.5).length;
+ document.getElementById('moving').textContent=moving;document.getElementById('toolbar-status').textContent=`${agents.length} people · ${playing?'Live':'Paused'}`;
+ document.getElementById('summary').innerHTML=`<b>${agents.length}</b> people · <b>${GROUPS.length}</b> communities · Average belonging <b>${Math.round(mean*100)}%</b> · Step <b>${time}</b>`;}
+function refreshInspect(){const el=document.getElementById('inspect');if(selected<0){el.textContent='Click a figure to see their community, belonging score, and destination.';return;}
+ const p=agents[selected];el.innerHTML=`<b>Person ${p.id+1}</b><br>${GROUPS[p.group].name}<br>Position: <b>${p.state==='bridge'?'Between communities':p.state[0].toUpperCase()+p.state.slice(1)}</b><br>Belonging score: <b>${Math.round(100*p.score)}%</b><br>Strongest affiliation: <b>${Math.round(100*p.affinity)}%</b>`;}
+const mount=document.getElementById('scene');const scene=new THREE.Scene();scene.background=new THREE.Color(0x080c11);scene.fog=new THREE.FogExp2(0x080c11,.012);
+const camera=new THREE.PerspectiveCamera(44,1,.1,160);const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.outputColorSpace=THREE.SRGBColorSpace;mount.appendChild(renderer.domElement);
+scene.add(new THREE.HemisphereLight(0xc9e4ec,0x18232d,2.0));const sun=new THREE.DirectionalLight(0xffe6c9,1.1);sun.position.set(-9,22,8);scene.add(sun);
+const plane=new THREE.Mesh(new THREE.PlaneGeometry(110,110),new THREE.MeshBasicMaterial({color:0x0c151d}));plane.rotation.x=-Math.PI/2;plane.position.y=-.04;scene.add(plane);
+const grid=new THREE.GridHelper(60,30,0x30424a,0x24323b);grid.material.transparent=true;grid.material.opacity=.25;scene.add(grid);
+const anchors=[];for(const group of GROUPS){const ring=new THREE.Mesh(new THREE.RingGeometry(2.7,2.74,100),new THREE.MeshBasicMaterial({color:group.color,side:THREE.DoubleSide,transparent:true,opacity:.26,depthWrite:false}));ring.rotation.x=-Math.PI/2;scene.add(ring);anchors.push(ring);}
+const joint=new THREE.SphereGeometry(.22,10,8);const limb=new THREE.CylinderGeometry(.105,.105,1,7);const hidden=new THREE.MeshBasicMaterial({visible:false});
+const heads=new THREE.InstancedMesh(new THREE.SphereGeometry(.24,10,8),new THREE.MeshStandardMaterial({roughness:.8,metalness:.06}),COUNT);
+const segments=Array.from({length:5},()=>new THREE.InstancedMesh(limb,new THREE.MeshStandardMaterial({roughness:.8}),COUNT));
+const hit=new THREE.InstancedMesh(new THREE.SphereGeometry(.54,8,6),hidden,COUNT);
+heads.instanceMatrix.setUsage(THREE.DynamicDrawUsage);for(const m of segments)m.instanceMatrix.setUsage(THREE.DynamicDrawUsage);hit.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+scene.add(heads,...segments,hit);const dummy=new THREE.Object3D(),v1=new THREE.Vector3(),v2=new THREE.Vector3(),delta=new THREE.Vector3(),axis=new THREE.Vector3(0,1,0),col=new THREE.Color();
+function limbAt(mesh,i,a,b){v1.set(...a);v2.set(...b);delta.copy(v2).sub(v1);dummy.position.copy(v1).addScaledVector(delta,.5);dummy.quaternion.setFromUnitVectors(axis,delta.clone().normalize());dummy.scale.set(1,delta.length(),1);dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix);}
+function personPose(i,elapsed){const p=agents[i];const walking=Math.hypot(p.tx-p.x,p.tz-p.z)>.18;const stride=walking?Math.sin(elapsed*5+p.phase)*.18:0;const sway=.022*Math.sin(elapsed*2+p.phase);const x=p.x,z=p.z;
+ dummy.position.set(x,1.67+sway,z);dummy.scale.setScalar(1);dummy.quaternion.identity();dummy.updateMatrix();heads.setMatrixAt(i,dummy.matrix);
+ limbAt(segments[0],i,[x,1.43+sway,z],[x,.77,z]);limbAt(segments[1],i,[x,1.29+sway,z],[x-.37,.95+sway,z+.09]);limbAt(segments[2],i,[x,1.29+sway,z],[x+.37,.95+sway,z+.09]);limbAt(segments[3],i,[x,.77,z],[x-.22,.1,z+stride]);limbAt(segments[4],i,[x,.77,z],[x+.22,.1,z-stride]);
+ dummy.position.set(x,1.14,z);dummy.scale.set(1,2.7,1);dummy.quaternion.identity();dummy.updateMatrix();hit.setMatrixAt(i,dummy.matrix);
+}
+function recolor(){for(let i=0;i<COUNT;i++){const p=agents[i];col.setHex(GROUPS[p.group].color);if(p.state==='isolated')col.lerp(new THREE.Color(0x8a949c),.8);if(p.state==='excluded')col.lerp(new THREE.Color(0xc17e73),.3);heads.setColorAt(i,col);for(const m of segments)m.setColorAt(i,col);}for(const m of [heads,...segments])if(m.instanceColor)m.instanceColor.needsUpdate=true;}
+function resize(){const w=mount.clientWidth,h=mount.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}window.addEventListener('resize',resize);resize();
+let theta=.5,phi=1.06,radius=46,down=false,dragDistance=0,startX=0,startY=0,lastX=0,lastY=0;
+function positionCamera(){camera.position.set(Math.sin(theta)*Math.sin(phi)*radius,Math.cos(phi)*radius,Math.cos(theta)*Math.sin(phi)*radius);camera.lookAt(0,0,0);}positionCamera();
+renderer.domElement.addEventListener('pointerdown',e=>{down=true;dragDistance=0;startX=lastX=e.clientX;startY=lastY=e.clientY;renderer.domElement.setPointerCapture(e.pointerId);});
+renderer.domElement.addEventListener('pointermove',e=>{if(!down)return;const dx=e.clientX-lastX,dy=e.clientY-lastY;dragDistance+=Math.abs(dx)+Math.abs(dy);theta-=dx*.006;phi=clamp(phi+dy*.006,.25,1.53);lastX=e.clientX;lastY=e.clientY;positionCamera();});
+renderer.domElement.addEventListener('pointerup',e=>{down=false;if(dragDistance>6)return;const rect=renderer.domElement.getBoundingClientRect();const pointer=new THREE.Vector2((e.clientX-rect.left)/rect.width*2-1,-(e.clientY-rect.top)/rect.height*2+1);const ray=new THREE.Raycaster();ray.setFromCamera(pointer,camera);const hits=ray.intersectObject(hit);selected=hits.length?hits[0].instanceId:-1;refreshInspect();});
+renderer.domElement.addEventListener('wheel',e=>{e.preventDefault();radius=clamp(radius*Math.exp(e.deltaY*.001),19,80);positionCamera();},{passive:false});
+function sliders(host,config,obj){for(const [key,label] of config){const wrap=document.createElement('div');wrap.className='control';const name=document.createElement('span');name.textContent=label;const output=document.createElement('output');output.textContent=obj[key];const input=document.createElement('input');input.type='range';input.min=key in defaults?0:1;input.max=key in defaults?100:10;input.step=1;input.value=obj[key];input.addEventListener('input',()=>{obj[key]=+input.value;output.textContent=input.value;input.style.setProperty('--fill',((Number(input.value)-Number(input.min))/(Number(input.max)-Number(input.min))*100)+'%');updateAll(false);recolor();});const pct=(Number(input.value)-Number(input.min))/(Number(input.max)-Number(input.min))*100;input.style.setProperty('--fill',pct+'%');wrap.append(name,input,output);host.appendChild(wrap);}}
+sliders(document.getElementById('global-sliders'),descriptors,params);
+sliders(document.getElementById('personal-sliders'),FACTORS.map(k=>[k,k.replace(/([A-Z])/g,' $1').replace(/^./,s=>s.toUpperCase())]),personal);
+const legend=document.getElementById('legend');for(const g of GROUPS){const span=document.createElement('span');span.innerHTML=`<i class="dot" style="background:#${g.color.toString(16).padStart(6,'0')}"></i>${g.name}`;legend.appendChild(span);}const hint=document.createElement('span');hint.className='hint';hint.textContent='Drag to orbit · Scroll to zoom · Click a person to inspect';legend.appendChild(hint);
+const toggle=document.getElementById('toggle-controls'),panel=document.getElementById('controls-panel');
+toggle.addEventListener('click',()=>{const open=panel.hidden;panel.hidden=!open;toggle.setAttribute('aria-expanded',String(open));toggle.textContent=open?'Hide Controls':'Show Controls';});
+document.getElementById('close-controls').addEventListener('click',()=>{panel.hidden=true;toggle.setAttribute('aria-expanded','false');toggle.textContent='Show Controls';});
+function tick(){time++;updateAll(false);recolor();}document.getElementById('pause').addEventListener('click',e=>{playing=!playing;e.currentTarget.textContent=playing?'Pause':'Resume';});document.getElementById('step').addEventListener('click',()=>{tick();});
+document.getElementById('reset').addEventListener('click',()=>{Object.assign(params,defaults);for(const k of FACTORS)personal[k]=5;document.querySelectorAll('.control').forEach(c=>{const label=c.querySelector('span')?.textContent;const entry=[...descriptors,...FACTORS.map(k=>[k,k.replace(/([A-Z])/g,' $1').replace(/^./,s=>s.toUpperCase())])].find(x=>x[1]===label);if(entry){const key=entry[0],value=key in defaults?params[key]:personal[key];c.querySelector('input').value=value;c.querySelector('output').textContent=value;const input=c.querySelector('input');input.style.setProperty('--fill',((Number(value)-Number(input.min))/(Number(input.max)-Number(input.min))*100)+'%');}});time=0;selected=-1;initialize();recolor();});
+initialize();recolor();let last=performance.now(),acc=0;
+function animate(now){const dt=Math.min(.08,(now-last)/1000);last=now;if(playing){acc+=dt;while(acc>.9){acc-=.9;tick();}}
+ for(const p of agents){const speed=1-Math.exp(-dt*1.75);p.x+=(p.tx-p.x)*speed;p.z+=(p.tz-p.z)*speed;}
+ const space=5.4+params.segregation/100*5.1;for(let j=0;j<GROUPS.length;j++){const g=GROUPS[j];anchors[j].position.set(space*Math.cos(g.angle),0.012,space*Math.sin(g.angle));}
+ for(let i=0;i<COUNT;i++)personPose(i,now/1000);for(const m of [heads,...segments,hit])m.instanceMatrix.needsUpdate=true;
+ if(Math.floor(now/500)!==Math.floor((now-dt*1000)/500))updateStats();renderer.render(scene,camera);requestAnimationFrame(animate);}requestAnimationFrame(animate);
+</script></body></html>
