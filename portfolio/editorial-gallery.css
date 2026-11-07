@@ -195,3 +195,81 @@
     min-height: 390px;
   }
 }
+
+/* Refined editorial chapter typography */
+.editorial-chapter h2 {
+    font-size: clamp(30px, 3.4vw, 54px);
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+    margin-bottom: 12px;
+    min-height: 0;
+}
+
+@media (max-width: 650px) {
+    .editorial-chapter h2 {
+        font-size: clamp(27px, 7vw, 36px);
+        line-height: 1.15;
+    }
+}
+
+clear
+clear
+
+
+
+
+
+cd ~/Documents/WebDev/0shubhankar.github.io
+
+cat >> portfolio/editorial-gallery.css <<'CSS'
+
+/* Refined editorial chapter typography */
+.editorial-chapter h2 {
+    font-size: clamp(30px, 3.4vw, 54px);
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+    margin-bottom: 12px;
+    min-height: 0;
+}
+
+@media (max-width: 650px) {
+    .editorial-chapter h2 {
+        font-size: clamp(27px, 7vw, 36px);
+        line-height: 1.15;
+    }
+}
+
+
+/* Refined editorial chapter typography */
+.editorial-chapter h2 {
+    font-size: clamp(30px, 3.4vw, 54px);
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+    margin-bottom: 12px;
+    min-height: 0;
+}
+
+@media (max-width: 650px) {
+    .editorial-chapter h2 {
+        font-size: clamp(27px, 7vw, 36px);
+        line-height: 1.15;
+    }
+}
+
+
+/* Refined editorial chapter typography */
+.editorial-chapter h2 {
+    font-size: clamp(30px, 3.4vw, 54px);
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+    margin-bottom: 12px;
+    min-height: 0;
+}
+
+@media (max-width: 650px) {
+    .editorial-chapter h2 {
+        font-size: clamp(27px, 7vw, 36px);
+        line-height: 1.15;
+    }
+}
+
