@@ -300,7 +300,7 @@ function fig(name,value,negative=false){return `<div class="figure"><small>${nam
 function presentValue(flows,rate){return flows.reduce((pv,cf,i)=>pv+cf/Math.pow(1+rate,i),0);}
 function internalRate(flows){const f=r=>presentValue(flows,r);let lo=-.95,hi=5;const a=f(lo),b=f(hi);if(!Number.isFinite(a)||!Number.isFinite(b)||a*b>0)return null;for(let i=0;i<130;i++){const mid=(lo+hi)/2;if(f(mid)*a>0)lo=mid;else hi=mid;}return (lo+hi)/2;}
 function projection(a){const qz=financialQuote(a);const hurdle=Number(q('hurdleSelect').value);const startPrice=qz.price;
- const flowUnlevered=[-(startPrice+qz.fee)];const flowLevered=[-qz.equity];let senior=qz.senior,mezz=qz.mezz;
+ const flowUnlevered=[-(startPrice+startPrice*.018)];const flowLevered=[-qz.equity];let senior=qz.senior,mezz=qz.mezz;
  const rate=qz.rate,mezzRate=qz.mezzRate;let noi=operating(a,null).noi,maintenance=a.maint;
  const scheduled=annuity(senior,rate,20);
  for(let t=1;t<=5;t++){
@@ -317,7 +317,31 @@ function returnFigure(label,val,warning=false){return `<div class="return-figure
 function renderDossier(){const a=asset(selected),o=s.owned[a.id],marketValue=valueOf(a,o),ask=askOf(a),NOI=operating(a,o).noi,cap=capRate(a),x=operating(a,o);
  q('assetName').textContent=a.name;q('assetMeta').textContent=`${a.district.toUpperCase()} / ${a.type.toUpperCase()} / ${a.id}`;
  q('assetFinancials').innerHTML=fig(o?'MARKED VALUE':'ASKING PRICE',money(o?marketValue:ask))+fig('INCOME-BASED VALUE',money(marketValue))+fig('EXPECTED ANNUAL NOI',money(NOI))+fig('MARKET CAP RATE',pct(cap))+fig('EST. OCCUPANCY',pct(1-x.vacancy))+fig(o?'SECURED DEBT':'ASK / VALUE',o?money(loanBal(o)):num(ask/marketValue)+'×',!o&&ask>marketValue*1.15);
- const forecast=projection(a);const irrText=x=>x===null?'N/M':pct(x);q('returnProjection').innerHTML=returnFigure('UNLEVERED 5Y IRR',irrText(forecast.unleveredIRR),forecast.unleveredIRR===null||forecast.unleveredIRR<0)+returnFigure('EQUITY 5Y IRR',irrText(forecast.equityIRR),forecast.equityIRR===null||forecast.equityIRR<0)+returnFigure('EQUITY NPV / HURDLE',money(forecast.equityNPV),forecast.equityNPV<0);
+
+ const panelTitle=q('xrayModeTitle'),panelCaption=q('xrayModeCaption');
+ if(o){
+  const debt=loanBal(o);
+  const service=debtAnnual(o);
+  const annualCash=x.noi-x.maintenance-service;
+  const propertyEquity=marketValue-debt;
+  const coverage=service>0?num(x.noi/service)+'×':'NO DEBT';
+  panelTitle.textContent='OWNED PROPERTY / CURRENT FINANCIAL POSITION';
+  panelCaption.textContent='Current-year estimates, not realized investment returns. Property equity equals marked value less outstanding secured debt. Annual cash deducts maintenance and scheduled debt service from NOI; taxes, capital events and fund distributions are excluded.';
+  q('returnProjection').innerHTML=
+   returnFigure('MARKED PROPERTY EQUITY',money(propertyEquity),propertyEquity<0)+
+   returnFigure('ANNUAL CASH AFTER DEBT',money(annualCash),annualCash<0)+
+   returnFigure('CURRENT DSCR',coverage,service>0&&x.noi/service<1.13);
+ }else{
+  const forecast=projection(a);
+  const irrText=v=>v===null?'N/M':pct(v);
+  panelTitle.textContent='ACQUISITION UNDERWRITING / FIVE-YEAR FORECAST';
+  panelCaption.textContent='Hypothetical acquisition scenario, not a forecast. NOI and maintenance grow 2% annually; the exit cap rises 0.5 percentage point and sale costs are 2.5%. Unlevered returns exclude financing-specific fees. Equity returns include financing costs, interest and principal.';
+  q('returnProjection').innerHTML=
+   returnFigure('UNLEVERED 5Y IRR',irrText(forecast.unleveredIRR),forecast.unleveredIRR===null||forecast.unleveredIRR<0)+
+   returnFigure('EQUITY 5Y IRR',irrText(forecast.equityIRR),forecast.equityIRR===null||forecast.equityIRR<0)+
+   returnFigure('EQUITY NPV / HURDLE',money(forecast.equityNPV),forecast.equityNPV<0);
+ }
+
  q('marketNarrative').textContent=a.desc+(o?` Owned by your ${o.owner==='fund'?'investor fund':'management company'}. The marked value excludes your financing structure. Annual maintenance is a separate cash outflow from NOI.`:` The asking price is a seller quote. Your valuation is NOI ÷ the risk-adjusted cap rate. There is no guarantee that an offer below asking will be accepted.`);
  q('dealForm').hidden=Boolean(o);q('ownedActions').hidden=!o;
  if(o){q('ownerBanner').textContent=`${o.owner==='fund'?'INVESTOR FUND':'YOUR COMPANY'} / OWNED SINCE YEAR ${String(o.purchaseYear).padStart(2,'0')}`;
@@ -361,8 +385,51 @@ function renderLedger(){const assets=heldProps('company').reduce((sum,a)=>sum+va
  }
  q('ledgerDate').textContent=`YEAR ${s.year} + LAST CLOSED YEAR`;
 }
+// Debt-book scenario forecasts are illustrative and do not mutate state.
+function debtSchedulePreview(l, plusRate=0){
+ let balance=l.balance, amort=Math.max(1,l.remainingAmort||20);
+ const records=[];
+ for(let year=s.year;year<=Math.min(20,l.maturityYear)&&balance>1e-8;year++){
+  const floating=l.kind==='floating';
+  let r=floating?s.market.rate+l.spread+plusRate:l.rate;
+  if(floating&&l.capUntil>=year&&l.capRate!=null)r=Math.min(r,l.capRate);
+  r=Math.max(0,r);
+  const interest=balance*r;
+  const regular=l===undefined?0:annuity(balance,r,amort);
+  const principal=l.isMezz?0:Math.min(balance,Math.max(0,regular-interest));
+  balance=Math.max(0,balance-principal);
+  const balloon=year>=l.maturityYear?balance:0;
+  records.push({year,interest,principal,balloon,rate:r});
+  if(balloon>0)balance=0;
+  amort=Math.max(1,amort-1);
+ }
+ return records;
+}
+function renderDebtForecast(){
+ const active=heldProps().flatMap(a=>['senior','mezz'].flatMap(kind=>{
+  const l=s.owned[a.id][kind];return l?[{a,kind,l}]:[];
+ }));
+ if(!active.length)return;
+ const rows=active.map(({a,kind,l})=>{
+  const loan={...l,isMezz:kind==='mezz'};
+  const base=debtSchedulePreview(loan),stress=debtSchedulePreview(loan,.02);
+  const due=base[0]||{interest:0,principal:0,balloon:0};
+  const maturity=base.at(-1)||due;
+  const shock=stress[0]||due;
+  return `<tr><td>${escapeHTML(a.name)}</td><td>${kind.toUpperCase()}</td>`+
+   `<td>${money(due.interest)}</td><td>${money(due.principal)}</td>`+
+   `<td>${money(maturity.balloon)}</td><td>YR ${l.maturityYear}</td>`+
+   `<td>${money(shock.interest-due.interest)}</td></tr>`;
+ }).join('');
+ q('loansTable').insertAdjacentHTML('beforeend',
+  `<div class="debt-preview-note"><h3>Debt maturity &amp; rate stress</h3>`+
+  `<p>Illustrative schedule in $ millions. Base floating rates are held at today's market level; the stress case raises the base rate by 2 percentage points from now onward. Existing rate caps are respected while active. No refinancing is assumed. The balloon is the unpaid balance after the scheduled payment in the maturity year.</p>`+
+  `<div style="overflow-x:auto"><table class="finance-table"><thead><tr><th>PROPERTY</th><th>LOAN</th><th>NEXT INTEREST</th><th>NEXT PRINCIPAL</th><th>MATURITY BALLOON</th><th>MATURITY</th><th>EXTRA NEXT INTEREST AT +2PP</th></tr></thead><tbody>${rows}</tbody></table></div>`+
+  `<p>Senior loans amortize; mezzanine debt is interest-only. The forecast excludes fees, defaults, refinancing, collateral liquidation, future NOI changes and any discretionary actions. Loan settlement in the actual game remains unchanged.</p></div>`);
+}
 function renderLoans(){const loans=heldProps().map(a=>{const o=s.owned[a.id];return ['senior','mezz'].map(k=>{const l=o[k];if(!l)return '';return `<tr><td>${a.name}</td><td>${o.owner==='fund'?'LP FUND':'COMPANY'}</td><td>${k.toUpperCase()}</td><td>${money(l.balance)}</td><td>${pct(currRate(l))}${l.kind==='floating'?' ↕':''}</td><td>${s.year+l.remainingAmort >0?`YR ${l.maturityYear}`:'—'}</td><td>${num(operating(a,o).noi/Math.max(.001,debtAnnual(o)))}×</td></tr>`;}).join('');}).join('');
  q('loansTable').innerHTML=`<table class="finance-table"><thead><tr><th>PROPERTY</th><th>ACCOUNT</th><th>TYPE</th><th>PRINCIPAL</th><th>RATE</th><th>MATURITY</th><th>PROPERTY DSCR</th></tr></thead><tbody>${loans||'<tr><td colspan="7">No mortgages yet. Acquire a building with financing to open a loan file.</td></tr>'}</tbody></table><p class="small-print">Senior mortgages amortize over 20 years but mature after 7; unpaid principal becomes a balloon at maturity. Mezzanine debt is interest-only and matures after 5. Interest-rate caps may limit floating rates. Maturity risk can force distressed disposals.</p>`;
+ renderDebtForecast();
 }
 function renderFund(){const f=s.fund;const open=s.year>=8;q('raiseFundBtn').disabled=!open||f.active||s.finished;q('distributeFundBtn').disabled=!f.active||f.cash<=.46||s.finished;
  q('raiseFundBtn').textContent=f.active?'FUND ALREADY RAISED':open?'RAISE $3.00M OF OUTSIDE CAPITAL':'UNLOCKS IN YEAR 8';
