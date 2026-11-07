@@ -328,7 +328,7 @@ const portfolioItems = [
         title: "Socio-economic impacts on different neighborhood classes",
         titleLink: "29/housing-economic-impact.html",
         tags: ["Urban Economics", "Scenario Analysis", "Leaflet", "Map Visualization", "Neighborhood Classification", "Economic Boom", "Economic Recession", "Rent Control", "Housing Affordability", "GeoJSON", "Dynamic Map", "Urban Simulation"],
-        image: "images/previews/29.webp",
+        image: "images/previews/project29gallaryimage.png",
     },
     {
         projectType: "Civic Data Innovation", //  
