@@ -1,9 +1,10 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>three.js + Free Bus Ride Simulation with Rotation-based Updates</title>
+    <title>The Free Bus Ride Dilemma | Public-Goods Simulation</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js"
         crossorigin="anonymous"></script>
     <style>
@@ -59,11 +60,53 @@
             margin-left: 20%;
         }
     </style>
+
+    <style id="p33-model-preview-style">
+      #description { max-width: 850px; margin: 30px auto 85px; padding: 0 24px; font: 18px/1.75 Georgia, "Times New Roman", serif; text-align: left; color: #e8e7e4; user-select: text; }
+      #description h1 { font-size: clamp(35px, 5vw, 64px); font-weight: 400; letter-spacing: -.035em; line-height: 1.1; margin: 10px 0 20px; color: #fff; }
+      #description h2 { font-size: clamp(23px, 2.5vw, 32px); font-weight: 400; line-height: 1.25; margin: 46px 0 12px; color: #fff; }
+      #description p { margin: 0 0 19px; }
+      #description .essay-kicker { font: 600 11px/1.6 Arial,sans-serif; letter-spacing: .15em; text-transform: uppercase; color: #c5a780; }
+      #description .essay-lede { font-size: clamp(19px, 2vw, 23px); line-height: 1.55; color: #d4d2cd; }
+      #description .equation { font: 21px/1.6 Georgia,serif; text-align: center; margin: 24px 0; padding: 0; color: #fff; overflow-wrap: anywhere; }
+      #results { max-width: min(300px, calc(100vw - 60px)); font-size: 13px; line-height: 1.3; border: 1px solid rgba(255,255,255,.15); }
+      #results h3 { margin: 4px 0 12px; font-size: 16px; }
+      #results p { margin: 8px 0; }
+      @media (max-width: 650px) { #description { margin: 28px auto 60px; padding: 0 20px; font-size: 16px; } #results { left: 10px; top: 10px; font-size: 12px; padding: 9px; } #results h3 { font-size: 13px; } }
+    </style>
+
+<style id="p33-academic-refinement-style">
+  /* Understated academic text; uses local Garamond when installed, with familiar fallbacks. */
+  #description { max-width: 800px; margin: 34px auto 92px; padding: 0 24px; background: transparent;
+    font-family: Garamond, "Baskerville", "Palatino Linotype", Georgia, serif;
+    font-size: 19px; line-height: 1.68; font-weight: 400; text-align: left; color: #dedbd5; }
+  #description h1, #description h2 { font-family: Garamond, "Baskerville", Georgia, serif;
+    font-weight: 400; color: #f8f6f1; letter-spacing: -.015em; }
+  #description h1 { font-size: clamp(40px, 5vw, 65px); line-height: 1.09; margin: 10px 0 24px; }
+  #description h2 { font-size: clamp(27px, 2.7vw, 34px); margin: 44px 0 13px; }
+  #description p { margin: 0 0 19px; }
+  #description .essay-lede { font-size: clamp(20px, 2.3vw, 25px); color: #e6e1d9; line-height: 1.48; }
+  #description .essay-kicker { font: 500 11px/1.5 system-ui, sans-serif; letter-spacing: .16em; color: #c7a987; }
+  #description .equation { font-family: Garamond, Georgia, serif; color: #fff; font-size: 20px;
+    padding: 5px 0; margin: 16px 0 26px; text-align: center; overflow-x: auto; overflow-y: hidden; }
+  #description .MathJax { max-width: 100%; }
+  #results { max-width: min(330px, calc(100vw - 36px)); max-height: 55vh; overflow-y: auto;
+    font-family: Garamond, Georgia, serif; font-size: 15px; line-height: 1.25; }
+  #results h3 { font-size: 19px; margin: 4px 0 12px; }
+  #results p { margin: 7px 0; }
+  @media (max-width: 650px) {
+    #description { padding: 0 20px; margin: 28px auto 60px; font-size: 17px; }
+    #description h1 { font-size: 40px; }
+    #description .equation { font-size: 16px; }
+    #results { top: 8px; left: 8px; max-height: 38vh; font-size: 12px; padding: 8px; }
+    #results h3 { font-size: 15px; }
+  }
+</style>
 </head>
 
 <body>
     <!-- Container for the simulation -->
-    
+
 
 <div id="webgl-notice" style="position:fixed;bottom:16px;right:16px;z-index:10000;font-family:Arial,sans-serif;max-width:calc(100vw - 32px);">
   <div id="webgl-notice-panel" style="background:rgba(23,38,56,.95);color:white;padding:14px;border-radius:10px;width:290px;max-width:calc(100vw - 60px);box-sizing:border-box;box-shadow:0 5px 20px #0005;font-size:13px;line-height:1.5;">
@@ -80,134 +123,48 @@
 
 <div id="container">
         <div id="results">
-            <h3>Simulation Results</h3>
-            <p><strong>Cooperators:</strong> <span id="cooperatorPayoff">0</span></p>
-            <p><strong>Defectors:</strong> <span id="defectorPayoff">0</span></p>
-            <p><strong>Loners:</strong> <span id="lonerPayoff">0</span></p>
+            <h3>Public-goods payoffs</h3>
+            <p><strong>Cooperators (π<sub>C</sub>):</strong> <span id="cooperatorPayoff">0</span></p>
+            <p><strong>Defectors (π<sub>D</sub>):</strong> <span id="defectorPayoff">0</span></p>
+            <p><strong>Loners (π<sub>L</sub>):</strong> <span id="lonerPayoff">0</span></p>
+            <p><strong>Mean rider benefit:</strong> <span id="riderBenefit">0</span></p>
+            <p><strong>Mean payoff:</strong> <span id="averagePayoff">0</span></p>
+            <p><strong>Bus participants:</strong> <span id="riderShare">0</span></p>
+            <p><strong>Payoff group (n):</strong> <span id="interactionGroupResult">0</span></p>
+            <p><strong>Private gain D → C:</strong> <span id="privateSwitchGain">0</span></p>
+            <p><strong>Social gain D → C:</strong> <span id="socialSwitchGain">0</span></p>
+            <p><strong>Collective-action dilemma:</strong> <span id="strategicDilemma">—</span></p>
         </div>
     </div>
 
-    <!-- Description section below the container -->
-    <div id="description">
-        <p>
-            Imagine a city offers <strong>free bus rides</strong> as a public good. In this situation, the city needs some
-            people to contribute (e.g., by paying taxes or volunteering) to keep the buses running. However, not everyone
-            contributes. People in this simulation fall into three categories:
-        </p>
-    
-        <p>
-            <strong>1. Cooperators (Blue):</strong> These people <strong>pay their fair share</strong> (either through
-            taxes, donations, or other contributions). Their contribution helps keep the buses running, providing a public
-            good for everyone. In the simulation, cooperators are represented as <strong>blue points</strong>, and their
-            payoff depends on how much the bus system benefits from the contributions of all cooperators.
-        </p>
-    
-        <p>
-            <strong>2. Defectors (Red):</strong> These people <strong>ride the buses without contributing</strong>. They
-            benefit from the free service but don’t pay for it. In the simulation, defectors are <strong>red
-                points</strong>. They free-ride on the public transport system without paying, benefiting from the buses
-            without helping to sustain them.
-        </p>
-    
-        <p>
-            <strong>3. Loners (White):</strong> These people <strong>don’t participate in the bus system at all</strong>.
-            Instead of taking the bus, they might walk, cycle, or use private transport. They don’t contribute to or benefit
-            from the bus system, but they also don’t get caught up in the collapse of the system if too many people defect.
-            In the simulation, loners are <strong>white points</strong>. They receive a fixed payoff (representing the
-            payoff from using alternatives, such as walking or using a car).
-        </p>
-    
-        <p>
-            In the free bus ride scenario, the behavior of cooperators, defectors, and loners reflects different strategies
-            that people might adopt when dealing with public goods like free transport.
-        </p>
-    
-        <p>
-            <strong>Cooperators' Payoff:</strong> The payoff for cooperators depends on how much benefit they receive from a
-            well-functioning bus system. The more cooperators there are, the more effective the system becomes, and the
-            payoff increases.
-        </p>
-    
-        <p>
-            <strong>Defectors' Payoff:</strong> Defectors get to use the bus system without contributing. They enjoy the
-            benefits of free rides without paying taxes or contributing in other ways. However, if too many people defect,
-            the bus system collapses, and the payoff decreases.
-        </p>
-    
-        <p>
-            <strong>Loners' Payoff:</strong> Loners don't use the bus system at all. Instead, they walk or use private
-            transport, receiving a fixed payoff.
-        </p>
-    
-        <p>
-            Let's say we're simulating a <strong>free bus system</strong> in a city:
-        </p>
-    
-        <p>
-            The <strong>cooperators</strong> represent people who contribute to the free bus system by paying taxes or
-            supporting it financially. They benefit because a high number of contributors makes the bus system more reliable
-            and efficient. The <strong>defectors</strong> represent people who use the free bus system but avoid paying
-            taxes or contributing in any way. They still benefit from the service, but if too many people defect, the system
-            might collapse or become unreliable. The <strong>loners</strong> represent people who don't use the bus system
-            at all. They either walk, bike, or use their cars. They have a stable payoff because they don't rely on the
-            public good, but they miss out on any benefits if the bus system is highly efficient and beneficial.
-        </p>
-    
-        <p>
-            <strong>publicGoodRewardMultiplier (r):</strong> In the free bus ride scenario, this represents how effective
-            and valuable the bus system is for those who use it. A high <strong>r</strong> means that the bus system is very
-            beneficial (e.g., fast, reliable, and convenient). A low <strong>r</strong> means the bus system is not very
-            effective, reducing the incentive to cooperate.
-        </p>
-    
-        <p>
-            <strong>lonerFixedPayoff (σ):</strong> This represents the payoff loners receive by opting out of the bus system
-            and using alternative transportation. It could represent walking or private transport. The higher the
-            <strong>σ</strong>, the more attractive it is to be a loner and avoid the public good entirely.
-        </p>
-    
-        <p>
-            <strong>interactionRadius:</strong> This parameter controls how close agents need to be to interact and form
-            connections. In real life, this could represent how connected people are within neighborhoods or city districts.
-            A larger interaction radius means more people are interacting and influencing each other (e.g., more
-            interconnected neighborhoods).
-        </p>
-    
-        <p>
-            <strong>Number of Cooperators, Defectors, and Loners:</strong> These control how many people adopt each
-            strategy. In the free bus ride scenario, this represents how many people choose to cooperate (by supporting the
-            bus system), defect (by using it without supporting it), or opt out entirely (by using alternative
-            transportation).
-        </p>
-    
-        <p>
-            In the simulation, agents representing cooperators, defectors, and loners are distributed on a 3D grid. As the
-            simulation runs, the agents rotate in 3D space, and lines are drawn between cooperators and defectors when they
-            are within a certain distance of each other (the <strong>interactionRadius</strong>). After each full rotation,
-            the system updates the payoffs for each agent type based on their interactions and displays these results on the
-            screen.
-        </p>
-    
-        <p>
-            <strong>Visual Representation:</strong>
-        </p>
-    
-        <p>
-            <strong>Cooperators (blue):</strong> Represent people contributing to the bus system. <strong>Defectors
-                (red):</strong> Represent people using the bus system but not contributing. <strong>Loners (white):</strong>
-            Represent people who don’t use or support the bus system. <strong>Red and Blue Lines:</strong> These lines
-            connect cooperators and defectors when they are close enough to interact.
-        </p>
-    
-        <p>
-            This code provides a <strong>visual simulation</strong> of a public good scenario (like a free bus ride system)
-            using 3D graphics. The mathematical models behind the simulation reflect the payoffs for different strategies
-            (cooperation, defection, or opting out). By adjusting the parameters in the GUI (such as the public good reward
-            multiplier, the loner payoff, and the number of agents), you can explore how different scenarios play out in
-            this simplified, but visually engaging, simulation.
-        </p>
-    </div>
+    <section id="description" aria-labelledby="essay-title">
+      <p class="essay-kicker">Urban economics / public goods</p>
+      <h1 id="essay-title">The Free Bus Ride Dilemma</h1>
+      <p class="essay-lede">Free public transport raises a familiar economic question: who contributes to a service that others can use without paying? This experiment uses a small public-goods game to examine the difference between individual incentives and collective outcomes.</p>
 
+      <h2>Participation and strategy</h2>
+      <p>People follow one of three fixed strategies. <strong>Cooperators</strong> (blue) contribute one unit toward the service. <strong>Defectors</strong> (red) take part but do not contribute. <strong>Loners</strong> (white) choose an outside option with a fixed payoff. The spheres show these groups. The connecting lines indicate visual proximity; they do not determine who shares a payoff.</p>
+
+      <h2>How the model works</h2>
+      <p>Let \(C\), \(D\), and \(L\) be the numbers of cooperators, defectors, and loners. The rider population is \(N=C+D\). Each payoff interaction brings together \(n\) riders selected at random, without replacement. If \(k\) of those riders cooperate, the group produces a benefit \(rk\) that is shared equally among its \(n\) members.</p>
+      <p class="equation">\[ b(k,n)=\frac{rk}{n} \]</p>
+      <p>Here \(r\) is the <em>public-good multiplier</em>. A cooperator pays a normalized contribution cost of one unit. A defector pays nothing. A loner does not join the group and instead receives the outside-option payoff \(\sigma\).</p>
+
+      <h2>Expected payoffs</h2>
+      <p>The number of other cooperators in a randomly assembled group is uncertain. The model therefore calculates an <em>expected payoff</em> for each strategy. A cooperator meets, on average, \((n-1)(C-1)/(N-1)\) other cooperators. A defector meets \((n-1)C/(N-1)\). The focal person's own strategy changes the expected composition of the remaining group.</p>
+      <p class="equation">\[ \pi_C=\frac{r}{n}\left(1+\frac{(n-1)(C-1)}{N-1}\right)-1 \]</p>
+      <p class="equation">\[ \pi_D=\frac{r}{n}\frac{(n-1)C}{N-1},\qquad \pi_L=\sigma \]</p>
+      <p>These expressions apply when the corresponding strategy is present and \(N>1\). For a single rider, the contribution term is evaluated directly; a strategy with no members is shown as unavailable. The results are measured in abstract payoff units, not rupees, ticket prices, or measured welfare.</p>
+
+      <h2>The collective-action problem</h2>
+      <p>Suppose one defector becomes a cooperator while the number of riders stays fixed. The individual's expected payoff changes by \(r/n-1\), while total payoff across the rider population changes by \(r-1\). When \(1<r<n\), cooperation benefits the group even though switching alone reduces the individual's expected payoff.</p>
+      <p class="equation">\[ \Delta\pi_{D\rightarrow C}=\frac{r}{n}-1,\qquad \Delta W_{D\rightarrow C}=r-1 \]</p>
+      <p>This difference is the central dilemma. The displayed indicators update when you change the group size, public-good multiplier, or number of participants. The mean payoff is calculated over cooperators, defectors, and loners together.</p>
+
+      <h2>Reading the experiment</h2>
+      <p>Use the controls to change the composition of the rider population and the size of a typical group. Smaller groups can make one person's contribution more consequential to their own return. Increasing \(r\) raises the collective value of cooperation. Increasing \(\sigma\) makes the outside option more attractive, but it does not change the benefits shared by riders.</p>
+      <p>These are expected outcomes from random matching, not observations of how people actually travel. Strategies do not evolve automatically, and the visual proximity network is separate from the game-theoretic calculations. Real transit funding also depends on taxation, fare policy, service capacity, and political institutions. The model isolates one incentive problem; it does not forecast ridership or assess a city's transport budget.</p>
+    </section>
 
     <script type="module">
         import * as THREE from '../vendor/shared/lib-5e6d7c2d082f/dist/three.module.js';
@@ -223,6 +180,7 @@
 
         const params = {
             publicGoodRewardMultiplier: 2.0,  // Multiplier for how much benefit the public good provides (r)
+            interactionGroupSize: 12, // Riders randomly matched in each payoff group
             lonerFixedPayoff: 1.0,            // Fixed payoff for loners (σ)
             numberOfCooperators: 320,         // Number of cooperators (agents who contribute to the public good)
             numberOfDefectors: 329,           // Number of defectors (agents who benefit without contributing)
@@ -284,6 +242,7 @@
             gui = new GUI();
             gui.add(params, 'publicGoodRewardMultiplier', 0, 5).name('Public Good Multiplier').onChange(updateSimulation);
             gui.add(params, 'lonerFixedPayoff', 0, 5).name('Loner Payoff').onChange(updateSimulation);
+            gui.add(params, 'interactionGroupSize', 2, 40, 1).name('Riders per group (n)').onChange(updateSimulation);
             gui.add(params, 'numberOfCooperators', 100, 500).name('Cooperators').onChange(updateAgents);
             gui.add(params, 'numberOfDefectors', 100, 500).name('Defectors').onChange(updateAgents);
             gui.add(params, 'numberOfLoners', 100, 500).name('Loners').onChange(updateAgents);
@@ -294,6 +253,7 @@
             gui.add(params, 'visualBloomThreshold', 0, 1).name('Bloom Threshold').onChange(updateBloom);
 
             updateLines();
+            updateSimulation();
         }
 
         function createAgents(count, material) {
@@ -327,6 +287,7 @@
             scene.add(loners);
 
             updateLines();
+            updateSimulation();
         }
 
         function updateBloom() {
@@ -335,14 +296,61 @@
             composer.passes[1].radius = params.visualBloomRadius;
         }
 
-        function updateSimulation() {
-            cooperatorPayoff = (params.publicGoodRewardMultiplier * Math.random() * 100).toFixed(2);
-            defectorPayoff = ((params.publicGoodRewardMultiplier / 2) * Math.random() * 100).toFixed(2);
-            lonerPayoff = (params.lonerFixedPayoff * Math.random() * 100).toFixed(2);
+        // Finite-group public-goods model: random matching WITHOUT replacement.
+        // Payoffs are expected outcomes (not empirical transit outcomes).
+        // Conditional on a cooperator focal rider, other cooperators expected:
+        // (n-1)*(C-1)/(N-1); conditional on a defector: (n-1)*C/(N-1).
+        // Total welfare identity: W=(r-1)*C + sigma*L.
+        function publicGoodsPayoffs(C, D, L, r, sigma, requestedGroupSize) {
+            C = Math.max(0, Math.floor(Number(C) || 0));
+            D = Math.max(0, Math.floor(Number(D) || 0));
+            L = Math.max(0, Math.floor(Number(L) || 0));
+            r = Math.max(0, Number(r) || 0);
+            sigma = Math.max(0, Number(sigma) || 0);
+            const N = C + D;
+            const totalAgents = N + L;
+            const n = N > 0 ? Math.min(N, Math.max(1, Math.floor(Number(requestedGroupSize) || 1))) : 0;
+            const others = N > 1 ? (n-1) / (N-1) : 0;
+            const coopBenefit = C > 0 ? (r / n) * (1 + (C-1)*others) : null;
+            const defectBenefit = D > 0 ? (r / n) * (C*others) : null;
+            const cooperation = C > 0 ? coopBenefit - 1 : null;
+            const defection = D > 0 ? defectBenefit : null;
+            const optOut = L > 0 ? sigma : null;
+            const totalWelfare = (r-1)*C + sigma*L;
+            const average = totalAgents > 0 ? totalWelfare/totalAgents : 0;
+            const meanRiderBenefit = N > 0 ? r*C/N : 0;
+            // Counterfactual: one current defector changes to cooperation; N and n fixed.
+            const privateSwitchGain = D > 0 ? r/n - 1 : null;
+            const socialSwitchGain = D > 0 ? r - 1 : null;
+            const dilemma = D > 0 && r > 1 && r < n;
+            return {cooperation, defection, optOut, n, N, totalAgents, average,
+                    totalWelfare, meanRiderBenefit, privateSwitchGain, socialSwitchGain, dilemma};
+        }
 
-            document.getElementById('cooperatorPayoff').innerText = cooperatorPayoff;
-            document.getElementById('defectorPayoff').innerText = defectorPayoff;
-            document.getElementById('lonerPayoff').innerText = lonerPayoff;
+        function updateSimulation() {
+            const result = publicGoodsPayoffs(
+                params.numberOfCooperators,
+                params.numberOfDefectors,
+                params.numberOfLoners,
+                params.publicGoodRewardMultiplier,
+                params.lonerFixedPayoff,
+                params.interactionGroupSize
+            );
+            const fmt = value => value === null ? '—' : value.toFixed(2);
+            cooperatorPayoff = result.cooperation;
+            defectorPayoff = result.defection;
+            lonerPayoff = result.optOut;
+            document.getElementById('cooperatorPayoff').textContent = fmt(cooperatorPayoff);
+            document.getElementById('defectorPayoff').textContent = fmt(defectorPayoff);
+            document.getElementById('lonerPayoff').textContent = fmt(lonerPayoff);
+            document.getElementById('riderBenefit').textContent = fmt(result.meanRiderBenefit);
+            document.getElementById('averagePayoff').textContent = fmt(result.average);
+            document.getElementById('riderShare').textContent = result.N+' of '+result.totalAgents;
+            document.getElementById('interactionGroupResult').textContent = String(result.n);
+            document.getElementById('privateSwitchGain').textContent = fmt(result.privateSwitchGain);
+            document.getElementById('socialSwitchGain').textContent = fmt(result.socialSwitchGain);
+            document.getElementById('strategicDilemma').textContent =
+                result.dilemma ? 'Present (1 < r < n)' : 'Not present under these parameters';
         }
 
         function updateLines() {
@@ -398,7 +406,6 @@
 
             currentRotation += 0.01;
             if (currentRotation >= 2 * Math.PI) {
-                updateSimulation();
                 currentRotation = 0;
             }
         }
