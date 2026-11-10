@@ -1176,3 +1176,32 @@ h3 {
 .contact-email:active {
   transform: translateY(0);
 }
+
+
+/* URPAC external website links */
+.urpac-external {
+    color: inherit;
+    text-decoration: none;
+    transition: color .2s ease;
+}
+.urpac-external span {
+    display: inline-block;
+    margin-left: .15em;
+    color: #50bfae;
+    transition: transform .2s ease;
+}
+.urpac-external:hover,
+.urpac-external:focus-visible {
+    color: #50bfae;
+}
+.urpac-external:hover span {
+    transform: translate(3px, -3px);
+}
+.urpac-inline {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+.urpac-inline:hover {
+    color: #50bfae;
+}
