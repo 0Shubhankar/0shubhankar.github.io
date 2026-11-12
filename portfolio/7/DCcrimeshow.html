@@ -2,6 +2,20 @@
 <html lang="en">
 
 <head>
+<!-- Google Analytics: track full pages, not embedded copies of project demos. -->
+<script>
+  if (window.self === window.top) {
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = window.gtag || function(){window.dataLayer.push(arguments);};
+    gtag('js', new Date());
+    gtag('config', 'G-GMKGJLY7GL');
+    var analyticsScript = document.createElement('script');
+    analyticsScript.async = true;
+    analyticsScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-GMKGJLY7GL';
+    document.head.appendChild(analyticsScript);
+  }
+</script>
+
     <title>Fly to a location based on scroll position</title>
     <meta property="og:description"
         content="Scroll down through the story and the map will fly to the chapter's location." />

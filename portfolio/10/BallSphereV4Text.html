@@ -2,6 +2,20 @@
 <html lang="en">
 
 <head>
+<!-- Google Analytics: track full pages, not embedded copies of project demos. -->
+<script>
+  if (window.self === window.top) {
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = window.gtag || function(){window.dataLayer.push(arguments);};
+    gtag('js', new Date());
+    gtag('config', 'G-GMKGJLY7GL');
+    var analyticsScript = document.createElement('script');
+    analyticsScript.async = true;
+    analyticsScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-GMKGJLY7GL';
+    document.head.appendChild(analyticsScript);
+  }
+</script>
+
     <meta charset="UTF-8">
     <meta viewport="width=device-width, initial-scale=1.0">
     <title>Interactive 3D Network Graph</title>
