@@ -1,0 +1,30 @@
+{
+  "release": "Gotham 1.0",
+  "original_sha256": "1df6f164e7d265d0b88a2b6627b411120b357770579886717247afbdff8f85b0",
+  "source_sha256": {
+    "README.md": "58c94f37cbb650de2a4af5b18cbfa05be17a833f91b590020b3cc6aa024e77d0",
+    "housing-visuals.js": "8a41d5f8ca0159294bf73c51c9a9fd3de9bdf6a4625464e162b651a1ac495909",
+    "hpe/city-feedback.js": "f344a743a1660eaf4f48ba39f65d798ce8b3608d3c947ff00e46bbec324573c2",
+    "hpe/config.js": "2c663156046ca5af3e029d5490fbc03eed076b01280d3fddbe1aefe4fc0fe230",
+    "hpe/gotham-flow.js": "cf9d5c53395aa25eaa39b9e60e740aadf6b4e6c9353aa5dc4f5bf60bb7e633bd",
+    "hpe/housing-engine.js": "8902f0f9be20b385d74aa9644d59df69f0e64ec26622e0bcd0e4879eea1f1aef",
+    "hpe/housing-state.js": "2c4b22b14a06594a0495f01be2eba2da467f534e36aa7d572a31490108760784",
+    "hpe/package.json": "8a62608323a6c461de521f63c10237aed44ab9d357f0fa912fafa4e36ebf3809",
+    "hpe/performance.js": "d220883ec9f73c4533f259789ff12b06a62b8475c60e317b1ff81e0b1f55ba9f",
+    "hpe/tests/extended.test.js": "b576364379aae5a48bde3d8bd31f3ae603d961cc951fd19ec73b820df3e45d10",
+    "hpe/tests/feedback.test.js": "67155d0de4b5d620ec807407341018a0a94f49bbdabfe69b19b019bbdbac6718",
+    "hpe/tests/gotham-flow.test.js": "bf543a57098d078b2928a34d4ddd84771793f7456621ba9773bd5f9f73c0f80e",
+    "hpe/tests/housing-engine.test.js": "395d446b3bd3560d141cab3e0ded4134b337d523f30c89d9fbacf54694e76801",
+    "hpe/tests/housing-state.test.js": "ae34df1b1783d7820d6b176b0740b499d7190e32f471a10e87537cd772dd60a8",
+    "hpe/tests/performance.test.js": "490a7e9d383badec67ecd38778b474a66144ebd3a7edf5cf7d402123d95a18a0",
+    "hpe/tests/story.test.js": "d796587a50fc9d6b3ea0b728bcf8ffb737ca360655c2a14ba090ab092030f8f1",
+    "index.html": "e85fa0f47f68fde05e6d904ab5c69f9da73070e416e888cc0acfff4be5e47e9a",
+    "main.js": "ab81f4310c119c3a9f0ccfb555af22d25844a60311ce7cc7f71d1b37264ee39c",
+    "style.css": "08a16607470abd113168edb23836299eaf5b6a0b5b6e8be30da771071d5677ec"
+  },
+  "build_sha256": {
+    "assets/index-5kDtgZ9w.css": "c403574d8ec0d8cdb39a190d965d38a799a21d6ffae4deeae6f66e52e4c0b3a7",
+    "assets/index-Bwx8dBGv.js": "4a56ffe83c552ae91f8f4a9d7790e2360978c1ae0ca18ea415b6d39a5f92a1e9",
+    "index.html": "dac8f941eeba8e27ba7a26735251e46442cfc785fbd2937b8778b6a42448a09b"
+  }
+}
