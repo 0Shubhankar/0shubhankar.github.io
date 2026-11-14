@@ -454,3 +454,7 @@
     font-size:11px;
     line-height:1.4;
 }
+
+/* E05B isolated lifecycle preview */
+#financePanel select {display:block;width:100%;padding:5px;color:white;background:rgba(20,20,20,.8);border:1px solid #ffffff55;border-radius:4px;}
+#financePanel select option {background:#222;color:#fff;}

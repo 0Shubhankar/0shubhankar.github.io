@@ -1,6 +1,6 @@
 
-import * as G from './municipal/game.mjs';
-import * as E from './municipal/events.mjs';
+import * as G from './municipal-lifecycle/player.mjs';
+import * as E from './municipal-lifecycle/events.mjs';
 
 import {
     PROJECTS
@@ -12,7 +12,7 @@ export function installGame(
 
     const $=id=>document.getElementById(id);
 
-    const key='p42-municipal-v1';
+    const key='p42-municipal-e05b-v1';
 
     const money=n=>'$'+
         (n/1e6).toLocaleString(
@@ -167,6 +167,7 @@ export function installGame(
         }
 
         function annualRows(parent,r){
+            row(parent,'Maintenance expenditure',r.maintenance?.spent??0);
 
             row(parent,'Opening treasury',r.openingCash);
 
@@ -209,6 +210,26 @@ export function installGame(
             const b=E.debtBudget(s);
 
             const q=E.financing(s);
+            const lifecycle=addF('details','');
+            addF('summary','Infrastructure lifecycle',lifecycle);
+            addF('p','Demand grows 2% per year; effective capacity deteriorates 3% per year. Illustrative assumptions.',lifecycle);
+            row(lifecycle,'Maintenance required',b.maintenance.required);
+            row(lifecycle,'Maintenance funded',b.maintenance.spent);
+            const policy=addF('select','',lifecycle);
+            policy.setAttribute('aria-label','Annual maintenance policy');
+            for(const [value,label] of [['none','No maintenance'],['half','Half requirement'],['full','Full requirement if affordable'],['buffer5','Preserve $5M cash buffer']]){
+                const option=addF('option',label,policy);
+                option.value=value;
+            }
+            policy.value=s.maintenancePlan;
+            const apply=addF('button','Apply maintenance policy',lifecycle);
+            const notice=addF('p','Maintenance uses unrestricted cash before construction. Policy carries forward until changed.',lifecycle);
+            apply.onclick=()=>{
+                try{
+                    store(G.setMaintenance(game,policy.value));
+                    if(activeSite!==null)sitePanel(activeSite);else menu();
+                }catch(e){notice.textContent=e.message;}
+            };
 
             const spent=Object.values(s.decisions)
                 .reduce((a,d)=>a+d.cost,0);
@@ -514,7 +535,7 @@ export function installGame(
 
                 add(
                     'p',
-                    `${names[site.id]}: ${site.total.toLocaleString()} of ${(site.total+site.remaining).toLocaleString()} ${site.unit}`
+                    `${names[site.id]}: ${site.effective.toLocaleString('en-US',{maximumFractionDigits:2})} effective of ${site.target.toLocaleString('en-US',{maximumFractionDigits:2})} ${site.unit} required`
                 );
             }
 
@@ -622,7 +643,7 @@ export function installGame(
             title:names[id],
 
             text:
-                `${v.delivered.toLocaleString()} of ${v.target.toLocaleString()} ${v.unit} delivered.`,
+                `${v.delivered.toLocaleString('en-US',{maximumFractionDigits:2})} installed; ${(v.effective??v.delivered).toLocaleString('en-US',{maximumFractionDigits:2})} effective of ${v.target.toLocaleString('en-US',{maximumFractionDigits:2})} ${v.unit} required.`,
 
             detail:''
         };
@@ -650,7 +671,7 @@ export function installGame(
 
             'p',
 
-            `${v.delivered.toLocaleString()} of ${v.target.toLocaleString()} ${v.unit} delivered.`
+            `${v.delivered.toLocaleString('en-US',{maximumFractionDigits:2})} installed; ${(v.effective??v.delivered).toLocaleString('en-US',{maximumFractionDigits:2})} effective of ${v.target.toLocaleString('en-US',{maximumFractionDigits:2})} ${v.unit} required.`
         );
 
         const labels={
@@ -687,7 +708,7 @@ export function installGame(
 
             v.decision
 
-                ? `Current decision: ${v.decision.action==='full'?'Complete development':v.decision.action==='phase'?'Next phase':v.decision.action==='continue'?'Continue existing service':'Defer investment'}. Choose again to revise.`
+                ? `Current decision: ${v.decision.action==='full'?'Complete development':v.decision.action==='phase'?'Next phase':v.decision.action==='continue'?'Continue existing service':v.decision.action==='expand'?'Meet current demand':v.decision.action==='expand-phase'?'Partial expansion':'Defer investment'}. Choose again to revise.`
 
                 : 'Choose an intervention.'
         );
@@ -697,7 +718,7 @@ export function installGame(
         for(const o of v.options){
 
             const name=
-
+                o.id==='expand'||o.id==='expand-phase' ? o.label :
                 o.id==='full'
 
                     ? labels[id][0]
@@ -728,7 +749,7 @@ export function installGame(
                         )
                     );
 
-                    const n=p.phases.slice(
+                    const n=o.quantity??p.phases.slice(
 
                         game.city.completed[id],
 
