@@ -50,6 +50,7 @@
     "main.js": "a7c0da0667e1295fd12b5db9c50e4fc83c546f047be44a0042411747b33536eb",
     "migration-test-results.txt": "3fc2d3c0417d8a54f621e843e6781b807a52ed2c05d653a4b7d3b14b146246d6",
     "package.json": "89c47db7851f89caec72da4f215ebc21cf1e294aeef3b45d2583562d846ab035",
-    "style.css": "08a16607470abd113168edb23836299eaf5b6a0b5b6e8be30da771071d5677ec"
-  }
+    "style.css": "c4ae9d94ff5a2b95166517b8fcfea82bfb60ce4233c344977bfbb3525ea5e1fe"
+  },
+  "ui_revision": "transparent-game-ui-v1"
 }

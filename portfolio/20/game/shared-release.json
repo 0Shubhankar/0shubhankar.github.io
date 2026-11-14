@@ -53,6 +53,7 @@
     "narrative.js": "8e6597082abae856bd944eb5e9cea7a9d3b84caf1db340b259a89f1eda43a398",
     "package.json": "89c47db7851f89caec72da4f215ebc21cf1e294aeef3b45d2583562d846ab035",
     "park-visuals.js": "ef6ad2f91c30265f6588909bda944453967736bf8e6f0bcbff00bc1d5873665e",
-    "style.css": "da5e2a331db9bf575a90bbdb628171c801863ab5359de1c817c6ff71b0213db8"
-  }
+    "style.css": "685e8e3d0887c6974537e1b4bbf994efaf7c06e243383ed37b9c13f31a3593fb"
+  },
+  "ui_revision": "transparent-game-ui-v1"
 }

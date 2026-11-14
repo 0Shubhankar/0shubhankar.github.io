@@ -53,6 +53,7 @@
     "package.json": "6dc1b06d6b093e9cccb20bee06a93836eee0420ae26803ca2ce4065d82f070d1",
     "police-plan.js": "6657492134b413666c061af758110918ed541a998bce970acb70b64402c03d73",
     "police-visual.js": "be90a7caa8266925723124976acb4c7abd66573094298c5698e1c987e85a2982",
-    "style.css": "1344e69f619dbfcc3a0b910674c7b83b459e52440e14a1f6f7e3b3d477a96f3d"
-  }
+    "style.css": "8d75459044dffeef3a1da1106410dac31561ce90d979892bc66065f93de8a17c"
+  },
+  "ui_revision": "transparent-game-ui-v1"
 }

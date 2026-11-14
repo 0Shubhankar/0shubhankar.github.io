@@ -37,7 +37,7 @@
     "migration-test-results.txt": "fe24dce5241225b4067980b2365e14882346e2d983a62abb1ef38893b1814e4a",
     "narrative.js": "99b32073f9136dcbac994359e38d2a69e1e6351aa2f04b2e196458675a8cb5ed",
     "package.json": "6dc1b06d6b093e9cccb20bee06a93836eee0420ae26803ca2ce4065d82f070d1",
-    "style.css": "f98feaacebf7f4291a1af34a554d3e629a87bb2964cd72c0b1d68c2f53d659ae",
+    "style.css": "d725991e3ba5060fc2d53bb1932741505695c6201374e4342d8cb4e7bbc03b26",
     "ure/README.md": "76679382f9dfc0e442d1bc216fdd8dd64da53264c830e8a39da6738c41361a6e",
     "ure/demo.js": "d8ffa3778405d3be40cabe7de2da4ba17a9fb7a31c06a0d633ae4073cdf8188e",
     "ure/package.json": "2e86734a4c4fdbdd95bf96af93cbdb8ce217315a12c3ae1c9350753d9a53a18c",
@@ -48,5 +48,6 @@
     "ure/tests/economics.test.js": "747a85cb51ac9f87ed5c9c92e3f8be1058fe5569927f8edba4a22d7378b9812f",
     "ure/tests/engine.test.js": "7df367b7cf27bdc38fff8fcc2b1681b8d9f416614a6a2491ad9a31b8e87403ee",
     "ure/tests/preview.test.js": "094dccc0daa932fb00f505644ebb172779f68facb6726c2b18e7c5247c1db2c7"
-  }
+  },
+  "ui_revision": "transparent-game-ui-v1"
 }
