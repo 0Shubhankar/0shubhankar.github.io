@@ -1,49 +1,16 @@
 <!doctype html>
 <html lang="en">
 <head>
-<!-- Google Analytics: track full pages, not embedded copies of project demos. -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The $100 Million City</title>
+<meta http-equiv="refresh" content="0;url=./game/">
+<link rel="canonical" href="https://shubhankarsharma.com/portfolio/42/game/">
 <script>
-  if (window.self === window.top) {
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = window.gtag || function(){window.dataLayer.push(arguments);};
-    gtag('js', new Date());
-    gtag('config', 'G-GMKGJLY7GL');
-    var analyticsScript = document.createElement('script');
-    analyticsScript.async = true;
-    analyticsScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-GMKGJLY7GL';
-    document.head.appendChild(analyticsScript);
-  }
+window.location.replace("./game/");
 </script>
-
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#090d12"><meta name="description" content="The $100 Million Mistake — an interactive infrastructure investment simulation.">
-<title>The $100 Million Mistake! — Capital at Risk</title>
-<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<header class="mast"><a class="back" href="../">← PORTFOLIO</a><span class="mast-center">THE CAPITAL ALLOCATION SERIES · INVESTMENT DESK</span><span class="edition">THE INVESTMENT GAME</span></header>
-<main>
-<section class="intro"><div class="eyebrow"><span class="live-dot"></span> THE INVESTMENT COMMITTEE HAS CONVENED</div><div class="intro-row"><div><h1>THE <em>$100 MILLION</em><br>MISTAKE<span class="punct">!</span></h1><p class="lede">Five assets. Ten years. One hundred million dollars. Build a city-sized investment portfolio—and find out how expensive confidence can be.</p></div><div class="opening-stamp"><span>YOUR MANDATE</span><strong>$100<span>M</span></strong><small>INVEST WISELY. OR DON'T.</small></div></div></section>
-<section class="world-section" aria-label="Interactive city model"><div class="world-top"><div class="world-caption"><span class="tiny-label">YOUR ASSET UNIVERSE</span><strong id="cityTitle">The city is waiting for its investor.</strong></div><div class="world-key"><span><i class="key-dot owned"></i> OWNED</span><span><i class="key-dot unowned"></i> UNALLOCATED</span></div></div><div id="cityScene" class="scene"></div><div class="scene-footer"><span>FIVE WAYS TO MAKE MONEY. EVEN MORE WAYS TO LOSE IT.</span><span id="sceneYear">PRE-INVESTMENT / YEAR 0</span></div></section>
-<section class="top-stats" aria-label="Portfolio key metrics">
-<div class="stat"><small>PORTFOLIO NAV <button class="help" data-tip="Net asset value = cash + market value of owned assets (net of project debt) − emergency borrowing.">ⓘ</button></small><strong id="navStat">$100.0M</strong><span id="navDelta" class="neutral">Starting capital</span></div>
-<div class="stat"><small>CASH ON HAND <button class="help" data-tip="Uninvested cash plus actual operating and investing cash flows, after debt service and policy actions.">ⓘ</button></small><strong id="cashStat">$100.0M</strong><span id="cashSub">Available to invest</span></div>
-<div class="stat"><small>PROJECT DEBT <button class="help" data-tip="Outstanding debt financing your asset purchases, excluding any liquidity facility.">ⓘ</button></small><strong id="debtStat">$0.0M</strong><span id="debtSub">Project loan balances</span></div>
-<div class="stat"><small>MARK-TO-MARKET RETURN <button class="help" data-tip="Annualized compound change in total portfolio NAV since the initial $100M. Interim cash is retained inside NAV. Not a realized investor IRR.">ⓘ</button></small><strong id="returnStat">—</strong><span id="returnSub">Play a year to begin</span></div>
-</section>
-<section class="layout"><div class="main-column">
-<div class="panel allocation"><div class="section-heading"><div><span class="tiny-label">01 / THE ALLOCATION DESK</span><h2>Choose your bets.</h2><p>You can't buy everything. Set an <b>equity ticket</b> for each asset and decide how aggressively to finance it with debt. Each purchase is a fictional fractional stake in the asset.</p></div><span class="side-note">$ MILLIONS / REAL CASH FLOWS</span></div>
-<div id="assetRows" class="asset-rows"></div>
-<div class="alloc-summary"><div><small>EQUITY COMMITTED</small><strong id="committed">$0M</strong></div><div><small>DRY POWDER</small><strong id="unspent">$100M</strong></div><div><small>INITIAL ASSET DEBT</small><strong id="initialDebt">$0M</strong></div></div>
-</div>
-<div class="panel control-panel"><div class="section-heading"><div><span class="tiny-label">02 / THE MACRO MACHINE</span><h2>Pick your economic weather.</h2><p>Your scenarios alter growth, inflation, borrowing rates and bad surprises. The future doesn't ask permission.</p></div></div>
-<div id="scenarioButtons" class="scenario-grid"></div><div class="control-grid"><label>Starting base rate <output id="rateLabel">5.0%</output><input id="baseRate" type="range" min="2" max="11" step="0.5" value="5"></label><label>Inflation <output id="inflationLabel">2.5%</output><input id="inflation" type="range" min="0" max="9" step="0.5" value="2.5"></label><label>Discount-rate premium <output id="premiumLabel">4.0%</output><input id="premium" type="range" min="2" max="10" step="0.5" value="4"></label><label>Shock severity <output id="severityLabel">1.0×</output><input id="severity" type="range" min="0" max="2" step="0.25" value="1"></label></div>
-<div class="start-row"><div class="cash-warning" id="setupMessage">Keep some liquidity: debt service continues even when revenue disappoints.</div><button id="startBtn" class="primary">COMMIT YOUR CAPITAL <span>→</span></button></div></div>
-<div class="panel game-panel hidden" id="gamePanel"><div class="section-heading"><div><span class="tiny-label">03 / THE INVESTMENT COMMITTEE</span><h2 id="yearHeading">Year 1: The first test.</h2><p id="eventStory">Your portfolio is about to meet reality.</p></div><div class="year-bubble" id="yearBubble">01 / 10</div></div><div class="event-strip"><span id="eventKind">MARKET EVENT</span><strong id="eventTitle">A change in the forecast</strong><p id="eventDetail"></p></div><p class="decision-label">ONE CHOICE BEFORE THE YEAR CLOSES</p><div id="actions" class="action-grid"></div><div class="start-row"><p class="cash-warning" id="actionMessage">Choose a response. It may cost cash now to protect value later.</p><button id="advanceBtn" class="primary">CLOSE THE YEAR <span>→</span></button></div></div>
-<div class="panel ledger" id="ledgerPanel"><div class="section-heading"><div><span class="tiny-label">04 / OPEN THE BOOKS</span><h2>Follow every dollar.</h2><p>These are your investments' cash flows, not the host city's full financial statements.</p></div></div><div class="tabs" role="tablist"><button class="tab selected" data-tab="cash">CASH FLOW</button><button class="tab" data-tab="debt">DEBT & COVERAGE</button><button class="tab" data-tab="values">VALUATION</button></div><div id="ledgerContent"></div><div class="ledger-note">All amounts are fictional, rounded to one or two decimals. Reconciliations use unrounded numbers.</div></div>
-<div class="panel methodology"><div class="section-heading"><div><span class="tiny-label">05 / THE MATH UNDER THE HOOD</span><h2>No magic multipliers.</h2></div></div><div class="formula-grid"><div><b>Project cash flow</b><p>Revenue − operating costs − maintenance capital expenditure − cash taxes = unlevered cash flow.</p></div><div><b>Debt schedule</b><p>Annual debt service = interest on beginning loan balance + scheduled straight-line principal; remaining debt declines annually.</p></div><div><b>DCF value</b><p>Expected future project cash flows discounted at a risk-adjusted rate, plus discounted terminal value; deduct outstanding debt for equity value.</p></div><div><b>Municipal bond value</b><p>Present value of remaining fixed coupons and principal at the current required yield; duration is computed by repricing around that yield.</p></div><div><b>Debt service coverage</b><p>Cash available for debt service divided by annual scheduled interest and principal, for cash-generating infrastructure holdings.</p></div><div><b>Return & risk</b><p>Portfolio NAV, annualized NAV return, concentration, sensitivity to interest rates and a distribution of scenario shocks.</p></div></div><p class="method-foot">This is a deliberately simplified financial simulation, not an investment recommendation, tax model, credit rating or accurate forecast. Forecasts and terminal multiples are assumptions. Asset earnings, bonds and debt accounting are kept separate.</p></div>
-</div><aside class="right-column"><div class="sticky-stack"><div class="side-panel"><span class="tiny-label">MARKET TAPE</span><div class="tape-row"><span>SIMULATION YEAR</span><strong id="sideYear">00 / 10</strong></div><div class="tape-row"><span>BASE RATE</span><strong id="sideRate">5.0%</strong></div><div class="tape-row"><span>INFLATION</span><strong id="sideInflation">2.5%</strong></div><div class="tape-row"><span>CREDIT / RISK PREMIUM</span><strong id="sidePremium">4.0%</strong></div><div class="tape-row"><span>MARKET MOOD</span><strong id="sideMood">UNCERTAIN</strong></div></div><div class="side-panel"><span class="tiny-label">HOW'S THE FUND DOING?</span><div class="big-number" id="sideGain">$0.0M</div><p class="muted">Gain or loss versus the original $100 million</p><div class="horizontal"><span>DEBT / GROSS ASSETS</span><strong id="leverageStat">0.0%</strong></div><div class="track"><div class="fill" id="leverageFill"></div></div><div class="horizontal"><span>WEIGHT IN BIGGEST BET</span><strong id="concentrationStat">0.0%</strong></div><div class="track"><div class="fill gold" id="concentrationFill"></div></div><div class="horizontal"><span>MINIMUM PROJECT DSCR</span><strong id="dscrStat">—</strong></div><p class="muted" id="riskMessage">Some risks are invisible until you borrow.</p></div><div class="side-panel"><span class="tiny-label">PORTFOLIO NAV · HISTORY</span><div id="navChart" class="chart"></div><div id="timeline" class="timeline"></div></div><div class="side-panel small-side"><span class="tiny-label">YOUR BRIEF</span><p>Earn a return. Keep enough cash. Avoid a debt spiral. Don't forget that markets reprice assets even when their cash flows seem fine.</p><button id="restartBtn" class="secondary">↺ RESTART SIMULATION</button></div></div></aside></section>
-<section class="ending hidden" id="ending"><span class="tiny-label">THE INVESTMENT COMMITTEE · FINAL VERDICT</span><h2 id="endingTitle">A decade in the books.</h2><p id="endingText"></p><div id="endingMetrics" class="ending-metrics"></div><button id="endingRestart" class="primary">TAKE ANOTHER SHOT <span>↺</span></button></section>
-<footer><span>THE $100 MILLION MISTAKE! / AN INTERACTIVE URBAN CAPITAL EXPERIMENT</span><span>FICTIONAL FINANCIAL SIMULATION · NOT INVESTMENT ADVICE</span></footer></main>
-<script src="game.js"></script>
-</body></html>
+<a href="./game/">Open The $100 Million City</a>
+</body>
+</html>
