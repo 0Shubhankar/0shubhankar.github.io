@@ -1,0 +1,5 @@
+{"name":"baseline","period":5,"households":106147,"stock":103822,"homeless":834,"budget":120000000,"innerRent":2770.9041222315536}
+{"name":"density","period":5,"households":106147,"stock":107554,"homeless":795,"budget":120000000,"innerRent":1978.269887706258}
+{"name":"rentControl","period":5,"households":106147,"stock":103822,"homeless":795,"budget":120000000,"innerRent":2086.6933337400005}
+{"name":"affordableHousing","period":5,"households":106147,"stock":103822,"homeless":832,"budget":72000000,"innerRent":2770.9041222315536}
+{"name":"mixed","period":5,"households":106147,"stock":107566,"homeless":728,"budget":93200000,"innerRent":1945.0408408357835}

@@ -1,0 +1,19 @@
+# Spudsville — Crime Prevention Engine 0.1
+
+Standalone ES modules; Node 18+. No dependencies. `npm test`, `node demo.js`.
+
+Original source: https://github.com/0shubhankar/0shubhankar.github.io/blob/main/portfolio/21/crime-policy-game.html
+
+## Narrative mapping
+`story.js` reconstructs the original 3 challenges and all substantive choice edges. Labels are shortened paraphrases. Original one-option transitions are collapsed; original forced restarts after hardline enforcement, expanded monitoring, security-first decisions and expanded media campaigns continue to the next challenge instead. The latter two security-first choices continue to the corresponding existing final dilemma (xa or xb); expanded media goes to xc. These continuation mappings are new design choices, not original story branches. No scripted wins or losses. Each chapter settles two fictional annual periods, regardless of the number of choices. Reviews contain prior chapter indicators, current indicators, matched no-policy results and performance. `choose` returns an independent state; caller controls review display before presenting the next node. `routes` enumerates 96 adapted paths.
+
+## Model and assumptions
+Population fixed at 50,000. Initial annual incident counts: 1,200 property and 240 violent incidents; initial reported count 800 is a scenario assumption. Baseline rights score 75 at start, transitioning to 70 under the annual rule. Budget 30 million fictional dollars, no new revenues, all policy costs paid once; recurring costs and actual staffing are not modelled. Index variables range 0–100. Policy table uses invented costs and changes to capacity, cooperation, oversight, monitoring exposure, rights protections, prevention commitment, communications and coercion burden. These are fictional aggregate parameters, not tactical surveillance or enforcement instructions.
+
+Each period prevention capacity moves 25% toward committed prevention; its previous value affects crime in the subsequent period. Pressure = max(0, coercion + .55 monitoring - .65 oversight - .4 rights). Rights and trust are illustrative institutional indices; see exact equations in `crime-engine.js`. Annual baseline incident growth is 2.5% property and 2% violent, with a bounded illustrative policy adjustment (-.12 to .18). Reporting fraction = clamp(.35 + .004 trust + .0015 monitoring, .2, .95). Reported counts are not used as the underlying crime outcome. Response minutes and perceived safety are proxies, not measured response times or public opinion. No inference from ethnicity, income, or protected characteristics. No geographic targeting or operational surveillance model.
+
+## Assessment
+Identical no-policy run at each review year. Each component starts at 50 for baseline; safety adds percentage reduction in total underlying incidents; liberties and trust add index difference; prevention adds realized capacity difference; fiscal subtracts 50 times spending share. All components clipped 0–100. Weights .30/.25/.20/.15/.10. No objective interpretation of these scores; no victory threshold. Score range is narrow in initial scenarios and budget is generous (12–21 million remaining). Fiscal score measures spending, not cost-effectiveness, and can penalize valuable investment. Stakeholder, spatial, detailed offence and actual recurring cost models are pending. Neither coefficients nor scoring weights empirically calibrated; not a real-world prediction tool. Source code is the authoritative mathematical specification.
+
+## Integration
+Original site and shared UUE untouched. UI should call createGame(), read nodes[game.node], call choose(game,index), render new reviews before moving on, and use metrics and assess for comparison. No UUE dependencies yet. Next release: night-time cinematic game, unnumbered scene titles, no internal branding, scenario-specific visuals and review UI. 

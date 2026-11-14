@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createGame,FLOW} from '../gotham-flow.js';
+test('six chapters preserve original choices and add meaningful interventions',()=>{const g=createGame();let periods=[],steps=[];while(g.view().step!=='reviewFinal'){const v=g.view();steps.push(v.step);if(v.review)periods.push(v.current.period);g.choose(0);}periods.push(g.view().current.period);assert.deepEqual(periods,[2,4,6,8,10,12]);assert.ok(['start','rent','s','access','x','legacy'].every(x=>steps.includes(x)));assert.ok(g.view().current.budget>=0);});

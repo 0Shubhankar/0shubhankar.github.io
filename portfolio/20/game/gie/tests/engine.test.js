@@ -1,0 +1,10 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {initial,choose,advance,validate,indicators,baseline,assessment} from '../engine.js';import {paths} from '../story.js';
+test('initial land and cash reconcile',()=>assert.ok(validate(initial())));
+test('all 96 routes finish six years with valid balances',()=>{const routes=[...paths()];assert.equal(routes.length,96);for(const p of routes){const s=p.reduce(choose,initial());assert.equal(s.node,'finished');assert.equal(s.year,6);assert.ok(validate(s));assert.ok(s.cash>=0);assert.ok(assessment(s).score>=0&&assessment(s).score<=100);}});
+test('invalid decision leaves original unchanged',()=>{const s=initial(),b=JSON.stringify(s);assert.throws(()=>choose(s,'w1'));assert.equal(JSON.stringify(s),b)});
+test('targeted investment improves low-income access more than equal allocation',()=>{const s=['a','a2','a22','s2','s2a'].reduce(choose,initial());assert.ok(indicators(choose(s,'w1')).lowAccess>indicators(choose(s,'w2')).lowAccess)});
+test('naming rights raise sponsorship and control relative to limits',()=>{const s=['a','a2','a22','s1','s1b'].reduce(choose,initial());const a=choose(s,'s1bb'),b=choose(s,'s1ba');assert.ok(a.partner>b.partner&&a.corporateControl>b.corporateControl)});
+test('baseline score neutral',()=>assert.equal(assessment(advance(initial(),6)).score,50));
+test('deterministic replay',()=>{const p=[...paths()][0];assert.deepEqual(p.reduce(choose,initial()),p.reduce(choose,initial()))});
+test('tax relief reduces recurring tax',()=>{const s=['a','a2','a22','s1','s1a'].reduce(choose,initial());assert.ok(indicators(choose(s,'s1aa')).annualTax<indicators(choose(s,'s1ab')).annualTax)});
+test('corporate naming rights lower governance proxy relative to limits',()=>{const s=['a','a2','a22','s1','s1b'].reduce(choose,initial());assert.ok(indicators(choose(s,'s1bb')).governanceProxy<indicators(choose(s,'s1ba')).governanceProxy)});

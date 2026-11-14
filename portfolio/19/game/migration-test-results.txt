@@ -1,0 +1,174 @@
+
+> test
+> node --test tests/*.test.js
+
+TAP version 13
+# Subtest: six chapters preserve original choices and add meaningful interventions
+ok 1 - six chapters preserve original choices and add meaningful interventions
+  ---
+  duration_ms: 48.74072
+  ...
+# Subtest: visual plan reconciles stock and resets to no construction
+ok 2 - visual plan reconciles stock and resets to no construction
+  ---
+  duration_ms: 9.321295
+  ...
+# Subtest: matched stakeholder benchmark is neutral and missing homeowner metric explicit
+ok 3 - matched stakeholder benchmark is neutral and missing homeowner metric explicit
+  ---
+  duration_ms: 5.60227
+  ...
+# Subtest: stakeholder trade-offs respond to rent changes
+ok 4 - stakeholder trade-offs respond to rent changes
+  ---
+  duration_ms: 4.032896
+  ...
+# Subtest: density changes five-period stock
+ok 5 - density changes five-period stock
+  ---
+  duration_ms: 10.735233
+  ...
+# Subtest: baseline homelessness evolves gradually
+ok 6 - baseline homelessness evolves gradually
+  ---
+  duration_ms: 1.986231
+  ...
+# Subtest: all extended decision routes reach a review and reset
+ok 7 - all extended decision routes reach a review and reset
+  ---
+  duration_ms: 7214.236295
+  ...
+# Subtest: baseline and independent snapshots
+ok 8 - baseline and independent snapshots
+  ---
+  duration_ms: 3.775144
+  ...
+# Subtest: all policies accepted
+ok 9 - all policies accepted
+  ---
+  duration_ms: 5.025474
+  ...
+# Subtest: failed policy atomic
+ok 10 - failed policy atomic
+  ---
+  duration_ms: 1.769899
+  ...
+# Subtest: rent cap respected
+ok 11 - rent cap respected
+  ---
+  duration_ms: 1.59414
+  ...
+# Subtest: construction completes next period
+ok 12 - construction completes next period
+  ---
+  duration_ms: 1.097766
+  ...
+# Subtest: long run accounting and budget
+ok 13 - long run accounting and budget
+  ---
+  duration_ms: 16.97224
+  ...
+# Subtest: deterministic replay and reset
+ok 14 - deterministic replay and reset
+  ---
+  duration_ms: 3.810268
+  ...
+# Subtest: shelters do not create permanent housing
+ok 15 - shelters do not create permanent housing
+  ---
+  duration_ms: 0.594115
+  ...
+# Subtest: budget constraint
+ok 16 - budget constraint
+  ---
+  duration_ms: 0.474386
+  ...
+# Subtest: inclusionary construction
+ok 17 - inclusionary construction
+  ---
+  duration_ms: 0.765446
+  ...
+# Subtest: city baseline reconciles
+ok 18 - city baseline reconciles
+  ---
+  duration_ms: 5.116076
+  ...
+# Subtest: neighbourhood indicators
+ok 19 - neighbourhood indicators
+  ---
+  duration_ms: 0.241067
+  ...
+# Subtest: independent state instances
+ok 20 - independent state instances
+  ---
+  duration_ms: 0.233796
+  ...
+# Subtest: reject negative
+ok 21 - reject negative
+  ---
+  duration_ms: 0.40771
+  ...
+# Subtest: reject overvacancy
+ok 22 - reject overvacancy
+  ---
+  duration_ms: 0.229086
+  ...
+# Subtest: reject status
+ok 23 - reject status
+  ---
+  duration_ms: 0.208239
+  ...
+# Subtest: reject income
+ok 24 - reject income
+  ---
+  duration_ms: 0.293771
+  ...
+# Subtest: reject duplicate
+ok 25 - reject duplicate
+  ---
+  duration_ms: 0.210791
+  ...
+# Subtest: reject invalidRent
+ok 26 - reject invalidRent
+  ---
+  duration_ms: 0.330362
+  ...
+# Subtest: zero stock returns undefined vacancy as null
+ok 27 - zero stock returns undefined vacancy as null
+  ---
+  duration_ms: 0.347345
+  ...
+# Subtest: matched baseline has score 55 and no policy difference
+ok 28 - matched baseline has score 55 and no policy difference
+  ---
+  duration_ms: 18.429384
+  ...
+# Subtest: rent control improves affordability score and baseline is independent
+ok 29 - rent control improves affordability score and baseline is independent
+  ---
+  duration_ms: 6.83226
+  ...
+# Subtest: all extended paths have bounded deterministic assessments at all six reviews
+ok 30 - all extended paths have bounded deterministic assessments at all six reviews
+  ---
+  duration_ms: 9694.22683
+  ...
+# Subtest: new policy mechanisms have tracked state
+ok 31 - new policy mechanisms have tracked state
+  ---
+  duration_ms: 9.245276
+  ...
+# Subtest: review includes chapter starting budget and time
+ok 32 - review includes chapter starting budget and time
+  ---
+  duration_ms: 11.595872
+  ...
+1..32
+# tests 32
+# suites 0
+# pass 32
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 9894.653285

@@ -151,7 +151,7 @@ const portfolioItems = [
         title: "Gotham City Housing Crisis: A Planner’s Gamble",
         titleLink: "19/housing-policy-game.html",
         tags: ["Housing Policy Game", "Urban Housing Crisis", "Decision-Making Game", "Gentrification Challenges", "Affordable Housing Policies", "Rent Control Strategies", "High-Density Development", "Homelessness Solutions", "City Management Simulation", "Inclusionary Zoning Policies", "Community Development Initiatives", "Player Choices"],
-        image: "images/previews/19.webp",
+        image: "images/previews/gallery19.png",
     },
     {
         projectType: "Civic Data Innovation", //  
@@ -159,7 +159,7 @@ const portfolioItems = [
         title: "Greenville Green: Balancing Parks and Progress",
         titleLink: "20/green-space-policy-game.html",
         tags: ["Green Policy Game", "Environmental Justice", "Green Space Development", "Urban Planning Simulation", "Economic Development Balance", "Community Engagement", "Sustainable City Planning", "Park Maintenance Challenges", "Volunteer Programs", "Public-Private Partnerships", "Equitable Resource Allocation", "Urban Green Infrastructure"],
-        image: "images/previews/20.webp",
+        image: "images/previews/gallery20.png",
     },
     {
         projectType: "Data-Driven Insights", //  
@@ -167,7 +167,7 @@ const portfolioItems = [
         title: "Spudsville Under Siege: A Crime Prevention Dilemma",
         titleLink: "21/crime-policy-game.html",
         tags: ["Crime Policy Game", "Crime Prevention", "Public Safety", "Civil Liberties", "Law Enforcement Strategies", "Surveillance and Privacy", "Community Policing", "Media and Public Perception", "Political Leadership", "Social Programs for Crime Reduction", "Ethics in Policing", "Public Policy Simulation"],
-        image: "images/previews/21.webp",
+        image: "images/previews/gallery21.png",
     },
     {
         projectType: "Civic Data Innovation", //  
@@ -183,7 +183,7 @@ const portfolioItems = [
         title: "Revitalize Central: A Mayor's Dilemma",
         titleLink: "23/downtown-policy-game.html",
         tags: ["Urban Revitalization", "Downtown Development", "Public-Private Partnerships", "Economic Incentives", "Mixed-Use Development", "Zoning Reforms", "Affordable Housing", "Economic Development Zones", "Sustainable Growth", "Stakeholder Management", "Urban Planning", "Infrastructure Improvements"],
-        image: "images/previews/23.webp",
+        image: "images/previews/gallery23.png",
     },
     {
         projectType: "Geospatial Analysis", //  

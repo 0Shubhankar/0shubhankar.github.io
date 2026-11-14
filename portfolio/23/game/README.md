@@ -1,0 +1,15 @@
+# Revitalize Central — cinematic preview 0.3
+
+Run from shared UUE root: `npm run dev -- --port 5180 --strictPort`, then open `/p23-cinematic/`. Uses shared CityEngine and Three.js; no UUE files modified. Daylight default, unnumbered titles, no internal branding. Original website page is untouched.
+
+The URE engine and all 26 original substantive decision options are included. Three chapters, two annual periods per chapter. Costs and mechanisms before each decision, chapter comparisons, matched no-policy scoring, and stakeholder outcomes. See `ure/README.md` for equations, units, limitations and model assumptions.
+
+Visual adapter selects existing commercial buildings where available, and uses a separate development/civic anchor where available. Three facade samples per selected building illustrate the current occupancy fraction, rounded to available display slots. Shutters represent vacant shops; lit windows and awnings represent occupied shops. A roof-level exhibit represents pending and completed development; it is not physical construction, commercial floor area or a parcel model. UUE street activity is ambient; footfall remains an index, not a pedestrian simulation. Sparse layouts may reuse anchors. All model values and visual proxies are fictional. The visual adapter does not modify the city state or geometry of original buildings.
+
+Tests: `cd ure && npm test`. All 96 adapted paths tested; syntax checks for preview modules. Browser rendering and local geometry scale/occlusion require acceptance testing on the user's Mac. Not a production release or empirically calibrated model.
+
+## 0.4 facade refinement
+Distinct vacancy shutters and TO LET signs, local-business and other-retail signs, striped awnings, display shelves and facade-attached planters gated by accessibility. Roof exhibit adds scaffold levels and a miniature crane within the footprint. Counts reconcile to the engine's rounded occupancy and local-business shares. Signs are generic illustrative labels, not modelled business sectors. No sidewalk or traffic geometry changes; no actual pedestrian footfall model. URE unchanged. Browser acceptance remains required.
+
+## Central City 0.8 consolidated update
+All original branches retained. Commercial economics use a 100 m2 representative premise, illustrative sales and cost structure, 7.5% capitalization rate, 1.2% annual property tax, and $360k construction cost. Estimated daily visits scale with vitality (10,000 at baseline); storefront visitor figures are stationary representative exhibits, not routed pedestrians. Operating yield influences commercial completions; negative margins increase exits; the original local business cohort is tracked separately from new entrants. Rent-related closures are a proxy, not observed relocations. PPP payments are allocated proportionately when annual expenses cannot be funded; private commitments are not realized cash flows or investor IRR. All parameters are illustrative and require empirical calibration.

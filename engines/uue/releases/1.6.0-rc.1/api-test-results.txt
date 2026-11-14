@@ -1,0 +1,45 @@
+TAP version 13
+# Subtest: raw access, project-owned objects, cleanup and independent engine lifecycle
+ok 1 - raw access, project-owned objects, cleanup and independent engine lifecycle
+  ---
+  duration_ms: 2.002216
+  ...
+# Subtest: asset registry and behaviours
+ok 2 - asset registry and behaviours
+  ---
+  duration_ms: 0.362245
+  ...
+# Subtest: extension cleanup and event unsubscribe
+ok 3 - extension cleanup and event unsubscribe
+  ---
+  duration_ms: 0.321841
+  ...
+# Subtest: camera jump and cancelled flight restore controls
+ok 4 - camera jump and cancelled flight restore controls
+  ---
+  duration_ms: 0.482233
+  ...
+# Subtest: camera animation completes and restores controls
+ok 5 - camera animation completes and restores controls
+  ---
+  duration_ms: 0.303448
+  ...
+# Subtest: simulation adapter reports results without governing domain state
+ok 6 - simulation adapter reports results without governing domain state
+  ---
+  duration_ms: 0.770132
+  ...
+# Subtest: night, activity and optional engine disposal
+ok 7 - night, activity and optional engine disposal
+  ---
+  duration_ms: 0.259338
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 105.114041

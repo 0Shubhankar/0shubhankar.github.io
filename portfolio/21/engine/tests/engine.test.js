@@ -1,0 +1,10 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {nodes,routes} from '../story.js';import {initial,apply,advance,metrics,baseline,assess,createGame,choose,policies} from '../crime-engine.js';
+test('every source branch has a defined policy and target',()=>{for(const n of Object.values(nodes))for(const e of n.options){assert.ok(policies[e.policy]);assert.ok(e.next==='end'||nodes[e.next]);}});
+test('all 96 routes finish with 3 reviews, six years, budget reconciliation, bounded indices',()=>{assert.equal(routes().length,96);for(const path of routes()){let g=createGame();for(const i of path)g=choose(g,i);assert.equal(g.node,'end');assert.equal(g.state.year,6);assert.equal(g.reviews.length,3);assert.ok(g.state.budget>=0);assert.ok(Math.abs(g.state.budget+g.state.spent-30)<1e-9);for(const r of g.reviews){assert.ok(r.player.reported<=r.player.incidents);assert.ok(r.score>=0&&r.score<=100);for(const v of Object.values(r.dimensions))assert.ok(v>=0&&v<=100);}}});
+test('baseline is neutral',()=>assert.equal(assess(baseline(6)).score,50));
+test('policy costs atomic',()=>{const s=initial();assert.throws(()=>apply({...s,budget:0},'police'));assert.equal(s.budget,30);assert.equal(apply(s,'police').budget,27);});
+test('prevention has lag',()=>{const a=apply(initial(),'social');const x=advance(a),y=advance(x);assert.equal(x.property,advance(initial()).property);assert.ok(y.property<baseline(2).property);});
+test('rights and trust respond to coercion and oversight',()=>{const hard=advance(apply(initial(),'hardline'));const safe=advance(apply(initial(),'accountability'));assert.ok(hard.liberties<safe.liberties);assert.ok(hard.trust<safe.trust);});
+test('reporting distinct from underlying incidents',()=>{const a=advance({...initial(),trust:80}),b=advance({...initial(),trust:30});assert.ok(a.reported/a.property>b.reported/b.property);});
+test('deterministic independent replay',()=>{const run=()=>routes()[0].reduce(choose,createGame());assert.deepEqual(run(),run());assert.equal(createGame().state.year,0);});
+test('invalid decisions rejected',()=>assert.throws(()=>choose(createGame(),3)));

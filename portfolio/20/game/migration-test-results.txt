@@ -1,0 +1,99 @@
+
+> greenville-green-engine@0.1.0 test
+> node --test tests/*.test.js
+
+TAP version 13
+# Subtest: network catchment uses street distance, not diagonal distance
+ok 1 - network catchment uses street distance, not diagonal distance
+  ---
+  duration_ms: 1.716493
+  ...
+# Subtest: canopy increases cooling and annual carbon estimate
+ok 2 - canopy increases cooling and annual carbon estimate
+  ---
+  duration_ms: 0.609877
+  ...
+# Subtest: land conversion reduces storm runoff relative to developed land
+ok 3 - land conversion reduces storm runoff relative to developed land
+  ---
+  duration_ms: 0.367123
+  ...
+# Subtest: condition improves habitat proxy
+ok 4 - condition improves habitat proxy
+  ---
+  duration_ms: 1.156551
+  ...
+# Subtest: stakeholder baseline neutral and all routes bounded
+ok 5 - stakeholder baseline neutral and all routes bounded
+  ---
+  duration_ms: 293.347085
+  ...
+# Subtest: initial land and cash reconcile
+ok 6 - initial land and cash reconcile
+  ---
+  duration_ms: 1.405601
+  ...
+# Subtest: all 96 routes finish six years with valid balances
+ok 7 - all 96 routes finish six years with valid balances
+  ---
+  duration_ms: 301.740921
+  ...
+# Subtest: invalid decision leaves original unchanged
+ok 8 - invalid decision leaves original unchanged
+  ---
+  duration_ms: 0.40132
+  ...
+# Subtest: targeted investment improves low-income access more than equal allocation
+ok 9 - targeted investment improves low-income access more than equal allocation
+  ---
+  duration_ms: 2.725068
+  ...
+# Subtest: naming rights raise sponsorship and control relative to limits
+ok 10 - naming rights raise sponsorship and control relative to limits
+  ---
+  duration_ms: 2.58275
+  ...
+# Subtest: baseline score neutral
+ok 11 - baseline score neutral
+  ---
+  duration_ms: 0.374808
+  ...
+# Subtest: deterministic replay
+ok 12 - deterministic replay
+  ---
+  duration_ms: 7.261595
+  ...
+# Subtest: tax relief reduces recurring tax
+ok 13 - tax relief reduces recurring tax
+  ---
+  duration_ms: 2.789142
+  ...
+# Subtest: corporate naming rights lower governance proxy relative to limits
+ok 14 - corporate naming rights lower governance proxy relative to limits
+  ---
+  duration_ms: 2.65502
+  ...
+# Subtest: every original choice has a concrete description
+ok 15 - every original choice has a concrete description
+  ---
+  duration_ms: 1.448448
+  ...
+# Subtest: every route has three reviews at two-year intervals
+ok 16 - every route has three reviews at two-year intervals
+  ---
+  duration_ms: 260.194903
+  ...
+# Subtest: chapter entry and labels are defined
+ok 17 - chapter entry and labels are defined
+  ---
+  duration_ms: 0.28939
+  ...
+1..17
+# tests 17
+# suites 0
+# pass 17
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 435.899993

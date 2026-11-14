@@ -1,0 +1,8 @@
+import {createGame} from './gotham-flow.js';
+const game=createGame(),story=document.querySelector('#storyText'),options=document.querySelector('#optionsContainer');
+const metrics=document.createElement('div');metrics.id='housingMetrics';metrics.setAttribute('aria-live','polite');document.body.insertBefore(metrics,story);
+const fmt=n=>Math.round(n).toLocaleString('en-US'),money=n=>'$'+fmt(n);let timer;
+function render(){clearTimeout(timer);const v=game.view(),c=v.current;metrics.hidden=v.step==='start';metrics.textContent=`Housing: ${fmt(c.housingUnits)}  |  Households: ${fmt(c.households)}  |  Inner-city rent: ${money(c.zones[1].rent)}/mo  |  Homeless households: ${fmt(c.homeless)}  |  Budget: ${money(c.budget)}`;
+ let text=v.text;if(v.review){const b=v.initial;text+=`\n\nSince the start: housing ${fmt(b.housingUnits)} → ${fmt(c.housingUnits)}; inner-city rent ${money(b.zones[1].rent)} → ${money(c.zones[1].rent)}; homeless households ${fmt(b.homeless)} → ${fmt(c.homeless)}. Emergency shelter places: ${fmt(c.zones.reduce((a,z)=>a+z.shelterBeds,0))}.\n\nIllustrative model, not a real-world forecast.`;if(v.notes.length)text+='\n\nModel limitations: '+v.notes.join(' ');}
+ options.replaceChildren();options.style.opacity='0';story.textContent='';const show=()=>{story.textContent=text;for(const [i,o] of v.options.entries()){const b=document.createElement('button');b.className='button';b.textContent=o.label;b.onclick=()=>{try{game.choose(i);render();}catch(e){story.textContent=text+'\n\nCannot implement this choice: '+e.message;}};options.append(b);}options.style.opacity='1';};if(v.step==='start'){let i=0;const tick=()=>{story.textContent=text.slice(0,++i);if(i<text.length)timer=setTimeout(tick,12);else show();};tick();}else show();}
+render();

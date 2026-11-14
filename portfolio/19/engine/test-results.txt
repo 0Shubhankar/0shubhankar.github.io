@@ -1,0 +1,152 @@
+
+> test
+> node --test tests/*.test.js
+
+TAP version 13
+# Subtest: density changes five-period stock
+ok 1 - density changes five-period stock
+  ---
+  duration_ms: 5.896522
+  type: 'test'
+  ...
+# Subtest: baseline homelessness evolves gradually
+ok 2 - baseline homelessness evolves gradually
+  ---
+  duration_ms: 1.057638
+  type: 'test'
+  ...
+# Subtest: all original decision routes reach a review and reset
+ok 3 - all original decision routes reach a review and reset
+  ---
+  duration_ms: 118.638102
+  type: 'test'
+  ...
+# Subtest: baseline and independent snapshots
+ok 4 - baseline and independent snapshots
+  ---
+  duration_ms: 1.704449
+  type: 'test'
+  ...
+# Subtest: all policies accepted
+ok 5 - all policies accepted
+  ---
+  duration_ms: 1.882481
+  type: 'test'
+  ...
+# Subtest: failed policy atomic
+ok 6 - failed policy atomic
+  ---
+  duration_ms: 0.899965
+  type: 'test'
+  ...
+# Subtest: rent cap respected
+ok 7 - rent cap respected
+  ---
+  duration_ms: 0.786769
+  type: 'test'
+  ...
+# Subtest: construction completes next period
+ok 8 - construction completes next period
+  ---
+  duration_ms: 0.490692
+  type: 'test'
+  ...
+# Subtest: long run accounting and budget
+ok 9 - long run accounting and budget
+  ---
+  duration_ms: 6.447373
+  type: 'test'
+  ...
+# Subtest: deterministic replay and reset
+ok 10 - deterministic replay and reset
+  ---
+  duration_ms: 0.714362
+  type: 'test'
+  ...
+# Subtest: shelters do not create permanent housing
+ok 11 - shelters do not create permanent housing
+  ---
+  duration_ms: 0.240745
+  type: 'test'
+  ...
+# Subtest: budget constraint
+ok 12 - budget constraint
+  ---
+  duration_ms: 0.330207
+  type: 'test'
+  ...
+# Subtest: inclusionary construction
+ok 13 - inclusionary construction
+  ---
+  duration_ms: 0.472646
+  type: 'test'
+  ...
+# Subtest: city baseline reconciles
+ok 14 - city baseline reconciles
+  ---
+  duration_ms: 2.970033
+  type: 'test'
+  ...
+# Subtest: neighbourhood indicators
+ok 15 - neighbourhood indicators
+  ---
+  duration_ms: 0.205643
+  type: 'test'
+  ...
+# Subtest: independent state instances
+ok 16 - independent state instances
+  ---
+  duration_ms: 0.248766
+  type: 'test'
+  ...
+# Subtest: reject negative
+ok 17 - reject negative
+  ---
+  duration_ms: 0.392518
+  type: 'test'
+  ...
+# Subtest: reject overvacancy
+ok 18 - reject overvacancy
+  ---
+  duration_ms: 0.214756
+  type: 'test'
+  ...
+# Subtest: reject status
+ok 19 - reject status
+  ---
+  duration_ms: 0.2238
+  type: 'test'
+  ...
+# Subtest: reject income
+ok 20 - reject income
+  ---
+  duration_ms: 0.1633
+  type: 'test'
+  ...
+# Subtest: reject duplicate
+ok 21 - reject duplicate
+  ---
+  duration_ms: 0.195778
+  type: 'test'
+  ...
+# Subtest: reject invalidRent
+ok 22 - reject invalidRent
+  ---
+  duration_ms: 0.493566
+  type: 'test'
+  ...
+# Subtest: zero stock returns undefined vacancy as null
+ok 23 - zero stock returns undefined vacancy as null
+  ---
+  duration_ms: 0.492174
+  type: 'test'
+  ...
+1..23
+# tests 23
+# suites 0
+# pass 23
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 224.26623

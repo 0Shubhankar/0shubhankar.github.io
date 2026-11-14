@@ -1,0 +1,4 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createGame,FLOW} from '../gotham-flow.js';import {createEngine} from '../housing-engine.js';
+test('density changes five-period stock',()=>{const a=createEngine(),b=createEngine();b.applyPolicy('density','inner',.4);for(let i=0;i<5;i++){a.advance();b.advance();}assert.ok(b.indicators().housingUnits>a.indicators().housingUnits);});
+test('baseline homelessness evolves gradually',()=>{const e=createEngine();for(let i=0;i<5;i++)e.advance();assert.ok(e.indicators().homeless<2000);});
+test('all extended decision routes reach a review and reset',()=>{let count=0;function walk(path){const g=createGame();for(const i of path)g.choose(i);const v=g.view();if(v.step==='reviewFinal'){assert.equal(v.current.period,12);g.choose(0);assert.equal(g.view().current.period,0);count++;return;}for(let i=0;i<FLOW[v.step].options.length;i++)walk([...path,i]);}walk([]);assert.equal(count,768);});

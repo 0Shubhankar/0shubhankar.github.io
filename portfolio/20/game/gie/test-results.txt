@@ -1,0 +1,68 @@
+
+> greenville-green-engine@0.1.0 test
+> node --test tests/*.test.js
+
+TAP version 13
+# Subtest: initial land and cash reconcile
+ok 1 - initial land and cash reconcile
+  ---
+  duration_ms: 1.634043
+  type: 'test'
+  ...
+# Subtest: all 96 routes finish six years with valid balances
+ok 2 - all 96 routes finish six years with valid balances
+  ---
+  duration_ms: 48.09666
+  type: 'test'
+  ...
+# Subtest: invalid decision leaves original unchanged
+ok 3 - invalid decision leaves original unchanged
+  ---
+  duration_ms: 0.452315
+  type: 'test'
+  ...
+# Subtest: targeted investment improves low-income access more than equal allocation
+ok 4 - targeted investment improves low-income access more than equal allocation
+  ---
+  duration_ms: 0.810552
+  type: 'test'
+  ...
+# Subtest: naming rights raise sponsorship and control relative to limits
+ok 5 - naming rights raise sponsorship and control relative to limits
+  ---
+  duration_ms: 0.499294
+  type: 'test'
+  ...
+# Subtest: baseline score neutral
+ok 6 - baseline score neutral
+  ---
+  duration_ms: 0.106486
+  type: 'test'
+  ...
+# Subtest: deterministic replay
+ok 7 - deterministic replay
+  ---
+  duration_ms: 1.857491
+  type: 'test'
+  ...
+# Subtest: tax relief reduces recurring tax
+ok 8 - tax relief reduces recurring tax
+  ---
+  duration_ms: 0.622496
+  type: 'test'
+  ...
+# Subtest: corporate naming rights lower governance proxy relative to limits
+ok 9 - corporate naming rights lower governance proxy relative to limits
+  ---
+  duration_ms: 0.671588
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 111.831373

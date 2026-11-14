@@ -1,0 +1,103 @@
+{
+  "paths": 96,
+  "min": 46.410393146223825,
+  "max": 66.57208699699798,
+  "mean": 56.97652673044012,
+  "minBudget": 12,
+  "maxBudget": 21,
+  "examples": [
+    {
+      "path": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "score": 57.87149975870876,
+      "dimensions": {
+        "safety": 74.36823104693141,
+        "liberties": 48.45,
+        "trust": 63.07598555647999,
+        "prevention": 50,
+        "fiscal": 33.33333333333333
+      },
+      "player": {
+        "year": 6,
+        "incidents": 1257,
+        "property": 1034,
+        "violent": 223,
+        "reported": 801,
+        "trust": 68.07598555647999,
+        "liberties": 68.45,
+        "prevention": 0,
+        "perceivedSafety": 53.55649638912,
+        "responseMinutes": 8.746355685131196,
+        "budget": 20,
+        "spent": 10
+      },
+      "benchmark": {
+        "year": 6,
+        "incidents": 1662,
+        "property": 1392,
+        "violent": 270,
+        "reported": 972,
+        "trust": 55,
+        "liberties": 70,
+        "prevention": 0,
+        "perceivedSafety": 45.225,
+        "responseMinutes": 12,
+        "budget": 30,
+        "spent": 0
+      }
+    },
+    {
+      "path": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "score": 59.07410128849876,
+      "dimensions": {
+        "safety": 66.54632972322503,
+        "liberties": 50,
+        "trust": 48.354661760000006,
+        "prevention": 97.928466796875,
+        "fiscal": 22.5
+      },
+      "player": {
+        "year": 6,
+        "incidents": 1387,
+        "property": 1148,
+        "violent": 239,
+        "reported": 802,
+        "trust": 53.354661760000006,
+        "liberties": 70,
+        "prevention": 47.928466796875,
+        "perceivedSafety": 52.21116544,
+        "responseMinutes": 12,
+        "budget": 13.5,
+        "spent": 16.5
+      },
+      "benchmark": {
+        "year": 6,
+        "incidents": 1662,
+        "property": 1392,
+        "violent": 270,
+        "reported": 972,
+        "trust": 55,
+        "liberties": 70,
+        "prevention": 0,
+        "perceivedSafety": 45.225,
+        "responseMinutes": 12,
+        "budget": 30,
+        "spent": 0
+      }
+    }
+  ]
+}

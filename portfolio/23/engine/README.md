@@ -1,0 +1,17 @@
+# Central City — Urban Regeneration Engine 0.1
+
+Standalone ES modules, Node 18+. Run `npm test` and `node demo.js`. No dependencies. Browser integration is a later stage. No shared UUE source changes.
+
+## Story mapping
+Original source: https://raw.githubusercontent.com/0shubhankar/0shubhankar.github.io/main/portfolio/23/downtown-policy-game.html (reviewed 2026-11-14). All 26 substantive options are represented in `story.js` with shortened labels; original forced restarts proceed to the next chapter, and three equivalent stakeholder branches merge. No policy choices are added. Each chapter advances two annual periods after its decisions; a complete mandate spans six years. The matched baseline uses the same initial state and number of annual periods, without interventions.
+
+## Model and units
+Initial downtown: 1,000 commercial premises, 650 occupied (500 local businesses), 3,900 jobs, 1,200 homes (180 affordable), $60M policy treasury. Rent is an illustrative monthly $/m² commercial rent. Footfall, access, diversity, governance and conflict are indices, not measured quantities. All costs, response coefficients and scoring weights are fictional scenario assumptions. Policy definitions and costs are exported in `policies`.
+
+Annual budget: opening balance + commercial tax revenue (0.004M per occupied premise) - paid recurring obligations; recurring demand = 1.5M + subsidy + PPP obligation. Policy costs are charged separately on selection. Unfunded recurring demand is reported, not carried as debt. Capital and access plans deliver gradually; permitted commercial capacity is built at up to 30 premises/year and planned housing at up to 60 units/year. Affordable completions use the selected share. Commercial rent growth depends on occupancy, corporate presence and landlord relief; a cap limits increases. Entries and exits depend on support, access, rent and conflict; local entries and exits are reconciled with occupied premises. Employment is a stylized occupied-premises proxy, not an independently estimated labor market. Footfall is an index derived from occupancy, access and housing. Displacement is a cumulative proxy, not a household migration model. Private investment is a scenario commitment indicator, not a cash flow or verified realized investment. Governance and conflict are illustrative indices. See implementation for exact coefficients and bounds.
+
+## Performance
+Six scores are clipped to 0–100, with 50 denoting the identical no-policy comparator. Weighted dimensions: economic recovery 25%, local business retention 20%, inclusive development 20%, vitality 15%, fiscal 10%, governance 10%. Stakeholder scores are outcome proxies, not surveyed satisfaction. Final score evaluates final state against same-year baseline. No winner/loser. Score and budget sensitivity have not been empirically calibrated.
+
+## Known limitations
+No parcel-level GIS, commercial floor-area accounting, firm-level survival estimation, household relocation, realized private cash flows, project finance or property valuation. Commercial premises and residential units are distinct quantities; development capacity is simplified. Sector diversity is tracked as an index, not modeled sector employment. All paths finish with funds remaining; fiscal difficulty needs playtesting. Automated tests establish software consistency, not scientific validity. Original website and shared UUE remain untouched.

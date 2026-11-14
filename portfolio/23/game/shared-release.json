@@ -1,0 +1,52 @@
+{
+  "release": "central-city 1.0 shared runtime candidate",
+  "runtime_version": "1.6.0-rc.1",
+  "runtime_sha256": "6967f3523f749ea6b14cf140e9481c5b87f6c96841e82a704b89cc4ceaef0c79",
+  "source_sha256": {
+    "README.md": "877ca2d1319ecd3db7cf783f8c99625dfeb65d33c69cd63973738b052fb3f546",
+    "downtown.js": "fc7509cd26a58a08d350fe92fc2a91ed7d4f808493cc41bd07ef907adf2408c3",
+    "index.html": "a3296c9cc5733b530824e576d64baf3e7ecb77c11a716e7b38c6ac36606dbfbf",
+    "layout.js": "d21e206a99ac0e0ec2341caf89bfc7f6176dbc116cab65cb6da14947cccb53de",
+    "main.js": "2df5e4928ac85d5b1df3531343491126be3552a8121fa0defdfc709634f6868a",
+    "narrative.js": "99b32073f9136dcbac994359e38d2a69e1e6351aa2f04b2e196458675a8cb5ed",
+    "package.json": "6dc1b06d6b093e9cccb20bee06a93836eee0420ae26803ca2ce4065d82f070d1",
+    "style.css": "f98feaacebf7f4291a1af34a554d3e629a87bb2964cd72c0b1d68c2f53d659ae",
+    "ure/README.md": "76679382f9dfc0e442d1bc216fdd8dd64da53264c830e8a39da6738c41361a6e",
+    "ure/demo.js": "d8ffa3778405d3be40cabe7de2da4ba17a9fb7a31c06a0d633ae4073cdf8188e",
+    "ure/package.json": "2e86734a4c4fdbdd95bf96af93cbdb8ce217315a12c3ae1c9350753d9a53a18c",
+    "ure/regeneration-engine.js": "81fe675acfc95e5e76ab9fcaf9d9224b8f67c984f83bf55d0c5d71771a1b13d8",
+    "ure/scenario-results.json": "5ab0247c2f291936d0661a5be2a7dff1391db65472c91878a050e9036ddcab7f",
+    "ure/story.js": "794bb0e27287b35616071d4344da45084612087756eb0fa9fe670aec7d2e9b69",
+    "ure/test-results.txt": "004525401e6b9c9287cce62483da3dceb92dd7110b72d5ac03c0fd2d36c2675e",
+    "ure/tests/economics.test.js": "747a85cb51ac9f87ed5c9c92e3f8be1058fe5569927f8edba4a22d7378b9812f",
+    "ure/tests/engine.test.js": "7df367b7cf27bdc38fff8fcc2b1681b8d9f416614a6a2491ad9a31b8e87403ee",
+    "ure/tests/preview.test.js": "094dccc0daa932fb00f505644ebb172779f68facb6726c2b18e7c5247c1db2c7"
+  },
+  "rewritten_imports": {
+    "three": 2,
+    "city": 1,
+    "config": 1
+  },
+  "empirically_validated": false,
+  "sha256": {
+    "README.md": "877ca2d1319ecd3db7cf783f8c99625dfeb65d33c69cd63973738b052fb3f546",
+    "downtown.js": "bbf40d3615e5469d29fbd30f259a217ccc1eb93b1b12bfbd0f7696464404faf3",
+    "index.html": "a3296c9cc5733b530824e576d64baf3e7ecb77c11a716e7b38c6ac36606dbfbf",
+    "layout.js": "d21e206a99ac0e0ec2341caf89bfc7f6176dbc116cab65cb6da14947cccb53de",
+    "main.js": "665d0108989fa6a615b4cc0f8024f7d408124ecf010a53a515f5bc687a6f1c5e",
+    "migration-test-results.txt": "fe24dce5241225b4067980b2365e14882346e2d983a62abb1ef38893b1814e4a",
+    "narrative.js": "99b32073f9136dcbac994359e38d2a69e1e6351aa2f04b2e196458675a8cb5ed",
+    "package.json": "6dc1b06d6b093e9cccb20bee06a93836eee0420ae26803ca2ce4065d82f070d1",
+    "style.css": "f98feaacebf7f4291a1af34a554d3e629a87bb2964cd72c0b1d68c2f53d659ae",
+    "ure/README.md": "76679382f9dfc0e442d1bc216fdd8dd64da53264c830e8a39da6738c41361a6e",
+    "ure/demo.js": "d8ffa3778405d3be40cabe7de2da4ba17a9fb7a31c06a0d633ae4073cdf8188e",
+    "ure/package.json": "2e86734a4c4fdbdd95bf96af93cbdb8ce217315a12c3ae1c9350753d9a53a18c",
+    "ure/regeneration-engine.js": "81fe675acfc95e5e76ab9fcaf9d9224b8f67c984f83bf55d0c5d71771a1b13d8",
+    "ure/scenario-results.json": "5ab0247c2f291936d0661a5be2a7dff1391db65472c91878a050e9036ddcab7f",
+    "ure/story.js": "794bb0e27287b35616071d4344da45084612087756eb0fa9fe670aec7d2e9b69",
+    "ure/test-results.txt": "004525401e6b9c9287cce62483da3dceb92dd7110b72d5ac03c0fd2d36c2675e",
+    "ure/tests/economics.test.js": "747a85cb51ac9f87ed5c9c92e3f8be1058fe5569927f8edba4a22d7378b9812f",
+    "ure/tests/engine.test.js": "7df367b7cf27bdc38fff8fcc2b1681b8d9f416614a6a2491ad9a31b8e87403ee",
+    "ure/tests/preview.test.js": "094dccc0daa932fb00f505644ebb172779f68facb6726c2b18e7c5247c1db2c7"
+  }
+}

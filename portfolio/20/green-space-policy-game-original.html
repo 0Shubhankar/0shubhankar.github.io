@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<!-- Google Analytics: track full pages, not embedded copies of project demos. -->
+<script>
+  if (window.self === window.top) {
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = window.gtag || function(){window.dataLayer.push(arguments);};
+    gtag('js', new Date());
+    gtag('config', 'G-GMKGJLY7GL');
+    var analyticsScript = document.createElement('script');
+    analyticsScript.async = true;
+    analyticsScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-GMKGJLY7GL';
+    document.head.appendChild(analyticsScript);
+  }
+</script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greenville</title>
+    <style>
+            /* Base styles */
+    body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        font-family: 'Courier New', Courier, monospace;
+        padding: 0 10%;
+        box-sizing: border-box;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    .typewriter {
+        font-size: 24px;
+        border-right: 2px solid;
+        white-space: pre-wrap;
+        overflow: hidden;
+        animation: blink 0.75s step-end infinite;
+        margin-bottom: 20px;
+        text-align: center;
+        max-width: 100%;
+    }
+
+    @keyframes blink {
+        from, to { border-color: transparent }
+        50% { border-color: transparent }
+    }
+
+    .options {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 2s ease;
+    }
+
+    .button {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 18px;
+        padding: 10px 20px;
+        margin: 10px;
+        cursor: pointer;
+        border: 2px solid #333;
+        background-color: #fff;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .button:hover {
+        background-color: #333;
+        color: #fff;
+    }
+
+    body {
+            background-color: #000000;
+            /* Dark Gray */
+            color: #00ff08;
+            /* Light Gray */
+        }
+    
+        .button {
+            background-color: #00ff04;
+            /* Gold */
+            color: #ff0000;
+            /* Dark Gray */
+        }
+    
+        .button:hover {
+            background-color: #000000;
+            color: #ffffff;
+        }
+    
+    </style>
+</head>
+
+<body>
+    <div id="storyText" class="story-text typewriter"></div>
+    <div id="optionsContainer" class="options"></div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const storyText = document.getElementById('storyText');
+            const optionsContainer = document.getElementById('optionsContainer');
+            function typeText(text, callback) {
+                let i = 0;
+                storyText.innerHTML = ""; // Clear previous text
+                const speed = 50; // Speed of typing
+                function type() {
+                    if (i < text.length) {
+                        storyText.innerHTML += text.charAt(i);
+                        i++;
+                        setTimeout(type, speed);
+                    } else if (callback) {
+                        callback();
+                    }
+                }
+                type(); // Start typing effect
+            }
+            function displayStep(step) {
+                const currentStep = steps[step];
+                optionsContainer.innerHTML = ''; // Clear previous options
+                optionsContainer.style.opacity = 0; // Reset opacity to 0 for fade-in effect
+                typeText(currentStep.text, () => {
+                    currentStep.options.forEach(option => {
+                        const button = document.createElement('button');
+                        button.textContent = option.text;
+                        button.className = 'button';
+                        button.onclick = () => displayStep(option.nextStep);
+                        optionsContainer.appendChild(button);
+                    });
+                    setTimeout(() => optionsContainer.style.opacity = 1, 100); // Fade in options after 100ms
+                });
+            }
+            const steps = {
+                 "start": {
+                    "text": "Welcome to Greenville, a town known for its charming streets and lovely houses, but there’s a big green problem. The city’s low-income neighborhoods are suffering from a serious lack of parks and green spaces! This isn’t just about having a nice place to picnic—it’s affecting people's health, happiness, and overall quality of life. As the newly elected mayor, how will you address this issue to ensure every resident of Greenville can enjoy the benefits of accessible green spaces?",
+                    "options": [
+                        { "text": "Address the lack of green spaces in underserved areas.", "nextStep": "a" },
+                        { "text": "Balance environmental justice with economic development.", "nextStep": "b" }
+                    ]
+                },
+                "a": {
+                    "text": "You’ve decided to tackle Greenville’s green space crisis head-on! New parks are being planned, and residents are excited. But with a tight budget, you’ll have to make careful choices to keep the project on track. 💸 How will you proceed?",
+                    "options": [
+                        { "text": "Invest in a large-scale park development project in low-income areas.", "nextStep": "a1" },
+                        { "text": "Start by planting trees and creating small green spaces in vacant lots.", "nextStep": "a2" }
+                    ]
+                },
+                "a1": {
+                    "text": "You’ve committed to a large-scale park project in low-income areas, transforming Greenville! However, costs are soaring, and you need to make tough choices to keep the green initiative alive.",
+                    "options": [
+                        { "text": "Cut funding from other infrastructure projects to maintain park development.", "nextStep": "a11" },
+                        { "text": "Explore public-private partnerships to share development costs.", "nextStep": "a12" }
+                    ]
+                },
+                "a11": {
+                    "text": "You’ve reallocated funds from other projects to keep park development on track. The new parks are flourishing, but now a new challenge arises: maintenance. Without proper upkeep, these green spaces could fall into disrepair, and residents might become dissatisfied. 🌳",
+                    "options": [
+                        { "text": "Prepare to tackle the long-term park maintenance challenge and keep Greenville green.", "nextStep": "s" }
+                    ]
+                },
+                "a12": {
+                    "text": "You attempted to secure public-private partnerships, but the deals fell through, leaving the budget tighter than ever. The parks remain incomplete, and residents are losing hope. 😬",
+                    "options": [
+                        { "text": "Restart", "nextStep": "start" }
+                    ]
+                },
+                "a2": {
+                    "text": "You’ve taken a measured approach by planting trees and creating small green spaces. Residents appreciate the effort, but progress is slow. How will you sustain this momentum without breaking the bank?",
+                    "options": [
+                        { "text": "Apply for grants to expand green space projects over time.", "nextStep": "a21" },
+                        { "text": "Engage the community to participate in tree planting and park maintenance.", "nextStep": "a22" }
+                    ]
+                },
+                "a21": {
+                    "text": "You’ve secured grants, and Greenville’s green spaces are gradually expanding. 🌳 But with expansion comes the challenge of maintenance. Without consistent care, these parks could become neglected, and resident support could dwindle. 😬",
+                    "options": [
+                        { "text": "Prepare to tackle the long-term park maintenance challenge and keep Greenville green.", "nextStep": "s" }
+                    ]
+                },
+                "a22": {
+                    "text": "You’ve rallied the community for tree planting and park maintenance—fantastic! But volunteers can be inconsistent. Without regular support, the parks might become overgrown, and the community’s enthusiasm could fade. 🌿",
+                    "options": [
+                        { "text": "Prepare to tackle the long-term park maintenance challenge and keep Greenville green.", "nextStep": "s" }
+                    ]
+                },
+                "b": {
+                    "text": "You’ve chosen to balance green space development with Greenville’s growing economy. Businesses are relieved, but now you have to ensure parks are developed without stalling economic progress. How will you manage this delicate balance?",
+                    "options": [
+                        { "text": "Integrate green spaces within commercial zones to benefit both businesses and residents.", "nextStep": "b1" },
+                        { "text": "Prioritize green space development exclusively in residential zones.", "nextStep": "b2" }
+                    ]
+                },
+                "b1": {
+                    "text": "You’ve integrated green spaces within commercial zones, keeping both businesses and residents happy. But sacrificing some parkland for businesses has created tension. What’s your next move?",
+                    "options": [
+                        { "text": "Increase park development in residential areas to counterbalance the loss of green space in commercial zones.", "nextStep": "b11" },
+                        { "text": "Introduce zoning laws that limit business expansion near parks.", "nextStep": "b12" }
+                    ]
+                },
+                "b11": {
+                    "text": "You’ve increased park development in residential areas, and residents are thrilled! But without proper maintenance, these parks could quickly deteriorate, and public support could falter. 🌳",
+                    "options": [
+                        { "text": "Prepare to tackle the long-term park maintenance challenge and keep Greenville green.", "nextStep": "s" }
+                    ]
+                },
+                "b12": {
+                    "text": "You introduced zoning laws to limit business expansion near parks, and while public satisfaction is up, businesses are pushing back, claiming their growth is stunted. The plan has hit a wall. 😬",
+                    "options": [
+                        { "text": "Restart", "nextStep": "start" }
+                    ]
+                },
+                "b2": {
+                    "text": "You’ve prioritized green spaces in residential areas, and the community is delighted! But businesses feel left out, and tensions are rising. How will you handle this situation?",
+                    "options": [
+                        { "text": "Work with developers to incentivize building eco-friendly businesses near green spaces.", "nextStep": "b21" },
+                        { "text": "Implement a moratorium on commercial development in residential green zones.", "nextStep": "b22" }
+                    ]
+                },
+                "b21": {
+                    "text": "You’ve struck a deal with developers to build eco-friendly businesses near parks. Progress is steady, but maintenance remains a challenge. Without regular upkeep, these parks could lose their charm, and public support might wane. 🌿",
+                    "options": [
+                        { "text": "Prepare to tackle the long-term park maintenance challenge and keep Greenville green.", "nextStep": "s" }
+                    ]
+                },
+                "b22": {
+                    "text": "You’ve put a moratorium on commercial development in residential green zones, and the people are cheering! But without a sustainable maintenance plan, these beloved green spaces could become neglected, and public support might dwindle. 😬",
+                    "options": [
+                        { "text": "Prepare to tackle the long-term park maintenance challenge and keep Greenville green.", "nextStep": "s" }
+                    ]
+                },
+                "s": {
+                    "text": "Your parks are thriving, but maintenance is the real challenge. Without consistent care, all your hard work could unravel, turning green spaces into overgrown eyesores. How will you secure long-term maintenance for these parks?",
+                    "options": [
+                        { "text": "Create a city-wide green space maintenance fund using tax revenues.", "nextStep": "s1" },
+                        { "text": "Partner with local communities to manage green spaces through volunteer programs.", "nextStep": "s2" }
+                    ]
+                },
+                "s1": {
+                    "text": "You’ve established a city-wide maintenance fund, but some wealthier residents and businesses aren’t happy about the higher taxes. How will you manage their concerns?",
+                    "options": [
+                        { "text": "Justify the tax increase with public campaigns highlighting environmental and health benefits.", "nextStep": "s1a" },
+                        { "text": "Create a public-private partnership for long-term green space maintenance.", "nextStep": "s1b" }
+                    ]
+                },
+                "s1a": {
+                    "text": "You’ve launched a campaign highlighting the benefits of green spaces, and most of Greenville is on board. But some wealthier residents are still grumbling. What’s your next move?",
+                    "options": [
+                        { "text": "Offer tax breaks to wealthier residents.", "nextStep": "s1aa" },
+                        { "text": "Host a ‘Green Gala’ fundraiser to boost funds.", "nextStep": "s1ab" }
+                    ]
+                },
+                "s1aa": {
+                    "text": "You offered tax breaks to wealthy residents, hoping to appease them. But it wasn’t enough, and now your budget’s even tighter! 😳 Time to rethink your strategy, Mayor!",
+                    "options": [
+                        { "text": "Restart", "nextStep": "start" }
+                    ]
+                },
+                "s1ab": {
+                    "text": "The ‘Green Gala’ was a success, and funds are rolling in! But the wealth gap in park access is still widening, and environmental justice concerns are growing. 🌍",
+                    "options": [
+                        { "text": "Move forward to tackle the green space inequality and bring balance to all of Greenville.", "nextStep": "xa" }
+                    ]
+                },
+                "s1b": {
+                    "text": "You’ve set up a public-private partnership, and the parks are thriving! But now corporations are demanding more influence in park management, raising public concerns. 🤔",
+                    "options": [
+                        { "text": "Limit corporate involvement to maintain public trust.", "nextStep": "s1ba" },
+                        { "text": "Allow corporations to name the parks to keep funding flowing.", "nextStep": "s1bb" }
+                    ]
+                },
+                "s1ba": {
+                    "text": "You’ve set clear boundaries on corporate involvement, and public trust is high. But the green space gap between wealthier and low-income areas is still growing. 🌍",
+                    "options": [
+                        { "text": "Move forward to tackle the green space inequality and bring balance to all of Greenville.", "nextStep": "xb" }
+                    ]
+                },
+                "s1bb": {
+                    "text": "You let corporations name the parks, but residents are protesting. Branded parks feel like billboards, not community spaces. Time to rethink the strategy! 🌍",
+                    "options": [
+                        { "text": "Restart", "nextStep": "start" }
+                    ]
+                },
+                "s2": {
+                    "text": "You’ve teamed up with the community, and the parks are thriving. But volunteer support is inconsistent. How will you ensure reliable maintenance?",
+                    "options": [
+                        { "text": "Offer stipends to incentivize consistent volunteer participation.", "nextStep": "s2a" },
+                        { "text": "Rely solely on volunteers, with limited city oversight.", "nextStep": "s2b" }
+                    ]
+                },
+                "s2a": {
+                    "text": "Offering stipends worked! Volunteer participation is steady, and the parks are well-maintained. But now the challenge is ensuring equitable green space across Greenville. 🌍",
+                    "options": [
+                        { "text": "Move forward to tackle the green space inequality and bring balance to all of Greenville.", "nextStep": "xc" }
+                    ]
+                },
+                "s2b": {
+                    "text": "Relying solely on volunteers seemed like a good idea, but now some parks are overgrown while others are well-kept. Time to rethink this strategy! 🌍",
+                    "options": [
+                        { "text": "Restart", "nextStep": "start" }
+                    ]
+                },
+                "xa": {
+                    "text": "Greenville’s parks are flourishing in wealthier areas, but low-income neighborhoods are still lacking. How will you address this imbalance?",
+                    "options": [
+                        { "text": "Implement an equitable green space policy that prioritizes low-income areas.", "nextStep": "w1" },
+                        { "text": "Spread resources evenly across all neighborhoods, regardless of income.", "nextStep": "w2" }
+                    ]
+                },
+                "xb": {
+                    "text": "Greenville’s parks are flourishing in wealthier areas, but low-income neighborhoods are still underserved. How will you address this imbalance?",
+                    "options": [
+                        { "text": "Implement an equitable green space policy that prioritizes low-income areas.", "nextStep": "w1" },
+                        { "text": "Spread resources evenly across all neighborhoods, regardless of income.", "nextStep": "w2" }
+                    ]
+                },
+                "xc": {
+                    "text": "Greenville’s parks are flourishing in wealthier areas, but low-income neighborhoods are still underserved. How will you address this imbalance?",
+                    "options": [
+                        { "text": "Implement an equitable green space policy that prioritizes low-income areas.", "nextStep": "w1" },
+                        { "text": "Spread resources evenly across all neighborhoods, regardless of income.", "nextStep": "w2" }
+                    ]
+                },
+                "w1": {
+                    "text": "🎉 Congratulations! 🎉 You prioritized low-income areas, and it’s paying off! New parks are thriving, and residents are thrilled! 🌱 Despite some grumbling from wealthier neighborhoods, you’ve closed the green space gap and made Greenville a more equitable place to live. Well done! 👏",
+                },
+                "w2": {
+                    "text": "🎉 Well done! 🌳 You spread resources evenly across Greenville, and everyone got a little something. But low-income areas are still struggling to catch up. You’ve made some progress, but there’s more work to be done to truly close the gap and bring balance to Greenville.",
+                },
+                "restart": {
+                    "text": "You have reached a deadlock or end. Do you want to restart?",
+                    "options": [
+                        { "text": "Restart", "nextStep": "start" }
+                    ]
+                }
+            };
+
+            displayStep('start');
+        });
+    </script>
+</body>
+
+</html>

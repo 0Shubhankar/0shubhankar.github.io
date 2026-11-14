@@ -1,0 +1,2 @@
+import {routes} from './story.js';import {createGame,choose,assess} from './crime-engine.js';
+const all=routes().map(path=>{let g=createGame();for(const i of path)g=choose(g,i);return {path,...assess(g.state)};});const scores=all.map(x=>x.score);console.log(JSON.stringify({paths:all.length,min:Math.min(...scores),max:Math.max(...scores),mean:scores.reduce((a,b)=>a+b,0)/scores.length,minBudget:Math.min(...all.map(x=>x.player.budget)),maxBudget:Math.max(...all.map(x=>x.player.budget)),examples:[all[0],all.at(-1)]},null,2));

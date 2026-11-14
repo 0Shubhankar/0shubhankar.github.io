@@ -1,0 +1,3 @@
+import {createEngine} from './housing-engine.js';
+const scenarios={baseline:[],density:[['density','inner',.4]],rentControl:[['rentControl','inner',.03]],affordableHousing:[['peripheralHousing','periphery',300]],mixed:[['density','inner',.4],['inclusionary','inner',.25],['supportiveHousing','inner',100]]};
+for(const [name,policies] of Object.entries(scenarios)){const e=createEngine();for(const p of policies)e.applyPolicy(...p);for(let i=0;i<5;i++)e.advance();const x=e.indicators();console.log(JSON.stringify({name,period:x.period,households:x.households,stock:x.housingUnits,homeless:x.homeless,budget:x.budget,innerRent:x.zones[1].rent}));}

@@ -1,0 +1,94 @@
+
+> central-city-ure@0.1.0 test
+> node --test tests/*.test.js
+
+TAP version 13
+# Subtest: property economics responds to occupancy and rent
+ok 1 - property economics responds to occupancy and rent
+  ---
+  duration_ms: 1.881466
+  ...
+# Subtest: tax and partnership flows reconcile
+ok 2 - tax and partnership flows reconcile
+  ---
+  duration_ms: 2.319407
+  ...
+# Subtest: all routes preserve cohort and financial balances
+ok 3 - all routes preserve cohort and financial balances
+  ---
+  duration_ms: 53.799418
+  ...
+# Subtest: all 96 paths complete with balanced stocks and budgets
+ok 4 - all 96 paths complete with balanced stocks and budgets
+  ---
+  duration_ms: 57.506883
+  ...
+# Subtest: every policy is mapped
+ok 5 - every policy is mapped
+  ---
+  duration_ms: 0.262295
+  ...
+# Subtest: identical benchmark neutral
+ok 6 - identical benchmark neutral
+  ---
+  duration_ms: 0.15422
+  ...
+# Subtest: choices immutable and invalid rejected
+ok 7 - choices immutable and invalid rejected
+  ---
+  duration_ms: 0.413836
+  ...
+# Subtest: infrastructure delivered gradually
+ok 8 - infrastructure delivered gradually
+  ---
+  duration_ms: 0.254333
+  ...
+# Subtest: rent cap affects rising rent
+ok 9 - rent cap affects rising rent
+  ---
+  duration_ms: 0.180929
+  ...
+# Subtest: affordable requirement delivers housing
+ok 10 - affordable requirement delivers housing
+  ---
+  duration_ms: 0.180665
+  ...
+# Subtest: unfunded costs explicit
+ok 11 - unfunded costs explicit
+  ---
+  duration_ms: 0.151867
+  ...
+# Subtest: replay deterministic
+ok 12 - replay deterministic
+  ---
+  duration_ms: 2.511874
+  ...
+# Subtest: every choice has contextual scene and cost
+ok 13 - every choice has contextual scene and cost
+  ---
+  duration_ms: 2.712959
+  ...
+# Subtest: commercial anchors selected and civic distinct when available
+ok 14 - commercial anchors selected and civic distinct when available
+  ---
+  duration_ms: 0.678056
+  ...
+# Subtest: storefront plan reconciles occupancy and resets
+ok 15 - storefront plan reconciles occupancy and resets
+  ---
+  duration_ms: 53.322478
+  ...
+# Subtest: facade types reconcile every route and zero slots
+ok 16 - facade types reconcile every route and zero slots
+  ---
+  duration_ms: 42.704864
+  ...
+1..16
+# tests 16
+# suites 0
+# pass 16
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 219.784792

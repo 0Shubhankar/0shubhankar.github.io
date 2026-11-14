@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<!-- Google Analytics: track full pages, not embedded copies of project demos. -->
+<script>
+  if (window.self === window.top) {
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = window.gtag || function(){window.dataLayer.push(arguments);};
+    gtag('js', new Date());
+    gtag('config', 'G-GMKGJLY7GL');
+    var analyticsScript = document.createElement('script');
+    analyticsScript.async = true;
+    analyticsScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-GMKGJLY7GL';
+    document.head.appendChild(analyticsScript);
+  }
+</script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crime in Spudsville</title>
+    <style>
+        /* Base styles */
+    body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        font-family: 'Courier New', Courier, monospace;
+        padding: 0 10%;
+        box-sizing: border-box;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    .typewriter {
+        font-size: 24px;
+        border-right: 2px solid;
+        white-space: pre-wrap;
+        overflow: hidden;
+        animation: blink 0.75s step-end infinite;
+        margin-bottom: 20px;
+        text-align: center;
+        max-width: 100%;
+    }
+
+    @keyframes blink {
+        from, to { border-color: transparent }
+        50% { border-color: transparent }
+    }
+
+    .options {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 2s ease;
+    }
+
+    .button {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 18px;
+        padding: 10px 20px;
+        margin: 10px;
+        cursor: pointer;
+        border: 2px solid #333;
+        background-color: #fff;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .button:hover {
+        background-color: #333;
+        color: #fff;
+    }
+
+    body {
+            background-color: #000000;
+            /* Dark Gray */
+            color: #FFFFFF;
+            /* Light Gray */
+        }
+    
+        .button {
+            background-color: #ff1900;
+            /* Gold */
+            color: #FDFEFE;
+            /* Dark Gray */
+        }
+    
+        .button:hover {
+            background-color: #000000;
+            color: #ffffff;
+        }
+    
+    </style>
+</head>
+
+<body>
+    <div id="storyText" class="story-text typewriter"></div>
+    <div id="optionsContainer" class="options"></div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const storyText = document.getElementById('storyText');
+            const optionsContainer = document.getElementById('optionsContainer');
+            function typeText(text, callback) {
+                let i = 0;
+                storyText.innerHTML = ""; // Clear previous text
+                const speed = 50; // Speed of typing
+                function type() {
+                    if (i < text.length) {
+                        storyText.innerHTML += text.charAt(i);
+                        i++;
+                        setTimeout(type, speed);
+                    } else if (callback) {
+                        callback();
+                    }
+                }
+                type(); // Start typing effect
+            }
+            function displayStep(step) {
+                const currentStep = steps[step];
+                optionsContainer.innerHTML = ''; // Clear previous options
+                optionsContainer.style.opacity = 0; // Reset opacity to 0 for fade-in effect
+                typeText(currentStep.text, () => {
+                    currentStep.options.forEach(option => {
+                        const button = document.createElement('button');
+                        button.textContent = option.text;
+                        button.className = 'button';
+                        button.onclick = () => displayStep(option.nextStep);
+                        optionsContainer.appendChild(button);
+                    });
+                    setTimeout(() => optionsContainer.style.opacity = 1, 100); // Fade in options after 100ms
+                });
+            }
+            const steps = {
+                "start": {
+                    "text": "Welcome to Spudsville, a town once known for its tranquility, now grappling with a surge in crime. 🕵️‍♂️ Burglaries, runaway incidents, and late-night thefts have left the citizens on edge, casting a shadow over this once peaceful place. As the situation escalates, the community looks to you, their newly elected mayor, for a solution. What actions will you take to restore peace and safety in Spudsville?",
+                    "options": [
+                        { "text": "Increase Police Presence", "nextStep": "a" },
+                        { "text": "Implement Public Surveillance", "nextStep": "b" }
+                    ]
+                },
+                "a": {
+                    "text": "You've decided to increase the police presence by deploying more officers across Spudsville. The streets are a little safer, but a bigger decision now awaits you. 🚓🥔 How will you guide this growing force?",
+                    "options": [
+                        { "text": "Increase police presence and implement a 'zero tolerance' policy on crime.", "nextStep": "a1" },
+                        { "text": "Invest in community policing and focus on building relationships between police and local communities.", "nextStep": "a2" }
+                    ]
+                },
+                "a1": {
+                    "text": "You’ve chosen to implement a 'Zero Tolerance' Policy on Crime, cracking down hard on Spudsville’s criminals. The streets are safer, but tensions are rising. Now, you must choose how to deal with the growing political pressure. Will you handle the backlash or stick to your guns?",
+                    "options": [
+                        { "text": "Address Public Backlash with Police Accountability", "nextStep": "a11" },
+                        { "text": "Double down on the law-and-order approach, dismissing civil liberty concerns.", "nextStep": "a12" }
+                    ]
+                },
+                "a11": {
+                    "text": "You chose to address public backlash with police accountability, adding oversight and transparency to ease concerns. While some in Spudsville are applauding the move, public opinion is still divided, and the media isn’t making it easy on you! Reports are rolling in, questioning whether your approach to crime prevention is effective enough or just a political move to calm the crowd. As the media shapes the narrative, public perception of you, Mayor, is starting to dip. The pressure is mounting, and now you need to figure out how to manage the media storm and win back trust. 🌍",
+                    "options": [
+                        { "text": "Move ahead decisively to tackle the challenge of media perception and public opinion", "nextStep": "s" }
+                    ]
+                },
+                "a12": {
+                    "text": "You chose to double down on the law-and-order approach, dismissing civil liberty concerns and cracking down hard on crime. While crime initially dropped, public outcry over heavy-handed policing grew louder. Civil liberties groups, local communities, and even some of the officers themselves started to push back. The intense policing strained relationships between law enforcement and the public, leading to protests and further distrust. Instead of restoring order, the hardline approach created more division in Spudsville. Time for a new plan, Mayor! 🌍",
+                    "options": [
+                        { "text": "Restart", "nextStep": "start" }
+                    ]
+                },
+                "a2": {
+                    "text": "You’ve chosen to invest in community policing, focusing on building relationships between the police and Spudsville’s residents. Crime rates are slowly dropping, and trust is growing, but some say it’s not happening fast enough. While most are cheering your efforts, the pressure is on for quicker results. What’s your move? 🌍",
+                    "options": [
+                        { "text": "Combine community policing with targeted enforcement in high-crime areas.", "nextStep": "a21" },
+                        { "text": "Invest in social programs that address the root causes of crime, such as poverty and education.", "nextStep": "a22" }
+                    ]
+                },
+                "a21": {
+                    "text": "You’ve chosen to combine community policing with targeted enforcement, hoping to balance trust-building with a stronger hand in high-crime areas. But the media isn't making things easy! While some Spudsvillians see this as a smart compromise, others feel like it's just a step back toward heavy-handed policing. 😬 The media is stirring the pot, reporting that some neighborhoods feel targeted, and public opinion is beginning to sour. People are questioning if this is the right direction, and you’re finding yourself at the center of the storm. Time to manage the narrative before it spins out of control! 🌍",
+                    "options": [
+                        { "text": "Move ahead decisively to tackle the challenge of media perception and public opinion", "nextStep": "s" }
+                    ]
+                },
+                "a22": {
+                    "text": "You’ve chosen to invest in social programs, tackling the root causes of crime with a focus on poverty, education, and social support. It’s a long-term solution, but the media and some Spudsvillians are growing impatient. 😬 While progress is happening slowly, the media is questioning whether this approach is too soft to address the current crime wave. Reports are circulating that the plan is too slow to curb rising crime rates, and public opinion is starting to falter. Now, the challenge ahead is to manage the growing media storm and reassure the city that you’re on the right path! 🌍",
+                    "options": [
+                        { "text": "Move ahead decisively to tackle the challenge of media perception and public opinion", "nextStep": "s" }
+                    ]
+                },
+                "b": {
+                    "text": "You’ve chosen to implement public surveillance, installing cameras across Spudsville to keep an eye on thieves and criminals! But now, the next big decision looms—how far will you take it? What’s your next move? 🌍",
+                    "options": [
+                        { "text": "Deploy surveillance technologies, including cameras and facial recognition, in public areas.", "nextStep": "b1" },
+                        { "text": "Reject widespread surveillance and focus on social programs to prevent crime.", "nextStep": "b2" }
+                    ]
+                },
+                "b1": {
+                    "text": "You chose to deploy surveillance technologies, with cameras and facial recognition now watching over Spudsville. Crime prevention has improved, and law enforcement is responding faster than ever. But there’s a catch—privacy concerns are growing, and public trust is shaky in some parts of town. The pressure is on! Your move! 🌍",
+                    "options": [
+                        { "text": "Implement stricter privacy regulations to ensure that surveillance is used responsibly.", "nextStep": "b11" },
+                        { "text": "Expand surveillance coverage to further reduce crime, ignoring civil liberties concerns.", "nextStep": "b12" }
+                    ]
+                },
+                "b11": {
+                    "text": "You chose to implement stricter privacy regulations, introducing rules to protect Spudsville’s residents from surveillance overreach. While it’s a move to reassure the public, the media is split. Some see it as a positive step, but others say it’s a band-aid fix that still leaves civil liberties at risk. 😬 The media’s reports are starting to shape public perception, with some wondering if crime prevention will weaken or if these new measures go far enough. The trust you hoped to restore is shaky at best. Now, it’s up to you to manage the narrative before things spiral. 🌍",
+                    "options": [
+                        { "text": "Move ahead decisively to tackle the challenge of media perception and public opinion", "nextStep": "s" }
+                    ]
+                },
+                "b12": {
+                    "text": "Expanding Surveillance Backfires! 🎥🥔 You chose to expand surveillance coverage, ignoring civil liberty concerns in hopes of further reducing crime. While cameras multiplied across Spudsville, it didn’t go as planned. 😬 Though crime prevention improved in some areas, the public grew increasingly uncomfortable with the constant monitoring. Civil liberties groups protested, claiming an invasion of privacy. Tensions rose, and residents felt spied on rather than protected. Trust in the government eroded, especially in low-income communities, where surveillance was seen as overreach. Instead of creating safety, it led to widespread distrust and frustration. Time to rethink!",
+                    "options": [
+                        { "text": "Restart", "nextStep": "start" }
+                    ]
+                },
+                "b2": {
+                    "text": "You’ve chosen to reject widespread surveillance and focus on social programs to prevent crime. Civil liberties advocates and local communities are cheering, but with less direct action, some areas are seeing an uptick in crime. The media and political opposition are getting louder, demanding results. The pressure is on!",
+                    "options": [
+                        { "text": "Pilot a community-based crime monitoring program", "nextStep": "b21" },
+                        { "text": "Invest heavily in job training, education, and social services", "nextStep": "b22" }
+                    ]
+                },
+                "b21": {
+                    "text": "You chose to pilot a community-based crime monitoring program, launching neighborhood watches and patrols to keep crime in check. While some in Spudsville appreciate the local involvement, the media is having a field day with this one. Critics are calling it a 'band-aid solution,' claiming it’s too little, too late for serious crime prevention. 😬 As the media fans the flames, public opinion is wavering. Some believe it’s a positive step toward community trust, while others think it’s not enough to tackle the rising crime rates. Now, the challenge is to manage the fallout and steer Spudsville forward! 🌍",
+                    "options": [
+                        { "text": "Move ahead decisively to tackle the challenge of media perception and public opinion", "nextStep": "s" }
+                    ]
+                },
+                "b22": {
+                    "text": "You chose to invest heavily in job training, education, and social services, tackling the root causes of crime with major resources. While it’s a bold, long-term approach, the media isn’t so sure. Critics are saying Spudsville’s streets are still dangerous, and this plan is moving too slowly to address the immediate crime spike. 😬 Reports are swirling, and public opinion is starting to divide. Some praise your forward-thinking strategy, while others feel the city is vulnerable in the short term. Now, the pressure’s on to manage expectations and keep Spudsville on board with your vision! 🌍",
+                    "options": [
+                        { "text": "Move ahead decisively to tackle the challenge of media perception and public opinion", "nextStep": "s" }
+                    ]
+                },
+                "s": {
+                    "text": "Public opinion is split on your crime prevention approach, and the media isn’t making things any easier. Reports are flying in, and public sentiment isn’t in your favor. Now, it’s time to decide how you’ll tackle this head-on. How do you manage public perception and the media?",
+                    "options": [
+                        { "text": "Hold public forums and engage in open dialogue with citizens and the press", "nextStep": "s1" },
+                        { "text": "Launch a media campaign to shape the narrative in your favor.", "nextStep": "s2" }
+                    ]
+                },
+                "s1": {
+                    "text": "You’ve chosen to hold public forums, engaging directly with citizens and the press. Transparency is paying off—public trust is slowly rising, and media coverage is turning more favorable. But some critics remain, and your political opponents are using the spotlight to push their own agendas. Now you must decide how to keep the momentum going.",
+                    "options": [
+                        { "text": "Continue hosting forums to keep public engagement high and build trust.", "nextStep": "s1a" },
+                        { "text": "Shift focus to action rather than dialogue, implementing bold new policies.", "nextStep": "s1b" }
+                    ]
+                },
+                "s1a": {
+                    "text": "You’ve chosen to continue hosting forums to keep public engagement high and build trust. As you strengthen transparency, two more critical paths now lie ahead—each could shape Spudsville's future differently.",
+                    "options": [
+                        { "text": "Continue prioritizing security over civil liberties, focusing on law enforcement success", "nextStep": "s1aa" },
+                        { "text": "Invest in long-term solutions like education, economic development, and mental health services", "nextStep": "s1ab" }
+                    ]
+                },
+                "s1aa": {
+                    "text": "You chose to continue prioritizing security over civil liberties, showcasing law enforcement success and focusing on keeping Spudsville safe. But it didn’t go as planned. 😬 While some citizens felt reassured, the media began hammering you with reports on reduced civil liberties. Public backlash has intensified, and protests are growing against your administration. Ratings are plummeting, and trust is eroding as Spudsville citizens feel their freedoms slipping away. The protests are loud, the headlines are harsh, and the strategy is backfiring. It’s time to rethink the approach, things aren’t looking good! 🌍",
+                    "options": [
+                        { "text": "Restart", "nextStep": "start" }
+                    ]
+                },
+                "s1ab": {
+                    "text": "You’ve invested in long-term solutions, addressing the root causes of crime through education, economic development, and mental health services. While crime rates are slowly decreasing, particularly in high-crime areas, a new storm is brewing. The debate over balancing civil liberties and public safety is intensifying, and your administration is now facing mounting political pressure. Political opposition is growing louder, accusing you of neglecting public safety by focusing too much on long-term solutions. Civil liberties have been curtailed in the process, and certain sectors of the public are turning sharply against you. While the short-term crime numbers look promising, the challenge of balancing these opposing forces remains your next big test. 🌍",
+                    "options": [
+                        { "text": "Move forward and tackle the civil liberties vs. public safety debate.", "nextStep": "xa" }
+                    ]
+                },
+                "s1b": {
+                    "text": "You’ve chosen to shift focus to action, implementing bold new policies to tackle Spudsville’s challenges head-on. Now, two decisive paths lie before you, each with its own risks and rewards.",
+                    "options": [
+                        { "text": "Introduce legislation to safeguard civil liberties while maintaining strong security measures", "nextStep": "s1ba" },
+                        { "text": "Continue prioritizing security over civil liberties, focusing on law enforcement success.", "nextStep": "s1bb" }
+                    ]
+                },
+                "s1ba": {
+                    "text": "You chose to introduce legislation to safeguard civil liberties, aiming to strike a balance between security and freedom. While this effort has reassured some, the debate over how to handle civil liberties vs. public safety is only intensifying. Your administration is now facing mounting political pressure. 🔥 Political opposition is louder than ever, accusing you of neglecting public safety by focusing too much on civil liberties. Meanwhile, certain sectors of the public, feeling unsafe, are turning sharply against you. Despite short-term crime rates dropping, your stance on civil liberties has sparked a backlash, leaving you grappling with how to navigate these opposing forces. This remains your greatest challenge yet, Mayor. 🌍",
+                    "options": [
+                        { "text": "Move forward and tackle the civil liberties vs. public safety debate.", "nextStep": "xb" }
+                    ]
+                },
+                "s1bb": {
+                    "text": "You chose to continue prioritizing security over civil liberties, showcasing law enforcement success and focusing on keeping Spudsville safe. But it didn’t go as planned. 😬 While some citizens felt reassured, the media began hammering you with reports on reduced civil liberties. Public backlash has intensified, and protests are growing against your administration. Ratings are plummeting, and trust is eroding as Spudsville citizens feel their freedoms slipping away. The protests are loud, the headlines are harsh, and the strategy is backfiring. It’s time to rethink the approach, Mayor—things aren’t looking good! 🌍",
+                    "options": [
+                        { "text": "Restart", "nextStep": "start" }
+                    ]
+                },
+                "s2": {
+                    "text": "You chose to launch a media campaign, and it's starting to work—media coverage is more favorable, and your successes in crime prevention are shining through. But not everyone is buying it. Some citizens feel manipulated, and your opponents are accusing you of avoiding real dialogue, calling it 'all spin.' Now, it’s time to decide your next step.",
+                    "options": [
+                        { "text": "Engage in direct dialogue with community leaders to rebuild trust.", "nextStep": "s2a" },
+                        { "text": "Expand the media campaign to counter public criticism.", "nextStep": "s2b" }
+                    ]
+                },
+                "s2a": {
+                    "text": "You chose to engage in direct dialogue with community leaders, hoping to rebuild trust by listening to their concerns. While this effort has reassured some, the core issue persists: the debate over civil liberties vs. public safety is only growing louder. Political pressure is escalating. 🔥 Opposition forces are amplifying their claims, accusing you of focusing too much on civil liberties while neglecting public safety. Certain parts of the public, still feeling unsafe, are increasingly critical of your leadership. Despite promising drops in crime rates, your approach has sparked backlash, and the struggle to balance these opposing forces is still your biggest challenge yet, Mayor.",
+                    "options": [
+                        { "text": "Move forward and tackle the civil liberties vs. public safety debate.", "nextStep": "xc" }
+                    ]
+                },
+                "s2b": {
+                    "text": "You chose to expand the media campaign in an attempt to counter the growing criticism. At first, it seemed like a solid move to shift the narrative, but it didn’t go as planned. 😬 Rather than calming things down, the public's criticism intensified. Many saw your media push as a way to drown out their concerns, and the perception grew that you were avoiding real dialogue. People felt their voices weren’t being heard, and the media's counter-campaign only made it worse. Instead of winning the public over, the strategy backfired, leaving you facing even more outrage. Time for a new approach! 🌍",
+                    "options": [
+                        { "text": "Restart", "nextStep": "start" }
+                    ]
+                },
+                "xa": {
+                    "text": "Now you are facing a growing challenge as the debate over civil liberties vs. public safety intensifies in Spudsville. Public concern is mounting, and the mayor's administration is feeling the pressure to strike the right balance between keeping the city safe and protecting personal freedoms. With political opposition growing louder, you have two options to consider.",
+                    "options": [
+                        { "text": "Strengthen Civil Liberties Protections", "nextStep": "w1" },
+                        { "text": "Prioritize Public Safety with Oversight", "nextStep": "w2" }
+                    ]
+                },
+                "xb": {
+                    "text": "Now you are facing a growing challenge as the debate over civil liberties vs. public safety intensifies in Spudsville. Public concern is mounting, and the mayor's administration is feeling the pressure to strike the right balance between keeping the city safe and protecting personal freedoms. With political opposition growing louder, you have two options to consider.",
+                    "options": [
+                        { "text": "Prioritize Public Safety with Oversight", "nextStep": "w1" },
+                        { "text": "Create a Civilian Oversight Board", "nextStep": "w2" }
+                    ]
+                },
+                "xc": {
+                    "text": "Now you are facing a growing challenge as the debate over civil liberties vs. public safety intensifies in Spudsville. Public concern is mounting, and the mayor's administration is feeling the pressure to strike the right balance between keeping the city safe and protecting personal freedoms. With political opposition growing louder, you have two options to consider.",
+                    "options": [
+                        { "text": "Implement Targeted Public Safety Measures", "nextStep": "w1" },
+                        { "text": "Invest in Preventive Measures", "nextStep": "w2" }
+                    ]
+                },
+                "w1": {
+                    "text": "🎉 Congratulations! 🥔🎉 You've taken Spudsville on a wild ride, tackling everything from civil liberties debates to targeted crime policies! Through all the tough calls—whether it was cracking down on high-crime areas or investing in long-term solutions like education and job creation—you stuck with it and led Spudsville to safer streets. 🚓 The public is far happier now than when you first stepped in, and Spudsville is thriving under your leadership. The once divided potato patch has come together, and now, you can finally enjoy a victory fry! 🍟💪 Well done!"
+                },
+                "w2": {
+                    "text": "🎉 Well done! 🥔 You’ve navigated Spudsville through some tough policy decisions, from balancing civil liberties to focusing on long-term crime solutions. While there’s still room for improvement, you've managed to calm the public and make the city a safer place. 🚓 The public is generally happier now than when you started, but there’s still work to be done. Some decisions could have gone smoother, and a few folks feel things could’ve been handled better. Still, you’ve made solid progress, Mayor. Keep at it, and maybe next time you’ll hit the sweet spot. 🍟"
+                },
+                "restart": {
+                    "text": "You have reached a deadlock or end. Do you want to restart?",
+                    "options": [
+                        { "text": "Restart", "nextStep": "start" }
+                    ]
+                }
+            };
+
+            displayStep('start');
+        });
+    </script>
+</body>
+
+</html>

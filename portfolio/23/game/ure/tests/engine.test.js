@@ -1,0 +1,10 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {initial,apply,advance,metrics,assess,createGame,choose,policies} from '../regeneration-engine.js';import {routes,nodes} from '../story.js';
+test('all 96 paths complete with balanced stocks and budgets',()=>{let count=0;for(const route of routes()){let g=createGame();for(const i of route){g=choose(g,i);const s=g.state;assert(s.local<=s.occupied&&s.occupied<=s.stock&&s.affordableUnits<=s.housing&&s.budget>=0);assert(Math.abs(60+s.revenue-s.spent-s.budget)<1e-7);}assert.equal(g.node,'end');assert.equal(g.state.year,6);assert.equal(g.reviews.length,3);assert(g.reviews.every(r=>r.score>=0&&r.score<=100));count++;}assert.equal(count,96);});
+test('every policy is mapped',()=>{for(const n of Object.values(nodes))for(const e of n.options)assert(Object.hasOwn(policies,e.policy));});
+test('identical benchmark neutral',()=>{const m=metrics(initial());assert.equal(assess(m,m).score,50);});
+test('choices immutable and invalid rejected',()=>{const g=createGame();assert.throws(()=>choose(g,2));const h=choose(g,0);assert.equal(g.state.budget,60);assert(h.state.budget<60);});
+test('infrastructure delivered gradually',()=>{const s=apply(initial(),'infrastructure');assert.equal(s.access,45);assert(advance(s).access>45);});
+test('rent cap affects rising rent',()=>{const s=initial();s.occupied=900;s.corporate=1;assert(advance(apply(s,'rentCap')).rent<advance(s).rent);});
+test('affordable requirement delivers housing',()=>{const s=apply(apply(initial(),'mixed'),'affordable');assert(advance(s).affordableUnits>s.affordableUnits);});
+test('unfunded costs explicit',()=>{const s=initial();s.budget=0;s.occupied=0;assert(advance(s).annualUnfunded>0);});
+test('replay deterministic',()=>{const p=[...routes()][0];const run=()=>p.reduce(choose,createGame());assert.deepEqual(run(),run());});
