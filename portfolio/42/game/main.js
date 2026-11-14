@@ -442,9 +442,7 @@ try{
 
     $('error').textContent=
 
-        'Project 42 could not start: '+
-
-        e.message;
+        'The city could not start. Please reload the page to try again.';
 
     console.error(e);
 }
